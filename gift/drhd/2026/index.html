@@ -374,10 +374,11 @@
     object-fit: contain;
     background: #0a0805;
   }
-  .ggem { position:absolute;width:11px;height:11px;background:var(--gold);opacity:.65;z-index:3;
-          clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
-  .ggem.tl{top:-5px;left:-5px} .ggem.tr{top:-5px;right:-5px}
-  .ggem.bl{bottom:-5px;left:-5px} .ggem.br{bottom:-5px;right:-5px}
+  .ggem { position:absolute;width:12px;height:12px;background:var(--gold);opacity:.65;z-index:3; }
+  .ggem.tl{top:-1px;left:-1px; clip-path:polygon(0% 0%,100% 0%,0% 100%);}
+  .ggem.tr{top:-1px;right:-1px; clip-path:polygon(0% 0%,100% 0%,100% 100%);}
+  .ggem.bl{bottom:-1px;left:-1px; clip-path:polygon(0% 0%,100% 100%,0% 100%);}
+  .ggem.br{bottom:-1px;right:-1px; clip-path:polygon(100% 0%,100% 100%,0% 100%);}
   /* На мобильных — разрешаем перенос */
   @media(max-width:700px){
     .gallery-row { gap:10px; padding:10px 4px 4px; flex-wrap:wrap; justify-content:center; }
@@ -1407,11 +1408,11 @@ document.addEventListener('keydown', ev => {
 // ── Credits (edit names/roles here) ──
 const CREDITS = [
   { role:"Реставратор-историк",    name:"Julietta Helwell-de-Kur" },
-  { role:"Куратор. Искусствовед. Главная по гонгу",       name:"Хелена Кейн" },
+  { role:"Арт-министр музея",             name:"Блейк Эллингтон" },
   { role:"Скульптр антропоморфоза бекл",        name:"Амилия Лиссаранд" },
   { role:"Мастер беклового андеграунда",        name:"Беата ЛаВей" },
   { role:"Организатор беклоэкскурсий. Беклоэкскурсовод",         name:"Мерида Морграфт" },
-  { role:"Арт-министр музея",             name:"Блейк Эллингтон" },
+  { role:"Куратор. Искусствовед. Главная по гонгу",       name:"Хелена Кейн" },
 ];
 
 (function(){
