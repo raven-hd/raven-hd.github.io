@@ -886,6 +886,32 @@
 
   .footer-year{font-family:'Cinzel Decorative',serif;font-size:clamp(.7rem,1.5vw,.95rem);color:var(--gold-d);letter-spacing:.35em;opacity:.4;}
 
+  .footer-contact {
+    max-width: 580px; width: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 0;
+  }
+  .footer-contact-line {
+    width: 65%; height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,168,76,.22) 30%, rgba(201,168,76,.38) 50%, rgba(201,168,76,.22) 70%, transparent);
+    margin-bottom: 14px;
+  }
+  .footer-contact-ornament {
+    font-family: 'Cinzel', serif;
+    font-size: .52rem; letter-spacing: .5em;
+    color: var(--gold-d); opacity: .5;
+    margin-bottom: 12px;
+  }
+  .footer-contact-text {
+    font-family: 'Crimson Text', serif;
+    font-size: clamp(.78rem, 1.3vw, .95rem);
+    color: #5a4a28;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.75;
+    letter-spacing: .02em;
+  }
+
   @media(max-width:600px){
     #l-footer{height:min(600px,95vh);}
     .slab-inner{padding:16px 18px 18px;}
@@ -1005,6 +1031,16 @@
           <div class="slab-grid" id="creditsGrid">
             <!-- filled below — edit as needed -->
           </div>
+        </div>
+      </div>
+
+      <div class="footer-contact">
+        <div class="footer-contact-line"></div>
+        <div class="footer-contact-ornament">◈</div>
+        <div class="footer-contact-text">
+          По вопросам сотрудничества, а также оформления дарственных<br>
+          и передачи экспонатов в фонд музея просим обращаться<br>
+          к любому сотруднику экспозиции.
         </div>
       </div>
 
@@ -1237,8 +1273,8 @@ const EX = [
   { title:"Раритетный экземпляр «Пера Ровены»", author:"Калипсо Крин", year:"05.03.2014.", desc:"Журналист Калипсо Крин выходит в поле — в общую гостиную — и возвращается с эксклюзивом: где живут беклы, чем питаются и как войти к ним в доверие. Провода с тех пор стали дефицитом.", img:"/gift/drhd/2026/img/p_018.png", type:"book", link:"https://perorave.wordpress.com/2014/03/05/%D1%85%D0%BE%D0%B3%D0%B2%D0%B0%D1%80%D1%82%D1%81%D0%BA%D0%B8%D0%B5-%D1%88%D0%BA%D0%BE%D0%B4%D0%BD%D0%B8%D0%BA%D0%B8/" },
 
   {
-    author:"Хаэль МакРори", year:"датировка затруднена",
-    desc:"Коллекция графических работ, извлечённых экспедицией музея из культурных слоев сети. Холсты идентифицированы, пронумерованы и помещены под охрану.",
+    author:"Разные художники", year:"2026",
+    desc:"Малые беклы зелёные. Мы с беклой. Бекла-серфер. Беклина радость. Бекла играет. Доисторическая бекла. И другие. Коллекция графических работ из фондов музея.",
     img:"/gift/drhd/2026/img/g_005.jpg",
     type:"gallery",
     rows: [
