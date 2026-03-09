@@ -461,10 +461,13 @@
     aspect-ratio: 1 / 1;
     border: 1px solid rgba(201,168,76,.35);
     box-shadow: 0 0 0 1px #1a1508, inset 0 0 8px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.7);
-    background:
-      radial-gradient(ellipse at 50% 30%, rgba(60,48,18,.55) 0%, transparent 70%),
-      linear-gradient(160deg, #1e1a0e 0%, #141009 50%, #1a1508 100%);
+    background: #0a0805;
     overflow: hidden;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .hframe:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 1px #1a1508, 0 0 10px rgba(201,168,76,.25), 0 6px 18px rgba(0,0,0,.8);
   }
   .hframe img { display:block; width:100%; height:100%; object-fit:cover; }
 
@@ -1112,6 +1115,8 @@
       <div class="gallery-row" id="galleryRow1"></div>
       <div class="gallery-mid-rail"></div>
       <div class="gallery-row" id="galleryRow2"></div>
+      <div class="gallery-mid-rail"></div>
+      <div class="gallery-row" id="galleryRow3"></div>
     </div>
 
     <!-- I: HONOR BOARD (доска почёта) -->
@@ -1238,6 +1243,10 @@ const EX = [
         { img:"/gift/drhd/2026/img/g_007.jpg", w:394, h:488 },
         { img:"/gift/drhd/2026/img/g_008.jpg", w:457, h:556 },
         { img:"/gift/drhd/2026/img/g_010.jpg", w:401, h:484 },
+      ],
+      [
+        { img:"/gift/drhd/2026/img/g_012.jpg", w:504, h:421 },
+        { img:"/gift/drhd/2026/img/g_011.jpg", w:504, h:695 },
       ],
     ]
   },
@@ -1429,27 +1438,34 @@ function renderMulti(frames) {
   });
 }
 
-// ── Gallery Wall renderer (2 ряда, точные пропорции, без нитей) ──
-// rows: массив из 2 массивов, каждый — [{img, w, h}]
+// ── Gallery Wall renderer (до 3 рядов, точные пропорции, без нитей) ──
+// rows: массив из массивов, каждый — [{img, w, h}]
 function renderGalleryWall(rows) {
   const rowEls = [
     document.getElementById('galleryRow1'),
     document.getElementById('galleryRow2'),
+    document.getElementById('galleryRow3'),
   ];
+
+  // Скрываем/показываем третий разделитель и ряд
+  const mid2 = rowEls[2] ? rowEls[2].previousElementSibling : null;
+  if (rowEls[2]) rowEls[2].style.display = rows[2] ? '' : 'none';
+  if (mid2 && mid2.classList.contains('gallery-mid-rail')) mid2.style.display = rows[2] ? '' : 'none';
+
+  // Максимальные высоты рядов
+  const maxH = [230, 200, 220];
 
   rows.forEach((row, ri) => {
     const rowEl = rowEls[ri];
+    if (!rowEl) return;
     rowEl.innerHTML = '';
 
-    // Вычисляем целевую высоту ряда: нормируем так, чтобы сумма ширин ~= ширине контейнера
     const containerW = document.getElementById('wrapGallery').offsetWidth || window.innerWidth * 0.92;
-    const GAP = 18;      // gap между рамками
-    const FPAD = 9;      // padding рамки
+    const GAP = 18;
+    const FPAD = 9;
     const availW = containerW - GAP * (row.length - 1) - FPAD * 2 * row.length;
-
-    // Суммарная ширина при высоте 1 (аспект-сумма)
     const aspectSum = row.reduce((s, f) => s + f.w / f.h, 0);
-    const targetH = Math.min(availW / aspectSum, ri === 0 ? 230 : 200);
+    const targetH = Math.min(availW / aspectSum, maxH[ri] || 210);
 
     row.forEach(f => {
       const imgW = Math.round((f.w / f.h) * targetH);
@@ -1461,7 +1477,6 @@ function renderGalleryWall(rows) {
       frame.style.height = (imgH + FPAD * 2) + 'px';
       frame.style.flexShrink = '0';
 
-      // угловые ромбики
       ['tl','tr','bl','br'].forEach(pos => {
         const g = document.createElement('div');
         g.className = 'ggem ' + pos;
