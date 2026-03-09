@@ -309,7 +309,80 @@
   }
   .multi-rail::before{left:5%;} .multi-rail::after{right:5%;}
 
-  /* exhibit-left wrapper — groups rail+wire+frame together */
+  /* ════════ TYPE: GALLERY (стена из 10 картин, 2 ряда) ════════ */
+  .wrap-gallery {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: min(96vw, 920px);
+    gap: 0;
+    animation: fIn .65s cubic-bezier(.16,1,.3,1) both;
+    flex-shrink: 0;
+  }
+  .gallery-rail {
+    width: 100%; height: 4px;
+    background: linear-gradient(to right,transparent,var(--gold-d) 6%,var(--gold) 50%,var(--gold-d) 94%,transparent);
+    opacity: .52; position: relative; flex-shrink: 0;
+  }
+  .gallery-rail::before,.gallery-rail::after {
+    content:'◆'; position:absolute; top:50%; transform:translateY(-50%);
+    color:var(--gold); font-size:.4rem; opacity:.75;
+  }
+  .gallery-rail::before{left:4%;} .gallery-rail::after{right:4%;}
+  /* Промежуточный рельс между рядами */
+  .gallery-mid-rail {
+    width: 100%; height: 3px;
+    background: linear-gradient(to right,transparent,var(--gold-d) 10%,rgba(201,168,76,.5) 50%,var(--gold-d) 90%,transparent);
+    opacity: .38; flex-shrink: 0;
+    margin: 18px 0 0;
+  }
+  .gallery-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;    /* выравнивание по нижнему краю — рамки разной высоты стоят на одной линии */
+    justify-content: center;
+    gap: 18px;
+    padding: 14px 8px 6px;
+    flex-wrap: nowrap;
+  }
+  .gframe {
+    position: relative;
+    flex-shrink: 0;
+    background: linear-gradient(135deg,#4a3510 0%,#6b5020 25%,#3d2a0a 50%,#5c4318 75%,#4a3510 100%);
+    box-shadow: 0 0 0 1px #8a6828, 0 0 0 3px #1e1508, 0 0 0 5px #7a5a20,
+                0 16px 40px rgba(0,0,0,.88), 0 0 28px rgba(201,168,76,.04);
+    padding: 9px;
+    box-sizing: border-box;
+    transition: box-shadow .25s, transform .25s;
+  }
+  .gframe::before {
+    content:''; position:absolute; inset:5px;
+    border:1px solid rgba(201,168,76,.18); pointer-events:none; z-index:2;
+  }
+  .gframe::after {
+    content:''; position:absolute; inset:14px;
+    box-shadow: inset 0 0 12px rgba(0,0,0,.5); pointer-events:none; z-index:2;
+  }
+  .gframe:hover {
+    box-shadow: 0 0 0 1px #c9a84c, 0 0 0 3px #1e1508, 0 0 0 5px #c9a84c,
+                0 22px 55px rgba(0,0,0,.95), 0 0 28px rgba(201,168,76,.2);
+    transform: translateY(-5px);
+    z-index: 10;
+  }
+  .gframe img {
+    display: block; width: 100%; height: 100%;
+    object-fit: contain;
+    background: #0a0805;
+  }
+  .ggem { position:absolute;width:11px;height:11px;background:var(--gold);opacity:.65;z-index:3;
+          clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+  .ggem.tl{top:-5px;left:-5px} .ggem.tr{top:-5px;right:-5px}
+  .ggem.bl{bottom:-5px;left:-5px} .ggem.br{bottom:-5px;right:-5px}
+  /* На мобильных — разрешаем перенос */
+  @media(max-width:700px){
+    .gallery-row { gap:10px; padding:10px 4px 4px; flex-wrap:wrap; justify-content:center; }
+    .wrap-gallery { width:98vw; }
+  }
   .exhibit-left {
     display: contents; /* behaves like its children in column mode */
   }
@@ -379,18 +452,6 @@
     font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;
     color:var(--gold-d);text-transform:uppercase;opacity:.55;
     border-bottom:1px solid rgba(201,168,76,.12);
-  }
-  /* Vitrine as link */
-  a.vitrine {
-    display:flex; align-items:flex-end; justify-content:center;
-    cursor:pointer; transition:box-shadow .25s, border-color .25s;
-  }
-  a.vitrine:hover {
-    border-color:rgba(201,168,76,.6);
-    box-shadow:0 0 0 1px rgba(201,168,76,.08) inset, 0 -4px 30px rgba(0,0,0,.7), 0 0 30px rgba(201,168,76,.12);
-  }
-  a.vitrine:hover #vitrineImg {
-    filter: brightness(1.07);
   }
   /* ════════════════════ PLAQUE ════════════════════ */
   .plaque {
@@ -935,18 +996,16 @@
 
     <!-- F: BOOK VITRINE -->
     <div class="wrap-book" id="wrapBook" style="display:none">
-      <a class="vitrine" id="vitrineLink" href="#" target="_blank" rel="noopener" style="text-decoration:none;">
-        <img id="vitrineImg" src="" alt="" style="display:none;max-height:340px;max-width:100%;object-fit:contain;position:relative;z-index:1;box-shadow:0 8px 30px rgba(0,0,0,.7);">
-        <div id="vitrinePh" class="art-ph" style="min-height:200px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;"><div class="ph-icon">📖</div><div class="ph-txt">Экспонат под стеклом</div></div>
+      <div class="vitrine">
         <div class="vitrine-shelf"></div>
-      </a>
+      </div>
       <div class="vitrine-legs">
         <div class="vitrine-leg"></div>
         <div class="vitrine-leg"></div>
         <div class="vitrine-leg"></div>
         <div class="vitrine-leg"></div>
       </div>
-      <div class="vitrine-label" id="vitrineLinkHint">◈ Экспонат под стеклом ◈</div>
+      <div class="vitrine-label">◈ Экспонат под стеклом ◈</div>
     </div>
 
     </div><!-- /exhibit-left -->
@@ -955,6 +1014,14 @@
     <div class="wrap-multi" id="wrapMulti" style="display:none">
       <div class="multi-rail"></div>
       <div class="multi-wall" id="multiWall"></div>
+    </div>
+
+    <!-- H: GALLERY WALL (10 картин, 2 ряда) -->
+    <div class="wrap-gallery" id="wrapGallery" style="display:none">
+      <div class="gallery-rail"></div>
+      <div class="gallery-row" id="galleryRow1"></div>
+      <div class="gallery-mid-rail"></div>
+      <div class="gallery-row" id="galleryRow2"></div>
     </div>
 
     <!-- PLAQUE -->
@@ -1041,7 +1108,7 @@ const EX = [
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_004.png", type:"sculpture" },
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_005.png", type:"sculpture" },
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_006.png", type:"sculpture" },
-  { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/p_018.png", type:"book", link:"https://perorave.wordpress.com/2014/03/05/%D1%85%D0%BE%D0%B3%D0%B2%D0%B0%D1%80%D1%82%D1%81%D0%BA%D0%B8%D0%B5-%D1%88%D0%BA%D0%BE%D0%B4%D0%BD%D0%B8%D0%BA%D0%B8/" },
+  { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/p_018.png", type:"book" },
   {
     title:"Бекла-серфер и другие", author:"Разные художники", year:"2026",
     desc:"Три работы из графической серии. Бекла-серфер покоряет волны данных. Беклина радость — первое, второе, третье и компот. Доисторическая бекла смотрит сквозь время.",
@@ -1083,6 +1150,28 @@ const EX = [
       { img:"/gift/drhd/2026/img/g_001.jpg", w:540, h:380 },
     ]
   },
+  {
+    title:"Беклы. Графика", author:"Разные художники", year:"2026",
+    desc:"Малые беклы зелёные. Мы с беклой. Бекла-серфер. Беклина радость. Бекла играет. Доисторическая бекла. И другие. Коллекция графических работ из фондов музея.",
+    img:"/gift/drhd/2026/img/g_001.jpg",
+    type:"gallery",
+    rows: [
+      [
+        { img:"/gift/drhd/2026/img/g_001.jpg", w:551, h:350 },
+        { img:"/gift/drhd/2026/img/g_004.jpg", w:472, h:457 },
+        { img:"/gift/drhd/2026/img/g_005.jpg", w:425, h:439 },
+        { img:"/gift/drhd/2026/img/g_009.jpg", w:472, h:377 },
+      ],
+      [
+        { img:"/gift/drhd/2026/img/g_002.jpg", w:362, h:611 },
+        { img:"/gift/drhd/2026/img/g_003.jpg", w:441, h:574 },
+        { img:"/gift/drhd/2026/img/g_006.jpg", w:394, h:502 },
+        { img:"/gift/drhd/2026/img/g_007.jpg", w:394, h:488 },
+        { img:"/gift/drhd/2026/img/g_008.jpg", w:457, h:556 },
+        { img:"/gift/drhd/2026/img/g_010.jpg", w:401, h:484 },
+      ],
+    ]
+  },
 ];
 
 let cur = 0;
@@ -1111,7 +1200,7 @@ function render() {
   const show = id => document.getElementById(id).style.display = '';
   const hide = id => document.getElementById(id).style.display = 'none';
 
-  hide('frameH'); hide('frameV'); hide('frameS'); hide('frameW'); hide('wrapSculpt'); hide('wrapBook'); hide('wrapMulti');
+  hide('frameH'); hide('frameV'); hide('frameS'); hide('frameW'); hide('wrapSculpt'); hide('wrapBook'); hide('wrapMulti'); hide('wrapGallery');
 
   if (t === 'painting-h') {
     show('frameH');
@@ -1140,37 +1229,18 @@ function render() {
     else        { img.style.display='none'; ph.style.display='flex'; }
   } else if (t === 'book') {
     show('wrapBook');
-    const vitrineLink = document.getElementById('vitrineLink');
-    const vitrineImg  = document.getElementById('vitrineImg');
-    const vitrinePh   = document.getElementById('vitrinePh');
-    const vitrineLinkHint = document.getElementById('vitrineLinkHint');
-    // Image
-    if (e.img) {
-      vitrineImg.src = e.img; vitrineImg.alt = e.title;
-      vitrineImg.style.display = 'block'; vitrinePh.style.display = 'none';
-    } else {
-      vitrineImg.style.display = 'none'; vitrinePh.style.display = 'flex';
-    }
-    // Link
-    if (e.link) {
-      vitrineLink.href = e.link;
-      vitrineLink.style.cursor = 'pointer';
-      vitrineLinkHint.textContent = '◈ Нажмите, чтобы перейти ◈';
-      vitrineLinkHint.style.opacity = '.75';
-    } else {
-      vitrineLink.href = '#';
-      vitrineLink.onclick = e => e.preventDefault();
-      vitrineLinkHint.textContent = '◈ Экспонат под стеклом ◈';
-      vitrineLinkHint.style.opacity = '.55';
-    }
   } else if (t === 'multi') {
     show('wrapMulti');
     renderMulti(e.frames || []);
+  } else if (t === 'gallery') {
+    show('wrapGallery');
+    requestAnimationFrame(() => renderGalleryWall(e.rows || []));
   }
 
   // Re-trigger animation
   const animEl = {
-    'painting-h':'frameH','painting-v':'frameV','painting-s':'frameS','painting-w':'frameW','sculpture':'wrapSculpt','book':'wrapBook','multi':'wrapMulti'
+    'painting-h':'frameH','painting-v':'frameV','painting-s':'frameS','painting-w':'frameW',
+    'sculpture':'wrapSculpt','book':'wrapBook','multi':'wrapMulti','gallery':'wrapGallery'
   }[t];
   if (animEl) {
     const el = document.getElementById(animEl);
@@ -1187,7 +1257,7 @@ function render() {
 }
 
 // ── Thumbnails ──
-const THUMB_ICON = {'painting-h':'🖼','painting-v':'🖼','painting-s':'🖼','painting-w':'🖼','sculpture':'🗿','book':'📖','multi':'🖼'};
+const THUMB_ICON = {'painting-h':'🖼','painting-v':'🖼','painting-s':'🖼','painting-w':'🖼','sculpture':'🗿','book':'📖','multi':'🖼','gallery':'🖼'};
 
 function buildThumbs() {
   const s = document.getElementById('thumbStrip');
@@ -1255,6 +1325,58 @@ function renderMulti(frames) {
   });
 }
 
+// ── Gallery Wall renderer (2 ряда, точные пропорции, без нитей) ──
+// rows: массив из 2 массивов, каждый — [{img, w, h}]
+function renderGalleryWall(rows) {
+  const rowEls = [
+    document.getElementById('galleryRow1'),
+    document.getElementById('galleryRow2'),
+  ];
+
+  rows.forEach((row, ri) => {
+    const rowEl = rowEls[ri];
+    rowEl.innerHTML = '';
+
+    // Вычисляем целевую высоту ряда: нормируем так, чтобы сумма ширин ~= ширине контейнера
+    const containerW = document.getElementById('wrapGallery').offsetWidth || window.innerWidth * 0.92;
+    const GAP = 18;      // gap между рамками
+    const FPAD = 9;      // padding рамки
+    const availW = containerW - GAP * (row.length - 1) - FPAD * 2 * row.length;
+
+    // Суммарная ширина при высоте 1 (аспект-сумма)
+    const aspectSum = row.reduce((s, f) => s + f.w / f.h, 0);
+    const targetH = Math.min(availW / aspectSum, ri === 0 ? 230 : 200);
+
+    row.forEach(f => {
+      const imgW = Math.round((f.w / f.h) * targetH);
+      const imgH = Math.round(targetH);
+
+      const frame = document.createElement('div');
+      frame.className = 'gframe';
+      frame.style.width  = (imgW + FPAD * 2) + 'px';
+      frame.style.height = (imgH + FPAD * 2) + 'px';
+      frame.style.flexShrink = '0';
+
+      // угловые ромбики
+      ['tl','tr','bl','br'].forEach(pos => {
+        const g = document.createElement('div');
+        g.className = 'ggem ' + pos;
+        frame.appendChild(g);
+      });
+
+      const img = document.createElement('img');
+      img.src = f.img;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.style.width  = imgW + 'px';
+      img.style.height = imgH + 'px';
+      frame.appendChild(img);
+
+      rowEl.appendChild(frame);
+    });
+  });
+}
+
 function go(d)   { goTo(cur+d); }
 function goTo(i) { if(i<0||i>=EX.length)return; cur=i; render(); }
 
@@ -1299,11 +1421,11 @@ document.addEventListener('keydown', ev => {
 // ── Credits (edit names/roles here) ──
 const CREDITS = [
   { role:"Реставратор-историк",    name:"Julietta Helwell-de-Kur" },
-  { role:"Куратор. Искусствовед. Главная по гонгу",       name:"Хелена Кейн" },
+  { role:"Арт-министр музея",             name:"Блейк Эллингтон" },
   { role:"Скульптр антропоморфоза бекл",        name:"Амилия Лиссаранд" },
   { role:"Мастер беклового андеграунда",        name:"Беата ЛаВей" },
   { role:"Организатор беклоэкскурсий. Беклоэкскурсовод",         name:"Мерида Морграфт" },
-  { role:"Арт-министр музея",             name:"Блейк Эллингтон" },
+  { role:"Куратор. Искусствовед. Главная по гонгу",       name:"Хелена Кейн" },
 ];
 
 (function(){
