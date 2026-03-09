@@ -453,7 +453,10 @@
     color:var(--gold-d);text-transform:uppercase;opacity:.55;
     border-bottom:1px solid rgba(201,168,76,.12);
   }
-  /* ════════════════════ PLAQUE ════════════════════ */
+  /* Vitrine as link */
+  a.vitrine { display:flex; align-items:flex-end; justify-content:center; cursor:default; transition:border-color .25s; }
+  a.vitrine[href]:not([href="#"]) { cursor:pointer; }
+  a.vitrine[href]:not([href="#"]):hover { border-color:rgba(201,168,76,.6); box-shadow:0 0 0 1px rgba(201,168,76,.08) inset,0 -4px 30px rgba(0,0,0,.7),0 0 28px rgba(201,168,76,.12); }
   .plaque {
     max-width: 640px; width: 90vw;
     margin-top: 16px;
@@ -996,16 +999,18 @@
 
     <!-- F: BOOK VITRINE -->
     <div class="wrap-book" id="wrapBook" style="display:none">
-      <div class="vitrine">
+      <a class="vitrine" id="vitrineLink" href="#" target="_blank" rel="noopener" style="text-decoration:none;">
+        <img id="vitrineImg" src="" alt="" style="display:none;max-height:340px;max-width:100%;object-fit:contain;position:relative;z-index:1;box-shadow:0 8px 30px rgba(0,0,0,.7);">
+        <div id="vitrinePh" style="min-height:180px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:rgba(201,168,76,.2);"><div style="font-size:3rem;opacity:.28;">📖</div><div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.35em;">Экспонат под стеклом</div></div>
         <div class="vitrine-shelf"></div>
-      </div>
+      </a>
       <div class="vitrine-legs">
         <div class="vitrine-leg"></div>
         <div class="vitrine-leg"></div>
         <div class="vitrine-leg"></div>
         <div class="vitrine-leg"></div>
       </div>
-      <div class="vitrine-label">◈ Экспонат под стеклом ◈</div>
+      <div class="vitrine-label" id="vitrineLinkHint">◈ Экспонат под стеклом ◈</div>
     </div>
 
     </div><!-- /exhibit-left -->
@@ -1108,12 +1113,13 @@ const EX = [
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_004.png", type:"sculpture" },
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_005.png", type:"sculpture" },
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_006.png", type:"sculpture" },
-  { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/p_018.png", type:"book" },
+  { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/p_018.png", type:"book", link:"https://perorave.wordpress.com/2014/03/05/%D1%85%D0%BE%D0%B3%D0%B2%D0%B0%D1%80%D1%82%D1%81%D0%BA%D0%B8%D0%B5-%D1%88%D0%BA%D0%BE%D0%B4%D0%BD%D0%B8%D0%BA%D0%B8/" },
 
   {
     title:"Беклы. Графика", author:"Разные художники", year:"2026",
     desc:"Малые беклы зелёные. Мы с беклой. Бекла-серфер. Беклина радость. Бекла играет. Доисторическая бекла. И другие. Коллекция графических работ из фондов музея.",
     img:"/gift/drhd/2026/img/g_005.jpg",
+    type:"gallery",
     rows: [
       [
         { img:"/gift/drhd/2026/img/g_001.jpg", w:551, h:350 },
@@ -1188,6 +1194,27 @@ function render() {
     else        { img.style.display='none'; ph.style.display='flex'; }
   } else if (t === 'book') {
     show('wrapBook');
+    const vitrineLink    = document.getElementById('vitrineLink');
+    const vitrineImg     = document.getElementById('vitrineImg');
+    const vitrinePh      = document.getElementById('vitrinePh');
+    const vitrineLinkHint = document.getElementById('vitrineLinkHint');
+    if (e.img) {
+      vitrineImg.src = e.img; vitrineImg.alt = e.title;
+      vitrineImg.style.display = 'block'; vitrinePh.style.display = 'none';
+    } else {
+      vitrineImg.style.display = 'none'; vitrinePh.style.display = 'flex';
+    }
+    if (e.link) {
+      vitrineLink.href = e.link;
+      vitrineLink.style.cursor = 'pointer';
+      vitrineLinkHint.textContent = '◈ Нажмите, чтобы перейти ◈';
+      vitrineLinkHint.style.opacity = '.75';
+    } else {
+      vitrineLink.href = '#';
+      vitrineLink.onclick = ev => ev.preventDefault();
+      vitrineLinkHint.textContent = '◈ Экспонат под стеклом ◈';
+      vitrineLinkHint.style.opacity = '.55';
+    }
   } else if (t === 'multi') {
     show('wrapMulti');
     renderMulti(e.frames || []);
@@ -1380,11 +1407,11 @@ document.addEventListener('keydown', ev => {
 // ── Credits (edit names/roles here) ──
 const CREDITS = [
   { role:"Реставратор-историк",    name:"Julietta Helwell-de-Kur" },
-  { role:"Арт-министр музея",             name:"Блейк Эллингтон" },
+  { role:"Куратор. Искусствовед. Главная по гонгу",       name:"Хелена Кейн" },
   { role:"Скульптр антропоморфоза бекл",        name:"Амилия Лиссаранд" },
   { role:"Мастер беклового андеграунда",        name:"Беата ЛаВей" },
   { role:"Организатор беклоэкскурсий. Беклоэкскурсовод",         name:"Мерида Морграфт" },
-  { role:"Куратор. Искусствовед. Главная по гонгу",       name:"Хелена Кейн" },
+  { role:"Арт-министр музея",             name:"Блейк Эллингтон" },
 ];
 
 (function(){
