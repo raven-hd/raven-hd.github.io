@@ -81,7 +81,7 @@
   /* ── CSS custom properties for layout arithmetic ── */
   :root {
     --nav-h: 62px;      /* museum top nav height */
-    --thumb-h: 58px;    /* bottom thumb strip */
+    --thumb-h: 62px;    /* bottom thumb strip */
     --arr-h: 74px;      /* nav arrows bar above thumbs */
     --bottom-ui: calc(var(--thumb-h) + var(--arr-h)); /* total bottom chrome */
     --avail-h: calc(100vh - var(--nav-h) - var(--bottom-ui)); /* usable canvas */
@@ -483,7 +483,7 @@
   /* ════════════════════ NAV ARROWS — fixed above thumb strip ════════════════════ */
   .nav-arrows{
     position:fixed;bottom:var(--thumb-h);left:50%;transform:translateX(-50%);
-    z-index:60;
+    z-index:55;
     display:flex;align-items:center;gap:22px;
     background:linear-gradient(to top,rgba(3,2,1,.88),rgba(3,2,1,.5));
     padding:10px 28px 12px;
@@ -498,7 +498,7 @@
   .kb-hint{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.25em;color:rgba(122,98,48,.32);text-transform:uppercase;}
 
   /* ════════════════════ THUMBS ════════════════════ */
-  .thumb-wrap{position:fixed;bottom:0;left:0;right:0;z-index:50;background:linear-gradient(to top,rgba(3,2,1,.98),rgba(3,2,1,.68));border-top:1px solid rgba(201,168,76,.1);padding:9px 18px 11px;}
+  .thumb-wrap{position:fixed;bottom:0;left:0;right:0;z-index:50;background:linear-gradient(to top,rgba(3,2,1,.98),rgba(3,2,1,.68));border-top:1px solid rgba(201,168,76,.1);padding:9px 18px 11px;height:var(--thumb-h);box-sizing:border-box;}
   .thumb-strip{display:flex;gap:7px;overflow-x:auto;max-width:1200px;margin:0 auto;scrollbar-width:thin;scrollbar-color:var(--gold-d) transparent;padding-bottom:2px;}
   .thumb-strip::-webkit-scrollbar{height:3px;}.thumb-strip::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px;}
   .thumb{flex-shrink:0;width:50px;height:38px;border:1px solid rgba(201,168,76,.18);cursor:pointer;overflow:hidden;background:#0f0c07;display:flex;align-items:center;justify-content:center;font-size:1rem;opacity:.45;position:relative;transition:all .2s;}
@@ -1408,11 +1408,11 @@ document.addEventListener('keydown', ev => {
 // ── Credits (edit names/roles here) ──
 const CREDITS = [
   { role:"Реставратор-историк",    name:"Julietta Helwell-de-Kur" },
-  { role:"Арт-министр музея",             name:"Блейк Эллингтон" },
+  { role:"Куратор. Искусствовед. Главная по гонгу",       name:"Хелена Кейн" },
   { role:"Скульптр антропоморфоза бекл",        name:"Амилия Лиссаранд" },
   { role:"Мастер беклового андеграунда",        name:"Беата ЛаВей" },
   { role:"Организатор беклоэкскурсий. Беклоэкскурсовод",         name:"Мерида Морграфт" },
-  { role:"Куратор. Искусствовед. Главная по гонгу",       name:"Хелена Кейн" },
+  { role:"Арт-министр музея",             name:"Блейк Эллингтон" },
 ];
 
 (function(){
