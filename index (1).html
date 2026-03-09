@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Экспозиция — Беклы Среди Нас</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold:#c9a84c; --gold-l:#e8c96a; --gold-d:#7a6230;
+    --cream:#f0e8d8; --bg:#0a0805;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Crimson Text',Georgia,serif;background:var(--bg);color:var(--cream);overflow-x:hidden;}
+
+  /* ════════════════════ LANDING ════════════════════ */
+  .hero-wrap{position:relative;width:100vw;height:100vh;overflow:hidden;}
+  #landing{position:relative;width:100vw;min-height:100vh;overflow-x:hidden;}
+  #landing-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center bottom;filter:brightness(0.9) contrast(1.05);}
+  .hero-wrap::before{
+    content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(to bottom,rgba(5,4,2,0.7) 0%,rgba(5,4,2,0.35) 25%,transparent 45%,transparent 62%,rgba(5,4,2,0.4) 100%);
+  }
+  .l-title{
+    position:absolute;top:0;left:0;right:0;z-index:10;text-align:center;
+    padding:28px 20px 44px;
+    background:linear-gradient(to bottom,rgba(5,4,2,0.92) 0%,rgba(5,4,2,0.75) 35%,rgba(5,4,2,0.3) 70%,transparent 100%);
+  }
+  .l-title h1{font-family:'Cinzel Decorative',serif;font-size:clamp(0.95rem,2.7vw,1.95rem);color:var(--gold-l);letter-spacing:.13em;line-height:1.3;text-shadow:0 0 40px rgba(201,168,76,.75),0 2px 10px #000;}
+  .l-title p{font-family:'Cinzel',serif;font-size:clamp(.52rem,1vw,.75rem);color:var(--gold-d);letter-spacing:.45em;margin-top:7px;text-shadow:0 1px 8px #000,0 0 20px rgba(0,0,0,.9);}
+  .hotspot{position:absolute;z-index:20;cursor:pointer;}
+  .hotspot:hover{filter:brightness(1.08);}
+  #hs-tickets{bottom:14%;right:5%;width:42%;height:18%;}
+  #hs-enter{bottom:0;left:15%;width:18%;height:35%;}
+  .l-hints{position:absolute;bottom:0;left:0;right:0;z-index:15;pointer-events:none;background:linear-gradient(to top,rgba(5,4,2,.88),transparent);padding:22px 30px 15px;display:flex;justify-content:center;gap:50px;}
+  .l-hints span{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.22em;color:var(--gold-d);opacity:.72;text-transform:uppercase;}
+
+  /* ════════════════════ MODAL ════════════════════ */
+  .modal-ov{display:none;position:fixed;inset:0;z-index:2000;background:rgba(3,2,1,.91);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
+  .modal-ov.open{display:flex;animation:mFade .3s ease;}
+  @keyframes mFade{from{opacity:0}to{opacity:1}}
+  .modal-box{position:relative;max-width:450px;width:90%;background:linear-gradient(150deg,#211c10,#1a1509,#211c10);border:1px solid var(--gold-d);padding:44px 38px 34px;text-align:center;box-shadow:0 0 80px rgba(0,0,0,.95),0 0 40px rgba(201,168,76,.07) inset;animation:mUp .4s cubic-bezier(.16,1,.3,1);}
+  @keyframes mUp{from{transform:translateY(26px);opacity:0}to{transform:none;opacity:1}}
+  .mc{position:absolute;width:20px;height:20px;border-color:var(--gold);border-style:solid;}
+  .mc.tl{top:9px;left:9px;border-width:2px 0 0 2px}.mc.tr{top:9px;right:9px;border-width:2px 2px 0 0}
+  .mc.bl{bottom:9px;left:9px;border-width:0 0 2px 2px}.mc.br{bottom:9px;right:9px;border-width:0 2px 2px 0}
+  .m-close{position:absolute;top:18px;right:18px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--gold-d);font-size:1rem;cursor:pointer;transition:color .2s;}
+  .m-close:hover{color:var(--gold-l);}
+  .m-eyebrow{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.42em;color:var(--gold-d);text-transform:uppercase;margin-bottom:20px;}
+  .m-portrait{width:155px;height:155px;border-radius:50%;margin:0 auto 18px;border:2px solid var(--gold-d);overflow:hidden;background:#14110a;box-shadow:0 0 30px rgba(201,168,76,.14);display:flex;align-items:center;justify-content:center;font-size:3rem;}
+  .m-portrait img{width:100%;height:100%;object-fit:cover;display:block;}
+  .m-name{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold-l);margin-bottom:10px;text-shadow:0 0 20px rgba(201,168,76,.4);}
+  .m-text{font-family:'Crimson Text',serif;font-size:.97rem;color:#8a7850;line-height:1.65;font-style:italic;}
+
+  /* ════════════════════ MUSEUM SHELL ════════════════════ */
+  #museum{display:none;min-height:100vh;position:relative;background:var(--bg);}
+  #museum.open{display:block;}
+  .hall-atm{position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(ellipse 85% 35% at 50% 0%,rgba(80,55,15,.2) 0%,transparent 100%),
+               radial-gradient(ellipse 25% 70% at 8% 50%,rgba(35,22,5,.35) 0%,transparent 100%),
+               radial-gradient(ellipse 25% 70% at 92% 50%,rgba(35,22,5,.35) 0%,transparent 100%),var(--bg);}
+  .hall-atm::before{content:'';position:absolute;inset:0;
+    background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(201,168,76,.02) 79px,rgba(201,168,76,.02) 80px),
+                     repeating-linear-gradient(90deg,transparent,transparent 119px,rgba(201,168,76,.015) 119px,rgba(201,168,76,.015) 120px);}
+  .hall-atm::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 45%,rgba(3,2,1,.65) 100%);}
+  .m-nav{position:relative;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:15px 40px;background:linear-gradient(to bottom,rgba(3,2,1,.96),rgba(3,2,1,.65));border-bottom:1px solid rgba(201,168,76,.17);gap:8px;}
+  .m-nav-right{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.25em;color:var(--gold-d);text-align:right;flex-shrink:0;white-space:nowrap;}
+  .m-nav h2{font-family:'Cinzel Decorative',serif;font-size:clamp(.65rem,1.7vw,1.05rem);color:var(--gold);letter-spacing:.12em;text-shadow:0 0 20px rgba(201,168,76,.4);}
+  .nav-btn{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.2em;color:var(--gold-d);background:none;border:1px solid rgba(201,168,76,.28);padding:7px 20px;cursor:pointer;text-transform:uppercase;transition:all .3s;}
+  .nav-btn:hover{color:var(--gold-l);border-color:var(--gold);box-shadow:0 0 14px rgba(201,168,76,.15);}
+
+  /* ════════════════════ EXHIBIT AREA ════════════════════
+     Mobile  (≤700px):  flex-column, scrollable, padding bottom for thumb+nav
+     Desktop (≥701px):  two cases:
+       A) Enough height  → column layout, exhibit+plaque stacked, no overflow
+       B) Short viewport → row layout, exhibit LEFT / plaque RIGHT
+  ════════════════════════════════════════════════════════ */
+
+  /* ── CSS custom properties for layout arithmetic ── */
+  :root {
+    --nav-h: 62px;      /* museum top nav height */
+    --thumb-h: 58px;    /* bottom thumb strip */
+    --arr-h: 74px;      /* nav arrows bar above thumbs */
+    --bottom-ui: calc(var(--thumb-h) + var(--arr-h)); /* total bottom chrome */
+    --avail-h: calc(100vh - var(--nav-h) - var(--bottom-ui)); /* usable canvas */
+    --frame-pad: 18px;  /* inner frame padding */
+  }
+
+  /* ── MAIN CONTAINER ── */
+  .exhibit-area {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* mobile: natural scroll */
+    padding: 28px 16px calc(var(--bottom-ui) + 20px);
+    gap: 16px;
+    min-height: calc(100vh - var(--nav-h));
+    box-sizing: border-box;
+  }
+
+  .spotlight{position:absolute;top:60px;left:50%;transform:translateX(-50%);width:min(560px,85vw);height:420px;pointer-events:none;z-index:5;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.065) 0%,transparent 65%);}
+  .wall-rail{width:min(680px,90vw);height:4px;position:relative;background:linear-gradient(to right,transparent,var(--gold-d) 12%,var(--gold) 50%,var(--gold-d) 88%,transparent);opacity:.52;transition:opacity .4s;flex-shrink:0;}
+  .wall-rail::before,.wall-rail::after{content:'◆';position:absolute;top:50%;transform:translateY(-50%);color:var(--gold);font-size:.45rem;opacity:.75;}
+  .wall-rail::before{left:10%;}.wall-rail::after{right:10%;}
+  .wire{width:1px;height:34px;background:linear-gradient(to bottom,var(--gold-d),transparent);opacity:.42;transition:opacity .4s;flex-shrink:0;}
+
+  /* ── SHARED frame base styles ── */
+  .frame-base {
+    position: relative;
+    background: linear-gradient(135deg,#4a3510 0%,#6b5020 25%,#3d2a0a 50%,#5c4318 75%,#4a3510 100%);
+    padding: var(--frame-pad);
+    box-shadow: 0 0 0 1px #8a6828, 0 0 0 3px #1e1508, 0 0 0 5px #7a5a20,
+                0 30px 70px rgba(0,0,0,.92), 0 0 45px rgba(201,168,76,.055);
+    animation: fIn .65s cubic-bezier(.16,1,.3,1) both;
+    /* Never overflow its container */
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+  .frame-base::before{content:'';position:absolute;inset:8px;border:1px solid rgba(201,168,76,.2);pointer-events:none;z-index:2;}
+  .frame-base::after{content:'';position:absolute;inset:18px;box-shadow:inset 0 0 18px rgba(0,0,0,.6);pointer-events:none;z-index:2;}
+
+  /* ── SHARED frame animation ── */
+  @keyframes fIn{from{opacity:0;transform:scale(.97) translateY(10px)}to{opacity:1;transform:none}}
+  @keyframes pIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* ════════════════════════════════════════
+     FRAME TYPES — mobile first
+     Images use object-fit:contain so they
+     NEVER get cropped inside the frame.
+  ════════════════════════════════════════ */
+
+  /* ── PAINTING-H  (4:3 horizontal) ── */
+  .frame-h {
+    width: min(92vw, 640px);
+  }
+  .art-img-h {
+    display:block; width:100%; aspect-ratio:4/3;
+    object-fit:contain; background:#0a0805;
+  }
+  .art-ph.ph-h { aspect-ratio:4/3; }
+
+  /* ── PAINTING-V  (3:4 vertical) ── */
+  .frame-v {
+    /* let height drive the size on mobile */
+    width: auto;
+    display: inline-block;
+  }
+  .art-img-v {
+    display:block;
+    width: auto;
+    max-width: min(72vw, 340px);
+    /* height cap so it doesn't dominate on large screens */
+    max-height: 55vh;
+    object-fit:contain;
+    background:#0a0805;
+  }
+  .art-ph.ph-v {
+    width: min(72vw, 280px);
+    aspect-ratio:3/4;
+    max-height:55vh;
+  }
+
+  /* ── PAINTING-S  (1:1 square) ── */
+  .frame-s {
+    width: min(80vw, 460px);
+  }
+  .art-img-s {
+    display:block; width:100%; aspect-ratio:1/1;
+    object-fit:contain; background:#0a0805;
+  }
+  .art-ph.ph-s { aspect-ratio:1/1; }
+
+  /* ── PAINTING-W  (3:2 wide) ── */
+  .frame-w {
+    width: min(92vw, 600px);
+  }
+  .art-img-w {
+    display:block; width:100%; aspect-ratio:3/2;
+    object-fit:contain; background:#0a0805;
+  }
+  .art-ph.ph-w { aspect-ratio:3/2; }
+
+  /* Apply base frame visuals to all frame types */
+  .frame-h, .frame-v, .frame-s, .frame-w {
+    position: relative;
+    background: linear-gradient(135deg,#4a3510 0%,#6b5020 25%,#3d2a0a 50%,#5c4318 75%,#4a3510 100%);
+    padding: var(--frame-pad);
+    box-shadow: 0 0 0 1px #8a6828, 0 0 0 3px #1e1508, 0 0 0 5px #7a5a20,
+                0 30px 70px rgba(0,0,0,.92), 0 0 45px rgba(201,168,76,.055);
+    animation: fIn .65s cubic-bezier(.16,1,.3,1) both;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+  .frame-h::before,.frame-v::before,.frame-s::before,.frame-w::before{content:'';position:absolute;inset:8px;border:1px solid rgba(201,168,76,.2);pointer-events:none;z-index:2;}
+  .frame-h::after,.frame-v::after,.frame-s::after,.frame-w::after{content:'';position:absolute;inset:18px;box-shadow:inset 0 0 18px rgba(0,0,0,.6);pointer-events:none;z-index:2;}
+
+  /* Shared frame internals */
+  .gem{position:absolute;width:14px;height:14px;background:var(--gold);opacity:.72;z-index:3;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);}
+  .gem.tl{top:-6px;left:-6px}.gem.tr{top:-6px;right:-6px}.gem.bl{bottom:-6px;left:-6px}.gem.br{bottom:-6px;right:-6px}
+  .art-ph{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:rgba(201,168,76,.2);background:linear-gradient(135deg,#0f0c07,#181408,#0f0c07);}
+  .art-ph .ph-icon{font-size:3.2rem;filter:grayscale(1);opacity:.28;}
+  .art-ph .ph-txt{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.35em;}
+
+  /* ════════ TYPE: SCULPTURE ════════ */
+  .wrap-sculpture{
+    position:relative;max-width:460px;width:min(90vw,460px);
+    display:flex;flex-direction:column;align-items:center;
+    animation:fIn .65s cubic-bezier(.16,1,.3,1) both;
+    flex-shrink:0;
+  }
+  .sculpture-img{
+    display:block;max-width:100%;width:auto;
+    max-height:min(50vh,420px);
+    object-fit:contain;
+    filter:drop-shadow(0 20px 50px rgba(0,0,0,.9)) drop-shadow(0 0 25px rgba(201,168,76,.07));
+  }
+  .sculpture-ph{width:260px;aspect-ratio:2/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:rgba(201,168,76,.2);}
+  .sculpture-ph .ph-icon{font-size:3.5rem;opacity:.28;}
+  .sculpture-ph .ph-txt{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.35em;}
+  /* Rope barrier */
+  .rope-barrier{width:min(520px,88vw);margin-top:18px;display:flex;align-items:flex-start;gap:0;}
+  .rope-post{flex-shrink:0;display:flex;flex-direction:column;align-items:center;}
+  .rope-post-ball{width:15px;height:15px;background:radial-gradient(circle at 38% 32%,#e0b84a,#7a5018);border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.75),0 0 10px rgba(201,168,76,.22);}
+  .rope-post-shaft{width:6px;height:56px;background:linear-gradient(to right,#5a3e10,#c9a84c 42%,#8a6422 62%,#4e360e);border-radius:3px;box-shadow:1px 2px 8px rgba(0,0,0,.65);}
+  .rope-post-base{width:26px;height:7px;background:linear-gradient(to bottom,#7a5a20,#2e2008);border-radius:3px 3px 1px 1px;box-shadow:0 3px 8px rgba(0,0,0,.75);}
+  .rope-line{flex:1;overflow:visible;margin-top:6px;}
+  .rope-line svg{width:100%;overflow:visible;display:block;}
+
+  /* exhibit-left wrapper — groups rail+wire+frame together */
+  .exhibit-left {
+    display: contents; /* behaves like its children in column mode */
+  }
+  /* In row mode (.layout-row added via JS), exhibit-left becomes a real flex column */
+  #museum.layout-row .exhibit-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    max-width: 60vw;
+    gap: 4px;
+  }
+
+  /* ════════ TYPE: BOOK (витрина с книгой) ════════ */
+  .wrap-book{
+    position:relative;max-width:580px;width:90vw;
+    display:flex;flex-direction:column;align-items:center;
+    animation:fIn .65s cubic-bezier(.16,1,.3,1) both;
+  }
+  /* Glass case */
+  .vitrine{
+    position:relative;width:100%;min-height:220px;
+    background:linear-gradient(160deg,rgba(30,25,12,.92),rgba(18,14,6,.96));
+    border:1px solid rgba(201,168,76,.3);
+    border-bottom:none;
+    padding:32px 40px 28px;
+    display:flex;align-items:flex-end;justify-content:center;gap:32px;
+    box-shadow:0 0 0 1px rgba(201,168,76,.08) inset,0 -4px 30px rgba(0,0,0,.7);
+  }
+  /* Glass shimmer top */
+  .vitrine::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:50%;
+    background:linear-gradient(to bottom,rgba(255,255,255,.04),transparent);
+    pointer-events:none;
+  }
+  /* Glass reflection streak */
+  .vitrine::after{
+    content:'';position:absolute;top:8px;left:15%;width:30%;height:1px;
+    background:linear-gradient(to right,transparent,rgba(255,255,255,.12),transparent);
+    pointer-events:none;
+  }
+  /* Velvet shelf */
+  .vitrine-shelf{
+    position:absolute;bottom:0;left:0;right:0;height:16px;
+    background:linear-gradient(to bottom,#3a1a08,#1e0e04);
+    border-top:1px solid rgba(201,168,76,.35);
+    box-shadow:0 4px 20px rgba(0,0,0,.8);
+  }
+  .vitrine-shelf::before{
+    content:'';position:absolute;inset:2px 0 0;
+    background:repeating-linear-gradient(90deg,rgba(80,30,10,.6),rgba(80,30,10,.6) 3px,transparent 3px,transparent 8px);
+    opacity:.4;
+  }
+  /* Stand legs */
+  .vitrine-legs{
+    width:100%;display:flex;justify-content:space-between;padding:0 30px;
+  }
+  .vitrine-leg{
+    width:10px;height:28px;
+    background:linear-gradient(to right,#5a3e10,#c9a84c 45%,#7a5018);
+    border-radius:0 0 4px 4px;
+    box-shadow:1px 2px 6px rgba(0,0,0,.6);
+  }
+  /* Label under vitrine */
+  .vitrine-label{
+    margin-top:4px;padding:5px 18px;
+    font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;
+    color:var(--gold-d);text-transform:uppercase;opacity:.55;
+    border-bottom:1px solid rgba(201,168,76,.12);
+  }
+  /* ════════════════════ PLAQUE ════════════════════ */
+  .plaque {
+    max-width: 640px; width: 90vw;
+    margin-top: 16px;
+    background: linear-gradient(to bottom,#1c1710,#141009);
+    border: 1px solid rgba(201,168,76,.22);
+    position: relative;
+    animation: pIn .6s cubic-bezier(.16,1,.3,1) .1s both;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+  .plaque::before{content:'';position:absolute;inset:4px;border:1px solid rgba(201,168,76,.065);pointer-events:none;}
+  .plaque-top{padding:14px 20px 11px;border-bottom:1px solid rgba(201,168,76,.1);display:flex;align-items:flex-start;justify-content:space-between;gap:18px;}
+  .plaque-main{flex:1;min-width:0;}
+  .p-num{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.42em;color:var(--gold-d);opacity:.6;margin-bottom:5px;}
+  .p-title{font-family:'Cinzel Decorative',serif;font-size:clamp(.78rem,1.9vw,1.2rem);color:var(--gold-l);line-height:1.3;text-shadow:0 0 20px rgba(201,168,76,.25);}
+  .p-orig{font-family:'Crimson Text',serif;font-size:.83rem;color:var(--gold-d);font-style:italic;margin-top:3px;opacity:.78;}
+  .plaque-meta{text-align:right;flex-shrink:0;}
+  .p-author{font-family:'Cinzel',serif;font-size:.74rem;letter-spacing:.07em;color:var(--cream);}
+  .p-year{font-family:'Crimson Text',serif;font-size:.78rem;color:#6a5828;font-style:italic;margin-top:2px;}
+  .p-tech{font-family:'Crimson Text',serif;font-size:.73rem;color:#4a3818;font-style:italic;margin-top:2px;}
+  .p-desc{padding:12px 20px 14px;font-family:'Crimson Text',serif;font-size:.97rem;line-height:1.68;color:#7a6840;font-style:italic;}
+
+  /* ════════════════════ NAV ARROWS — fixed above thumb strip ════════════════════ */
+  .nav-arrows{
+    position:fixed;bottom:var(--thumb-h);left:50%;transform:translateX(-50%);
+    z-index:60;
+    display:flex;align-items:center;gap:22px;
+    background:linear-gradient(to top,rgba(3,2,1,.88),rgba(3,2,1,.5));
+    padding:10px 28px 12px;
+    border-top:1px solid rgba(201,168,76,.1);
+  }
+  .arr-btn{width:50px;height:50px;border:1px solid rgba(201,168,76,.32);background:rgba(10,8,5,.8);color:var(--gold);font-size:1.35rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;position:relative;overflow:hidden;}
+  .arr-btn::before{content:'';position:absolute;inset:0;background:rgba(201,168,76,.09);transform:scaleX(0);transform-origin:left;transition:transform .25s;}
+  .arr-btn:hover:not(:disabled)::before{transform:scaleX(1);}
+  .arr-btn:hover:not(:disabled){border-color:var(--gold);box-shadow:0 0 18px rgba(201,168,76,.18);}
+  .arr-btn:disabled{opacity:.22;cursor:default;}
+  .arr-count{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.3em;color:var(--gold-d);min-width:75px;text-align:center;}
+  .kb-hint{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.25em;color:rgba(122,98,48,.32);text-transform:uppercase;}
+
+  /* ════════════════════ THUMBS ════════════════════ */
+  .thumb-wrap{position:fixed;bottom:0;left:0;right:0;z-index:50;background:linear-gradient(to top,rgba(3,2,1,.98),rgba(3,2,1,.68));border-top:1px solid rgba(201,168,76,.1);padding:9px 18px 11px;}
+  .thumb-strip{display:flex;gap:7px;overflow-x:auto;max-width:1200px;margin:0 auto;scrollbar-width:thin;scrollbar-color:var(--gold-d) transparent;padding-bottom:2px;}
+  .thumb-strip::-webkit-scrollbar{height:3px;}.thumb-strip::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:2px;}
+  .thumb{flex-shrink:0;width:50px;height:38px;border:1px solid rgba(201,168,76,.18);cursor:pointer;overflow:hidden;background:#0f0c07;display:flex;align-items:center;justify-content:center;font-size:1rem;opacity:.45;position:relative;transition:all .2s;}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .thumb:hover{opacity:.82;border-color:rgba(201,168,76,.45);}
+  .thumb.active{opacity:1;border-color:var(--gold);box-shadow:0 0 12px rgba(201,168,76,.3);}
+  .th-n{position:absolute;bottom:1px;right:2px;font-family:'Cinzel',serif;font-size:.42rem;color:var(--gold-d);text-shadow:0 0 4px rgba(0,0,0,.9);}
+
+  /* ════ MOBILE LANDING BUTTONS ════ */
+  .mobile-nav-btns{
+    display:none;position:absolute;
+    top:50%;left:50%;transform:translate(-50%,-50%);
+    z-index:25;gap:20px;flex-direction:column;align-items:center;
+  }
+  .mobile-nav-btns .mob-btn{
+    font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.22em;
+    color:var(--gold-l);
+    background:rgba(5,4,2,.82);
+    border:1px solid rgba(201,168,76,.55);
+    padding:18px 40px;cursor:pointer;text-transform:uppercase;
+    transition:all .3s;white-space:nowrap;backdrop-filter:blur(6px);
+    width:260px;text-align:center;
+    box-shadow:0 0 30px rgba(0,0,0,.6);
+  }
+  .mobile-nav-btns .mob-btn:hover,
+  .mobile-nav-btns .mob-btn:active{
+    color:var(--gold-l);border-color:var(--gold);
+    background:rgba(15,10,4,.9);
+    box-shadow:0 0 20px rgba(201,168,76,.25);
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     RESPONSIVE BREAKPOINTS
+     ── Mobile  ≤700px  : column, natural scroll
+     ── Desktop 701-899 : enough height  → column, no overflow
+                          too short (via JS class) → row layout
+     ── Desktop ≥900px  : column with constrained heights
+     ── Wide    ≥1100px : wider frames
+  ══════════════════════════════════════════════════════════════ */
+
+  /* ── Tablet / small desktop: constrain frame heights so everything fits ── */
+  @media(min-width:701px){
+    .exhibit-area{
+      height: calc(100vh - var(--nav-h));
+      overflow: hidden;
+      padding-top: 20px;
+      padding-bottom: calc(var(--bottom-ui) + 10px);
+      justify-content: flex-start;
+    }
+
+    /* ── COLUMN mode (default, enough height) ──
+       Frame gets a max-height so it never pushes plaque off screen.
+       --avail-h = viewport - nav - bottom UI
+       frame takes ~55%, plaque takes ~38%, rail+wire ~7%
+    */
+    .frame-h, .frame-s, .frame-w {
+      max-height: calc(var(--avail-h) * 0.56);
+      overflow: hidden;
+    }
+    .frame-v {
+      max-height: calc(var(--avail-h) * 0.58);
+      overflow: hidden;
+    }
+    .art-img-h, .art-ph.ph-h {
+      max-height: calc(var(--avail-h) * 0.56 - 36px);
+    }
+    .art-img-s, .art-ph.ph-s {
+      max-height: calc(var(--avail-h) * 0.56 - 36px);
+    }
+    .art-img-w, .art-ph.ph-w {
+      max-height: calc(var(--avail-h) * 0.56 - 36px);
+    }
+    .art-img-v {
+      max-height: calc(var(--avail-h) * 0.58 - 36px);
+      max-width: min(55vw, 320px);
+    }
+    .art-ph.ph-v {
+      max-height: calc(var(--avail-h) * 0.58 - 36px);
+      width: auto;
+    }
+    .sculpture-img {
+      max-height: calc(var(--avail-h) * 0.48);
+    }
+
+    /* Plaque scrolls internally if content overflows */
+    .plaque {
+      max-height: calc(var(--avail-h) * 0.38);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold-d) #0e0c07;
+    }
+    .plaque::-webkit-scrollbar{width:5px;}
+    .plaque::-webkit-scrollbar-track{background:#0e0c07;border-left:1px solid rgba(201,168,76,.08);}
+    .plaque::-webkit-scrollbar-thumb{background:linear-gradient(to bottom,var(--gold-d),rgba(201,168,76,.3),var(--gold-d));border-radius:3px;}
+    .plaque::-webkit-scrollbar-thumb:hover{background:var(--gold);}
+    /* Fade bottom edge */
+    .plaque::after{
+      content:'';position:sticky;bottom:0;display:block;
+      height:22px;background:linear-gradient(to top,#141009,transparent);
+      pointer-events:none;margin-top:-22px;
+    }
+  }
+
+  /* ── ROW mode: exhibit LEFT, plaque RIGHT (triggered by JS when viewport too short) ──
+     Class .layout-row added to #museum via JS.
+  */
+  #museum.layout-row .exhibit-area {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 24px;
+    padding-left: 20px;
+    padding-right: max(20px, 200px); /* leave room for watcher */
+    overflow: hidden;
+    height: calc(100vh - var(--nav-h));
+  }
+
+  /* In row mode, rail and wire go horizontal at the top of the left column */
+  #museum.layout-row .wall-rail {
+    display: none; /* hidden in row mode to save space */
+  }
+  #museum.layout-row .wire {
+    display: none;
+  }
+
+  /* Left column: exhibit */
+  #museum.layout-row .exhibit-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 0;
+  }
+
+  /* Right column: plaque */
+  #museum.layout-row .plaque {
+    width: clamp(260px, 35vw, 480px);
+    max-width: none;
+    max-height: calc(100vh - var(--nav-h) - var(--bottom-ui) - 20px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 0;
+    align-self: flex-start;
+    flex-shrink: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-d) #0e0c07;
+  }
+  #museum.layout-row .plaque::-webkit-scrollbar{width:5px;}
+  #museum.layout-row .plaque::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:3px;}
+
+  /* In row mode, frames get tighter height budget */
+  #museum.layout-row .frame-h,
+  #museum.layout-row .frame-s,
+  #museum.layout-row .frame-w {
+    max-height: calc(100vh - var(--nav-h) - var(--bottom-ui) - 20px);
+    max-width: min(52vw, 560px);
+  }
+  #museum.layout-row .frame-v {
+    max-height: calc(100vh - var(--nav-h) - var(--bottom-ui) - 20px);
+    max-width: min(35vw, 320px);
+  }
+  #museum.layout-row .art-img-h,
+  #museum.layout-row .art-ph.ph-h {
+    max-height: calc(100vh - var(--nav-h) - var(--bottom-ui) - 56px);
+  }
+  #museum.layout-row .art-img-v {
+    max-height: calc(100vh - var(--nav-h) - var(--bottom-ui) - 56px);
+    max-width: min(31vw, 280px);
+  }
+  #museum.layout-row .art-ph.ph-v {
+    max-height: calc(100vh - var(--nav-h) - var(--bottom-ui) - 56px);
+    width: auto;
+  }
+  #museum.layout-row .art-img-s,
+  #museum.layout-row .art-ph.ph-s,
+  #museum.layout-row .art-img-w,
+  #museum.layout-row .art-ph.ph-w {
+    max-height: calc(100vh - var(--nav-h) - var(--bottom-ui) - 56px);
+  }
+  #museum.layout-row .sculpture-img {
+    max-height: calc(100vh - var(--nav-h) - var(--bottom-ui) - 90px);
+  }
+  #museum.layout-row .wrap-sculpture {
+    max-width: min(45vw, 420px);
+  }
+
+  /* Watcher must not overlap the plaque in row mode */
+  #museum.layout-row #watcher {
+    right: 0;
+  }
+
+  /* ── Small screens ── */
+  @media(max-width:700px){
+    .plaque-top{flex-direction:column;}.plaque-meta{text-align:left;}
+    .m-nav{padding:11px 14px;}
+    .exhibit-area{padding:18px 10px calc(var(--bottom-ui) + 16px);}
+    .vitrine{padding:24px 20px 20px;}
+    .nav-btn{font-size:0;padding:8px 12px;letter-spacing:0;}
+    .nav-btn::before{content:'←';font-size:.9rem;}
+    .m-nav h2{font-size:.7rem;}
+    .m-nav-right{font-size:.52rem;letter-spacing:.12em;}
+  }
+
+  @media(max-width:900px){
+    .mobile-nav-btns{display:flex;}
+    #hs-tickets,#hs-enter{pointer-events:none;}
+    .l-hints{display:none;}
+  }
+
+  /* ── Extra wide: give more room to frames ── */
+  @media(min-width:1100px){
+    :root{--avail-h:calc(100vh - var(--nav-h) - var(--bottom-ui));}
+    .frame-h{max-width:min(88vw,700px);}
+    .frame-w{max-width:min(88vw,680px);}
+    .frame-s{max-width:min(75vw,520px);}
+    .frame-v{max-width:min(52vw,380px);}
+    .plaque{max-width:700px;}
+  }
+
+  /* ════════════════════ FOOTER ════════════════════ */
+  #l-footer{
+    position:relative;
+    width:100%;
+    min-height:min(520px,90vh);
+    overflow:hidden;
+    z-index:5;
+    display:flex; align-items:stretch;
+  }
+  .footer-parallax-bg{
+    position:absolute; inset:-40px 0;
+    background:
+      linear-gradient(to bottom, rgba(3,2,1,0) 0%, rgba(3,2,1,.7) 20%, rgba(3,2,1,.97) 50%),
+      radial-gradient(ellipse 120% 80% at 50% 100%, rgba(60,40,10,.5) 0%, transparent 70%),
+      #0a0805;
+    transform:translateY(0);
+    will-change:transform;
+  }
+  .footer-content{
+    position:relative; z-index:2;
+    width:100%; display:flex; flex-direction:column;
+    align-items:center; justify-content:flex-end;
+    padding:0 20px 36px;
+    gap:28px;
+  }
+  .footer-title-wrap{text-align:center;}
+  .footer-ornament{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.5em;color:var(--gold-d);opacity:.6;margin-bottom:10px;}
+  .footer-expo{font-family:'Cinzel',serif;font-size:clamp(.55rem,.9vw,.75rem);letter-spacing:.55em;color:var(--gold-d);text-transform:uppercase;margin-bottom:4px;}
+  .footer-name{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,3.5vw,2.4rem);color:var(--gold-l);letter-spacing:.1em;line-height:1.15;text-shadow:0 0 40px rgba(201,168,76,.5),0 2px 12px rgba(0,0,0,1);}
+  .footer-sub{font-family:'Crimson Text',serif;font-size:clamp(.75rem,1.4vw,1rem);color:#7a6840;font-style:italic;margin-top:10px;line-height:1.5;}
+
+  /* Stone slab / credits tablet */
+  .footer-slab{
+    max-width:680px; width:100%;
+    background:linear-gradient(145deg,#1e1a0e,#141009,#1e1a0e);
+    border:1px solid rgba(201,168,76,.28);
+    padding:0;
+    box-shadow: 0 0 0 1px rgba(201,168,76,.06) inset,
+                0 8px 40px rgba(0,0,0,.85),
+                0 0 60px rgba(201,168,76,.04);
+    position:relative;
+  }
+  .footer-slab::before{content:'';position:absolute;inset:5px;border:1px solid rgba(201,168,76,.07);pointer-events:none;}
+  /* top corner gems */
+  .footer-slab::after{
+    content:'◆';position:absolute;top:-7px;left:50%;transform:translateX(-50%);
+    color:var(--gold);font-size:.55rem;opacity:.7;
+  }
+  .slab-inner{padding:22px 32px 24px;}
+  .slab-header{
+    font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.45em;
+    color:var(--gold-d);text-transform:uppercase;text-align:center;
+    margin-bottom:12px;opacity:.75;
+  }
+  .slab-divider{
+    height:1px;background:linear-gradient(to right,transparent,var(--gold-d) 30%,var(--gold) 50%,var(--gold-d) 70%,transparent);
+    margin-bottom:18px;opacity:.5;
+  }
+  .slab-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:14px 24px;
+  }
+  .slab-person{text-align:center;}
+  .slab-role{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.3em;color:var(--gold-d);text-transform:uppercase;opacity:.6;margin-bottom:3px;}
+  .slab-name{font-family:'Crimson Text',serif;font-size:.95rem;color:var(--cream);font-style:italic;}
+
+  .footer-year{font-family:'Cinzel Decorative',serif;font-size:clamp(.7rem,1.5vw,.95rem);color:var(--gold-d);letter-spacing:.35em;opacity:.4;}
+
+  @media(max-width:600px){
+    #l-footer{height:min(600px,95vh);}
+    .slab-inner{padding:16px 18px 18px;}
+    .slab-grid{grid-template-columns:repeat(2,1fr);gap:12px 14px;}
+    .footer-name{font-size:clamp(.95rem,6vw,1.8rem);}
+  }
+
+  /* ════════════════════ WATCHER ════════════════════ */
+  #watcher{
+    position:fixed; bottom:70px; right:0;
+    z-index:55;
+    display:flex; flex-direction:column; align-items:flex-end;
+    pointer-events:none; /* container transparent */
+    /* slide in from right */
+    transform:translateX(0);
+    transition:transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  #watcher.hidden{ transform:translateX(110%); }
+
+  #watcherImg{
+    pointer-events:all;
+    width:clamp(120px,13vw,185px);
+    display:block;
+    filter:drop-shadow(-4px 0 14px rgba(0,0,0,.75));
+    cursor:pointer;
+    transition:filter .2s, transform .18s cubic-bezier(.16,1,.3,1);
+  }
+  #watcherImg:hover{ filter:drop-shadow(-4px 0 20px rgba(201,168,76,.35)) drop-shadow(-2px 0 8px rgba(0,0,0,.8)); }
+
+  /* Speech bubble */
+  #watcherBubble{
+    position:absolute;
+    bottom:72%;
+    right:calc(100% - 20px);
+    background:linear-gradient(135deg,#f5ecd4,#ede0c0);
+    border:1.5px solid rgba(100,70,20,.35);
+    border-radius:14px 14px 14px 14px;
+    padding:10px 14px;
+    max-width:200px;
+    min-width:130px;
+    box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 0 1px rgba(201,168,76,.15) inset;
+    opacity:0; transform:scale(.8) translateY(8px);
+    transform-origin:bottom left;
+    transition:opacity .35s ease, transform .35s cubic-bezier(.16,1,.3,1);
+    pointer-events:none;
+  }
+  #watcherBubble.show{
+    opacity:1; transform:scale(1) translateY(0);
+  }
+  .bubble-tail{
+    position:absolute; bottom:-10px; right:14px;
+    width:0; height:0;
+    border-left:8px solid transparent;
+    border-right:4px solid transparent;
+    border-top:10px solid #ede0c0;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,.2));
+  }
+  .bubble-tail::before{
+    content:''; position:absolute; top:-11px; right:-5px;
+    width:0; height:0;
+    border-left:9px solid transparent;
+    border-right:5px solid transparent;
+    border-top:11px solid rgba(100,70,20,.3);
+  }
+  #watcherText{
+    font-family:'Crimson Text',serif;
+    font-size:.88rem; line-height:1.4;
+    color:#2a1a06;
+    font-style:italic;
+    text-align:center;
+  }
+
+  /* Hide on mobile */
+  @media(max-width:700px){ #watcher{ display:none; } }
+</style>
+</head>
+<body>
+
+<!-- ════ LANDING ════ -->
+<div id="landing">
+  <div class="hero-wrap">
+  <img id="landing-bg" src="https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/museumbg0.png?raw=true" alt="Большой Зал Беклового Искусства">
+  <div class="l-title">
+    <h1>ЭКСПОЗИЦИЯ<br>БЕКЛЫ СРЕДИ НАС</h1>
+    <p>Коллекция мировых шедевров &nbsp;·&nbsp; Эпоха бекл</p>
+  </div>
+  <div class="hotspot" id="hs-tickets" onclick="openModal()"></div>
+  <div class="hotspot" id="hs-enter"   onclick="enterMuseum()"></div>
+  <!-- Mobile buttons (visible on touch/small screens) -->
+  <div class="mobile-nav-btns">
+    <button class="mob-btn" onclick="openModal()">🎟 Билеты</button>
+    <button class="mob-btn" onclick="enterMuseum()">Войти →</button>
+  </div>
+
+  <div class="l-hints">
+    <span>◈ кассы — попытаться купить билет</span>
+    <span>◈ вход — в зал музея</span>
+  </div>
+
+  </div><!-- /hero-wrap -->
+  <!-- ════ PARALLAX FOOTER ════ -->
+  <div id="l-footer">
+    <div class="footer-parallax-bg" id="footerBg"></div>
+    <div class="footer-content">
+      <div class="footer-title-wrap">
+        <div class="footer-ornament">◈ ◈ ◈</div>
+        <div class="footer-expo">ЭКСПОЗИЦИЯ</div>
+        <div class="footer-name">БЕКЛЫ СРЕДИ НАС</div>
+        <div class="footer-sub">создана когтевранцами специально к&nbsp;24-й годовщине основания школы</div>
+        <div class="footer-ornament" style="margin-top:16px">◈ ◈ ◈</div>
+      </div>
+
+      <div class="footer-slab">
+        <div class="slab-inner">
+          <div class="slab-header">НАД ПРОЕКТОМ РАБОТАЛИ</div>
+          <div class="slab-divider"></div>
+          <div class="slab-grid" id="creditsGrid">
+            <!-- filled below — edit as needed -->
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-year">MMXXIV</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL ════ -->
+<div class="modal-ov" id="modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="mc tl"></div><div class="mc tr"></div><div class="mc bl"></div><div class="mc br"></div>
+    <button class="m-close" onclick="closeModal()">✕</button>
+    <div class="m-eyebrow">◈ Касса экспозиции ◈</div>
+    <div class="m-portrait" id="mPortrait"><img src="https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/kiki.png?raw=true" alt="Кики"></div>
+    <div class="m-name">Та самая бекла Кики</div>
+    <div class="m-text">
+      Старший кассир третьей смены.<br>Служит музею уже 47 бекло-лет.<br>
+      <span style="font-size:.83rem;color:#3d2e10;display:block;margin-top:9px;">«Вход свободный. Выход — по договорённости.»</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MUSEUM ════ -->
+<div id="museum">
+  <div class="hall-atm"></div>
+  <header class="m-nav">
+    <button class="nav-btn" onclick="exitMuseum()">← Выход</button>
+    <h2>БЕКЛЫ СРЕДИ НАС</h2>
+    <div class="m-nav-right">БЕКЛОВОЕ<br>ИСКУССТВО</div>
+  </header>
+
+  <div class="exhibit-area">
+    <div class="spotlight"></div>
+    <div class="exhibit-left">
+    <div class="wall-rail" id="wallRail"></div>
+    <div class="wire" id="wallWire"></div>
+
+    <!-- A: PAINTING HORIZONTAL -->
+    <div class="frame-h" id="frameH" style="display:none">
+      <div class="gem tl"></div><div class="gem tr"></div><div class="gem bl"></div><div class="gem br"></div>
+      <img class="art-img-h" id="imgH" src="" alt="" style="display:none">
+      <div class="art-ph ph-h" id="phH"><div class="ph-icon">🎨</div><div class="ph-txt">Горизонтальная картина</div></div>
+    </div>
+
+    <!-- B: PAINTING VERTICAL -->
+    <div class="frame-v" id="frameV" style="display:none">
+      <div class="gem tl"></div><div class="gem tr"></div><div class="gem bl"></div><div class="gem br"></div>
+      <img class="art-img-v" id="imgV" src="" alt="" style="display:none">
+      <div class="art-ph ph-v" id="phV"><div class="ph-icon">🎨</div><div class="ph-txt">Вертикальная картина</div></div>
+    </div>
+
+    <!-- C: PAINTING SQUARE -->
+    <div class="frame-s" id="frameS" style="display:none">
+      <div class="gem tl"></div><div class="gem tr"></div><div class="gem bl"></div><div class="gem br"></div>
+      <img class="art-img-s" id="imgS" src="" alt="" style="display:none">
+      <div class="art-ph ph-s" id="phS"><div class="ph-icon">🎨</div><div class="ph-txt">Квадратная картина</div></div>
+    </div>
+
+    <!-- D: PAINTING WIDE 3:2 -->
+    <div class="frame-w" id="frameW" style="display:none">
+      <div class="gem tl"></div><div class="gem tr"></div><div class="gem bl"></div><div class="gem br"></div>
+      <img class="art-img-w" id="imgW" src="" alt="" style="display:none">
+      <div class="art-ph ph-w" id="phW"><div class="ph-icon">🎨</div><div class="ph-txt">Широкая картина (3:2)</div></div>
+    </div>
+
+    <!-- E: SCULPTURE -->
+    <div class="wrap-sculpture" id="wrapSculpt" style="display:none">
+      <img class="sculpture-img" id="imgSculpt" src="" alt="" style="display:none">
+      <div class="sculpture-ph" id="phSculpt"><div class="ph-icon">🗿</div><div class="ph-txt">Скульптура</div></div>
+      <div class="rope-barrier">
+        <div class="rope-post"><div class="rope-post-ball"></div><div class="rope-post-shaft"></div><div class="rope-post-base"></div></div>
+        <div class="rope-line">
+          <svg viewBox="0 0 400 32" preserveAspectRatio="none" height="32">
+            <defs>
+              <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%"   stop-color="#8a6020"/>
+                <stop offset="25%"  stop-color="#c9a84c"/>
+                <stop offset="50%"  stop-color="#7a5018"/>
+                <stop offset="75%"  stop-color="#c9a84c"/>
+                <stop offset="100%" stop-color="#8a6020"/>
+              </linearGradient>
+              <filter id="rs"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.6)"/></filter>
+            </defs>
+            <path d="M0 8 Q100 30 200 28 Q300 26 400 8" fill="none" stroke="url(#rg)" stroke-width="3.5" stroke-linecap="round" filter="url(#rs)"/>
+            <path d="M0 8 Q100 30 200 28 Q300 26 400 8" fill="none" stroke="rgba(201,168,76,0.35)" stroke-width="1.2" stroke-dasharray="6,8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="rope-post"><div class="rope-post-ball"></div><div class="rope-post-shaft"></div><div class="rope-post-base"></div></div>
+      </div>
+    </div>
+
+    <!-- F: BOOK VITRINE -->
+    <div class="wrap-book" id="wrapBook" style="display:none">
+      <div class="vitrine">
+        <div class="vitrine-shelf"></div>
+      </div>
+      <div class="vitrine-legs">
+        <div class="vitrine-leg"></div>
+        <div class="vitrine-leg"></div>
+        <div class="vitrine-leg"></div>
+        <div class="vitrine-leg"></div>
+      </div>
+      <div class="vitrine-label">◈ Экспонат под стеклом ◈</div>
+    </div>
+
+    </div><!-- /exhibit-left -->
+
+    <!-- PLAQUE -->
+    <div class="plaque" id="plaque">
+      <div class="plaque-top">
+        <div class="plaque-main">
+          <div class="p-num" id="pNum">ЭКСПОНАТ № 001</div>
+          <div class="p-title" id="pTitle">—</div>
+          <div class="p-orig"  id="pOrig">—</div>
+        </div>
+        <div class="plaque-meta">
+          <div class="p-author" id="pAuthor">—</div>
+          <div class="p-year"   id="pYear">—</div>
+          <div class="p-tech"   id="pTech">—</div>
+        </div>
+      </div>
+      <div class="p-desc" id="pDesc">—</div>
+    </div>
+
+    <div class="nav-arrows">
+      <button class="arr-btn" id="btnPrev" onclick="go(-1)">←</button>
+      <span class="arr-count" id="counter">1 / 1</span>
+      <button class="arr-btn" id="btnNext" onclick="go(1)">→</button>
+    </div>
+  </div>
+
+  <!-- ════ ANGRY WATCHER MODAL ════ -->
+  <div class="modal-ov" id="angryModal" onclick="closeAngryModal(event)">
+    <div class="modal-box">
+      <div class="mc tl"></div><div class="mc tr"></div><div class="mc bl"></div><div class="mc br"></div>
+      <button class="m-close" onclick="closeAngryModal()">✕</button>
+      <div class="m-eyebrow">◈ Официальное предупреждение ◈</div>
+      <div class="m-portrait" style="font-size:2.8rem;border-color:#8a2020;box-shadow:0 0 30px rgba(180,40,40,.2);"><img src="https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/смотритель2.png?raw=true"></div>
+      <div class="m-name" style="color:#c97070;">Это уже слишком.</div>
+      <div class="m-text" style="color:#7a5050;">
+        Серьезно, это дурная привычка —<br>тыкать на всякие картинки и ссылки.<br>
+        <span style="display:block;margin-top:12px;font-size:.9rem;color:#4a2a2a;">Что с вами не так?</span>
+        <span style="display:block;margin-top:16px;font-size:.78rem;color:#3a2020;font-style:normal;letter-spacing:.1em;">— Бекла, ст. смотритель</span>
+      </div>
+    </div>
+  </div>
+  <div class="thumb-wrap"><div class="thumb-strip" id="thumbStrip"></div></div>
+  <!-- ════ WATCHER BEKLA ════ -->
+  <div id="watcher" class="hidden">
+    <div id="watcherBubble">
+      <div id="watcherText"></div>
+      <div class="bubble-tail"></div>
+    </div>
+    <img id="watcherImg" src="https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/смотритель.png?raw=true" alt="Смотритель">
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// type: "painting-h"  — горизонтальная картина (4:3)
+// type: "painting-v"  — вертикальная картина   (3:4)
+// type: "painting-s"  — квадратная картина     (1:1)
+// type: "painting-w"  — широкая картина        (3:2)
+// type: "sculpture"   — скульптура + канат
+// type: "book"        — витрина с книгой
+// img: ""             — ссылка на изображение
+// ══════════════════════════════════════════════
+const EX = [
+  { title:"Бекла Джокондская", orig:"по мотивам «Моны Лизы» (Да Винчи)", author:"Леонардо да Бекли", year:"ок. 1503–1519 б.э.", tech:"Тина на камне", desc:"Загадочная улыбка беклы не даёт покоя исследователям уже пять веков. Одни полагают, что она только что поймала крупного жука. Другие уверены — просто щурится от солнца.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_001.PNG?raw=true", type:"painting-v" },
+  { title:"Бекла с жемчужной серёжкой", orig:"по мотивам «Девушки с жемчужной серёжкой» (Вермеер)", author:"Ян Вермеклер", year:"ок. 1665 б.э.", tech:"Масло на кувшинковом листе", desc:"Кто она? Настоящая ли серёжка — или просто блестящий жук, застрявший в ухе? Полуоборот, взгляд через плечо, тайна в глазах. Картина хранит молчание уже более 350 бекло-лет.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_002.jpg?raw=true", type:"painting-v" },
+  { title:"Крик Беклы", orig:"по мотивам «Крика» (Мунк)", author:"Эдвард Муначный", year:"1893 б.э.", tech:"Масло, темпера, болотный ужас", desc:"Бекла застыла на мосту над пылающим болотом, и природа сама завыла вместе с ней. Ближайшие кувшинки до сих пор слегка вибрируют.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_003.jpg?raw=true", type:"painting-v" },
+  { title:"Бекла с горностаем", orig:"по мотивам «Дамы с горностаем» (Да Винчи)", author:"Леонардо да Бекли", year:"ок. 1489–1490 б.э.", tech:"Масло на тополиной доске", desc:"Молодая бекла держит на руках горностая с выражением человека, который не совсем понимает, как так вышло. Горностай тоже не в восторге.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_004.png?raw=true", type:"painting-v" },
+  { title:"Голова Беклы", orig:"по мотивам «Головы женщины» (Пикассо)", author:"Пабло Пикаббекло", year:"1907 б.э.", tech:"Масло, кубизм, дерзость", desc:"Художник изобразил беклу одновременно анфас и в профиль. Сама бекла говорит, что узнала себя. Это настораживает.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_005.PNG?raw=true", type:"painting-v" },
+  { title:"Девочка-Бекла с персиками", orig:"по мотивам «Девочки с персиками» (Серов)", author:"Валентин Серобекль", year:"1887 б.э.", tech:"Масло на болотном полотне", desc:"Юная бекла сидит за столом и смотрит прямо на зрителя с видом существа, которое только что съело один персик и точно знает, где лежат остальные.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_006.png?raw=true", type:"painting-s" },
+  { title:"Рождение Беклы Венерклёвой", orig:"по мотивам «Рождения Венеры» (Боттичелли)", author:"Сандро Боттибекли", year:"ок. 1484–1486 б.э.", tech:"Тина, ряска, яичная темпера", desc:"Бекла восстаёт из болотной пены на исполинской ракушке. Ветер развевает её водоросли. Критики называют это «апогеем бекловой мифологии».", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_007.png?raw=true", type:"painting-w" },
+  { title:"Танец Беклов", orig:"по мотивам «Танца» (Матисс)", author:"Анри Матибекль", year:"1910 б.э.", tech:"Масло, яркость, хаотичные лапки", desc:"Пятеро беклов взялись за лапки и закружились в диком хороводе. Линии упрощены до предела. Цвета кричат. Радость безгранична.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_008.png?raw=true", type:"painting-w" },
+  { title:"Бекловая готика", orig:"по мотивам «Американской готики» (Грант Вуд)", author:"Грант Вуддребекль", year:"1930 б.э.", tech:"Масло на болотной доске", desc:"Два бекла у деревянного домика. Один держит вилы. Оба смотрят с таким выражением, будто рады видеть вас — но только не здесь и не сейчас.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_009.png?raw=true", type:"painting-v" },
+  { title:"Бекла с веером", orig:"по мотивам «Дамы с веером» (Климт)", author:"Густав Беклимт", year:"1917–1918 б.э.", tech:"Золото, масло, перья болотной птицы", desc:"Бекла смотрит поверх веера с видом существа, которое знает о вас всё — и этим совершенно не обеспокоено. Веер скрывает улыбку. Или её отсутствие.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_010.png?raw=true", type:"painting-s" },
+  { title:"Утро в сосновом болоте", orig:"по мотивам «Утра в сосновом лесу» (Шишкин)", author:"Иван Шишкибекль и Константин Савицкобекль", year:"1889 б.э.", tech:"Масло, хвоя, утренняя сырость", desc:"Трое беклят резвятся на поваленной сосне под надзором четвёртого. Медведей на картине нет — авторы заменили их беклами ещё на этапе эскиза и ни разу не пожалели.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_011.png?raw=true", type:"painting-w" },
+  { title:"Три беклатыря", orig:"по мотивам «Трёх богатырей» (Васнецов)", author:"Виктор Васнецобекль", year:"1898 б.э.", tech:"Масло, доблесть, болотная грязь на копытах", desc:"Три могучих бекла на конях замерли на холме, вглядываясь в болотную даль. Дозорные. Защитники. Никто точно не помнит, от чего именно.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_012.png?raw=true", type:"painting-w" },
+  { title:"Всадница-Бекла", orig:"по мотивам «Всадницы» (Брюллов)", author:"Карл Брюлобекль", year:"1832 б.э.", tech:"Масло на парадном холсте", desc:"Юная бекла гарцует на вороном коне с видом победительницы. Маленькая бекла смотрит снизу с нескрываемым восхищением. Конь смотрит в никуда — он уже всё видел.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_013.png?raw=true", type:"painting-v" },
+  { title:"Бекла над болотом", orig:"по мотивам «Над городом» (Шагал)", author:"Марк Шагабекль", year:"1918 б.э.", tech:"Масло, лиризм, левитация", desc:"Двое беклов летят над болотом, взявшись за лапки. Внизу — кочки, камыши, чья-то изба. Никто внизу не удивляется. В этих краях это обычное дело.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_014.png?raw=true", type:"painting-w" },
+  { title:"Бекла-царевич на Сером Волке", orig:"по мотивам «Ивана-царевича на Сером Волке» (Васнецов)", author:"Виктор Васнецобекль", year:"1889 б.э.", tech:"Масло, сказочность, болотный туман", desc:"Серый Волк мчит бекла-царевича сквозь дремучий лес. На руках у царевича — спасённая бекла-царевна. Оба смотрят назад с видом существ, которые натворили что-то серьёзное.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_015.png?raw=true", type:"painting-v" },
+  { title:"Портрет незнакомой беклы", orig:"по мотивам «Портрета неизвестной» (Крамской)", author:"Иван Крамскобекль", year:"1883 б.э.", tech:"Масло, достоинство, загадка", desc:"Она едет в открытом экипаже и смотрит на зрителя сверху вниз — с холодным спокойствием существа, которое никогда не объяснит, кто она и куда направляется.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_016.png?raw=true", type:"painting-h" },
+  { title:"Бекло-Сфинкс", orig:"по мотивам статуи Большого Сфинкса (Гиза)", author:"Неизвестный бекло-зодчий", year:"ок. 2500 б.э.", tech:"Известняк, тина, вечность", desc:"Величественный Бекло-Сфинкс охраняет вход в болото уже несколько тысячелетий. Нос слегка отбит — предположительно, в ходе жаркого спора о принадлежности лучшей лужи.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/s_001.png?raw=true", type:"sculpture" },
+  { title:"Маленькая Русалобекла", orig:"по мотивам статуи «Русалочки» (Эриксен)", author:"Эдвард Эрибекксен", year:"1913 б.э.", tech:"Бронза, морская тина, тоска", desc:"Маленькая бекла сидит на камне у воды и смотрит вдаль с видом существа, которое пожертвовало голосом ради любви, а потом передумало, но уже поздно.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/s_002.png?raw=true", type:"sculpture" },
+  { title:"Бекла Свободная", orig:"по мотивам Статуи Свободы (Бартольди)", author:"Фредерик Бартолдибекль", year:"1886 б.э.", tech:"Медь, каркас из болотного тростника", desc:"Бекла с факелом стоит в гавани и озаряет болота. В правой лапке — огонь. В левой — скрижаль с законами. Выражение лица говорит: «Я тут стою уже очень давно».", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/s_003.png?raw=true", type:"sculpture" },
+  { title:"Мыслящая Бекла", orig:"по мотивам «Мыслителя» (Роден)", author:"Огюст Роденбекль", year:"1902 б.э.", tech:"Бронзированная тина", desc:"Бекла сидит, подперев голову лапкой, и думает. О чём — неизвестно. Возможно, о жуке. Возможно, о смысле болота. Скорее всего, о жуке.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/s_004.png?raw=true", type:"sculpture" },
+];
+
+let cur = 0;
+
+// ── Render ──
+function render() {
+  const e = EX[cur];
+  // Plaque
+  document.getElementById('pNum').textContent    = `ЭКСПОНАТ № ${String(cur+1).padStart(3,'0')}`;
+  document.getElementById('pTitle').textContent  = e.title;
+  document.getElementById('pOrig').textContent   = e.orig;
+  document.getElementById('pAuthor').textContent = e.author;
+  document.getElementById('pYear').textContent   = e.year;
+  document.getElementById('pTech').textContent   = e.tech;
+  document.getElementById('pDesc').textContent   = e.desc;
+  document.getElementById('counter').textContent = `${cur+1} / ${EX.length}`;
+
+  const t = e.type || 'painting-h';
+  const isPainting = t === 'painting-h' || t === 'painting-v' || t === 'painting-s' || t === 'painting-w';
+
+  // Rail & wire only for paintings
+  document.getElementById('wallRail').style.opacity = isPainting ? '' : '0';
+  document.getElementById('wallWire').style.opacity = isPainting ? '' : '0';
+
+  // Show/hide display containers
+  const show = id => document.getElementById(id).style.display = '';
+  const hide = id => document.getElementById(id).style.display = 'none';
+
+  hide('frameH'); hide('frameV'); hide('frameS'); hide('frameW'); hide('wrapSculpt'); hide('wrapBook');
+
+  if (t === 'painting-h') {
+    show('frameH');
+    const img = document.getElementById('imgH'), ph = document.getElementById('phH');
+    if (e.img) { img.src=e.img; img.alt=e.title; img.style.display='block'; ph.style.display='none'; }
+    else        { img.style.display='none'; ph.style.display='flex'; }
+  } else if (t === 'painting-v') {
+    show('frameV');
+    const img = document.getElementById('imgV'), ph = document.getElementById('phV');
+    if (e.img) { img.src=e.img; img.alt=e.title; img.style.display='block'; ph.style.display='none'; }
+    else        { img.style.display='none'; ph.style.display='flex'; }
+  } else if (t === 'painting-s') {
+    show('frameS');
+    const img = document.getElementById('imgS'), ph = document.getElementById('phS');
+    if (e.img) { img.src=e.img; img.alt=e.title; img.style.display='block'; ph.style.display='none'; }
+    else        { img.style.display='none'; ph.style.display='flex'; }
+  } else if (t === 'painting-w') {
+    show('frameW');
+    const img = document.getElementById('imgW'), ph = document.getElementById('phW');
+    if (e.img) { img.src=e.img; img.alt=e.title; img.style.display='block'; ph.style.display='none'; }
+    else        { img.style.display='none'; ph.style.display='flex'; }
+  } else if (t === 'sculpture') {
+    document.getElementById('wrapSculpt').style.display = 'flex';
+    const img = document.getElementById('imgSculpt'), ph = document.getElementById('phSculpt');
+    if (e.img) { img.src=e.img; img.alt=e.title; img.style.display='block'; ph.style.display='none'; }
+    else        { img.style.display='none'; ph.style.display='flex'; }
+  } else if (t === 'book') {
+    show('wrapBook');
+  }
+
+  // Re-trigger animation
+  const animEl = {
+    'painting-h':'frameH','painting-v':'frameV','painting-s':'frameS','painting-w':'frameW','sculpture':'wrapSculpt','book':'wrapBook'
+  }[t];
+  if (animEl) {
+    const el = document.getElementById(animEl);
+    el.style.animation='none'; el.offsetHeight; el.style.animation='';
+  }
+
+  document.getElementById('btnPrev').disabled = cur===0;
+  document.getElementById('btnNext').disabled = cur===EX.length-1;
+
+  // Thumbs
+  document.querySelectorAll('.thumb').forEach((th,i)=>th.classList.toggle('active',i===cur));
+  const at = document.querySelectorAll('.thumb')[cur];
+  if (at) at.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+}
+
+// ── Thumbnails ──
+const THUMB_ICON = {'painting-h':'🖼','painting-v':'🖼','painting-s':'🖼','painting-w':'🖼','sculpture':'🗿','book':'📖'};
+
+function buildThumbs() {
+  const s = document.getElementById('thumbStrip');
+  s.innerHTML = '';
+  EX.forEach((e, i) => {
+    const t = document.createElement('div');
+    t.className = 'thumb' + (i===cur?' active':'');
+    t.title = e.title;
+    t.onclick = () => goTo(i);
+    if (e.img) {
+      const img = document.createElement('img');
+      img.src=e.img; img.alt=e.title; t.appendChild(img);
+    } else {
+      t.textContent = THUMB_ICON[e.type||'painting-h'] || '🎨';
+    }
+    const n = document.createElement('span');
+    n.className='th-n'; n.textContent=i+1; t.appendChild(n);
+    s.appendChild(t);
+  });
+}
+
+function go(d)   { goTo(cur+d); }
+function goTo(i) { if(i<0||i>=EX.length)return; cur=i; render(); }
+
+// ════ ADAPTIVE LAYOUT: switch to row when viewport is too short ════
+const COLUMN_MIN_HEIGHT = 620; // px — below this, switch to row layout
+
+function updateLayout() {
+  const museum = document.getElementById('museum');
+  if (!museum || !museum.classList.contains('open')) return;
+  if (window.innerWidth <= 700) {
+    museum.classList.remove('layout-row');
+    return;
+  }
+  // Available height after nav + bottom UI
+  const avail = window.innerHeight - 62 - 132; // nav + arrows+thumb
+  museum.classList.toggle('layout-row', avail < COLUMN_MIN_HEIGHT);
+}
+
+window.addEventListener('resize', updateLayout, {passive:true});
+
+function enterMuseum() {
+  document.getElementById('landing').style.display='none';
+  document.getElementById('museum').classList.add('open');
+  cur=0; buildThumbs(); render();
+  updateLayout();
+}
+function exitMuseum() {
+  document.getElementById('museum').classList.remove('open');
+  document.getElementById('museum').classList.remove('layout-row');
+  document.getElementById('landing').style.display='block';
+}
+function openModal()  { document.getElementById('modal').classList.add('open'); }
+function closeModal(e){ if(!e||e.target===document.getElementById('modal')||!e.target.closest('.modal-box')) document.getElementById('modal').classList.remove('open'); }
+
+document.addEventListener('keydown', ev => {
+  if(!document.getElementById('museum').classList.contains('open')) return;
+  if(ev.key==='ArrowLeft')  go(-1);
+  if(ev.key==='ArrowRight') go(1);
+  if(ev.key==='Escape')     exitMuseum();
+});
+
+// ── Credits (edit names/roles here) ──
+const CREDITS = [
+  { role:"Куратор проекта",    name:"Имя Фамилия" },
+  { role:"Арт-директор",       name:"Имя Фамилия" },
+  { role:"Иллюстратор",        name:"Имя Фамилия" },
+  { role:"Иллюстратор",        name:"Имя Фамилия" },
+  { role:"Разработка",         name:"Имя Фамилия" },
+  { role:"Тексты",             name:"Имя Фамилия" },
+];
+
+(function(){
+  const grid = document.getElementById('creditsGrid');
+  if(grid) {
+    grid.innerHTML = CREDITS.map(p=>`
+      <div class="slab-person">
+        <div class="slab-role">${p.role}</div>
+        <div class="slab-name">${p.name}</div>
+      </div>`).join('');
+  }
+
+  // Parallax on scroll / pointer
+  const bg = document.getElementById('footerBg');
+  const landing = document.getElementById('landing');
+  if(!bg) return;
+
+  function applyParallax() {
+    if(!landing || landing.style.display==='none') return;
+    const rect = (document.getElementById('l-footer')||{}).getBoundingClientRect?.() || {};
+    const wh = window.innerHeight;
+    const progress = rect.top !== undefined ? Math.max(0, Math.min(1, 1 - rect.top / wh)) : 0;
+    bg.style.transform = `translateY(${progress * -30}px)`;
+  }
+  window.addEventListener('scroll', applyParallax, {passive:true});
+  landing && landing.addEventListener('scroll', applyParallax, {passive:true});
+  applyParallax();
+})();
+
+// ════ WATCHER ════
+const WATCHER_PHRASES = [
+  "Руками трогать нельзя!",
+  "Колдографии запрещены!",
+  "Не дышите на экспонаты.",
+  "Тише, пожалуйста.",
+  "Вспышка запрещена!",
+  "Отойдите от картины.",
+  "Это не трогать. И это тоже.",
+  "Ваша аура слишком громкая.",
+  "Экспонаты не кормить.",
+  "Не смотрите им в глаза.",
+  "Музей закрывается. Нет, не сейчас.",
+  "Следите за своими мыслями.",
+];
+
+let watcherPhraseIdx = 0;
+let watcherTimer = null;
+
+function showWatcherBubble() {
+  const bubble = document.getElementById('watcherBubble');
+  const text   = document.getElementById('watcherText');
+  if (!bubble || !text) return;
+
+  // Pick next phrase (cycle)
+  text.textContent = WATCHER_PHRASES[watcherPhraseIdx % WATCHER_PHRASES.length];
+  watcherPhraseIdx++;
+
+  bubble.classList.add('show');
+
+  clearTimeout(watcherTimer);
+  watcherTimer = setTimeout(() => {
+    bubble.classList.remove('show');
+  }, 3200);
+}
+
+// Show bubble every 3rd navigation
+let _navCount = 0;
+const _origGoTo = goTo;
+// wrap goTo after definition — done via nav counter in render
+// We hook into the render call instead:
+const _origRender = render;
+let _renderCount = 0;
+
+// Patch: after enterMuseum, attach watcher visibility
+const _origEnter = enterMuseum;
+enterMuseum = function() {
+  _origEnter();
+  document.getElementById('watcher').classList.remove('hidden');
+  _renderCount = 0;
+};
+
+const _origExit = exitMuseum;
+exitMuseum = function() {
+  _origExit();
+};
+
+// Hook navigation to trigger bubble every 3rd exhibit change
+let _goCount = 0;
+const _baseGoTo = goTo;
+goTo = function(i) {
+  _baseGoTo(i);
+  _goCount++;
+  if (_goCount % 3 === 0) {
+    showWatcherBubble();
+  }
+};
+
+const WATCHER_CLICK_PHRASES = [
+  "Пальцы пообкусаю! Куда тыкаешь!",
+  "Не трогать смотрителя!",
+  "Это не экспонат!!",
+  "Ай! Больно же!",
+  "Ещё раз — и выгоню из музея.",
+  "Руки убрал(а)!",
+  "Я вам не игрушка.",
+  "Укушу. Предупреждаю.",
+];
+let _clickPhraseIdx = 0;
+
+let _watcherClickCount = 0;
+
+document.getElementById('watcherImg').addEventListener('click', function(e) {
+  e.stopPropagation();
+  _watcherClickCount++;
+
+  // Every 10th click — show angry modal
+  if (_watcherClickCount % 10 === 0) {
+    document.getElementById('angryModal').classList.add('open');
+    document.getElementById('watcherBubble').classList.remove('show');
+    clearTimeout(watcherTimer);
+    return;
+  }
+
+  const bubble = document.getElementById('watcherBubble');
+  const text   = document.getElementById('watcherText');
+  if (!bubble || !text) return;
+  clearTimeout(watcherTimer);
+  text.textContent = WATCHER_CLICK_PHRASES[_clickPhraseIdx % WATCHER_CLICK_PHRASES.length];
+  _clickPhraseIdx++;
+  bubble.classList.add('show');
+  this.style.transform = 'rotate(-6deg) scale(1.08)';
+  setTimeout(() => { this.style.transform = ''; }, 180);
+  watcherTimer = setTimeout(() => { bubble.classList.remove('show'); }, 3000);
+});
+
+function closeAngryModal(e) {
+  if (!e || e.target === document.getElementById('angryModal') || !e.target.closest('.modal-box'))
+    document.getElementById('angryModal').classList.remove('open');
+}
+
+// ── Public helpers ──
+function setCashier(url){ document.getElementById('mPortrait').innerHTML=`<img src="${url}" alt="Кассир">`; }
+function setArt(i,url)  { if(!EX[i])return; EX[i].img=url; buildThumbs(); if(cur===i)render(); }
+</script>
+</body>
+</html>
