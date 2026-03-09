@@ -397,7 +397,7 @@
   .honor-board {
     width: 100%;
     box-sizing: border-box;
-    background: linear-gradient(160deg, #1e1a0e, #141009, #1e1a0e);
+    background: linear-gradient(160deg, #221c0f, #1a1409, #221c0f);
     border: 1px solid var(--gold-d);
     box-shadow: 0 0 0 1px #3a2e0a, 0 0 0 4px #1a1508, 0 0 0 6px rgba(201,168,76,.18),
                 0 24px 60px rgba(0,0,0,.95);
@@ -406,8 +406,20 @@
   }
   .honor-board::before {
     content:''; position:absolute; inset:5px;
-    border:1px solid rgba(201,168,76,.12); pointer-events:none;
+    border:1px solid rgba(201,168,76,.12); pointer-events:none; z-index: 1;
   }
+  .honor-board::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(120,85,25,.13) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 0% 50%, rgba(80,55,15,.1) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 100% 50%, rgba(80,55,15,.1) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .honor-board > * { position: relative; z-index: 1; }
   .hb-gem { position:absolute;width:12px;height:12px;background:var(--gold);opacity:.7;z-index:3; }
   .hb-gem.tl{top:-1px;left:-1px; clip-path:polygon(0% 0%,100% 0%,0% 100%);}
   .hb-gem.tr{top:-1px;right:-1px; clip-path:polygon(0% 0%,100% 0%,100% 100%);}
@@ -461,7 +473,7 @@
     aspect-ratio: 1 / 1;
     border: 1px solid rgba(201,168,76,.35);
     box-shadow: 0 0 0 1px #1a1508, inset 0 0 8px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.7);
-    background: #0a0805;
+    background: radial-gradient(ellipse at 50% 30%, #2a1f0e 0%, #1a1408 45%, #110e07 100%);
     overflow: hidden;
     transition: border-color .2s, box-shadow .2s;
   }
@@ -1225,8 +1237,8 @@ const EX = [
   { title:"Раритетный экземпляр «Пера Ровены»", author:"Калипсо Крин", year:"05.03.2014.", desc:"Журналист Калипсо Крин выходит в поле — в общую гостиную — и возвращается с эксклюзивом: где живут беклы, чем питаются и как войти к ним в доверие. Провода с тех пор стали дефицитом.", img:"/gift/drhd/2026/img/p_018.png", type:"book", link:"https://perorave.wordpress.com/2014/03/05/%D1%85%D0%BE%D0%B3%D0%B2%D0%B0%D1%80%D1%82%D1%81%D0%BA%D0%B8%D0%B5-%D1%88%D0%BA%D0%BE%D0%B4%D0%BD%D0%B8%D0%BA%D0%B8/" },
 
   {
-    title:"Беклы. Графика", author:"Разные художники", year:"2026",
-    desc:"Малые беклы зелёные. Мы с беклой. Бекла-серфер. Беклина радость. Бекла играет. Доисторическая бекла. И другие. Коллекция графических работ из фондов музея.",
+    title:"Беклы. Графика", author:"Хаэль МакРори", year:"датировка затруднена",
+    desc:"Коллекция графических работ, извлечённых экспедицией музея из культурных слоев сети. Холсты идентифицированы, пронумерованы и помещены под охрану.",
     img:"/gift/drhd/2026/img/g_005.jpg",
     type:"gallery",
     rows: [
@@ -1453,7 +1465,7 @@ function renderGalleryWall(rows) {
   if (mid2 && mid2.classList.contains('gallery-mid-rail')) mid2.style.display = rows[2] ? '' : 'none';
 
   // Максимальные высоты рядов
-  const maxH = [230, 200, 220];
+  const maxH = [230, 200, 150];
 
   rows.forEach((row, ri) => {
     const rowEl = rowEls[ri];
