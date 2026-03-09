@@ -230,65 +230,84 @@
   .rope-line{flex:1;overflow:visible;margin-top:6px;}
   .rope-line svg{width:100%;overflow:visible;display:block;}
 
-  /* ════════ TYPE: GALLERY WALL (свободная развеска) ════════ */
-  .wrap-gallery {
-    position: relative;
-    width: min(96vw, 860px);
-    animation: fIn .65s cubic-bezier(.16,1,.3,1) both;
-    flex-shrink: 0;
+  /* ════════ TYPE: MULTI (несколько рамок на стене) ════════ */
+  .wrap-multi {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-  }
-  .gallery-rail {
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(to right,transparent,var(--gold-d) 8%,var(--gold) 50%,var(--gold-d) 92%,transparent);
-    opacity: .55;
-    position: relative;
+    align-items: center;
+    gap: 0;
+    width: min(96vw, 900px);
+    animation: fIn .65s cubic-bezier(.16,1,.3,1) both;
     flex-shrink: 0;
   }
-  .gallery-rail::before,.gallery-rail::after {
-    content:'◆'; position:absolute; top:50%; transform:translateY(-50%);
-    color:var(--gold); font-size:.4rem; opacity:.75;
-  }
-  .gallery-rail::before{left:6%;} .gallery-rail::after{right:6%;}
-  .gallery-wall {
-    position: relative;
+  .multi-wall {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;   /* выравниваем по нижнему краю — центр по высоте задаётся JS */
+    justify-content: center;
+    gap: 28px;
     width: 100%;
-    min-height: 320px;
+    padding: 16px 12px 8px;
+    box-sizing: border-box;
   }
-  .gframe {
-    position: absolute;
+  .mframe {
+    position: relative;
+    flex-shrink: 0;
     background: linear-gradient(135deg,#4a3510 0%,#6b5020 25%,#3d2a0a 50%,#5c4318 75%,#4a3510 100%);
-    box-shadow: 0 0 0 1px #8a6828, 0 0 0 2px #1e1508, 0 0 0 4px #7a5a20,
-                0 12px 35px rgba(0,0,0,.85);
-    padding: 8px;
+    box-shadow: 0 0 0 1px #8a6828, 0 0 0 3px #1e1508, 0 0 0 5px #7a5a20,
+                0 20px 50px rgba(0,0,0,.9), 0 0 35px rgba(201,168,76,.05);
+    padding: 10px;
     box-sizing: border-box;
     transition: box-shadow .25s, transform .25s;
   }
-  .gframe::before {
-    content:''; position:absolute; inset:5px;
-    border:1px solid rgba(201,168,76,.18); pointer-events:none; z-index:2;
+  .mframe::before {
+    content:''; position:absolute; inset:6px;
+    border:1px solid rgba(201,168,76,.2); pointer-events:none; z-index:2;
   }
-  .gframe:hover {
+  .mframe::after {
+    content:''; position:absolute; inset:16px;
+    box-shadow: inset 0 0 14px rgba(0,0,0,.55); pointer-events:none; z-index:2;
+  }
+  .mframe:hover {
     box-shadow: 0 0 0 1px #c9a84c, 0 0 0 3px #1e1508, 0 0 0 5px #c9a84c,
-                0 18px 50px rgba(0,0,0,.92), 0 0 28px rgba(201,168,76,.2);
-    transform: translateY(-4px) rotate(0deg) !important;
+                0 24px 60px rgba(0,0,0,.95), 0 0 32px rgba(201,168,76,.22);
+    transform: translateY(-5px);
     z-index: 10;
   }
-  .gframe img {
+  .mframe img {
     display: block; width: 100%; height: 100%;
     object-fit: cover;
     background: #0a0805;
   }
-  .gwire {
-    position: absolute;
-    width: 1px;
-    background: linear-gradient(to bottom, rgba(201,168,76,.45), rgba(201,168,76,.08));
-    pointer-events: none;
-    z-index: 1;
+  .mgem { position:absolute;width:12px;height:12px;background:var(--gold);opacity:.7;z-index:3;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+  .mgem.tl{top:-5px;left:-5px} .mgem.tr{top:-5px;right:-5px}
+  .mgem.bl{bottom:-5px;left:-5px} .mgem.br{bottom:-5px;right:-5px}
+  /* wire above each frame */
+  .mwire-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
   }
+  .mwire {
+    width: 1px;
+    height: 28px;
+    background: linear-gradient(to bottom, rgba(201,168,76,.5), rgba(201,168,76,.12));
+  }
+  /* rail above all frames */
+  .multi-rail {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right,transparent,var(--gold-d) 6%,var(--gold) 50%,var(--gold-d) 94%,transparent);
+    opacity: .52;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .multi-rail::before,.multi-rail::after {
+    content:'◆'; position:absolute; top:50%; transform:translateY(-50%);
+    color:var(--gold); font-size:.4rem; opacity:.75;
+  }
+  .multi-rail::before{left:5%;} .multi-rail::after{right:5%;}
 
   /* exhibit-left wrapper — groups rail+wire+frame together */
   .exhibit-left {
@@ -918,10 +937,10 @@
 
     </div><!-- /exhibit-left -->
 
-    <!-- G: GALLERY WALL -->
-    <div class="wrap-gallery" id="wrapGallery" style="display:none">
-      <div class="gallery-rail"></div>
-      <div class="gallery-wall" id="galleryWall"></div>
+    <!-- G: MULTI-FRAME WALL -->
+    <div class="wrap-multi" id="wrapMulti" style="display:none">
+      <div class="multi-rail"></div>
+      <div class="multi-wall" id="multiWall"></div>
     </div>
 
     <!-- PLAQUE -->
@@ -1006,21 +1025,44 @@ const EX = [
   { title:"Бекла Свободы", author:"Фредди Бартобекльдерик", year:"2026", desc:"Бекла свободная. Бекла довольная. В правой лапке — огонь. В левой — выпуск про бекл. Выражение мордочки говорит: «Я тут была. Тут и буду».", img:"/gift/drhd/2026/img/s_003.png", type:"sculpture" },
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_004.png", type:"sculpture" },
   {
-    title:"Беклы. Графика", author:"Разные художники", year:"2026",
-    desc:"Малые беклы, зелёные, а щит есть в крапинку. Беклина радость, бекла-серфер, бекла в грустях — каждая со своим характером, каждая со своей историей. Коллекция графических работ из фондов музея.",
-    img:"/gift/drhd/2026/img/g_001_thumb.png",
-    type:"gallery",
-    imgs:[
-      "/gift/drhd/2026/img/g_001.jpg",
-      "/gift/drhd/2026/img/g_002.jpg",
-      "/gift/drhd/2026/img/g_003.jpg",
-      "/gift/drhd/2026/img/g_004.jpg",
-      "/gift/drhd/2026/img/g_005.jpg",
-      "/gift/drhd/2026/img/g_006.jpg",
-      "/gift/drhd/2026/img/g_007.jpg",
-      "/gift/drhd/2026/img/g_008.jpg",
-      "/gift/drhd/2026/img/g_009.jpg",
-      "/gift/drhd/2026/img/g_010.jpg",
+    title:"Бекла-серфер и другие", author:"Разные художники", year:"2026",
+    desc:"Три работы из графической серии. Бекла-серфер покоряет волны данных. Беклина радость — первое, второе, третье и компот. Доисторическая бекла смотрит сквозь время.",
+    img:"/gift/drhd/2026/img/g_004.jpg",
+    type:"multi",
+    frames:[
+      { img:"/gift/drhd/2026/img/g_004.jpg", w:472, h:457 },
+      { img:"/gift/drhd/2026/img/g_005.jpg", w:425, h:439 },
+      { img:"/gift/drhd/2026/img/g_009.jpg", w:472, h:377 },
+    ]
+  },
+  {
+    title:"Мы с беклой", author:"Разные художники", year:"2026",
+    desc:"Два портрета одного союза — художника и беклы. В одном — праздник и цвет, в другом — строгость и достоинство. Но бекла узнаётся.",
+    img:"/gift/drhd/2026/img/g_003.jpg",
+    type:"multi",
+    frames:[
+      { img:"/gift/drhd/2026/img/g_003.jpg", w:432, h:572 },
+      { img:"/gift/drhd/2026/img/g_002.jpg", w:400, h:572 },
+    ]
+  },
+  {
+    title:"Беклина радость", author:"Разные художники", year:"2026",
+    desc:"Триптих о радости беклы во всех её проявлениях: с кабелем, с тмином, просто так. Беклина радость многолика.",
+    img:"/gift/drhd/2026/img/g_007.jpg",
+    type:"multi",
+    frames:[
+      { img:"/gift/drhd/2026/img/g_007.jpg", w:430, h:536 },
+      { img:"/gift/drhd/2026/img/g_006.jpg", w:430, h:545 },
+      { img:"/gift/drhd/2026/img/g_008.jpg", w:432, h:520 },
+    ]
+  },
+  {
+    title:"Малые беклы зелёные", author:"Разные художники", year:"2026",
+    desc:"Малые беклы, зелёные, а щит есть в крапинку. Триптих бекловедения в одном горизонтальном формате.",
+    img:"/gift/drhd/2026/img/g_001.jpg",
+    type:"multi",
+    frames:[
+      { img:"/gift/drhd/2026/img/g_001.jpg", w:540, h:380 },
     ]
   },
 ];
@@ -1051,7 +1093,7 @@ function render() {
   const show = id => document.getElementById(id).style.display = '';
   const hide = id => document.getElementById(id).style.display = 'none';
 
-  hide('frameH'); hide('frameV'); hide('frameS'); hide('frameW'); hide('wrapSculpt'); hide('wrapBook'); hide('wrapGallery');
+  hide('frameH'); hide('frameV'); hide('frameS'); hide('frameW'); hide('wrapSculpt'); hide('wrapBook'); hide('wrapMulti');
 
   if (t === 'painting-h') {
     show('frameH');
@@ -1080,14 +1122,14 @@ function render() {
     else        { img.style.display='none'; ph.style.display='flex'; }
   } else if (t === 'book') {
     show('wrapBook');
-  } else if (t === 'gallery') {
-    show('wrapGallery');
-    renderGallery(e.imgs || []);
+  } else if (t === 'multi') {
+    show('wrapMulti');
+    renderMulti(e.frames || []);
   }
 
   // Re-trigger animation
   const animEl = {
-    'painting-h':'frameH','painting-v':'frameV','painting-s':'frameS','painting-w':'frameW','sculpture':'wrapSculpt','book':'wrapBook','gallery':'wrapGallery'
+    'painting-h':'frameH','painting-v':'frameV','painting-s':'frameS','painting-w':'frameW','sculpture':'wrapSculpt','book':'wrapBook','multi':'wrapMulti'
   }[t];
   if (animEl) {
     const el = document.getElementById(animEl);
@@ -1104,7 +1146,7 @@ function render() {
 }
 
 // ── Thumbnails ──
-const THUMB_ICON = {'painting-h':'🖼','painting-v':'🖼','painting-s':'🖼','painting-w':'🖼','sculpture':'🗿','book':'📖','gallery':'🖼'};
+const THUMB_ICON = {'painting-h':'🖼','painting-v':'🖼','painting-s':'🖼','painting-w':'🖼','sculpture':'🗿','book':'📖','multi':'🖼'};
 
 function buildThumbs() {
   const s = document.getElementById('thumbStrip');
@@ -1114,7 +1156,7 @@ function buildThumbs() {
     t.className = 'thumb' + (i===cur?' active':'');
     t.title = e.title;
     t.onclick = () => goTo(i);
-    const thumbImg = e.img || (e.imgs && e.imgs[0]);
+    const thumbImg = e.img || (e.frames && e.frames[0] && e.frames[0].img);
     if (thumbImg) {
       const img = document.createElement('img');
       img.src=thumbImg; img.alt=e.title; t.appendChild(img);
@@ -1127,79 +1169,49 @@ function buildThumbs() {
   });
 }
 
-// ── Gallery Wall renderer ──
-function renderGallery(imgs) {
-  const wall = document.getElementById('galleryWall');
-  const wrap = document.getElementById('wrapGallery');
+// ── Multi-frame wall renderer ──
+// frames: [{img, w, h}]  — w/h — исходные размеры изображения в пикселях
+function renderMulti(frames) {
+  const wall = document.getElementById('multiWall');
   wall.innerHTML = '';
 
-  // Layout config: each item has [col, row, w, h, rotate] in grid units
-  // Grid unit = ~100px. Cols 0..7, rows 0..4 (approximate)
-  // Images: 10 total, mixed portrait/landscape/square
-  const layout = [
-    // [left%, top, width, height, rotateDeg]  — will be converted to px after wall width known
-    { c:0,   t:0,   w:22, h:30, r:-1.5 }, // 0 — landscape wide
-    { c:24,  t:0,   w:16, h:22, r: 1.2 }, // 1 — portrait
-    { c:42,  t:0,   w:20, h:20, r:-0.8 }, // 2 — portrait tall
-    { c:64,  t:0,   w:20, h:25, r: 1.8 }, // 3 — portrait
-    { c:86,  t:0,   w:14, h:18, r:-1.0 }, // 4 — small square
-    { c:0,   t:32,  w:18, h:24, r: 0.9 }, // 5 — portrait
-    { c:20,  t:24,  w:22, h:18, r:-1.3 }, // 6 — landscape
-    { c:44,  t:22,  w:16, h:22, r: 1.5 }, // 7 — portrait
-    { c:62,  t:27,  w:22, h:18, r:-0.7 }, // 8 — landscape
-    { c:86,  t:20,  w:14, h:28, r: 1.1 }, // 9 — portrait tall
-  ];
+  // Целевая высота — фиксированная, рамки масштабируются пропорционально
+  const TARGET_H = Math.min(window.innerHeight * 0.38, 320);
 
-  // Determine wall height from layout
-  const totalH = layout.reduce((m, l) => Math.max(m, l.t + l.h), 0);
+  frames.forEach(f => {
+    const aspect = f.w / f.h;
+    const frameH = TARGET_H;
+    const frameW = frameH * aspect;
 
-  // Use percentage-based positioning so it scales with width
-  // We'll set wall height as aspect of totalH/100 * wallWidth
-  const setWallHeight = () => {
-    const ww = wall.offsetWidth;
-    if (!ww) return;
-    wall.style.height = (ww * totalH / 100) + 'px';
+    // wrapper: wire + frame вертикально
+    const col = document.createElement('div');
+    col.className = 'mwire-wrap';
 
-    // Place frames
-    wall.querySelectorAll('.gframe,.gwire').forEach(el => el.remove());
+    const wire = document.createElement('div');
+    wire.className = 'mwire';
+    col.appendChild(wire);
 
-    layout.forEach((l, i) => {
-      if (i >= imgs.length) return;
+    const frame = document.createElement('div');
+    frame.className = 'mframe';
+    frame.style.width  = frameW + 'px';
+    frame.style.height = frameH + 'px';
 
-      const left = (l.c / 100) * ww;
-      const top  = (l.t / 100) * ww;
-      const w    = (l.w / 100) * ww;
-      const h    = (l.h / 100) * ww;
-
-      // wire
-      const wireH = Math.max(14, top * 0.18);
-      const wireEl = document.createElement('div');
-      wireEl.className = 'gwire';
-      wireEl.style.cssText = `left:${left + w/2}px; top:0; height:${top + 8}px;`;
-      wall.appendChild(wireEl);
-
-      // frame
-      const frame = document.createElement('div');
-      frame.className = 'gframe';
-      frame.style.cssText = `left:${left}px; top:${top}px; width:${w}px; height:${h}px; transform:rotate(${l.r}deg);`;
-
-      const img = document.createElement('img');
-      img.src = imgs[i];
-      img.alt = '';
-      img.loading = 'lazy';
-      frame.appendChild(img);
-      wall.appendChild(frame);
+    // угловые ромбики
+    ['tl','tr','bl','br'].forEach(pos => {
+      const g = document.createElement('div');
+      g.className = 'mgem ' + pos;
+      frame.appendChild(g);
     });
-  };
 
-  // Run after paint so offsetWidth is available
-  requestAnimationFrame(() => { requestAnimationFrame(setWallHeight); });
+    const img = document.createElement('img');
+    img.src = f.img;
+    img.alt = '';
+    img.loading = 'lazy';
+    frame.appendChild(img);
 
-  // Also rerun on resize
-  if (wall._resizeObs) wall._resizeObs.disconnect();
-  const ro = new ResizeObserver(setWallHeight);
-  ro.observe(wall);
-  wall._resizeObs = ro;
+    col.appendChild(frame);
+    wall.appendChild(col);
+  });
 }
 
 function go(d)   { goTo(cur+d); }
