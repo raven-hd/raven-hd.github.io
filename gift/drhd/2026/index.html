@@ -364,10 +364,10 @@
     box-shadow: inset 0 0 12px rgba(0,0,0,.5); pointer-events:none; z-index:2;
   }
   .gframe:hover {
-    box-shadow: 0 0 0 1px #c9a84c, 0 0 0 3px #1e1508, 0 0 0 5px #c9a84c,
-                0 22px 55px rgba(0,0,0,.95), 0 0 28px rgba(201,168,76,.2);
-    transform: translateY(-5px);
-    z-index: 10;
+    box-shadow: 0 0 0 1px #8a6828, 0 0 0 3px #1e1508, 0 0 0 5px #7a5a20,
+                0 16px 40px rgba(0,0,0,.88), 0 0 28px rgba(201,168,76,.04);
+    transform: none;
+    z-index: auto;
   }
   .gframe img {
     display: block; width: 100%; height: 100%;
@@ -897,7 +897,7 @@
 
       <div class="footer-slab">
         <div class="slab-inner">
-          <div class="slab-header">НАД ВЫСТАВКОЙ РАБОТАЛИ</div>
+          <div class="slab-header">НАД ПРОЕКТОМ РАБОТАЛИ</div>
           <div class="slab-divider"></div>
           <div class="slab-grid" id="creditsGrid">
             <!-- filled below — edit as needed -->
@@ -1109,52 +1109,11 @@ const EX = [
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_005.png", type:"sculpture" },
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_006.png", type:"sculpture" },
   { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/p_018.png", type:"book" },
-  {
-    title:"Бекла-серфер и другие", author:"Разные художники", year:"2026",
-    desc:"Три работы из графической серии. Бекла-серфер покоряет волны данных. Беклина радость — первое, второе, третье и компот. Доисторическая бекла смотрит сквозь время.",
-    img:"/gift/drhd/2026/img/g_004.jpg",
-    type:"multi",
-    frames:[
-      { img:"/gift/drhd/2026/img/g_004.jpg", w:472, h:457 },
-      { img:"/gift/drhd/2026/img/g_005.jpg", w:425, h:439 },
-      { img:"/gift/drhd/2026/img/g_009.jpg", w:472, h:377 },
-    ]
-  },
-  {
-    title:"Мы с беклой", author:"Разные художники", year:"2026",
-    desc:"Два портрета одного союза — художника и беклы. В одном — праздник и цвет, в другом — строгость и достоинство. Но бекла узнаётся.",
-    img:"/gift/drhd/2026/img/g_003.jpg",
-    type:"multi",
-    frames:[
-      { img:"/gift/drhd/2026/img/g_003.jpg", w:432, h:572 },
-      { img:"/gift/drhd/2026/img/g_002.jpg", w:400, h:572 },
-    ]
-  },
-  {
-    title:"Беклина радость", author:"Разные художники", year:"2026",
-    desc:"Триптих о радости беклы во всех её проявлениях: с кабелем, с тмином, просто так. Беклина радость многолика.",
-    img:"/gift/drhd/2026/img/g_007.jpg",
-    type:"multi",
-    frames:[
-      { img:"/gift/drhd/2026/img/g_007.jpg", w:430, h:536 },
-      { img:"/gift/drhd/2026/img/g_006.jpg", w:430, h:545 },
-      { img:"/gift/drhd/2026/img/g_008.jpg", w:432, h:520 },
-    ]
-  },
-  {
-    title:"Малые беклы зелёные", author:"Разные художники", year:"2026",
-    desc:"Малые беклы, зелёные, а щит есть в крапинку. Триптих бекловедения в одном горизонтальном формате.",
-    img:"/gift/drhd/2026/img/g_001.jpg",
-    type:"multi",
-    frames:[
-      { img:"/gift/drhd/2026/img/g_001.jpg", w:540, h:380 },
-    ]
-  },
+
   {
     title:"Беклы. Графика", author:"Разные художники", year:"2026",
     desc:"Малые беклы зелёные. Мы с беклой. Бекла-серфер. Беклина радость. Бекла играет. Доисторическая бекла. И другие. Коллекция графических работ из фондов музея.",
-    img:"/gift/drhd/2026/img/g_001.jpg",
-    type:"gallery",
+    img:"/gift/drhd/2026/img/g_005.jpg",
     rows: [
       [
         { img:"/gift/drhd/2026/img/g_001.jpg", w:551, h:350 },
