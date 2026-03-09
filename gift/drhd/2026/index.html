@@ -230,6 +230,66 @@
   .rope-line{flex:1;overflow:visible;margin-top:6px;}
   .rope-line svg{width:100%;overflow:visible;display:block;}
 
+  /* ════════ TYPE: GALLERY WALL (свободная развеска) ════════ */
+  .wrap-gallery {
+    position: relative;
+    width: min(96vw, 860px);
+    animation: fIn .65s cubic-bezier(.16,1,.3,1) both;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .gallery-rail {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(to right,transparent,var(--gold-d) 8%,var(--gold) 50%,var(--gold-d) 92%,transparent);
+    opacity: .55;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .gallery-rail::before,.gallery-rail::after {
+    content:'◆'; position:absolute; top:50%; transform:translateY(-50%);
+    color:var(--gold); font-size:.4rem; opacity:.75;
+  }
+  .gallery-rail::before{left:6%;} .gallery-rail::after{right:6%;}
+  .gallery-wall {
+    position: relative;
+    width: 100%;
+    min-height: 320px;
+  }
+  .gframe {
+    position: absolute;
+    background: linear-gradient(135deg,#4a3510 0%,#6b5020 25%,#3d2a0a 50%,#5c4318 75%,#4a3510 100%);
+    box-shadow: 0 0 0 1px #8a6828, 0 0 0 2px #1e1508, 0 0 0 4px #7a5a20,
+                0 12px 35px rgba(0,0,0,.85);
+    padding: 8px;
+    box-sizing: border-box;
+    transition: box-shadow .25s, transform .25s;
+  }
+  .gframe::before {
+    content:''; position:absolute; inset:5px;
+    border:1px solid rgba(201,168,76,.18); pointer-events:none; z-index:2;
+  }
+  .gframe:hover {
+    box-shadow: 0 0 0 1px #c9a84c, 0 0 0 3px #1e1508, 0 0 0 5px #c9a84c,
+                0 18px 50px rgba(0,0,0,.92), 0 0 28px rgba(201,168,76,.2);
+    transform: translateY(-4px) rotate(0deg) !important;
+    z-index: 10;
+  }
+  .gframe img {
+    display: block; width: 100%; height: 100%;
+    object-fit: cover;
+    background: #0a0805;
+  }
+  .gwire {
+    position: absolute;
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(201,168,76,.45), rgba(201,168,76,.08));
+    pointer-events: none;
+    z-index: 1;
+  }
+
   /* exhibit-left wrapper — groups rail+wire+frame together */
   .exhibit-left {
     display: contents; /* behaves like its children in column mode */
@@ -858,18 +918,24 @@
 
     </div><!-- /exhibit-left -->
 
+    <!-- G: GALLERY WALL -->
+    <div class="wrap-gallery" id="wrapGallery" style="display:none">
+      <div class="gallery-rail"></div>
+      <div class="gallery-wall" id="galleryWall"></div>
+    </div>
+
     <!-- PLAQUE -->
     <div class="plaque" id="plaque">
       <div class="plaque-top">
         <div class="plaque-main">
           <div class="p-num" id="pNum">ЭКСПОНАТ № 001</div>
           <div class="p-title" id="pTitle">—</div>
-          <div class="p-orig"  id="pOrig">—</div>
+          <div class="p-orig"  id="pOrig" style="display:none">—</div>
         </div>
         <div class="plaque-meta">
           <div class="p-author" id="pAuthor">—</div>
           <div class="p-year"   id="pYear">—</div>
-          <div class="p-tech"   id="pTech">—</div>
+          <div class="p-tech"   id="pTech" style="display:none">—</div>
         </div>
       </div>
       <div class="p-desc" id="pDesc">—</div>
@@ -919,26 +985,44 @@
 // img: ""             — ссылка на изображение
 // ══════════════════════════════════════════════
 const EX = [
-  { title:"Монобекла", author:"Лео Беклинчи", year:"2026", desc:"Загадочная улыбка этой беклы заставляет нервничать каждого работника Технической службы.Выкинула ли она баг или выкинет ли она баг?", img:"/gift/drhd/2026/img/p_001.png", type:"painting-v" },
-  { title:"Бекла с жемчужной сережкой", author:"Янвер Беклмеер", year:"2026", desc:"Кто эта бекла и кому принадлежит жемчужная сережка? И этот жемчуг не из коллекции ли завуча? В глазах авантюра, за спиной гравюра, за кадром увертюра.", img:"/gift/drhd/2026/img/p_002.jpg", type:"painting-v" },
-  { title:"Ор выше озер", author:"Эд Мунбекл", year:"2026", desc:"Бекла застыла в крике, а ландшафт расплескалася по полотну. Крик ли радости за стыл на её устах, ужаса ли? Ярко расплескавшиеся чувства в моменте по всем заветам эмоционального интеллекта. Но главный вопрос: ЧТО.БЫЛО.ДАЛЬШЕ?", img:"/gift/drhd/2026/img/p_003.jpg", type:"painting-v" },
-  { title:"Дама со стайной беклой", author:"Лео Беклинчи", year:"2026", desc:"Отчего у беклы ошалевший вид? Может, эту беклу не везут в Мадрид? Отчего же дама как староста/стажер? Художник не сознается, хоть смотри в упор", img:"/gift/drhd/2026/img/p_004.png", type:"painting-v" },
-  { title:"Голова Беклы", orig:"по мотивам «Головы женщины» (Пикассо)", author:"Пабло Пикаббекло", year:"1907 б.э.", tech:"Масло, кубизм, дерзость", desc:"Художник изобразил беклу одновременно анфас и в профиль. Сама бекла говорит, что узнала себя. Это настораживает.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_005.PNG?raw=true", type:"painting-v" },
-  { title:"Девочка-Бекла с персиками", orig:"по мотивам «Девочки с персиками» (Серов)", author:"Валентин Серобекль", year:"1887 б.э.", tech:"Масло на болотном полотне", desc:"Юная бекла сидит за столом и смотрит прямо на зрителя с видом существа, которое только что съело один персик и точно знает, где лежат остальные.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_006.png?raw=true", type:"painting-s" },
-  { title:"Рождение Беклы Венерклёвой", orig:"по мотивам «Рождения Венеры» (Боттичелли)", author:"Сандро Боттибекли", year:"ок. 1484–1486 б.э.", tech:"Тина, ряска, яичная темпера", desc:"Бекла восстаёт из болотной пены на исполинской ракушке. Ветер развевает её водоросли. Критики называют это «апогеем бекловой мифологии».", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_007.png?raw=true", type:"painting-w" },
-  { title:"Танец Беклов", orig:"по мотивам «Танца» (Матисс)", author:"Анри Матибекль", year:"1910 б.э.", tech:"Масло, яркость, хаотичные лапки", desc:"Пятеро беклов взялись за лапки и закружились в диком хороводе. Линии упрощены до предела. Цвета кричат. Радость безгранична.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_008.png?raw=true", type:"painting-w" },
-  { title:"Бекловая готика", orig:"по мотивам «Американской готики» (Грант Вуд)", author:"Грант Вуддребекль", year:"1930 б.э.", tech:"Масло на болотной доске", desc:"Два бекла у деревянного домика. Один держит вилы. Оба смотрят с таким выражением, будто рады видеть вас — но только не здесь и не сейчас.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_009.png?raw=true", type:"painting-v" },
-  { title:"Бекла с веером", orig:"по мотивам «Дамы с веером» (Климт)", author:"Густав Беклимт", year:"1917–1918 б.э.", tech:"Золото, масло, перья болотной птицы", desc:"Бекла смотрит поверх веера с видом существа, которое знает о вас всё — и этим совершенно не обеспокоено. Веер скрывает улыбку. Или её отсутствие.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_010.png?raw=true", type:"painting-s" },
-  { title:"Утро в сосновом болоте", orig:"по мотивам «Утра в сосновом лесу» (Шишкин)", author:"Иван Шишкибекль и Константин Савицкобекль", year:"1889 б.э.", tech:"Масло, хвоя, утренняя сырость", desc:"Трое беклят резвятся на поваленной сосне под надзором четвёртого. Медведей на картине нет — авторы заменили их беклами ещё на этапе эскиза и ни разу не пожалели.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_011.png?raw=true", type:"painting-w" },
-  { title:"Три беклатыря", orig:"по мотивам «Трёх богатырей» (Васнецов)", author:"Виктор Васнецобекль", year:"1898 б.э.", tech:"Масло, доблесть, болотная грязь на копытах", desc:"Три могучих бекла на конях замерли на холме, вглядываясь в болотную даль. Дозорные. Защитники. Никто точно не помнит, от чего именно.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_012.png?raw=true", type:"painting-w" },
-  { title:"Всадница-Бекла", orig:"по мотивам «Всадницы» (Брюллов)", author:"Карл Брюлобекль", year:"1832 б.э.", tech:"Масло на парадном холсте", desc:"Юная бекла гарцует на вороном коне с видом победительницы. Маленькая бекла смотрит снизу с нескрываемым восхищением. Конь смотрит в никуда — он уже всё видел.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_013.png?raw=true", type:"painting-v" },
-  { title:"Бекла над болотом", orig:"по мотивам «Над городом» (Шагал)", author:"Марк Шагабекль", year:"1918 б.э.", tech:"Масло, лиризм, левитация", desc:"Двое беклов летят над болотом, взявшись за лапки. Внизу — кочки, камыши, чья-то изба. Никто внизу не удивляется. В этих краях это обычное дело.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_014.png?raw=true", type:"painting-w" },
-  { title:"Бекла-царевич на Сером Волке", orig:"по мотивам «Ивана-царевича на Сером Волке» (Васнецов)", author:"Виктор Васнецобекль", year:"1889 б.э.", tech:"Масло, сказочность, болотный туман", desc:"Серый Волк мчит бекла-царевича сквозь дремучий лес. На руках у царевича — спасённая бекла-царевна. Оба смотрят назад с видом существ, которые натворили что-то серьёзное.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_015.png?raw=true", type:"painting-v" },
-  { title:"Портрет незнакомой беклы", orig:"по мотивам «Портрета неизвестной» (Крамской)", author:"Иван Крамскобекль", year:"1883 б.э.", tech:"Масло, достоинство, загадка", desc:"Она едет в открытом экипаже и смотрит на зрителя сверху вниз — с холодным спокойствием существа, которое никогда не объяснит, кто она и куда направляется.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/p_016.png?raw=true", type:"painting-h" },
-  { title:"Бекло-Сфинкс", orig:"по мотивам статуи Большого Сфинкса (Гиза)", author:"Неизвестный бекло-зодчий", year:"ок. 2500 б.э.", tech:"Известняк, тина, вечность", desc:"Величественный Бекло-Сфинкс охраняет вход в болото уже несколько тысячелетий. Нос слегка отбит — предположительно, в ходе жаркого спора о принадлежности лучшей лужи.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/s_001.png?raw=true", type:"sculpture" },
-  { title:"Маленькая Русалобекла", orig:"по мотивам статуи «Русалочки» (Эриксен)", author:"Эдвард Эрибекксен", year:"1913 б.э.", tech:"Бронза, морская тина, тоска", desc:"Маленькая бекла сидит на камне у воды и смотрит вдаль с видом существа, которое пожертвовало голосом ради любви, а потом передумало, но уже поздно.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/s_002.png?raw=true", type:"sculpture" },
-  { title:"Бекла Свободная", orig:"по мотивам Статуи Свободы (Бартольди)", author:"Фредерик Бартолдибекль", year:"1886 б.э.", tech:"Медь, каркас из болотного тростника", desc:"Бекла с факелом стоит в гавани и озаряет болота. В правой лапке — огонь. В левой — скрижаль с законами. Выражение лица говорит: «Я тут стою уже очень давно».", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/s_003.png?raw=true", type:"sculpture" },
-  { title:"Мыслящая Бекла", orig:"по мотивам «Мыслителя» (Роден)", author:"Огюст Роденбекль", year:"1902 б.э.", tech:"Бронзированная тина", desc:"Бекла сидит, подперев голову лапкой, и думает. О чём — неизвестно. Возможно, о жуке. Возможно, о смысле болота. Скорее всего, о жуке.", img:"https://github.com/rav-drhd2025/rav-drhd2025.github.io/blob/main/expo-bekla/s_004.png?raw=true", type:"sculpture" },
+  { title:"Монобекла", author:"Лео Беклинчи", year:"2026", desc:"Загадочная улыбка этой беклы заставляет нервничать каждого работника Технической службы. Выкинула ли она баг или выкинет ли она баг?", img:"/gift/drhd/2026/img/p_001.png", type:"painting-v" },
+  { title:"Бекла с жемчужной сережкой", author:"Янвер Беклмеер", year:"2026", desc:"Кто эта бекла и кому принадлежит жемчужная сережка? И этот жемчуг не из коллекции ли завуча? В глазах авантюра, за спиной гравюра, за кадром увертюра.", img:"/gift/drhd/2026/img/p_002.png", type:"painting-v" },
+  { title:"Ор выше озер", author:"Эд Мунбекл", year:"2026", desc:"Бекла застыла в крике, а ландшафт расплескалася по полотну. Крик ли радости за стыл на её устах, ужаса ли? Ярко расплескавшиеся чувства в моменте по всем заветам эмоционального интеллекта. Но главный вопрос: ЧТО.БЫЛО.ДАЛЬШЕ?", img:"/gift/drhd/2026/img/p_003.png", type:"painting-v" },
+  { title:"Дама со стайной беклой", author:"Лео Беклинчи", year:"2026", desc:"Отчего у беклы ошалевший вид? Может, эту беклу не везут в Мадрид?\nОтчего же дама как староста/стажер? Художник не сознается, хоть смотри в упор.", img:"/gift/drhd/2026/img/p_004.png", type:"painting-v" },
+  { title:"Голова беклы", author:"Пабло Пикабекло", year:"2026", desc:"Художник изобразил беклу одновременно анфас и в профиль. Сама бекла говорит, что узнала себя. Это настораживает.", img:"/gift/drhd/2026/img/p_005.png", type:"painting-v" },
+  { title:"Бекла с персиками", author:"Вален Серобекл", year:"2026", desc:"Отчего так прекрасна и невинна эта бекла. Все дело в персиках. Персики внутри, персики снаружи, персики знает, где взять.", img:"/gift/drhd/2026/img/p_006.png", type:"painting-s" },
+  { title:"Беклорожденная", author:"Сандро Беклочелли", year:"2026", desc:"Происхождение бекл доподлинно неизвестно, но может из пены морской на ракушке они ворвались красиво в нашу грешную жизнь? Чтобы нагрешить ещё, конечно же.", img:"/gift/drhd/2026/img/p_007.png", type:"painting-w" },
+  { title:"Танец бекл", author:"Анри Матисбекл", year:"2026", desc:"Что делают беклы, когда шалость удалась? Стучат по карте и танцуют!", img:"/gift/drhd/2026/img/p_008.png", type:"painting-w" },
+  { title:"Хогвартская готика", author:"Гранд Вудбекль", year:"2026", desc:"Зачем беклам вилы? Чей это дом? Что говорят вам их лица? И где...", img:"/gift/drhd/2026/img/p_009.png", type:"painting-v" },
+  { title:"Бекла с веером", author:"Беклимт Устав", year:"2026", desc:"Вот бекла, вот веер. Это искусство.", img:"/gift/drhd/2026/img/p_010.png", type:"painting-s" },
+  { title:"Утро, сосны и болото", author:"Ива Шишбекл", year:"2026", desc:"Утро не бывает добрым, но утро бывает бурным. А бурное утро это почти как бодрое утро. Бодрое утро это почти доброе утро, если запустить беклой в это слово. А на картине утро, сосны. И болото.", img:"/gift/drhd/2026/img/p_011.png", type:"painting-w" },
+  { title:"Стражи галактики", author:"Вик Беснецов", year:"2026", desc:"Бекла может. Бекла богатырь. Стайный.", img:"/gift/drhd/2026/img/p_012.png", type:"painting-w" },
+  { title:"Всадница", author:"Бюрбекл, Карл", year:"2026", desc:"Как оседлать код и остановить коня на скаку? Скажите бекле, что это 8 марта и она и не такое продемонстрирует.", img:"/gift/drhd/2026/img/p_013.png", type:"painting-v" },
+  { title:"Над Хогсмидом", author:"Марк Шагалбекл", year:"2026", desc:"Можно по разному интерпретировать о чем говорит картина. Но мэр говорит, что это так беклы выселялись из Хогсмида.", img:"/gift/drhd/2026/img/p_014.png", type:"painting-w" },
+  { title:"Крайняя бекла", author:"Вик Беснецов", year:"2026", desc:"Иерархия среди бекл или кто везет, того и погоняют.", img:"/gift/drhd/2026/img/p_015.png", type:"painting-v" },
+  { title:"Незнакомка", author:"Иоан Крамбекл", year:"2026", desc:"Ты узнаешь ещё из тясячи по зубам, по мехам, по хаосу.. Или нет?", img:"/gift/drhd/2026/img/p_016.png", type:"painting-h" },
+  { title:"Сбинкс", author:"Игиптяне", year:"когда-то", desc:"Величественный Сбинкс лучше всех охраняет ваши пирамиды. Загадки загадает, ответы послушает, лагов и багов отсыплет. Можете быть покойны.", img:"/gift/drhd/2026/img/s_001.png", type:"sculpture" },
+  { title:"Ариэль", author:"Эд Эрикбекль", year:"2026", desc:"Беклофольклорный персонаж — Русалочка. Она променяла свой гогот на лампы, а корабль с принцем задержался. Или она просто думает о будущем. Или смотрит на рыб.", img:"/gift/drhd/2026/img/s_002.png", type:"sculpture" },
+  { title:"Бекла Свободы", author:"Фредди Бартобекльдерик", year:"2026", desc:"Бекла свободная. Бекла довольная. В правой лапке — огонь. В левой — выпуск про бекл. Выражение мордочки говорит: «Я тут была. Тут и буду».", img:"/gift/drhd/2026/img/s_003.png", type:"sculpture" },
+  { title:"Бекла мыслящая", author:"Огуст Беклоден", year:"2026", desc:"Где была, что наделала. Где не была, но будет. Бекла ищущая. Бекла мыслящая. Бекла существующая.", img:"/gift/drhd/2026/img/s_004.png", type:"sculpture" },
+  {
+    title:"Беклы. Графика", author:"Разные художники", year:"2026",
+    desc:"Малые беклы, зелёные, а щит есть в крапинку. Беклина радость, бекла-серфер, бекла в грустях — каждая со своим характером, каждая со своей историей. Коллекция графических работ из фондов музея.",
+    img:"/gift/drhd/2026/img/g_001_thumb.png",
+    type:"gallery",
+    imgs:[
+      "/gift/drhd/2026/img/g_001.jpg",
+      "/gift/drhd/2026/img/g_002.jpg",
+      "/gift/drhd/2026/img/g_003.jpg",
+      "/gift/drhd/2026/img/g_004.jpg",
+      "/gift/drhd/2026/img/g_005.jpg",
+      "/gift/drhd/2026/img/g_006.jpg",
+      "/gift/drhd/2026/img/g_007.jpg",
+      "/gift/drhd/2026/img/g_008.jpg",
+      "/gift/drhd/2026/img/g_009.jpg",
+      "/gift/drhd/2026/img/g_010.jpg",
+    ]
+  },
 ];
 
 let cur = 0;
@@ -967,7 +1051,7 @@ function render() {
   const show = id => document.getElementById(id).style.display = '';
   const hide = id => document.getElementById(id).style.display = 'none';
 
-  hide('frameH'); hide('frameV'); hide('frameS'); hide('frameW'); hide('wrapSculpt'); hide('wrapBook');
+  hide('frameH'); hide('frameV'); hide('frameS'); hide('frameW'); hide('wrapSculpt'); hide('wrapBook'); hide('wrapGallery');
 
   if (t === 'painting-h') {
     show('frameH');
@@ -996,11 +1080,14 @@ function render() {
     else        { img.style.display='none'; ph.style.display='flex'; }
   } else if (t === 'book') {
     show('wrapBook');
+  } else if (t === 'gallery') {
+    show('wrapGallery');
+    renderGallery(e.imgs || []);
   }
 
   // Re-trigger animation
   const animEl = {
-    'painting-h':'frameH','painting-v':'frameV','painting-s':'frameS','painting-w':'frameW','sculpture':'wrapSculpt','book':'wrapBook'
+    'painting-h':'frameH','painting-v':'frameV','painting-s':'frameS','painting-w':'frameW','sculpture':'wrapSculpt','book':'wrapBook','gallery':'wrapGallery'
   }[t];
   if (animEl) {
     const el = document.getElementById(animEl);
@@ -1017,7 +1104,7 @@ function render() {
 }
 
 // ── Thumbnails ──
-const THUMB_ICON = {'painting-h':'🖼','painting-v':'🖼','painting-s':'🖼','painting-w':'🖼','sculpture':'🗿','book':'📖'};
+const THUMB_ICON = {'painting-h':'🖼','painting-v':'🖼','painting-s':'🖼','painting-w':'🖼','sculpture':'🗿','book':'📖','gallery':'🖼'};
 
 function buildThumbs() {
   const s = document.getElementById('thumbStrip');
@@ -1027,9 +1114,10 @@ function buildThumbs() {
     t.className = 'thumb' + (i===cur?' active':'');
     t.title = e.title;
     t.onclick = () => goTo(i);
-    if (e.img) {
+    const thumbImg = e.img || (e.imgs && e.imgs[0]);
+    if (thumbImg) {
       const img = document.createElement('img');
-      img.src=e.img; img.alt=e.title; t.appendChild(img);
+      img.src=thumbImg; img.alt=e.title; t.appendChild(img);
     } else {
       t.textContent = THUMB_ICON[e.type||'painting-h'] || '🎨';
     }
@@ -1037,6 +1125,81 @@ function buildThumbs() {
     n.className='th-n'; n.textContent=i+1; t.appendChild(n);
     s.appendChild(t);
   });
+}
+
+// ── Gallery Wall renderer ──
+function renderGallery(imgs) {
+  const wall = document.getElementById('galleryWall');
+  const wrap = document.getElementById('wrapGallery');
+  wall.innerHTML = '';
+
+  // Layout config: each item has [col, row, w, h, rotate] in grid units
+  // Grid unit = ~100px. Cols 0..7, rows 0..4 (approximate)
+  // Images: 10 total, mixed portrait/landscape/square
+  const layout = [
+    // [left%, top, width, height, rotateDeg]  — will be converted to px after wall width known
+    { c:0,   t:0,   w:22, h:30, r:-1.5 }, // 0 — landscape wide
+    { c:24,  t:0,   w:16, h:22, r: 1.2 }, // 1 — portrait
+    { c:42,  t:0,   w:20, h:20, r:-0.8 }, // 2 — portrait tall
+    { c:64,  t:0,   w:20, h:25, r: 1.8 }, // 3 — portrait
+    { c:86,  t:0,   w:14, h:18, r:-1.0 }, // 4 — small square
+    { c:0,   t:32,  w:18, h:24, r: 0.9 }, // 5 — portrait
+    { c:20,  t:24,  w:22, h:18, r:-1.3 }, // 6 — landscape
+    { c:44,  t:22,  w:16, h:22, r: 1.5 }, // 7 — portrait
+    { c:62,  t:27,  w:22, h:18, r:-0.7 }, // 8 — landscape
+    { c:86,  t:20,  w:14, h:28, r: 1.1 }, // 9 — portrait tall
+  ];
+
+  // Determine wall height from layout
+  const totalH = layout.reduce((m, l) => Math.max(m, l.t + l.h), 0);
+
+  // Use percentage-based positioning so it scales with width
+  // We'll set wall height as aspect of totalH/100 * wallWidth
+  const setWallHeight = () => {
+    const ww = wall.offsetWidth;
+    if (!ww) return;
+    wall.style.height = (ww * totalH / 100) + 'px';
+
+    // Place frames
+    wall.querySelectorAll('.gframe,.gwire').forEach(el => el.remove());
+
+    layout.forEach((l, i) => {
+      if (i >= imgs.length) return;
+
+      const left = (l.c / 100) * ww;
+      const top  = (l.t / 100) * ww;
+      const w    = (l.w / 100) * ww;
+      const h    = (l.h / 100) * ww;
+
+      // wire
+      const wireH = Math.max(14, top * 0.18);
+      const wireEl = document.createElement('div');
+      wireEl.className = 'gwire';
+      wireEl.style.cssText = `left:${left + w/2}px; top:0; height:${top + 8}px;`;
+      wall.appendChild(wireEl);
+
+      // frame
+      const frame = document.createElement('div');
+      frame.className = 'gframe';
+      frame.style.cssText = `left:${left}px; top:${top}px; width:${w}px; height:${h}px; transform:rotate(${l.r}deg);`;
+
+      const img = document.createElement('img');
+      img.src = imgs[i];
+      img.alt = '';
+      img.loading = 'lazy';
+      frame.appendChild(img);
+      wall.appendChild(frame);
+    });
+  };
+
+  // Run after paint so offsetWidth is available
+  requestAnimationFrame(() => { requestAnimationFrame(setWallHeight); });
+
+  // Also rerun on resize
+  if (wall._resizeObs) wall._resizeObs.disconnect();
+  const ro = new ResizeObserver(setWallHeight);
+  ro.observe(wall);
+  wall._resizeObs = ro;
 }
 
 function go(d)   { goTo(cur+d); }
