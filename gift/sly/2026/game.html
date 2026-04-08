@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Сундук — Слизерин 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --bg: #324034; --gold: #ac9c6c; --gold2: #d2c7a7; --olive: #849474; --parch: #9b8c5e; }
+html, body { height:100%; }
+body {
+  background: var(--bg);
+  color: var(--gold2);
+  font-family: 'Cormorant Garamond', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0;
+  background: radial-gradient(ellipse 70% 50% at 20% 70%, rgba(92,103,78,0.25) 0%, transparent 60%),
+              radial-gradient(ellipse 50% 60% at 80% 20%, rgba(60,76,60,0.20) 0%, transparent 55%),
+              radial-gradient(ellipse 80% 50% at 50% 50%, rgba(36,52,36,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse 100% 40% at 50% 100%, rgba(8,13,12,0.5) 0%, transparent 50%);
+  animation: bgDrift 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes bgDrift { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.03) translate(-1%,1%); } }
+header {
+  position: relative; z-index: 10;
+  padding: 2rem 2rem 1.4rem;
+  background: linear-gradient(to bottom, rgba(4,6,4,0.99) 0%, rgba(8,13,12,0.98) 100%);
+  text-align: right;
+}
+.header-inner { max-width: 860px; margin: 0 auto; }
+.header-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 700; line-height: 1.15; color: var(--gold2);
+  text-shadow: 0 0 60px rgba(172,156,108,0.4), 0 0 120px rgba(172,156,108,0.15);
+  margin-bottom: 0.45rem;
+}
+.header-title em { font-style: normal; color: var(--gold); text-shadow: 0 0 35px rgba(172,156,108,0.6); }
+.header-sub { font-style: italic; font-size: 1.05rem; color: var(--parch); opacity: 0.85; }
+.nav-section {
+  position: relative; z-index: 10;
+  display: flex; justify-content: center;
+  padding: 1.2rem 1rem 0.8rem;
+  background: transparent;
+}
+.nav-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.nav-btn {
+  font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.18em;
+  text-transform: uppercase; text-decoration: none; color: var(--parch);
+  padding: 0.5rem 1.2rem; border: 1px solid rgba(155,140,94,0.45); border-radius: 2px;
+  background: rgba(8,13,12,0.65); backdrop-filter: blur(4px);
+  transition: color 0.22s, border-color 0.22s, background 0.22s;
+  cursor: pointer;
+}
+.nav-btn:hover { color: var(--gold2); border-color: rgba(172,156,108,0.7); background: rgba(8,13,12,0.85); }
+.nav-btn.active { color: var(--gold2); border-color: rgba(172,156,108,0.65); background: rgba(172,156,108,0.18); }
+main {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 2rem 1rem 5rem;
+  min-height: calc(100vh - 160px);
+}
+#chest-scene { display: flex; flex-direction: column; align-items: center; gap: 1.4rem; transition: opacity 0.5s ease; }
+#chest-wrap { position: relative; width: 360px; user-select: none; }
+#chest-img { width: 100%; display: block; filter: drop-shadow(0 16px 50px rgba(0,0,0,0.75)); transition: filter 0.4s; }
+#chest-img.glow { filter: drop-shadow(0 16px 50px rgba(0,0,0,0.75)) drop-shadow(0 0 40px rgba(172,156,108,0.65)); }
+#lock-img {
+  position: absolute; top: 0; left: 0; width: 100%; display: block; cursor: pointer;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.5)); transform-origin: center center;
+  transition: filter 0.25s;
+}
+#lock-img:hover { filter: drop-shadow(0 3px 8px rgba(0,0,0,0.5)) drop-shadow(0 0 18px rgba(172,156,108,0.55)); }
+#lock-img.spinning { animation: lockSpin 1.15s cubic-bezier(0.4, 0, 0.2, 1) forwards; pointer-events: none; }
+@keyframes lockSpin {
+  0% { transform: rotate(0deg) scale(1); opacity: 1; }
+  55% { transform: rotate(750deg) scale(1); opacity: 1; }
+  80% { transform: rotate(720deg) scale(1.05); opacity: 0.7; }
+  100% { transform: rotate(720deg) scale(0); opacity: 0; }
+}
+#chest-hint { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.26em; color: rgba(155,140,94,0.65); text-transform: uppercase; animation: hintPulse 2.6s ease-in-out infinite; }
+@keyframes hintPulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+#game-area {
+  display: none; flex-direction: column; align-items: center; width: 100%; max-width: 1100px; margin: 0 auto;
+  position: relative; opacity: 0; transition: opacity 0.5s; padding-top: 1rem;
+}
+#speech-bubble {
+  width: 100%; max-width: 760px; margin: 0 auto 2rem auto;
+  background: rgba(10,16,10,0.98); border: 1px solid rgba(172,156,108,0.55); border-radius: 18px;
+  padding: 0.75rem 1.2rem 0.75rem 2.8rem; backdrop-filter: blur(12px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(172,156,108,0.2);
+  font-style: italic; font-size: 1rem; line-height: 1.5; color: var(--gold2); text-align: center;
+  transition: box-shadow 0.3s, border-color 0.3s; pointer-events: auto; position: relative; z-index: 5;
+  min-height: 140px; overflow: visible; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box;
+}
+#bubble-inner { overflow: hidden; max-height: 130px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.3rem; width: 100%; pointer-events: none; }
+.bubble-text, .bubble-btn, #bubble-btns { pointer-events: auto; }
+#speech-bubble.win { border-color: rgba(172,156,108,0.95); box-shadow: 0 0 36px rgba(172,156,108,0.45), 0 12px 32px rgba(0,0,0,0.6); }
+.bubble-text { font-weight: 400; font-size: inherit; }
+.bubble-btns { display: flex; flex-direction: row; justify-content: center; gap: 0.5rem; margin-top: 0.4rem; flex-wrap: wrap; }
+.bubble-btn {
+  font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold2); padding: 0.3rem 0.8rem; border: 1px solid rgba(172,156,108,0.5); background: rgba(172,156,108,0.1);
+  cursor: pointer; transition: all 0.25s; border-radius: 2px; text-align: center; white-space: nowrap;
+}
+.bubble-btn:hover { border-color: var(--gold); background: rgba(172,156,108,0.25); color: var(--gold); }
+#btn-rules-fixed {
+  position: absolute; top: 0.55rem; left: 0.7rem; width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid rgba(172,156,108,0.55); background: rgba(172,156,108,0.12); color: var(--parch);
+  font-family: 'Cinzel', serif; font-size: 0.75rem; font-style: normal; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s, color 0.2s; z-index: 10; line-height: 1;
+}
+#btn-rules-fixed:hover { background: rgba(172,156,108,0.28); border-color: var(--gold); color: var(--gold2); }
+#table-section { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; width: 100%; }
+.area-label { font-family: 'Cinzel', serif; font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(155,140,94,0.45); }
+#table-area { display: flex; justify-content: center; align-items: flex-end; gap: 14px; flex-wrap: nowrap; transition: all 0.3s; }
+.table-card { width: 130px; height: 185px; perspective: 700px; flex-shrink: 0; opacity: 0; animation: cardFlyIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+@keyframes cardFlyIn { from { opacity: 0; transform: translateY(-70px) scale(0.4) rotate(var(--spin-from, 0deg)); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); } }
+.tc-inner { width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); position: relative; border-radius: 8px; }
+.table-card.open .tc-inner { transform: rotateY(180deg); }
+.tc-back, .tc-front { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 8px; overflow: hidden; }
+.tc-back { background: linear-gradient(145deg, #141e14, #0a120a); border: 2px solid rgba(172,156,108,0.42); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.25s; }
+.table-card.next-up .tc-back { border-color: rgba(172,156,108,0.85); box-shadow: 0 0 18px rgba(172,156,108,0.25), inset 0 0 10px rgba(172,156,108,0.05); animation: nextGlow 1.8s ease-in-out infinite; }
+@keyframes nextGlow { 0%,100% { box-shadow: 0 0 12px rgba(172,156,108,0.2); } 50% { box-shadow: 0 0 28px rgba(172,156,108,0.45); } }
+.tc-back:hover { border-color: rgba(172,156,108,0.7); }
+.tc-back-inner { width: 82%; height: 82%; border: 1px solid rgba(172,156,108,0.18); display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(45deg, transparent, transparent 9px, rgba(172,156,108,0.035) 9px, rgba(172,156,108,0.035) 10px), repeating-linear-gradient(-45deg, transparent, transparent 9px, rgba(172,156,108,0.035) 9px, rgba(172,156,108,0.035) 10px); }
+.tc-back-inner img { width: 65%; height: 65%; object-fit: contain; opacity: 0.35; }
+.tc-front { transform: rotateY(180deg); background: linear-gradient(165deg, #111a11, #0b140b); border: 2px solid rgba(172,156,108,0.38); display: flex; flex-direction: column; }
+.tc-front img { flex: 1; width: 100%; object-fit: contain; padding: 7px 7px 3px; display: block; min-height: 0; }
+.tc-name { padding: 3px 5px 5px; font-family: 'Cinzel', serif; font-size: 0.4rem; letter-spacing: 0.06em; color: var(--parch); text-align: center; line-height: 1.35; background: rgba(0,0,0,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.table-hand-divider { width: 60%; max-width: 400px; height: 1px; background: linear-gradient(to right, transparent, rgba(172,156,108,0.2), transparent); margin: 1.2rem auto 0.8rem; }
+#hand-section { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 0.6rem; margin-top: 0.2rem; }
+#hand-area { position: relative; width: 310px; height: 230px; }
+.hand-card {
+  position: absolute; width: 150px; height: 213px; bottom: 0; border-radius: 7px; overflow: hidden;
+  border: 2px solid rgba(172,156,108,0.38); background: linear-gradient(165deg, #111a11, #0b140b);
+  display: flex; flex-direction: column; opacity: 0; animation: handFadeIn 0.6s ease forwards;
+}
+@keyframes handFadeIn { from { opacity: 0; transform: translateY(30px) scale(0.85); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.hand-card:nth-child(1) { left: 18px; transform-origin: bottom center; transform: rotate(-14deg); animation: handFadeIn1 0.6s ease forwards; z-index: 1; }
+.hand-card:nth-child(2) { left: 140px; transform-origin: bottom center; transform: rotate(10deg); animation: handFadeIn2 0.65s ease forwards; z-index: 2; }
+@keyframes handFadeIn1 { from { opacity: 0; transform: rotate(-14deg) translateY(40px) scale(0.8); } to { opacity: 1; transform: rotate(-14deg) translateY(0) scale(1); } }
+@keyframes handFadeIn2 { from { opacity: 0; transform: rotate(10deg) translateY(40px) scale(0.8); } to { opacity: 1; transform: rotate(10deg) translateY(0) scale(1); } }
+.hand-card img { flex: 1; width: 100%; object-fit: contain; padding: 6px 6px 2px; display: block; min-height: 0; }
+.hand-card .hc-name { padding: 2px 4px 4px; font-family: 'Cinzel', serif; font-size: 0.38rem; letter-spacing: 0.05em; color: var(--parch); text-align: center; line-height: 1.3; background: rgba(0,0,0,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#squid-wrap {
+  position: absolute; right: -120px; top: -20px; display: none; flex-direction: column; align-items: center;
+  gap: 0.4rem; opacity: 0; transition: opacity 0.5s; width: auto; z-index: 20; pointer-events: none;
+}
+#squid-img { width: 350px; filter: drop-shadow(0 6px 24px rgba(0,0,0,0.7)); transition: transform 0.2s, width 0.3s; display: block; pointer-events: auto; }
+#squid-img:hover { transform: scale(1.02); }
+@media (max-width: 1400px) { #squid-wrap { right: -80px; } #squid-img { width: 280px; } }
+@media (max-width: 1200px) { #squid-wrap { right: -40px; } #squid-img { width: 220px; } }
+@media (max-width: 1050px) { #squid-wrap { position: fixed; right: 0; bottom: 48px; top: auto; pointer-events: auto; z-index: 50; transition: opacity 0.5s; } #squid-img { width: 140px; } }
+@media (max-width: 900px) { #squid-img { width: 110px; } }
+@media (max-width: 640px) { #chest-wrap { width: 280px; } .table-card { width: 90px; height: 128px; } #table-area { gap: 8px; } #hand-area { width: 290px; height: 210px; } .hand-card { width: 130px; height: 185px; } .hand-card:nth-child(1) { left: 16px; } .hand-card:nth-child(2) { left: 136px; } #squid-img { width: 90px; } #speech-bubble { font-size: 0.82rem; min-height: 100px; } }
+@media (max-width: 440px) { #chest-wrap { width: 230px; } .table-card { width: 64px; height: 91px; } .tc-name { font-size: 0.35rem; } #table-area { gap: 6px; } .nav-btn { font-size: 0.55rem; padding: 0.35rem 0.75rem; } #hand-area { width: 250px; height: 185px; } .hand-card { width: 110px; height: 157px; } .hand-card:nth-child(1) { left: 14px; } .hand-card:nth-child(2) { left: 118px; } #squid-img { width: 70px; } #speech-bubble { font-size: 0.72rem; min-height: 100px; } }
+#rules-modal { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1rem; }
+#rules-modal.open { display: flex; }
+#rules-box { background: linear-gradient(165deg, #0e180e, #0a120a); border: 1px solid rgba(172,156,108,0.45); border-radius: 10px; padding: 2rem 2.2rem; max-width: 650px; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.7); position: relative; }
+#rules-box h2 { font-family: 'Cinzel', serif; font-size: 1rem; letter-spacing: 0.2em; color: var(--gold2); margin-bottom: 1.2rem; text-align: center; }
+#rules-box p, #rules-box li { font-size: 0.9rem; line-height: 1.7; color: var(--gold2); opacity: 0.9; margin-bottom: 0.6rem; }
+#rules-box ul { padding-left: 1.2rem; margin-bottom: 0.8rem; }
+#rules-box strong { color: var(--gold); font-style: normal; }
+#rules-close { position: absolute; top: 0.8rem; right: 1rem; background: none; border: none; color: var(--parch); font-size: 1.3rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+#rules-close:hover { opacity: 1; }
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 1.8rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  color: rgba(155,140,94,0.45);
+  border-top: 1px solid rgba(155,140,94,0.15);
+  background: linear-gradient(to top, rgba(4,6,4,0.97), rgba(8,13,12,0.92));
+  backdrop-filter: blur(6px);
+}
+#games-counter {
+  position: absolute;
+  right: 1.8rem;
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  background: rgba(0,0,0,0.4);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  border-left: 1px solid rgba(172,156,108,0.3);
+}
+</style>
+</head>
+<body>
+<header><div class="header-inner"><h1 class="header-title">Игра гигантского кальмара</h1><p class="header-sub">День Слизерина 2026</p></div></header>
+<div class="nav-section"><div class="nav-buttons"><a href="https://rav-gifts.github.io/sly/2026/index.html" class="nav-btn">Главная</a><a href="https://rav-gifts.github.io/sly/2026/stamps.html" class="nav-btn">Марки</a><a href="https://rav-gifts.github.io/sly/2026/stamps2.html" class="nav-btn">Марки-символы</a><a href="https://rav-gifts.github.io/sly/2026/game.html" class="nav-btn active">Игра кальмара</a></div></div>
+<main>
+  <div id="chest-scene"><div id="chest-wrap"><img id="chest-img" src="https://radika1.link/2026/04/07/SUNDUK-TENTR557aa965d9cf502a.png" alt="Сундук"><img id="lock-img" src="https://radika1.link/2026/04/07/ZAMOK_TENTR7a43609fd126eedf.png" alt="Замок"></div><p id="chest-hint">Нажми на замок</p></div>
+  <div id="game-area">
+    <div id="speech-bubble"><button id="btn-rules-fixed" title="Правила игры">?</button><div id="bubble-inner"><div class="bubble-text" id="bubble-text"></div><div class="bubble-btns" id="bubble-btns"></div></div></div>
+    <div id="table-section"><span class="area-label">На столе</span><div id="table-area"></div></div>
+    <div class="table-hand-divider"></div>
+    <div id="hand-section"><span class="area-label">Твои карты</span><div id="hand-area"></div></div>
+    <div id="squid-wrap"><img id="squid-img" src="https://s1.radikal.cloud/2026/04/07/KALMAR-DVAd4d96b026cdb3d7c.png" alt="Кальмар"></div>
+  </div>
+</main>
+<div id="rules-modal"><div id="rules-box"><button id="rules-close">✕</button><h2>Правила игры</h2><p>Перед вами <strong>слизеринский покер</strong>. Самый покерный покер из всех слизеринских. В руку вам выдаются <strong>2 карты</strong>. На стол выкладываются <strong>5 закрытых карт</strong>.</p><p>Переворачивайте карты на столе, собирайте комбинации и получайте эксклюзивные марки.</p><h2>Условия выигрыша:</h2><ul><li><strong>3 карты с коврами </strong> — марка ля Подземелья "Алладин"</li><li><strong>3+ любые карты со слизеринскими клубами</strong> — марка ля Подземелья "Клубная карта"</li><li><strong>3+ любые карты с обитателями Слизерина</strong> — марка ля Подземелья "Трендсеттер"</li><li><strong>3+ любые карты с лучшими журналистами или главными редакторами️</strong> — марка ля Подземелья "Острый язык"</li><li><strong>3+ любые карты с организаторами общественных мероприятий</strong> — марка ля Подземелья "Возмутитель спокойствия"</li></ul><p>В случае неудачи - не расстраивайтесь! Просто нажмите "сыграть заново" и не забывайте держать pokerface  перед Кальмаром - он шуллер!</p><h2>О наградах:</h2><p>Итак, вы победили эту жизнь, что дальше? <br> <strong>Если вы справились до 13.04.2026</strong> <ul><li>Сделайте скриншот, на котором будет четко виден ваш результат
+</li><li>Скорее опубликуйте его в теме с подарком или просто пришлите Блейк Эллингтон любым удобным вам способом</li><li>Ждите заслуженную награду, она скоро появится на доске лучших картежников</li></ul><p><strong>Если вы справились после 13.04.2026</strong> <br> <ul><li>Вы молодец. Мы жмем вам руку, но станок больше не печатает. Такие дела.</li></ul></p></div></div>
+<footer><span>© Подарок ко Дню Слизерина 2025 · С любовью от Когтеврана</span><span id="games-counter">Сыграно игр: 0</span></footer>
+<script>
+const BASE = "https://raw.githubusercontent.com/rav-gifts/rav-gifts.github.io/refs/heads/main/sly/2026/stamps/";
+const stampsRegular = [
+  { src: BASE + "s_эблекфорд.png", name: "Элайза Блекфорд", role: "3 курс" }, { src: BASE + "s_норен.png", name: "Улла Норен", role: "5 курс" },
+  { src: BASE + "s_хольмгрен.png", name: "Рогнеда Хольмгрен", role: "выпускник" }, { src: BASE + "s_raygan.png", name: "Mia Raygan", role: "выпускник" },
+  { src: BASE + "s_рейвенхарт.png", name: "Теодор Рейвенхарт", role: "1 курс" }, { src: BASE + "s_montfort.png", name: "Amory de Montfort", role: "7 курс" },
+  { src: BASE + "s_wilson.png", name: "Adrian Wilson", role: "1 курс" }, { src: BASE + "s_тотен-нахтшталь.png", name: "Х. Тотен-Нахтшталь", role: "3 курс" },
+  { src: BASE + "s_брук.png", name: "Томас Брук", role: "выпускник" }, { src: BASE + "s_альба.png", name: "Идрис Альба", role: "7 курс" },
+  { src: BASE + "s_игараси.png", name: "Игараси Кайто", role: "1 курс" }, { src: BASE + "s_бэлл.png", name: "Джейсон Бэлл", role: "1 курс" },
+  { src: BASE + "s_сезанс.png", name: "Кори Сезенс", role: "выпускник" }, { src: BASE + "s_розье.png", name: "Каталина Розье", role: "1 курс" },
+  { src: BASE + "s_вульф.png", name: "Каталина Вульф", role: "4 курс" }, { src: BASE + "s_валтер.png", name: "Каланта Валтер", role: "выпускник" },
+  { src: BASE + "s_эйвери.png", name: "Аделин Эйвери", role: "3 курс" }, { src: BASE + "s_дру.png", name: "Роки Дру", role: "выпускник" },
+  { src: BASE + "s_дария.png", name: "Дария", role: "Декан" }, { src: BASE + "s_грин.png", name: "Владислава Грин", role: "3 курс" },
+  { src: BASE + "s_коваль.png", name: "Ананель Коваль", role: "4 курс" }, { src: BASE + "s_феникс.png", name: "Алиса Феникс", role: "2 курс" },
+  { src: BASE + "s_дюрансе-дейл.png", name: "Тиффани Дюрансе-Дейл", role: "выпускник" }, { src: BASE + "s_вестендорф.png", name: "Мерседес Вестендорф", role: "3 курс" },
+  { src: BASE + "s_дельмар.png", name: "Мира Дельмар", role: "1 курс" }, { src: BASE + "s_брэнсон.png", name: "Лекси Брэнсон", role: "выпускник" },
+  { src: BASE + "s_блэквуд.png", name: "Лилит Блэквуд", role: "1 курс" }, { src: BASE + "s_миллер.png", name: "Кэтрин Миллер", role: "1 курс" },
+  { src: BASE + "s_купер.png", name: "Кэтрин Купер", role: "2 курс" }, { src: BASE + "s_helwell.png", name: "Gugo Helwell", role: "Главный лекарь" },
+  { src: BASE + "s_моргрэн.png", name: "Эмилия Моргрэн", role: "1 курс" }, { src: BASE + "s_bloodstone.png", name: "Agatha Bloodstone", role: "1 курс" },
+  { src: BASE + "s_duart.png", name: "Aisha Duart", role: "1 курс" }, { src: BASE + "s_шейд.png", name: "Амарисса Шейд", role: "1 курс" },
+  { src: BASE + "s_миньярд.png", name: "Даниэль Миньярд", role: "1 курс" }, { src: BASE + "s_ардер.png", name: "Дарья Ардер", role: "2 курс" },
+  { src: BASE + "s_дэй.png", name: "Дездемона Дэй", role: "1 курс" }, { src: BASE + "s_блэкторн.png", name: "Кларенс Блэкторн", role: "1 курс" },
+  { src: BASE + "s_майерс.png", name: "Марс Майерс", role: "6 курс" }, { src: BASE + "s_ноксвуд.png", name: "Мирабель Ноксвуд", role: "2 курс" },
+  { src: BASE + "s_грейсон.png", name: "Нуада Грейсон", role: "3 курс" }, { src: BASE + "s_тока.png", name: "Рин Тока", role: "1 курс" },
+  { src: BASE + "s_блэкстоун.png", name: "Эдриан Блэкстоун", role: "2 курс" }, { src: BASE + "s_фатхи.png", name: "Яхья Фатхи", role: "выпускник" },
+  { src: BASE + "s_лблекфорд.png", name: "Лукреция Блекфорд", role: "3 курс" }, { src: BASE + "s_леонора.png", name: "Парселт Леонора", role: "1 курс" }
+];
+const stampsSymbols = [
+  { src: BASE + "s_барон.png", name: "Кровавый Барон", role: "Привидение факультета" }, { src: BASE + "s_джарви.png", name: "Джарви Нокс", role: "Привратник подземелий" },
+  { src: BASE + "s_ковер.png", name: "Ковер слизеринский", role: "" }, { src: BASE + "s_дк.png", name: "Дуэльный клуб", role: "" },
+  { src: BASE + "s_зм.png", name: "Зефирная мастерская", role: "" }, { src: BASE + "s_змеи.png", name: "Морские змеи", role: "Питомцы подземелий" },
+  { src: BASE + "s_ковер2.png", name: "Ковер слизеринский II", role: "" }, { src: BASE + "s_кв.png", name: "Клыки Василиска", role: "Сборная по квиддичу" },
+  { src: BASE + "s_кз.png", name: "Клуб Зельеваров", role: "" }, { src: BASE + "s_котокуст.png", name: "Котокуст", role: "Живой кустарник" },
+  { src: BASE + "s_ковер3.png", name: "Ковер слизеринский III", role: "" }, { src: BASE + "s_юрасик.png", name: "Скелет Юрасик", role: "Старшина шайки Брука" }
+];
+const stamps = [...stampsRegular, ...stampsSymbols];
+function getFilename(src) { return src.split('/').pop(); }
+const WIN_COMBOS = [
+  { name: 'Клубная карта', files: ['s_дк.png', 's_кз.png', 's_зм.png', 's_кв.png'], need: 3 },
+  { name: 'Трендсеттеры', files: ['s_юрасик.png', 's_барон.png', 's_котокуст.png', 's_джарви.png', 's_змеи.png'], need: 3 },
+  { name: 'Возмутители спокойствия', files: ['s_вульф.png', 's_дру.png', 's_фатхи.png', 's_helwell.png', 's_сезанс.png', 's_эблекфорд.png', 's_феникс.png', 's_коваль.png', 's_брук.png', 's_raygan.png'], need: 3 },
+  { name: 'Острые языки', files: ['s_дру.png', 's_фатхи.png', 's_вульф.png', 's_helwell.png', 's_эблекфорд.png', 's_альба.png'], need: 3 },
+  { name: 'Алладин', files: ['s_ковер.png', 's_ковер2.png', 's_ковер3.png'], need: 3 }
+];
+function checkWin(allCards) { const f = allCards.map(c => getFilename(c.src)); for (let c of WIN_COMBOS) { let m = c.files.filter(fi => f.includes(fi)); if (m.length >= c.need) return { name: c.name, winFiles: m }; } return null; }
+
+let tableCards = [], handCards = [], nextReveal = 0, gamePhase = 'chest', openedNames = [];
+let totalGames = 0;
+const counterSpan = document.getElementById('games-counter');
+
+function updateCounterDisplay() { counterSpan.textContent = `Сыграно игр: ${totalGames}`; }
+function incrementGameCounter() { totalGames++; localStorage.setItem('slyGamesTotal', totalGames); updateCounterDisplay(); }
+
+function loadCounter() { totalGames = parseInt(localStorage.getItem('slyGamesTotal')) || 0; updateCounterDisplay(); }
+
+function deal() { const shuffled = [...stamps].sort(() => Math.random() - 0.5); tableCards = shuffled.slice(0,5); handCards = shuffled.slice(5,7); nextReveal = 0; openedNames = []; }
+function renderTable() { const area = document.getElementById('table-area'); area.innerHTML = ''; const spins = [-180,90,-90,180,-120]; tableCards.forEach((stamp,i) => { const card = document.createElement('div'); card.className = 'table-card'; card.dataset.idx = i; card.style.animationDelay = (i*0.1)+'s'; card.style.setProperty('--spin-from', spins[i]+'deg'); card.innerHTML = `<div class="tc-inner"><div class="tc-back"><div class="tc-back-inner"><img src="https://s1.radikal.cloud/2026/04/07/OBLOZKA0f35d665468c61bf.png" alt=""></div></div><div class="tc-front"><img src="${stamp.src}" alt="${stamp.name}" loading="lazy"><div class="tc-name">${stamp.name}</div></div></div>`; card.querySelector('.tc-back').addEventListener('click', () => handleCardClick(i)); area.appendChild(card); }); }
+function renderHand() { const area = document.getElementById('hand-area'); area.innerHTML = ''; handCards.forEach((stamp,i) => { const card = document.createElement('div'); card.className = 'hand-card'; card.style.animationDelay = (0.55+i*0.08)+'s'; card.innerHTML = `<img src="${stamp.src}" alt="${stamp.name}" loading="lazy"><div class="hc-name">${stamp.name}</div>`; area.appendChild(card); }); }
+function updateNextCard() { document.querySelectorAll('.table-card').forEach((c,i) => c.classList.toggle('next-up', i===nextReveal)); }
+function handleCardClick(idx) { if(gamePhase !== 'playing') return; if(idx !== nextReveal) return; document.querySelectorAll('.table-card')[idx].classList.add('open'); document.querySelectorAll('.table-card')[idx].classList.remove('next-up'); nextReveal++; const stamp = tableCards[idx]; openedNames.push(stamp.name); updateNextCard(); if(nextReveal === 5) { gamePhase = 'done'; setTimeout(() => showResult(), 800); } else setBubble(`${stamp.name}!`, [], false); }
+function animateLose() {
+  const rotations = [-14, 10];
+  [...document.querySelectorAll('.table-card')].forEach((card, i) => {
+    setTimeout(() => { card.style.transition = 'opacity 0.45s ease, transform 0.45s ease'; card.style.opacity = '0'; card.style.transform = 'translateY(28px)'; }, i * 70);
+  });
+  [...document.querySelectorAll('.hand-card')].forEach((card, i) => {
+    const rot = rotations[i] || 0;
+    setTimeout(() => { card.style.transition = 'opacity 0.45s ease, transform 0.45s ease'; card.style.opacity = '0'; card.style.transform = `rotate(${rot}deg) translateY(28px)`; }, (5 + i) * 70);
+  });
+}
+function showResult() { const allCards = [...tableCards, ...handCards]; const result = checkWin(allCards); if(result) {
+    const winningCards = allCards.filter(c => result.winFiles.includes(getFilename(c.src)));
+    const cardNames = winningCards.map(c => c.name).join(', ');
+    setBubble(`БУЛЬ-БУЛЬ! Собрана комбинация: <strong>${result.name}</strong>!<br>Карты: ${cardNames}.`, [{ label: 'Сыграть ещё раз', id: 'btn-deal' }], true);
+    animateWin(result.winFiles);
+  } else { setBubble('Особых комбинаций не видно... Попробуй еще раз!', [{ label: 'Сыграть ещё раз', id: 'btn-deal' }], false); animateLose(); } document.getElementById('btn-deal')?.addEventListener('click', newGame); }
+function animateWin(winFiles) { 
+  const winSet = new Set(winFiles);
+  const winningCardsData = [...tableCards, ...handCards].filter(c => winSet.has(getFilename(c.src)));
+  const allCardElements = [...document.querySelectorAll('.table-card, .hand-card')];
+  allCardElements.forEach(card => { card.style.transition = 'opacity 0.4s ease, transform 0.4s ease'; card.style.opacity = '0'; card.style.transform = 'scale(0.8)'; });
+  setTimeout(() => {
+    const tableArea = document.getElementById('table-area'); tableArea.innerHTML = '';
+    winningCardsData.forEach((cardData, idx) => {
+      const cardDiv = document.createElement('div'); cardDiv.className = 'table-card'; cardDiv.style.animation = 'none'; cardDiv.style.opacity = '0'; cardDiv.style.transform = 'translateY(30px) scale(0.8)';
+      cardDiv.innerHTML = `<div class="tc-inner" style="transform: rotateY(180deg);"><div class="tc-front"><img src="${cardData.src}" alt="${cardData.name}" loading="lazy"><div class="tc-name">${cardData.name}</div></div><div class="tc-back"></div></div>`;
+      tableArea.appendChild(cardDiv);
+      setTimeout(() => { cardDiv.style.transition = 'opacity 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.2), transform 0.55s cubic-bezier(0.2, 0.9, 0.4, 1.2)'; cardDiv.style.opacity = '1'; cardDiv.style.transform = 'translateY(0) scale(1)'; }, idx * 80);
+    });
+    document.getElementById('hand-section').style.display = 'none'; document.querySelector('.table-hand-divider').style.display = 'none'; document.getElementById('table-section').querySelector('.area-label').style.opacity = '0.5';
+  }, 400);
+}
+function setBubble(html, btns, win) { document.getElementById('bubble-text').innerHTML = html; const btnsEl = document.getElementById('bubble-btns'); btnsEl.innerHTML = ''; btns.forEach(b => { const btn = document.createElement('button'); btn.className = 'bubble-btn'; btn.id = b.id; btn.textContent = b.label; btnsEl.appendChild(btn); }); document.getElementById('speech-bubble').classList.toggle('win', win); }
+function newGame() { incrementGameCounter(); document.getElementById('hand-section').style.display = ''; document.querySelector('.table-hand-divider').style.display = ''; const lbl = document.getElementById('table-section').querySelector('.area-label'); if(lbl) lbl.style.opacity = ''; deal(); renderTable(); renderHand(); updateNextCard(); gamePhase = 'playing'; openedNames = []; nextReveal = 0; setBubble('Буль-буль... Сундук открыт! Открывай карты на столе одну за другой — слева направо.', [], false); document.getElementById('squid-wrap').style.opacity = '1'; }
+function openChest() { const lock = document.getElementById('lock-img'); const chest = document.getElementById('chest-img'); const hint = document.getElementById('chest-hint'); const scene = document.getElementById('chest-scene'); lock.classList.add('spinning'); hint.style.display = 'none'; setTimeout(() => { chest.classList.add('glow'); setTimeout(() => { scene.style.opacity = '0'; setTimeout(() => { scene.style.display = 'none'; launchGame(); }, 500); }, 350); }, 1100); }
+function launchGame() { incrementGameCounter(); deal(); renderTable(); renderHand(); updateNextCard(); const gameArea = document.getElementById('game-area'); gameArea.style.display = 'flex'; requestAnimationFrame(() => requestAnimationFrame(() => gameArea.style.opacity = '1')); document.getElementById('squid-wrap').style.display = 'flex'; setTimeout(() => document.getElementById('squid-wrap').style.opacity = '1', 50); setBubble('Буль-буль... Сундук открыт! Открывай карты на столе одну за другой — слева направо.', [], false); gamePhase = 'playing'; }
+document.getElementById('lock-img').addEventListener('click', () => { if(gamePhase === 'chest') { gamePhase = 'opening'; openChest(); } });
+function openRulesModal() { document.getElementById('rules-modal').classList.add('open'); }
+document.getElementById('btn-rules-fixed').addEventListener('click', openRulesModal);
+document.getElementById('rules-close').addEventListener('click', () => document.getElementById('rules-modal').classList.remove('open'));
+document.getElementById('rules-modal').addEventListener('click', e => { if(e.target === document.getElementById('rules-modal')) document.getElementById('rules-modal').classList.remove('open'); });
+loadCounter();
+const rippleStyle = document.createElement('style'); rippleStyle.textContent = `.ripple-ring { position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); width: 0; height: 0; border: 1.5px solid transparent; animation: waterRipple var(--dur,1.4s) cubic-bezier(0.15,0.5,0.4,1) var(--delay,0s) forwards; } @keyframes waterRipple { 0% { width:4px; height:2px; opacity:0.8; border-width:1.5px; } 40% { opacity:0.5; } 100% { width:var(--maxW,220px); height:var(--maxH,70px); opacity:0; border-width:0.5px; } }`; document.head.appendChild(rippleStyle);
+document.addEventListener('click', e => { for(let i=0;i<4;i++){ const ring = document.createElement('div'); ring.className = 'ripple-ring'; ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px'; const spread = 1+i*0.28; const maxW = Math.round((100+Math.random()*40)*spread); const maxH = Math.round(maxW*(0.28+Math.random()*0.08)); ring.style.setProperty('--maxW', maxW+'px'); ring.style.setProperty('--maxH', maxH+'px'); ring.style.setProperty('--dur', (1.1+i*0.22+Math.random()*0.15).toFixed(2)+'s'); ring.style.setProperty('--delay', (i*0.11).toFixed(2)+'s'); ring.style.borderColor = `rgba(172,156,108,${(0.6-i*0.12).toFixed(2)})`; document.body.appendChild(ring); ring.addEventListener('animationend', () => ring.remove(), { once: true }); } });
+</script>
+</body>
+</html>
