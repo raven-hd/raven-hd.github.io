@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Коллекция марок — Слизерин 2025</title>
+ <link rel="icon" type="image/x-icon" href="favicon-sl.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:     #324034;
+    --gold:   #ac9c6c;
+    --gold2:  #d2c7a7;
+    --olive:  #849474;
+    --parch:  #9b8c5e;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--gold2);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 70%, rgba(92,103,78,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 20%, rgba(60,76,60,0.20) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 50% at 50% 50%, rgba(36,52,36,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 40% at 50% 100%, rgba(8,13,12,0.5) 0%, transparent 50%);
+    animation: bgDrift 18s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes bgDrift {
+    0%   { transform: scale(1) translate(0,0); }
+    100% { transform: scale(1.03) translate(-1%,1%); }
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative; z-index: 10;
+    padding: 2rem 2rem 1.4rem;
+    background: linear-gradient(to bottom, rgba(4,6,4,0.99) 0%, rgba(8,13,12,0.98) 100%);
+    text-align: right;
+  }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .header-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 700; line-height: 1.15; color: var(--gold2);
+    text-shadow: 0 0 60px rgba(172,156,108,0.4), 0 0 120px rgba(172,156,108,0.15);
+    margin-bottom: 0.45rem;
+  }
+  .header-title em {
+    font-style: normal; color: var(--gold);
+    text-shadow: 0 0 35px rgba(172,156,108,0.6), 0 0 70px rgba(172,156,108,0.25);
+  }
+  .header-sub {
+    font-style: italic; font-size: 1.05rem; color: var(--parch); opacity: 0.85;
+  }
+
+  /* ── НАВИГАЦИЯ ── */
+  .nav-section {
+    position: relative; z-index: 10;
+    display: flex;
+    justify-content: center;
+    padding: 1.2rem 1rem 0.8rem;
+    background: transparent;
+  }
+  .nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--parch);
+    padding: 0.5rem 1.2rem;
+    border: 1px solid rgba(155,140,94,0.45);
+    border-radius: 2px;
+    background: rgba(8,13,12,0.65);
+    backdrop-filter: blur(4px);
+    transition: color 0.22s, border-color 0.22s, background 0.22s;
+  }
+  .nav-btn:hover {
+    color: var(--gold2);
+    border-color: rgba(172,156,108,0.7);
+    background: rgba(8,13,12,0.85);
+  }
+  .nav-btn.active {
+    color: var(--gold2);
+    border-color: rgba(172,156,108,0.65);
+    background: rgba(172,156,108,0.18);
+  }
+
+  /* ── INTRO ── */
+  .page-intro {
+    position: relative; z-index: 1;
+    text-align: center; padding: 1rem 2rem 0.2rem;
+    font-style: italic; color: var(--parch); opacity: 0.8; font-size: 0.95rem;
+  }
+
+  /* ── ПОЛЕ МАРОК: УВЕЛИЧЕННЫЕ ЗАЗОРЫ, УМЕНЬШЕННЫЙ РАЗМЕР ── */
+  #stamp-field {
+    position: relative; z-index: 1;
+    width: 100%;
+    padding: 1.2rem 4% 3rem;
+  }
+
+  .stamp-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 32px;                /* увеличен зазор между марками (горизонталь) */
+    margin-bottom: 38px;      /* увеличен вертикальный зазор между рядами */
+    flex-wrap: nowrap;
+  }
+
+  .stamp-item {
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+    transform: rotate(var(--rot, 0deg));
+    transition: transform 0.22s ease;
+    position: relative;
+  }
+  .stamp-item img {
+    display: block; width: 100%;
+    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 5px rgba(155,140,94,0.08));
+    transition: filter 0.22s;
+  }
+  .stamp-item:hover {
+    transform: rotate(var(--rot, 0deg)) scale(1.1) translateY(-5px);
+    z-index: 20;
+  }
+  .stamp-item:hover img {
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.65)) drop-shadow(0 0 14px rgba(172,156,108,0.28));
+  }
+
+  /* ── MODAL ── */
+  #modal {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(8,13,12,0.92); backdrop-filter: blur(12px);
+    align-items: center; justify-content: center;
+  }
+  #modal.open { display: flex; }
+  #modal-inner {
+    position: relative; text-align: center;
+    animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    max-width: 540px; width: 92%;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
+  #modal-img {
+    width: 440px; max-width: 85vw;
+    margin: 0 auto 1.5rem; display: block;
+    border: none; outline: none; border-radius: 4px;
+    filter:
+      drop-shadow(0 0 40px rgba(172,156,108,0.35))
+      drop-shadow(0 0 80px rgba(172,156,108,0.15))
+      drop-shadow(0 14px 40px rgba(0,0,0,0.85));
+  }
+  .modal-sep {
+    width: 60px; height: 1px;
+    background: linear-gradient(to right, transparent, rgba(172,156,108,0.45), transparent);
+    margin: 0 auto 1rem;
+  }
+  #modal-name {
+    font-family: 'Cinzel', serif; font-size: 1.15rem;
+    color: var(--gold2); margin-bottom: 0.4rem; letter-spacing: 0.06em;
+  }
+  #modal-role { font-style: italic; font-size: 1rem; color: var(--parch); line-height: 1.5; }
+  #modal-close {
+    position: absolute; top: -0.6rem; right: -0.6rem;
+    background: rgba(8,13,12,0.95); border: 1px solid rgba(155,140,94,0.3);
+    color: var(--parch); width: 2.2rem; height: 2.2rem;
+    border-radius: 50%; font-size: 1rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  #modal-close:hover { color: var(--gold2); border-color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    text-align: center; padding: 1rem 1.8rem;
+    font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.3em;
+    color: rgba(155,140,94,0.45);
+    border-top: 1px solid rgba(155,140,94,0.15);
+    background: linear-gradient(to top, rgba(4,6,4,0.97) 0%, rgba(8,13,12,0.92) 100%);
+    backdrop-filter: blur(6px);
+  }
+
+  /* ── RIPPLE ── */
+  .ripple-ring {
+    position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%); width: 0; height: 0;
+    border: 1.5px solid transparent;
+    animation: waterRipple var(--dur,1.4s) cubic-bezier(0.15,0.5,0.4,1) var(--delay,0s) forwards;
+  }
+  @keyframes waterRipple {
+    0%   { width:4px; height:2px; opacity:0.8; border-width:1.5px; }
+    40%  { opacity:0.5; }
+    100% { width:var(--maxW,220px); height:var(--maxH,70px); opacity:0; border-width:0.5px; }
+  }
+
+  /* ── АДАПТИВ: планшеты и мобильные ── */
+  @media (max-width: 900px) {
+    .stamp-row {
+      gap: 28px;
+      margin-bottom: 34px;
+    }
+  }
+  @media (max-width: 640px) {
+    header { padding: 1.6rem 1.2rem 0.8rem; }
+    .header-title { font-size: clamp(1.35rem,6vw,1.9rem); }
+    .nav-btn { font-size: 0.6rem; padding: 0.4rem 0.9rem; letter-spacing: 0.12em; }
+    .stamp-row {
+      gap: 22px;
+      margin-bottom: 28px;
+    }
+    #modal-img { width: 280px; }
+  }
+  @media (max-width: 500px) {
+    .stamp-row {
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .nav-buttons {
+      gap: 0.65rem;
+    }
+    .nav-btn {
+      font-size: 0.55rem;
+      padding: 0.35rem 0.75rem;
+    }
+  }
+  @media (max-width: 400px) {
+    .stamp-row {
+      gap: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1 class="header-title">Марки-символы факультета</h1>
+    <p class="header-sub">День Слизерина 2026</p>
+  </div>
+</header>
+
+<div class="nav-section">
+  <div class="nav-buttons">
+    <a href="https://rav-gifts.github.io/sly/2026/index.html" class="nav-btn">Главная</a>
+    <a href="https://rav-gifts.github.io/sly/2026/stamps.html" class="nav-btn ">Коллекция марок</a>
+    <a href="https://rav-gifts.github.io/sly/2026/stamps2.html" class="nav-btn active">Марки-символы</a>
+    <a href="game.html" class="nav-btn">Игра кальмара</a>
+  </div>
+</div>
+
+<p class="page-intro"></p>
+
+<div id="stamp-field"></div>
+
+<div id="modal">
+  <div id="modal-inner">
+    <button id="modal-close">✕</button>
+    <img id="modal-img" src="" alt="">
+    <div class="modal-sep"></div>
+    <div id="modal-name"></div>
+    <div id="modal-role"></div>
+  </div>
+</div>
+
+<footer>© Подарок ко Дню Слизерина 2026 · С любовью от Когтеврана</footer>
+
+<script>
+// ─── STAMP DATA (полная коллекция) ───────────────────────────────
+const BASE = "https://raw.githubusercontent.com/rav-gifts/rav-gifts.github.io/refs/heads/main/sly/2026/stamps/";
+const stamps = [
+  { src: BASE + "s_барон.png",          name: "Кровавый Барон",        role: "Привидение факультета" },
+  { src: BASE + "s_джарви.png",              name: "Джарви Нокс",              role: "Привратник подземелий" },
+  { src: BASE + "s_ковер.png",              name: "Ковер слизеринский",              role: "" },
+  { src: BASE + "s_дк.png",          name: "Дуэльный клуб",          role: "" },
+  { src: BASE + "s_зм.png",             name: "Зефирная мастерская",             role: "" },
+  { src: BASE + "s_змеи.png",         name: "Морские змеи",         role: "Питомцы подземелий" },
+  { src: BASE + "s_ковер2.png",              name: "Ковер слизеринский",              role: "" },
+  { src: BASE + "s_кв.png",           name: "Клыки Василиска",        role: "Сборная факультета по квиддичу" },
+  { src: BASE + "s_кз.png",             name: "Клуб Зельеваров",             role: "" },
+  { src: BASE + "s_котокуст.png",    name: "Котокуст",    role: "Живой кустарник" },
+  { src: BASE + "s_ковер3.png",              name: "Ковер слизеринский",              role: "" },
+  { src: BASE + "s_юрасик.png",               name: "Скелет Юрасик",               role: "Скелет. Старшина шайки Брука" },
+];
+
+// ─── SEEDED RANDOM для мягкой вариации размеров и наклона ──────────
+function seededRand(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+// ─── ПОСТРОЕНИЕ СЕТКИ: марки ещё мельче + увеличенные зазоры ─────────
+const field = document.getElementById('stamp-field');
+
+function buildStampGrid() {
+  field.innerHTML = '';
+  const rand = seededRand(23);
+  const fw = document.body.clientWidth || window.innerWidth;
+
+  // Динамическое число марок в ряду (адаптив)
+  let colPattern;
+  if (fw < 500) colPattern = [3, 3, 4, 3];
+  else if (fw < 750) colPattern = [5, 4, 5, 4];
+  else colPattern = [6, 5, 6, 5, 6];   // больше колонок при широком экране, но марки станут мельче
+
+  const maxCols = Math.max(...colPattern);
+  const GAP_X = fw < 500 ? 12 : (fw < 750 ? 20 : 28);      // горизонтальный отступ между марками в расчётах
+  const PAD = fw * 0.045;
+  
+  // УМЕНЬШЕНИЕ РАЗМЕРА ЕЩЁ СИЛЬНЕЕ: базовый множитель 0.58 (было 0.82) → марки как почтовые миниатюры
+  const SIZE_FACTOR = 0.58;
+  let baseWidth = Math.round((fw - PAD * 2 - GAP_X * (maxCols - 1)) / maxCols * SIZE_FACTOR);
+  // Защита от слишком маленьких марок на телефонах, но пользователь просил ещё мельче — оставляем минимум 50px
+  if (baseWidth < 46) baseWidth = 46;
+  const baseHeight = Math.round(baseWidth * 1.42);
+
+  // Разбиваем марки по рядам с переменным числом колонок
+  const rows = [];
+  let idx = 0, patIdx = 0;
+  while (idx < stamps.length) {
+    const cols = colPattern[patIdx % colPattern.length];
+    const count = Math.min(cols, stamps.length - idx);
+    rows.push({ cols, items: stamps.slice(idx, idx + count) });
+    idx += count;
+    patIdx++;
+  }
+
+  rows.forEach((row, rowIdx) => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'stamp-row';
+    // Чередование вертикального выравнивания для живости
+    rowEl.style.alignItems = rowIdx % 2 === 0 ? 'flex-end' : 'flex-start';
+
+    // Генерируем размеры для ряда, затем расставляем их чередованием
+    // (большие на чётных позициях, маленькие на нечётных), чтобы маленькие
+    // никогда не оказывались рядом
+    const rawSizes = row.items.map(() => 0.80 + rand() * 0.38);
+    rawSizes.sort((a, b) => b - a); // по убыванию: большие первые
+    const rowSizes = new Array(row.items.length);
+    let lo = 0, hi = rawSizes.length - 1;
+    for (let i = 0; i < rawSizes.length; i++) {
+      // чётные позиции — большие, нечётные — маленькие
+      rowSizes[i] = i % 2 === 0 ? rawSizes[lo++] : rawSizes[hi--];
+    }
+
+    row.items.forEach((stamp, colIdx) => {
+      // Берём заранее перемешанный размер из упорядоченного массива
+      const sizeScale = rowSizes[colIdx];
+
+      const stampWidth = Math.round(baseWidth * sizeScale);
+      
+      const sign = (rowIdx + colIdx) % 2 === 0 ? 1 : -1;
+      const rot = sign * (1.2 + rand() * 7.5);   // легкий наклон
+
+      const el = document.createElement('div');
+      el.className = 'stamp-item';
+      el.style.cssText = `width:${stampWidth}px; --rot:${rot.toFixed(1)}deg;`;
+
+      const img = document.createElement('img');
+      img.src = stamp.src;
+      img.alt = stamp.name;
+      img.draggable = false;
+      img.loading = "lazy";
+      el.appendChild(img);
+
+      el.addEventListener('click', () => openModal(stamp));
+      rowEl.appendChild(el);
+    });
+
+    field.appendChild(rowEl);
+  });
+}
+
+window.addEventListener('load', buildStampGrid);
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(buildStampGrid, 220);
+});
+
+// ─── MODAL ЛОГИКА ──────────────────────────────────
+const modal  = document.getElementById('modal');
+const mImg   = document.getElementById('modal-img');
+const mName  = document.getElementById('modal-name');
+const mRole  = document.getElementById('modal-role');
+const mClose = document.getElementById('modal-close');
+
+function openModal(stamp) {
+  mImg.src = stamp.src;
+  mName.textContent = stamp.name;
+  mRole.textContent = stamp.role;
+  modal.classList.add('open');
+}
+mClose.addEventListener('click', () => modal.classList.remove('open'));
+modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+// ─── ЭФФЕКТ КОЛЕБАНИЯ ВОДЫ (РИПЛЫ) ─────────────────
+document.addEventListener('click', e => {
+  if (e.target.closest('#modal')) return;
+  // создаём несколько расходящихся колец
+  for (let i = 0; i < 4; i++) {
+    const ring = document.createElement('div');
+    ring.className = 'ripple-ring';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+    const spread = 1 + i * 0.28;
+    const maxW = Math.round((100 + Math.random() * 40) * spread);
+    const maxH = Math.round(maxW * (0.28 + Math.random() * 0.08));
+    ring.style.setProperty('--maxW', maxW + 'px');
+    ring.style.setProperty('--maxH', maxH + 'px');
+    ring.style.setProperty('--dur',  (1.1 + i * 0.22 + Math.random() * 0.15).toFixed(2) + 's');
+    ring.style.setProperty('--delay',(i * 0.11).toFixed(2) + 's');
+    ring.style.borderColor = `rgba(172,156,108,${(0.6 - i * 0.12).toFixed(2)})`;
+    document.body.appendChild(ring);
+    ring.addEventListener('animationend', () => ring.remove(), { once: true });
+  }
+});
+
+// Дополнительная инициализация: если картинки вдруг подгружаются с ошибкой (тишина)
+// и также подстраховка, чтобы кнопки оставались активными
+</script>
+</body>
+</html>

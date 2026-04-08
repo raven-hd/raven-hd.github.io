@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>День Слизерина 2025 — Главная</title>
+<link rel="icon" type="image/x-icon" href="favicon-sl.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:     #324034;
+    --gold:   #ac9c6c;
+    --gold2:  #d2c7a7;
+    --olive:  #849474;
+    --parch:  #9b8c5e;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--gold2);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 70%, rgba(92,103,78,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 20%, rgba(60,76,60,0.20) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 50% at 50% 50%, rgba(36,52,36,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 40% at 50% 100%, rgba(8,13,12,0.5) 0%, transparent 50%);
+    animation: bgDrift 18s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes bgDrift {
+    0%   { transform: scale(1) translate(0,0); }
+    100% { transform: scale(1.03) translate(-1%,1%); }
+  }
+
+  /* ── ШАПКА (только заголовок и подзаголовок) ── */
+  header {
+    position: relative; z-index: 10;
+    padding: 2rem 2rem 1.4rem;
+    background: linear-gradient(to bottom, rgba(4,6,4,0.99) 0%, rgba(8,13,12,0.98) 100%);
+    text-align: right;
+  }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .header-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 700; line-height: 1.15; color: var(--gold2);
+    text-shadow: 0 0 60px rgba(172,156,108,0.4), 0 0 120px rgba(172,156,108,0.15);
+    margin-bottom: 0.45rem;
+  }
+  .header-title em {
+    font-style: normal; color: var(--gold);
+    text-shadow: 0 0 35px rgba(172,156,108,0.6), 0 0 70px rgba(172,156,108,0.25);
+  }
+  .header-sub {
+    font-style: italic; font-size: 1.05rem; color: var(--parch); opacity: 0.85;
+  }
+
+  /* ── НАВИГАЦИЯ (отдельный блок, без лишних линий, просто кнопки) ── */
+  .nav-section {
+    position: relative; z-index: 10;
+    display: flex;
+    justify-content: center;
+    padding: 1.2rem 1rem 0.8rem;
+    background: transparent; /* полностью прозрачный фон, не сливается с header */
+  }
+  .nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .nav-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--parch);
+    padding: 0.5rem 1.2rem;
+    border: 1px solid rgba(155,140,94,0.45);
+    border-radius: 2px;
+    background: rgba(8,13,12,0.65);
+    backdrop-filter: blur(4px);
+    transition: color 0.22s, border-color 0.22s, background 0.22s;
+  }
+  .nav-btn:hover {
+    color: var(--gold2);
+    border-color: rgba(172,156,108,0.7);
+    background: rgba(8,13,12,0.85);
+  }
+  .nav-btn.active {
+    color: var(--gold2);
+    border-color: rgba(172,156,108,0.65);
+    background: rgba(172,156,108,0.18);
+  }
+
+  /* ── ОСНОВНОЙ КОНТЕНТ ── */
+  main {
+    position: relative; z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem 2rem 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.2rem;
+  }
+
+  /* ── КОЛЛАЖ (без анимации, только статика + hover) ── */
+  .collage {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    margin-bottom: 0;
+  }
+  .collage-stamp {
+    position: absolute;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.65)) drop-shadow(0 0 3px rgba(155,140,94,0.08));
+    transition: filter 0.35s, transform 0.35s;
+    cursor: pointer;
+    transform-origin: center bottom;
+  }
+  .collage-stamp:hover {
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.8)) drop-shadow(0 0 8px rgba(172,156,108,0.22));
+    transform: scale(1.05) translateY(-5px);
+    z-index: 20;
+  }
+  /* статические повороты и позиции */
+  .cs1 { width:130px; top:8%;  left:2%;   transform: rotate(-3deg); }
+  .cs2 { width:108px; top:2%;  left:22%;  transform: rotate(4deg); }
+  .cs3 { width:148px; top:5%;  left:38%;  transform: rotate(-2deg); }
+  .cs4 { width:115px; top:10%; left:60%;  transform: rotate(2deg); }
+  .cs5 { width:135px; top:2%;  left:76%;  transform: rotate(-1deg); }
+
+
+
+  /* ── ДЕКОРАТИВНЫЙ РАЗДЕЛИТЕЛЬ ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+    color: rgba(172,156,108,0.4);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+  }
+  .divider::before, .divider::after {
+    content:'';
+    flex:1;
+    height:1px;
+    background: linear-gradient(to right, transparent, rgba(172,156,108,0.35), transparent);
+  }
+
+  /* ── ПИСЬМО (стилизованный пергамент) ── */
+  .letter {
+    width: 100%;
+    max-width: 720px;
+    padding: 2rem 2.5rem;
+    background: linear-gradient(135deg, rgba(20,28,18,0.88), rgba(12,18,12,0.94));
+    border: 1px solid rgba(172,156,108,0.28);
+    backdrop-filter: blur(2px);
+    position: relative;
+  }
+  .letter::before {
+    content:'';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(172,156,108,0.12);
+    pointer-events: none;
+  }
+  .letter-drop {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    line-height: 1.2;
+    color: var(--gold);
+    text-shadow: 0 0 12px rgba(172,156,108,0.5);
+    display: block;
+    margin-bottom: 0.7em;
+  }
+  .letter-body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--gold2);
+    font-style: italic;
+  }
+  .letter-body p { margin-bottom: 0.8em; }
+  .letter-body p:last-child { margin-bottom: 0; }
+
+  /* ── КНОПКА CTA ── */
+  .cta {
+    display: inline-block;
+    padding: 0.8rem 2.4rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--gold2);
+    border: 1px solid rgba(172,156,108,0.5);
+    background: rgba(8,13,12,0.65);
+    backdrop-filter: blur(4px);
+    transition: all 0.3s ease;
+  }
+  .cta:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(172,156,108,0.12);
+    box-shadow: 0 0 20px rgba(172,156,108,0.2);
+  }
+
+  /* ── ФУТЕР ── */
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    text-align: center; padding: 1rem 1.8rem;
+    font-family: 'Cinzel', serif; font-size: 0.62rem; letter-spacing: 0.3em;
+    color: rgba(155,140,94,0.45);
+    border-top: 1px solid rgba(155,140,94,0.15);
+    background: linear-gradient(to top, rgba(4,6,4,0.97) 0%, rgba(8,13,12,0.92) 100%);
+    backdrop-filter: blur(6px);
+  }
+
+  /* ── ЭФФЕКТ ВОДНЫХ КОЛЕЦ (риплы) ── */
+  .ripple-ring {
+    position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%); width: 0; height: 0;
+    border: 1.5px solid transparent;
+    animation: waterRipple var(--dur,1.4s) cubic-bezier(0.15,0.5,0.4,1) var(--delay,0s) forwards;
+  }
+  @keyframes waterRipple {
+    0%   { width:4px; height:2px; opacity:0.8; border-width:1.5px; }
+    40%  { opacity:0.5; }
+    100% { width:var(--maxW,220px); height:var(--maxH,70px); opacity:0; border-width:0.5px; }
+  }
+
+  /* ── АДАПТИВНОСТЬ ── */
+  @media (max-width: 900px) {
+    main { padding: 1rem 1.5rem 4.5rem; gap: 1.8rem; }
+    .collage { height: 190px; }
+    .cs1 { width: 110px; }
+    .cs2 { width: 92px; }
+    .cs3 { width: 125px; }
+    .cs4 { width: 98px; }
+    .cs5 { width: 115px; }
+    .letter { padding: 1.8rem 2rem; }
+  }
+  @media (max-width: 640px) {
+    header { padding: 1.6rem 1.2rem 1.2rem; }
+    .header-title { font-size: clamp(1.35rem,6vw,1.9rem); }
+    .nav-section { padding: 0.8rem 1rem 0.4rem; }
+    .nav-btn { font-size: 0.6rem; padding: 0.4rem 0.9rem; letter-spacing: 0.12em; }
+    main { padding: 0.8rem 1rem 4rem; gap: 1.5rem; }
+    .collage { height: 160px; }
+    .cs1 { width: 85px; top: 12%; }
+    .cs2 { width: 72px; top: 5%; }
+    .cs3 { width: 98px; top: 8%; }
+    .cs4 { width: 78px; top: 15%; }
+    .cs5 { width: 90px; top: 6%; }
+    .letter { padding: 1.2rem 1.2rem; }
+    .letter-drop { font-size: 1.4rem; }
+    .letter-body { font-size: 0.95rem; line-height: 1.65; }
+    .cta { padding: 0.7rem 1.8rem; font-size: 0.65rem; letter-spacing: 0.2em; }
+  }
+  @media (max-width: 480px) {
+    .collage { height: 140px; }
+    .cs1 { width: 70px; }
+    .cs2 { width: 60px; }
+    .cs3 { width: 82px; }
+    .cs4 { width: 64px; }
+    .cs5 { width: 74px; }
+    .nav-buttons { gap: 0.65rem; }
+    .nav-btn { font-size: 0.55rem; padding: 0.35rem 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1 class="header-title">Подземное царство совсем не такое, каким вы его могли представлять</h1>
+    <p class="header-sub">Даже Анубис шлет вести со Дна.</p>
+  </div>
+</header>
+
+<!-- КНОПКИ МЕНЮ – ПОЛНОСТЬЮ ЗА ХЕДЕРОМ, ОТДЕЛЬНЫЙ БЛОК -->
+<div class="nav-section">
+  <div class="nav-buttons">
+    <a href="https://rav-gifts.github.io/sly/2026/index.html" class="nav-btn active">Главная</a>
+    <a href="https://rav-gifts.github.io/sly/2026/stamps.html" class="nav-btn">Коллекция марок</a>
+    <a href="https://rav-gifts.github.io/sly/2026/stamps2.html" class="nav-btn">Марки-символы</a>
+    <a href="game.html" class="nav-btn">Игра кальмара</a>
+  </div>
+</div>
+
+<main>
+  <!-- КОЛЛАЖ (анимация покачивания УБРАНА полностью) -->
+  <div class="collage">
+    <img class="collage-stamp cs1" src="https://raw.githubusercontent.com/rav-gifts/rav-gifts.github.io/refs/heads/main/sly/2026/stamps/s_helwell.png" alt="Gugo Helwell">
+    <img class="collage-stamp cs2" src="https://raw.githubusercontent.com/rav-gifts/rav-gifts.github.io/refs/heads/main/sly/2026/stamps/s_фатхи.png" alt="Професор Фатхи">
+    <img class="collage-stamp cs3" src="https://raw.githubusercontent.com/rav-gifts/rav-gifts.github.io/refs/heads/main/sly/2026/stamps/s_вульф.png" alt="Каиалина Вульф">
+    <img class="collage-stamp cs4" src="https://raw.githubusercontent.com/rav-gifts/rav-gifts.github.io/refs/heads/main/sly/2026/stamps/s_коваль.png" alt="Ананель Коваль">
+    <img class="collage-stamp cs5" src="https://raw.githubusercontent.com/rav-gifts/rav-gifts.github.io/refs/heads/main/sly/2026/stamps/s_дария.png" alt="Декан Дария">
+  </div>
+
+  <div class="divider">✧</div>
+
+  <!-- ПИСЬМО -->
+  <div class="letter">
+    <span class="letter-drop">Дорогие слизеринцы!</span>
+    <div class="letter-body">
+      <p>О ваших посланиях наслышаны все: совы, василиски, орлы, эльфы, гномы, трофейные. И хоть вы не любите оставлять отпечатки, мы все равно считаем, что вашей почте не обойтись без лимитированной коллекции марок, которую удобно клеить и на конверты, и на лоб. </p>
+      <p>Каждая марка пропитана  вашим изяществом, остроумием, лоском и нашей любовью к вам. Клейте марки, шлите зефирки!</p>
+    </div>
+  </div>
+
+  <a href="stamps.html" class="cta">Открыть коллекцию</a>
+</main>
+
+<footer>© Подарок ко Дню Слизерина 2026 · С любовью от Когтеврана</footer>
+
+<script>
+  // Водные кольца (риплы) при клике
+  document.addEventListener('click', e => {
+    for (let i = 0; i < 4; i++) {
+      const ring = document.createElement('div');
+      ring.className = 'ripple-ring';
+      ring.style.left = e.clientX + 'px';
+      ring.style.top  = e.clientY + 'px';
+      const spread = 1 + i * 0.28;
+      const maxW = Math.round((100 + Math.random() * 40) * spread);
+      const maxH = Math.round(maxW * (0.28 + Math.random() * 0.08));
+      ring.style.setProperty('--maxW', maxW + 'px');
+      ring.style.setProperty('--maxH', maxH + 'px');
+      ring.style.setProperty('--dur',  (1.1 + i * 0.22 + Math.random() * 0.15).toFixed(2) + 's');
+      ring.style.setProperty('--delay',(i * 0.11).toFixed(2) + 's');
+      ring.style.borderColor = `rgba(172,156,108,${(0.6 - i * 0.12).toFixed(2)})`;
+      document.body.appendChild(ring);
+      ring.addEventListener('animationend', () => ring.remove(), { once: true });
+    }
+  });
+</script>
+</body>
+</html>
