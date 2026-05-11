@@ -64,7 +64,7 @@ body { font-family: 'Cormorant Garamond', Georgia, serif; background: var(--crea
 
 /* заголовок категории */
 .cat-header {
-  display: flex; align-items: stretch; margin: 30px 0 14px;
+  display: flex; align-items: stretch; margin: 10px 0 14px;
   background: var(--blue);
   justify-content: center; /* центрируем содержимое */
 }
@@ -169,6 +169,34 @@ footer {
   text-transform: uppercase; text-align: center;
   margin-top: auto; /* прижать к низу */
 }
+
+/* навигационная строка */
+.menu-nav {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 4px;
+  padding: 4px 0;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: background .15s;
+  border: 1px solid transparent;
+}
+.nav-item:hover {
+  background: rgba(53,102,145,0.12);
+  border-color: var(--border);
+}
+.nav-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
 </style>
 </head>
 <body>
@@ -180,7 +208,20 @@ footer {
 
 <div class="content">
 
-  <!-- ЗАМОРОЖЕННЫЙ ЧАЙ -->
+  <!-- навигация -->
+  <nav class="menu-nav">
+    <a class="nav-item" href="#sec-tea">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/cafe/%D1%87%D0%B0%D0%B9.png" alt="">
+    </a>
+    <a class="nav-item" href="#sec-tarts">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/cafe/%D1%82%D0%B0%D1%80%D1%82.png" alt="">
+    </a>
+    <a class="nav-item" href="#sec-rolls">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/cafe/%D1%80%D0%BE%D0%BE%D0%BB%D0%BB%D1%8B.png" alt="">
+    </a>
+  </nav>
+
+  <div id="sec-tea"></div><!-- ЗАМОРОЖЕННЫЙ ЧАЙ -->
   <div class="cat-header">
     <div class="cat-title">Замороженный чай</div>
   </div>
@@ -222,11 +263,11 @@ footer {
     </div>
   </div>
 
-  <!-- ФРУКТОВЫЕ ТАРТЫ -->
+  <div id="sec-tarts"></div><!-- ФРУКТОВЫЕ ТАРТЫ -->
   <div class="cat-header">
     <div class="cat-title">Фруктовые тарты</div>
   </div>
-  <div class="tart-hint"><span>Кусочек — 7 G</span><span>·</span><span>Целый тарт — 20 G</span></div>
+  <div class="tart-hint"></div>
   <div class="items-grid">
     <div class="item">
       <div class="item-top"><span class="item-name">Клубничный «Розмерта»</span></div>
@@ -277,6 +318,81 @@ footer {
       </div>
     </div>
   </div>
+
+
+  <div id="sec-rolls"></div><!-- СПРИНГ РОЛЛЫ -->
+  <div class="cat-header">
+    <div class="cat-title">Спринг роллы</div>
+  </div>
+  <div class="items-grid">
+
+    <div class="item">
+      <div class="item-top">
+        <span class="item-name">Алый сад</span>
+        <span class="item-dots"></span>
+        <span class="item-price-tag">10 G</span>
+      </div>
+      <div class="item-desc">Нежный ролл с ягодной свежестью и сливочным кремом. Тонкая рисовая бумага скрывает спелую клубнику и воздушный маскарпоне — просто и безупречно.</div>
+      <div class="item-ing"><b>Состав:</b> Клубника, маскарпоне, свежая мята, клубничный соус</div>
+      <button class="add-btn" onclick="add('Алый сад',10,'ролл алый сад',this)">Заказать <i class="fas fa-coins"></i> 10 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top">
+        <span class="item-name">Золото тропиков</span>
+        <span class="item-dots"></span>
+        <span class="item-price-tag">10 G</span>
+      </div>
+      <div class="item-desc">Яркий и солнечный ролл с ароматом экзотических фруктов. Спелое манго и кокосовый крем с искрой лайма — как глоток летнего воздуха.</div>
+      <div class="item-ing"><b>Состав:</b> Манго, кокосовый крем, цедра лайма, кокосовый соус</div>
+      <button class="add-btn" onclick="add('Золото тропиков',10,'ролл золото тропиков',this)">Заказать <i class="fas fa-coins"></i> 10 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top">
+        <span class="item-name">Лесная чернь</span>
+        <span class="item-dots"></span>
+        <span class="item-price-tag">10 G</span>
+      </div>
+      <div class="item-desc">Насыщенный ролл с терпкой черникой и нежной рикоттой. Лимонная цедра добавляет яркость, а глубокий фиолетовый цвет делает его особенно эффектным.</div>
+      <div class="item-ing"><b>Состав:</b> Черника, рикотта, цедра лимона, черничный компот</div>
+      <button class="add-btn" onclick="add('Лесная чернь',10,'ролл лесная чернь',this)">Заказать <i class="fas fa-coins"></i> 10 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top">
+        <span class="item-name">Коралловый закат</span>
+        <span class="item-dots"></span>
+        <span class="item-price-tag">10 G</span>
+      </div>
+      <div class="item-desc">Романтичное сочетание персика и малины с пряными нотками свежего базилика. Тёплый, фруктовый, с лёгкой кислинкой.</div>
+      <div class="item-ing"><b>Состав:</b> Персик, малина, свежий базилик, малиновый соус</div>
+      <button class="add-btn" onclick="add('Коралловый закат',10,'ролл коралловый закат',this)">Заказать <i class="fas fa-coins"></i> 10 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top">
+        <span class="item-name">Янтарная роща</span>
+        <span class="item-dots"></span>
+        <span class="item-price-tag">10 G</span>
+      </div>
+      <div class="item-desc">Изысканный ролл для тех, кто ценит сложные вкусы. Спелая груша, горгонзола и мёд создают элегантный баланс сладкого, солёного и орехового.</div>
+      <div class="item-ing"><b>Состав:</b> Груша, горгонзола, грецкий орех, мёд</div>
+      <button class="add-btn" onclick="add('Янтарная роща',10,'ролл янтарная роща',this)">Заказать <i class="fas fa-coins"></i> 10 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top">
+        <span class="item-name">Северное лето</span>
+        <span class="item-dots"></span>
+        <span class="item-price-tag">10 G</span>
+      </div>
+      <div class="item-desc">Свежий и дерзкий ролл с ярким контрастом сочного арбуза и солёной феты. Мята придаёт прохладную лёгкость — неожиданно и очень вкусно.</div>
+      <div class="item-ing"><b>Состав:</b> Арбуз, фета, свежая мята, медово-лаймовый соус</div>
+      <button class="add-btn" onclick="add('Северное лето',10,'ролл северное лето',this)">Заказать <i class="fas fa-coins"></i> 10 G</button>
+    </div>
+
+  </div><!-- /items-grid роллы -->
 
   <footer>Все цены указаны в галлеонах · Под крылом Ворона</footer>
 </div>
