@@ -197,6 +197,45 @@ footer {
   height: 40px;
   object-fit: contain;
 }
+
+/* tooltip для навигации */
+.nav-item { position: relative; }
+.nav-item::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--blue);
+  color: var(--cream);
+  font-family: 'ArsenalSC', serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 3px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+  z-index: 50;
+}
+.nav-item::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--blue);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+  z-index: 50;
+}
+.nav-item:hover::after,
+.nav-item:hover::before { opacity: 1; }
 </style>
 </head>
 <body>
@@ -210,14 +249,23 @@ footer {
 
   <!-- навигация -->
   <nav class="menu-nav">
-    <a class="nav-item" href="#sec-tea">
-      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/cafe/tea.png" alt="">
+    <a class="nav-item" href="#sec-tea" data-tip="Замороженный чай">
+      <img src="https://raw.githubusercontent.com/blake-el/hogsmeade/refs/heads/main/img/rav/cafe/tea/navi/tea.png" alt="Замороженный чай">
     </a>
-    <a class="nav-item" href="#sec-tarts">
-      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/cafe/t.png" alt="">
+    <a class="nav-item" href="#sec-gelo" data-tip="Фруктовое жело">
+      <img src="https://raw.githubusercontent.com/blake-el/hogsmeade/refs/heads/main/img/rav/cafe/tea/navi/gelo.png" alt="Фруктовое жело">
     </a>
-    <a class="nav-item" href="#sec-rolls">
-      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/cafe/sr.png" alt="">
+    <a class="nav-item" href="#sec-tarts" data-tip="Фруктовые тарты">
+      <img src="https://raw.githubusercontent.com/blake-el/hogsmeade/refs/heads/main/img/rav/cafe/tea/navi/tart.png" alt="Фруктовые тарты">
+    </a>
+    <a class="nav-item" href="#sec-rolls" data-tip="Спринг роллы">
+      <img src="https://raw.githubusercontent.com/blake-el/hogsmeade/refs/heads/main/img/rav/cafe/tea/navi/rolls.png" alt="Спринг роллы">
+    </a>
+    <a class="nav-item" href="#sec-salad" data-tip="Фруктовые салаты">
+      <img src="https://raw.githubusercontent.com/blake-el/hogsmeade/refs/heads/main/img/rav/cafe/tea/navi/salad.png" alt="Фруктовые салаты">
+    </a>
+    <a class="nav-item" href="#sec-puding" data-tip="Фруктовые пудинги">
+      <img src="https://raw.githubusercontent.com/blake-el/hogsmeade/refs/heads/main/img/rav/cafe/tea/navi/puding.png" alt="Фруктовые пудинги">
     </a>
   </nav>
 
@@ -271,7 +319,8 @@ footer {
   <div class="items-grid">
     <div class="item">
       <div class="item-top"><span class="item-name">Клубничный «Розмерта»</span></div>
-      <div class="item-desc">Песочная основа, ванильный крем, свежая клубника, клубничная глазурь.</div>
+      <div class="item-desc">Спелая клубника, запечённая в собственном пюре — плотная, тёмно-красная начинка с ванильным сахаром и хрустящим тестом.</div>
+      <div class="item-ing"><b>Состав:</b> Песочное тесто, свежая клубника, клубничное пюре, ванильный сахар</div>
       <div class="variants">
         <button class="add-btn" onclick="add('Клубничный тарт — кусочек',7,'тарт клубника кусочек',this)">Кусочек <i class="fas fa-coins"></i> 7 G</button>
         <button class="add-btn" onclick="add('Клубничный тарт — целый',20,'тарт клубника целый',this)">Целый <i class="fas fa-coins"></i> 20 G</button>
@@ -279,7 +328,8 @@ footer {
     </div>
     <div class="item">
       <div class="item-top"><span class="item-name">Малиновый «Сладкий август»</span></div>
-      <div class="item-desc">Хрустящее песочное тесто, сливочный крем, малина, ягодный сироп.</div>
+      <div class="item-desc">Малина, запечённая в густом собственном пюре — терпкая, яркая, с тестом, пропитанным ягодным соком.</div>
+      <div class="item-ing"><b>Состав:</b> Песочное тесто, свежая малина, малиновое пюре, сахарная пудра</div>
       <div class="variants">
         <button class="add-btn" onclick="add('Малиновый тарт — кусочек',7,'тарт малина кусочек',this)">Кусочек <i class="fas fa-coins"></i> 7 G</button>
         <button class="add-btn" onclick="add('Малиновый тарт — целый',20,'тарт малина целый',this)">Целый <i class="fas fa-coins"></i> 20 G</button>
@@ -287,7 +337,8 @@ footer {
     </div>
     <div class="item">
       <div class="item-top"><span class="item-name">Персиковый «Медовое солнце»</span></div>
-      <div class="item-desc">Нежный крем, запечённый персик, ваниль, тонкая медовая глазурь.</div>
+      <div class="item-desc">Тонкие ломтики персика с мёдом — карамелизованные, сочные, под тонким слоем прозрачного желе. Веточка розмарина.</div>
+      <div class="item-ing"><b>Состав:</b> Песочное тесто, свежий персик, мёд, розмарин</div>
       <div class="variants">
         <button class="add-btn" onclick="add('Персиковый тарт — кусочек',7,'тарт персик кусочек',this)">Кусочек <i class="fas fa-coins"></i> 7 G</button>
         <button class="add-btn" onclick="add('Персиковый тарт — целый',20,'тарт персик целый',this)">Целый <i class="fas fa-coins"></i> 20 G</button>
@@ -295,7 +346,8 @@ footer {
     </div>
     <div class="item">
       <div class="item-top"><span class="item-name">Черничный «Вечерний Хогсмид»</span></div>
-      <div class="item-desc">Сливочный крем, черника, густая ягодная начинка с лёгкой кислинкой.</div>
+      <div class="item-desc">Черника, запечённая в собственном пюре — плотная, тёмная, с кислинкой лимонной цедры. Много ягод, много вкуса.</div>
+      <div class="item-ing"><b>Состав:</b> Песочное тесто, свежая черника, черничное пюре, лимонная цедра</div>
       <div class="variants">
         <button class="add-btn" onclick="add('Черничный тарт — кусочек',7,'тарт черника кусочек',this)">Кусочек <i class="fas fa-coins"></i> 7 G</button>
         <button class="add-btn" onclick="add('Черничный тарт — целый',20,'тарт черника целый',this)">Целый <i class="fas fa-coins"></i> 20 G</button>
@@ -303,7 +355,8 @@ footer {
     </div>
     <div class="item">
       <div class="item-top"><span class="item-name">Яблочный «С корицей»</span></div>
-      <div class="item-desc">Карамелизированные яблоки, корица, песочная основа, сливочный крем.</div>
+      <div class="item-desc">Яблоки, запечённые до карамельной глубины, под тонким прозрачным желе. Корица, карамель, тесто, пропитанное соком.</div>
+      <div class="item-ing"><b>Состав:</b> Песочное тесто, яблоки, корица, карамель</div>
       <div class="variants">
         <button class="add-btn" onclick="add('Яблочный тарт — кусочек',7,'тарт яблоко кусочек',this)">Кусочек <i class="fas fa-coins"></i> 7 G</button>
         <button class="add-btn" onclick="add('Яблочный тарт — целый',20,'тарт яблоко целый',this)">Целый <i class="fas fa-coins"></i> 20 G</button>
@@ -311,13 +364,35 @@ footer {
     </div>
     <div class="item">
       <div class="item-top"><span class="item-name">Грушевый «Под крылом»</span></div>
-      <div class="item-desc">Запечённая груша, цветочный мёд, ванильный крем, хрустящее тесто.</div>
+      <div class="item-desc">Груша на миндальном тесте под медовым желе — нежная, душистая, с тёплой ноткой имбиря.</div>
+      <div class="item-ing"><b>Состав:</b> Миндальное тесто, груша, мёд, свежий имбирь, сахарная пудра</div>
       <div class="variants">
         <button class="add-btn" onclick="add('Грушевый тарт — кусочек',7,'тарт груша кусочек',this)">Кусочек <i class="fas fa-coins"></i> 7 G</button>
         <button class="add-btn" onclick="add('Грушевый тарт — целый',20,'тарт груша целый',this)">Целый <i class="fas fa-coins"></i> 20 G</button>
       </div>
     </div>
-  </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Сливовый «Тёмная звезда»</span></div>
+      <div class="item-desc">Тёмная слива под прозрачным желе — глянцевая, глубокая, с пряным ароматом бадьяна. Смелый и запоминающийся вкус.</div>
+      <div class="item-ing"><b>Состав:</b> Песочное тесто, тёмная слива, бадьян</div>
+      <div class="variants">
+        <button class="add-btn" onclick="add('Сливовый тарт — кусочек',7,'тарт слива кусочек',this)">Кусочек <i class="fas fa-coins"></i> 7 G</button>
+        <button class="add-btn" onclick="add('Сливовый тарт — целый',20,'тарт слива целый',this)">Целый <i class="fas fa-coins"></i> 20 G</button>
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Вишнёвый «Полночь»</span></div>
+      <div class="item-desc">Тёмная вишня в густом собственном пюре с нотками корицы — глубокий, почти чёрный цвет, насыщенный и немного таинственный вкус.</div>
+      <div class="item-ing"><b>Состав:</b> Песочное тесто, тёмная вишня, вишнёвое пюре, корица</div>
+      <div class="variants">
+        <button class="add-btn" onclick="add('Вишнёвый тарт — кусочек',7,'тарт вишня кусочек',this)">Кусочек <i class="fas fa-coins"></i> 7 G</button>
+        <button class="add-btn" onclick="add('Вишнёвый тарт — целый',20,'тарт вишня целый',this)">Целый <i class="fas fa-coins"></i> 20 G</button>
+      </div>
+    </div>
+
+  </div><!-- /items-grid тарты -->
 
 
   <div id="sec-rolls"></div><!-- СПРИНГ РОЛЛЫ -->
@@ -393,6 +468,157 @@ footer {
     </div>
 
   </div><!-- /items-grid роллы -->
+
+
+  <div id="sec-gelo"></div><!-- ФРУКТОВОЕ ЖЕЛО -->
+  <div class="cat-header">
+    <div class="cat-title">Фруктовое жело</div>
+  </div>
+  <div class="items-grid">
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Малина — личи — роза</span><span class="item-dots"></span><span class="item-price-tag">11 G</span></div>
+      <div class="item-desc">Нежное ягодное жело с яркой малиной, сочной сладостью личи и тонким ароматом розовой воды. Лёгкое, цветочное и очень свежее.</div>
+      <button class="add-btn" onclick="add('Жело малина-личи-роза',11,'жело малина личи',this)">Заказать <i class="fas fa-coins"></i> 11 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Манго — маракуйя — лайм</span><span class="item-dots"></span><span class="item-price-tag">11 G</span></div>
+      <div class="item-desc">Тропическое сочетание спелого манго и кисло-сладкой маракуйи с освежающей лаймовой кислотностью. Сочный и солнечный вкус.</div>
+      <button class="add-btn" onclick="add('Жело манго-маракуйя-лайм',11,'жело манго маракуйя',this)">Заказать <i class="fas fa-coins"></i> 11 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Грейпфрут — юдзу — тимьян</span><span class="item-dots"></span><span class="item-price-tag">11 G</span></div>
+      <div class="item-desc">Цитрусовое жело с благородной горчинкой грейпфрута, ароматом юдзу и лёгкими травяными нотами тимьяна. Чистый и сложный вкус.</div>
+      <button class="add-btn" onclick="add('Жело грейпфрут-юдзу-тимьян',11,'жело грейпфрут юдзу',this)">Заказать <i class="fas fa-coins"></i> 11 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Черника — лаванда — лимон</span><span class="item-dots"></span><span class="item-price-tag">11 G</span></div>
+      <div class="item-desc">Глубокий вкус черники раскрывается мягкой лавандой и ярким лимонным акцентом. Спокойный, ароматный и слегка терпкий десерт.</div>
+      <button class="add-btn" onclick="add('Жело черника-лаванда-лимон',11,'жело черника лаванда',this)">Заказать <i class="fas fa-coins"></i> 11 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Киви — виноград — мята</span><span class="item-dots"></span><span class="item-price-tag">11 G</span></div>
+      <div class="item-desc">Освежающее жело с кислинкой киви, сладостью зелёного винограда и прохладной мятой. Очень лёгкое и летнее сочетание.</div>
+      <button class="add-btn" onclick="add('Жело киви-виноград-мята',11,'жело киви виноград',this)">Заказать <i class="fas fa-coins"></i> 11 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Персик — абрикос — розмарин</span><span class="item-dots"></span><span class="item-price-tag">11 G</span></div>
+      <div class="item-desc">Мягкое фруктовое жело с бархатистым персиком, сладким абрикосом и тонким хвойным ароматом розмарина. Тёплый и насыщенный вкус.</div>
+      <button class="add-btn" onclick="add('Жело персик-абрикос-розмарин',11,'жело персик абрикос',this)">Заказать <i class="fas fa-coins"></i> 11 G</button>
+    </div>
+
+  </div><!-- /items-grid жело -->
+
+  <div id="sec-salad"></div><!-- ФРУКТОВЫЕ САЛАТЫ -->
+  <div class="cat-header">
+    <div class="cat-title">Фруктовые салаты</div>
+  </div>
+  <div class="items-grid">
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Тропическая волна</span><span class="item-dots"></span><span class="item-price-tag">15 G</span></div>
+      <div class="item-desc">Яркий тропический микс с кремом из лайма и кокосовыми чипсами. Сочное манго, сладкий ананас и свежий киви — лето в стакане.</div>
+      <div class="item-ing"><b>Состав:</b> Манго, ананас, киви, кокосовые чипсы, крем из лайма, свежая мята</div>
+      <button class="add-btn" onclick="add('Тропическая волна',15,'салат тропическая волна',this)">Заказать <i class="fas fa-coins"></i> 15 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Ягодный парфе</span><span class="item-dots"></span><span class="item-price-tag">15 G</span></div>
+      <div class="item-desc">Классический парфе с тремя видами свежих ягод, хрустящей гранолой и ванильным йогуртом. Нежный, сочный, с лёгкой кислинкой.</div>
+      <div class="item-ing"><b>Состав:</b> Клубника, черника, малина, гранола, ванильный йогурт, малиновый соус</div>
+      <button class="add-btn" onclick="add('Ягодный парфе',15,'салат ягодный парфе',this)">Заказать <i class="fas fa-coins"></i> 15 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Осенняя роща</span><span class="item-dots"></span><span class="item-price-tag">15 G</span></div>
+      <div class="item-desc">Изысканный осенний салат с рикоттой и карамелью. Сочная груша, виноград и грецкий орех создают богатый букет вкусов.</div>
+      <div class="item-ing"><b>Состав:</b> Груша, красный виноград, грецкий орех, рикотта, карамельный соус</div>
+      <button class="add-btn" onclick="add('Осенняя роща',15,'салат осенняя роща',this)">Заказать <i class="fas fa-coins"></i> 15 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Цитрусовый рассвет</span><span class="item-dots"></span><span class="item-price-tag">15 G</span></div>
+      <div class="item-desc">Солнечный цитрусовый салат с тремя видами цитрусов, душистым мёдом и свежей мятой. Бодрящий, лёгкий, яркий.</div>
+      <div class="item-ing"><b>Состав:</b> Апельсин, грейпфрут, мандарин, свежая мята, мёд</div>
+      <button class="add-btn" onclick="add('Цитрусовый рассвет',15,'салат цитрусовый рассвет',this)">Заказать <i class="fas fa-coins"></i> 15 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Летний бриз</span><span class="item-dots"></span><span class="item-price-tag">15 G</span></div>
+      <div class="item-desc">Дерзкий и освежающий салат в средиземноморском духе. Сочный арбуз, солёная фета и прохладный огурец — неожиданно и очень летний вкус.</div>
+      <div class="item-ing"><b>Состав:</b> Арбуз, фета, свежий огурец, мята, лайм, мёд</div>
+      <button class="add-btn" onclick="add('Летний бриз',15,'салат летний бриз',this)">Заказать <i class="fas fa-coins"></i> 15 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Персиковая мельба</span><span class="item-dots"></span><span class="item-price-tag">15 G</span></div>
+      <div class="item-desc">Классический десерт мельба в современном прочтении. Нежный персик и яркая малина с ванильным кремом и хрустящим миндалём — элегантно и роскошно.</div>
+      <div class="item-ing"><b>Состав:</b> Персик, малина, ванильный крем, миндальные лепестки, малиновый соус</div>
+      <button class="add-btn" onclick="add('Персиковая мельба',15,'салат персиковая мельба',this)">Заказать <i class="fas fa-coins"></i> 15 G</button>
+    </div>
+
+  </div><!-- /items-grid салаты -->
+
+  <div id="sec-puding"></div><!-- ФРУКТОВЫЕ ПУДИНГИ -->
+  <div class="cat-header">
+    <div class="cat-title">Фруктовые пудинги</div>
+  </div>
+  <div class="items-grid">
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Кокос — манго — ваниль</span><span class="item-dots"></span><span class="item-price-tag">16 G</span></div>
+      <div class="item-desc">Нежный кокосовый пуддинг с пюре спелого манго и натуральной ванилью. Кремовый, тропический и мягкий вкус.</div>
+      <button class="add-btn" onclick="add('Пудинг кокос-манго-ваниль',16,'пудинг кокос манго',this)">Заказать <i class="fas fa-coins"></i> 16 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Матча — груша — белый шоколад</span><span class="item-dots"></span><span class="item-price-tag">16 G</span></div>
+      <div class="item-desc">Сливочный пуддинг с лёгкой горчинкой матча, сочной грушей и деликатной сладостью белого шоколада.</div>
+      <button class="add-btn" onclick="add('Пудинг матча-груша-шоколад',16,'пудинг матча груша',this)">Заказать <i class="fas fa-coins"></i> 16 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Банан — карамель — пекан</span><span class="item-dots"></span><span class="item-price-tag">16 G</span></div>
+      <div class="item-desc">Густой банановый пуддинг с солёной карамелью и хрустящим орехом пекан. Тёплый и насыщенный десерт.</div>
+      <button class="add-btn" onclick="add('Пудинг банан-карамель-пекан',16,'пудинг банан карамель',this)">Заказать <i class="fas fa-coins"></i> 16 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Малина — йогурт — лайм</span><span class="item-dots"></span><span class="item-price-tag">16 G</span></div>
+      <div class="item-desc">Лёгкий ягодный пуддинг на основе йогурта с яркой малиной и свежестью лайма. Нежный и освежающий вкус.</div>
+      <button class="add-btn" onclick="add('Пудинг малина-йогурт-лайм',16,'пудинг малина йогурт',this)">Заказать <i class="fas fa-coins"></i> 16 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Черника — лаванда — сливки</span><span class="item-dots"></span><span class="item-price-tag">16 G</span></div>
+      <div class="item-desc">Бархатистый сливочный пуддинг с черникой и тонким цветочным ароматом лаванды. Спокойный и изысканный десерт.</div>
+      <button class="add-btn" onclick="add('Пудинг черника-лаванда-сливки',16,'пудинг черника лаванда',this)">Заказать <i class="fas fa-coins"></i> 16 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Маракуйя — ананас — кокос</span><span class="item-dots"></span><span class="item-price-tag">16 G</span></div>
+      <div class="item-desc">Тропический пуддинг с яркой маракуйей, сладким ананасом и мягким кокосовым послевкусием. Сочный и ароматный.</div>
+      <button class="add-btn" onclick="add('Пудинг маракуйя-ананас-кокос',16,'пудинг маракуйя ананас',this)">Заказать <i class="fas fa-coins"></i> 16 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Клубника — базилик — маскарпоне</span><span class="item-dots"></span><span class="item-price-tag">16 G</span></div>
+      <div class="item-desc">Сливочный пуддинг с клубничной сладостью, свежим базиликом и нежным маскарпоне. Лёгкий итальянский акцент.</div>
+      <button class="add-btn" onclick="add('Пудинг клубника-базилик-маскарпоне',16,'пудинг клубника базилик',this)">Заказать <i class="fas fa-coins"></i> 16 G</button>
+    </div>
+
+    <div class="item">
+      <div class="item-top"><span class="item-name">Персик — жасмин — мёд</span><span class="item-dots"></span><span class="item-price-tag">16 G</span></div>
+      <div class="item-desc">Воздушный пуддинг с ароматом жасминового чая, сладким персиком и деликатной медовой ноткой.</div>
+      <button class="add-btn" onclick="add('Пудинг персик-жасмин-мёд',16,'пудинг персик жасмин',this)">Заказать <i class="fas fa-coins"></i> 16 G</button>
+    </div>
+
+  </div><!-- /items-grid пудинги -->
 
   <footer>Все цены указаны в галлеонах · Под крылом Ворона</footer>
 </div>
