@@ -444,7 +444,7 @@
         <div class="folder-paper">
           <div class="paper-clip"></div>
           <div class="folder-icon">
-            <img src="gift/huff/2026/img/logo0.png" alt="герб">
+            <img src="/gift/huff/2026/img/logo0.png" alt="герб">
           </div>
           <div class="case-number">HGW · PUF · 001 · 2026</div>
           <div class="case-title">Тайна вырванного квадрата</div>
@@ -469,17 +469,17 @@
           <div class="polaroid-wrap">
             <div class="polaroid">
               <div class="polaroid-img-area">
-                <img src="/img/case01/scene.jpg" alt="квадрат вырванного газона">
+                <img src="/gift/huff/2026/img/case01/scene.jpg" alt="квадрат вырванного газона">
               </div>
-              <div class="polaroid-caption">улика: ровный квадрат в траве</div>
+              <div class="polaroid-caption">Лужайка перед окнами</div>
             </div>
           </div>
         </div>
 
         <div class="folder-lupa-area">
           <img class="lupa-on-folder"
-            src="/img/case01/loupe.png"
-            alt="следственная лупа"
+            src="/gift/huff/2026/img/case01/loupe.png"
+            alt="Лупа травника"
             id="lupaImageTrigger"
             role="button"
             tabindex="0"
@@ -503,8 +503,8 @@
             <div class="tape-stripe diag2"></div>
           </div>
           <div class="confidential-stamp">КОНФИДЕНЦИАЛЬНО</div>
-          <img src="/img/fingerprint.png"
-               alt="отпечаток пальца с места преступления">
+          <img src="/gift/huff/2026/img/fingerprint.png"
+               alt="отпечаток с места преступления">
         </div>
         <div class="preview-note">
           <span>Совершенно секретно</span> — для детального анализа используйте магическую лупу (нажмите «Исследовать отпечатки»)
@@ -537,18 +537,18 @@ function openLoupeInfoModal() {
       <div class="modal-folder">
         <div class="modal-paper">
           <div class="modal-header">
-            <h3>Следственная лупа №01</h3>
+            <h3>Лупа №01. Лупа травника</h3>
             <button class="modal-close" aria-label="Закрыть">✕</button>
           </div>
           <div class="lupa-info-content">
             <div class="info-artifact-img">
-              <img src="/img/case01/loupe.png" alt="магическая лупа" loading="lazy">
+              <img src="/img/case01/loupe.png" alt="лупа травника" loading="lazy">
             </div>
             <div class="artifact-specs">
               <p><strong>Регистрационный номер:</strong> HGW · ART · 001</p>
-              <p><strong>Магические свойства:</strong> Увеличивает скрытые детали, проявляет невидимые чернила и остаточную магию. Линза из горного хрусталя, оправа — благородный дуб, пропитанный экстрактом мандрагоры.</p>
+              <p><strong>Свойства:</strong> Предназначена для поиска примятых участков травы, скрытых отпечатков и следов среди газонов, мха и зарослей. Особенно эффективна на свежей зелени и влажной почве.</p>
             </div>
-            <div class="modal-footer-stamp">Собственность Следственного Отдела Хогвартса · Печать Пуффендуя</div>
+            <div class="modal-footer-stamp">Собственность факультета Пуффендуй</div>
           </div>
         </div>
       </div>
@@ -569,8 +569,8 @@ let activeFingerprintModal = null;
 function openFingerprintModal() {
   if (activeFingerprintModal) return;
 
-  const BASE_URL   = '/img/fingerprint.png';
-  const HIDDEN_URL = '/img/case01/hs1.png';
+  const BASE_URL   = '/gift/huff/2026/img/fingerprint.png';
+  const HIDDEN_URL = '/gift/huff/2026/img/case01/hs1.png';
   const lensRadius = 60;
 
   const overlay = document.createElement('div');
@@ -582,7 +582,7 @@ function openFingerprintModal() {
       <div class="modal-folder">
         <div class="modal-paper">
           <div class="modal-header">
-            <h3>Магическая лупа · Анализ отпечатка</h3>
+            <h3>Лупа травника · Анализ отпечатка</h3>
             <button class="modal-close" aria-label="Закрыть">✕</button>
           </div>
           <div class="lens-interactive-area" id="modalInteractiveArea">
@@ -593,7 +593,7 @@ function openFingerprintModal() {
             </div>
           </div>
           <p class="modal-hint">Двигайте лупой по отпечатку — проявится скрытый символ (улика факультета)</p>
-          <div class="modal-footer-stamp">Отдел магических расследований · Одобрено М. Макгонагалл</div>
+          <div class="modal-footer-stamp">Отдел пуффендуйских расследований</div>
         </div>
       </div>
     </div>`;
