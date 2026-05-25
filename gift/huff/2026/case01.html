@@ -227,8 +227,26 @@
     max-width: 420px; width: 90%;
     background: #f3ede2; padding: 12px; border-radius: 5px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,245,215,0.8);
-    transform: rotate(1.5deg); transition: transform 0.2s;
+    transform: rotate(1.5deg); transition: transform 0.2s, box-shadow 0.2s;
     margin: 0 auto; overflow: hidden;
+    cursor: zoom-in;
+  }
+  .fingerprint-preview:hover {
+    transform: rotate(0deg) scale(1.02);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,245,215,0.8);
+  }
+  .fingerprint-preview::after {
+    content: '🔍';
+    position: absolute; bottom: 10px; right: 14px;
+    font-size: 18px; opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .fingerprint-preview:hover::after { opacity: 0.6; }
+
+  .static-fingerprint .investigate-btn {
+    margin-top: 14px;
+    clip-path: polygon(6% 0%, 94% 0%, 100% 100%, 0% 100%);
   }
   .fingerprint-preview img {
     width: 100%; height: auto; display: block;
@@ -536,9 +554,6 @@
             role="button"
             tabindex="0"
             aria-label="Открыть информацию о лупе">
-          <button class="investigate-btn" id="openFingerprintModalBtn">
-            Исследовать отпечатки
-          </button>
         </div>
       </div>
     </div>
@@ -549,7 +564,7 @@
     <div class="fingerprint-sheet">
       <div class="sheet-label">Вещественное доказательство · Отпечаток с места преступления</div>
       <div class="static-fingerprint">
-        <div class="fingerprint-preview">
+        <div class="fingerprint-preview" id="openScenePhotoBtn" role="button" tabindex="0" aria-label="Увеличить фото с места преступления" title="Нажмите для увеличения">
           <div class="tape-cross">
             <div class="tape-stripe diag1"></div>
             <div class="tape-stripe diag2"></div>
@@ -561,6 +576,9 @@
         <div class="preview-note">
           <span>Совершенно секретно</span> — для детального анализа используйте магическую лупу (нажмите «Исследовать отпечатки»)
         </div>
+        <button class="investigate-btn" id="openFingerprintModalBtn">
+          Исследовать отпечатки
+        </button>
       </div>
     </div>
 
@@ -754,6 +772,47 @@ function openFingerprintModal() {
 document.getElementById('lupaImageTrigger').addEventListener('click', e => { e.stopPropagation(); openLoupeInfoModal(); });
 document.getElementById('lupaImageTrigger').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLoupeInfoModal(); } });
 document.getElementById('openFingerprintModalBtn').addEventListener('click', e => { e.preventDefault(); openFingerprintModal(); });
+
+// Модал: фото с места преступления (только фото, без текста)
+function openScenePhotoModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.style.cssText = 'cursor:zoom-out;';
+  overlay.innerHTML = `
+    <div class="scene-photo-modal" style="
+      position:relative;
+      max-width:90vw; max-height:90vh;
+      display:flex; align-items:center; justify-content:center;
+      cursor:auto;
+    ">
+      <button class="modal-close" aria-label="Закрыть" style="
+        position:absolute; top:-36px; right:0;
+        background:none; border:none; font-size:28px; line-height:1;
+        color:#e8dcc8; cursor:pointer; font-family:monospace; padding:0 6px;
+        transition:0.2s;
+      ">✕</button>
+      <img src="/gift/huff/2026/img/case01/scene.jpg" alt="фото с места преступления" style="
+        max-width:100%; max-height:86vh;
+        object-fit:contain;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+        display:block;
+      ">
+    </div>`;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('active'));
+
+  const close = () => { overlay.classList.remove('active'); setTimeout(() => overlay.remove(), 260); };
+  overlay.querySelector('.modal-close').addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  overlay.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  overlay.querySelector('.modal-close').focus();
+}
+
+const sceneBtn = document.getElementById('openScenePhotoBtn');
+sceneBtn.addEventListener('click', openScenePhotoModal);
+sceneBtn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openScenePhotoModal(); } });
 </script>
 </body>
 </html>
