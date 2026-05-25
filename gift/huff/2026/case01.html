@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Дело №01 — Тайна вырванного квадрата</title>
-  <link rel="icon" type="image/x-icon" href="/gift/huff/2026/img/favicon.ico">
+<link rel="icon" type="image/x-icon" href="/gift/huff/2026/img/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -273,18 +273,34 @@
   }
   .preview-note span { font-weight: bold; color: var(--stamp-red); }
 
+  /* КНОПКА "РАСКРЫТЬ ДЕЛО" — всегда красная с белым текстом */
   .answer-section {
     background: rgba(139,26,26,0.08); border: 1px solid rgba(139,26,26,0.2);
     padding: 18px 22px; position: relative; z-index: 2;
   }
   .answer-btn {
-    display: block; width: 100%; text-align: center; text-decoration: none;
-    background: none; border: 1px solid var(--stamp-red); color: var(--stamp-red);
-    font-family: 'SpecialEliteCyrillic', serif; font-size: 12px; letter-spacing: 3px;
-    padding: 10px 24px; cursor: pointer; text-transform: uppercase; transition: all 0.2s;
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    background: var(--stamp-red);      /* всегда красный */
+    border: 1px solid var(--stamp-red);
+    color: #ffffff;                   /* белый текст */
+    font-family: 'SpecialEliteCyrillic', serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    padding: 10px 24px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: filter 0.2s, opacity 0.2s;
   }
-  .answer-btn:hover { background: var(--stamp-red); color: white; }
-  .answer-btn:focus-visible { outline: 2px solid var(--stamp-red); outline-offset: 3px; }
+  .answer-btn:hover {
+    background: var(--stamp-red);
+    filter: brightness(0.85);         /* лёгкое затемнение при наведении */
+    border-color: var(--stamp-red);
+    color: #ffffff;
+  }
+  .answer-btn:focus-visible { outline: 2px solid var(--hufflepuff-yellow); outline-offset: 3px; }
 
   /* MODAL */
   .modal-overlay {
@@ -327,26 +343,62 @@
     content: ''; position: absolute; inset: 8px;
     border: 1px solid rgba(139,69,19,0.12); pointer-events: none;
   }
+  /* Заголовок модала: кнопка справа, текст не переносится, но на мобильных уменьшается шрифт */
   .modal-header {
-    display: flex; justify-content: space-between; align-items: baseline;
-    border-bottom: 1px dashed #b48c5c; padding-bottom: 12px; margin-bottom: 20px;
-    flex-wrap: wrap; gap: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    border-bottom: 1px dashed #b48c5c;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    gap: 16px;
   }
   .modal-header h3 {
-    font-size: 16px; letter-spacing: 3px; color: var(--ink);
-    text-transform: uppercase; background: #e9dbc9; padding: 4px 12px;
+    font-size: 16px;
+    letter-spacing: 3px;
+    color: var(--ink);
+    text-transform: uppercase;
+    background: #e9dbc9;
+    padding: 4px 12px;
     border-left: 6px solid var(--cork);
     font-family: 'SpecialEliteCyrillic', serif;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;      /* текст в одну строку */
+    overflow-x: auto;
+    overflow-y: hidden;
+    line-height: 1.4;
   }
   .modal-close {
-    background: none; border: none; font-size: 26px; line-height: 1;
-    color: #7a4a2a; cursor: pointer; transition: 0.2s; font-family: monospace;
-    padding: 0 6px; flex-shrink: 0;
+    background: none;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    color: #7a4a2a;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: monospace;
+    padding: 0 6px;
+    flex-shrink: 0;
   }
   .modal-close:hover { color: var(--stamp-red); transform: scale(1.1); }
+
+  /* На телефонах и планшетах уменьшаем размер шрифта заголовка модала, чтобы не было переноса */
+  @media (max-width: 700px) {
+    .modal-header h3 {
+      font-size: 12px;
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+  }
+  @media (max-width: 500px) {
+    .modal-header h3 {
+      font-size: 10px;
+      letter-spacing: 1px;
+      padding: 4px 8px;
+    }
+  }
 
   .lupa-info-content { display: flex; flex-direction: column; gap: 16px; }
   .info-artifact-img { text-align: center; margin-bottom: 8px; }
@@ -526,7 +578,7 @@
 <script>
 'use strict';
 
-// Модал: информация о лупе
+// Модал: информация о лупе (заголовок без <br>, уменьшается шрифт на мобильных)
 function openLoupeInfoModal() {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
@@ -563,7 +615,7 @@ function openLoupeInfoModal() {
   overlay.querySelector('.modal-close').focus();
 }
 
-// Модал: интерактивная лупа для анализа отпечатка
+// Модал: интерактивная лупа для анализа отпечатка (заголовок без <br>)
 let activeFingerprintModal = null;
 
 function openFingerprintModal() {
