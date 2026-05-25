@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Дело №01 — Тайна вырванного квадрата · Следственный Отдел Хогвартса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  @font-face {
+    font-family: 'SpecialEliteCyrillic';
+    src: url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/main/gift/huff/2026/specialelite-cyrillic.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+  :root {
+    --cork: #c4874a; --paper: #f5ead6; --paper-aged: #e8d5b0;
+    --ink: #2a1a08; --ink-faded: #5a3e22; --stamp-red: #8b2020;
+    --hufflepuff-yellow: #f0c040; --hufflepuff-black: #1a1208;
+    --case-color: #8B3A3A;
+    --folder-shadow: #4a1414;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--hufflepuff-black);
+    font-family: 'SpecialEliteCyrillic', 'Alegreya', serif;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%23c4874a' stroke-width='2'/%3E%3Cline x1='15' y1='15' x2='22' y2='22' stroke='%23c4874a' stroke-width='2'/%3E%3C/svg%3E") 10 10, default;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--hufflepuff-black);
+    border-bottom: 2px solid var(--hufflepuff-yellow);
+    padding: 14px 32px;
+    display: flex; align-items: center; gap: 16px;
+    flex-wrap: wrap;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .back-btn {
+    color: var(--cork); text-decoration: none; font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase;
+    border: 1px solid var(--cork); padding: 7px 14px; transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .back-btn:hover { background: var(--cork); color: var(--hufflepuff-black); }
+  .header-case { color: var(--hufflepuff-yellow); font-size: 17px; }
+  .header-case span { font-size: 10px; letter-spacing: 3px; color: var(--cork); display: block; margin-top: 2px; }
+
+  .case-wrap {
+    max-width: 1200px; margin: 40px auto; padding: 0 32px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+  }
+
+  .folder-outer {
+    position: relative;
+    padding-right: 30px;
+    padding-bottom: 12px;
+  }
+  .folder-back {
+    position: absolute;
+    top: -12px; left: -12px; right: 14px; bottom: -8px;
+    background: var(--folder-shadow);
+    box-shadow: 6px 10px 32px rgba(0,0,0,0.7);
+    z-index: 0;
+  }
+  .folder-front {
+    position: relative;
+    z-index: 1;
+    box-shadow: 2px 4px 18px rgba(0,0,0,0.4);
+  }
+  .folder-body {
+    background: var(--case-color);
+    padding: 15px 0 32px 0;
+  }
+  .folder-side-tab {
+    position: absolute;
+    right: -30px; top: 44px;
+    width: 30px; height: 160px;
+    background: var(--case-color);
+    filter: brightness(0.72);
+    border-radius: 0 8px 8px 0;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+    box-shadow: 4px 2px 10px rgba(0,0,0,0.4);
+  }
+  .folder-side-tab span {
+    writing-mode: vertical-rl; text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'SpecialEliteCyrillic', serif;
+    font-size: 9px; letter-spacing: 4px;
+    color: rgba(255,255,255,0.55); text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .folder-paper {
+    background: var(--paper);
+    margin: 0 14px;
+    padding: 46px 26px 26px;
+    position: relative;
+    box-shadow: 0 3px 18px rgba(0,0,0,0.22);
+    z-index: 3; overflow: visible;
+  }
+  .folder-paper::before {
+    content: ''; position: absolute; inset: 8px;
+    border: 1px solid rgba(180,130,60,0.15); pointer-events: none;
+  }
+  .paper-clip {
+    position: absolute;
+    top: -42px; left: 52px;
+    width: 26px; height: 92px;
+    z-index: 10;
+    rotate: 30deg;
+  }
+  .paper-clip::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 26px; height: 92px;
+    border: 3px solid #c8c4b4;
+    border-radius: 14px;
+    background: transparent;
+  }
+  .paper-clip::after {
+    content: ''; position: absolute; top: 18px; left: 6px;
+    width: 12px; height: 58px;
+    border: 3px solid #c8c4b4;
+    border-bottom: none; border-radius: 10px 10px 0 0;
+    background: transparent;
+  }
+  .folder-icon {
+    position: absolute; top: 12px; right: 14px;
+    width: 56px; height: 56px;
+    opacity: 0.5; transform: rotate(-8deg);
+  }
+  .folder-icon img { width: 100%; height: 100%; object-fit: contain; }
+
+  .case-number {
+    font-size: 9px; letter-spacing: 5px; color: var(--ink-faded);
+    text-transform: uppercase; margin-bottom: 4px; opacity: 0.7;
+    margin-top: -18px; padding-left: 72px;
+  }
+  .case-title {
+    font-size: 21px; color: var(--ink); line-height: 1.3;
+    margin-bottom: 16px; padding-right: 66px;
+  }
+  .info-row { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .info-block { flex: 1; min-width: 120px; }
+  .info-label { font-size: 8px; letter-spacing: 4px; color: var(--ink-faded); text-transform: uppercase; margin-bottom: 3px; opacity: 0.7; }
+  .info-value { font-size: 13px; color: var(--ink); line-height: 1.4; }
+  .info-value a { color: var(--case-color); text-decoration: underline; text-underline-offset: 2px; }
+  .divider { border: none; border-top: 1px solid rgba(0,0,0,0.1); margin: 13px 0; }
+  .section-label { font-size: 8px; letter-spacing: 5px; color: var(--ink-faded); text-transform: uppercase; margin-bottom: 7px; opacity: 0.7; }
+  .case-text { font-size: 13px; line-height: 1.85; color: var(--ink-faded); margin-bottom: 16px; }
+
+  .polaroid-wrap { display: flex; justify-content: center; margin-top: 6px; }
+  .polaroid {
+    background: #f8f4ec; padding: 9px 9px 32px;
+    box-shadow: 2px 3px 12px rgba(0,0,0,0.25);
+    width: 100%; max-width: 300px; transform: rotate(-1deg);
+  }
+  .polaroid-img-area {
+    width: 100%; height: 150px; background: #d8d2c4; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .polaroid-img-area img { width: 100%; height: 100%; object-fit: cover; }
+  .polaroid-caption { font-size: 11px; color: #5a4a3a; text-align: center; margin-top: 7px; letter-spacing: 1px; }
+
+  .folder-lupa-area {
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 20px; padding: 0 20px;
+    position: relative; z-index: 5;
+    margin-top: -70px;
+  }
+  .lupa-on-folder {
+    width: 220px;
+    filter: drop-shadow(4px 8px 20px rgba(0,0,0,0.65));
+    transform: rotate(30deg);
+    transition: transform 0.2s ease, filter 0.2s;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+  .lupa-on-folder:hover {
+    filter: drop-shadow(4px 8px 26px rgba(73,113,117,0.75));
+    transform: rotate(38deg) scale(1.02);
+  }
+  .investigate-btn {
+    background: #497175; border: none; color: #e8dcc8;
+    font-family: 'SpecialEliteCyrillic', serif;
+    font-size: 12px; letter-spacing: 4px; padding: 13px 28px;
+    cursor: pointer; text-transform: uppercase;
+    clip-path: polygon(6% 0%, 94% 0%, 100% 100%, 0% 100%);
+    box-shadow: 3px 3px 0px #466E75, 5px 5px 0px #2e4e52;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    margin: 0 auto;
+    display: block;
+    outline: none;
+  }
+  .investigate-btn:hover { background: #5a8a8e; box-shadow: 3px 3px 0px #466E75, 5px 5px 0px #2e4e52, 0 0 18px rgba(73,113,117,0.5); }
+  .investigate-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 #466E75; }
+  .investigate-btn:focus-visible { outline: 2px solid var(--hufflepuff-yellow); outline-offset: 3px; }
+
+  .magnifier-section { display: flex; flex-direction: column; gap: 20px; }
+
+  .fingerprint-sheet {
+    background: var(--paper);
+    padding: 20px 20px 40px 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    position: relative; overflow: visible;
+    min-height: 500px;
+  }
+  .fingerprint-sheet::before {
+    content: ''; position: absolute; inset: 8px;
+    border: 1px solid rgba(180,130,60,0.2); pointer-events: none;
+  }
+  .sheet-label {
+    font-size: 9px; letter-spacing: 5px; color: var(--ink-faded);
+    text-transform: uppercase; margin-bottom: 24px; opacity: 0.7; text-align: center;
+  }
+
+  .static-fingerprint {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 16px; margin-bottom: 6px; position: relative; z-index: 3;
+  }
+  .fingerprint-preview {
+    position: relative;
+    max-width: 420px; width: 90%;
+    background: #f3ede2; padding: 12px; border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,245,215,0.8);
+    transform: rotate(1.5deg); transition: transform 0.2s;
+    margin: 0 auto; overflow: hidden;
+  }
+  .fingerprint-preview img {
+    width: 100%; height: auto; display: block;
+    filter: sepia(0.12) contrast(1.02); border-radius: 2px;
+  }
+
+  .tape-cross {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 8;
+  }
+  .tape-stripe {
+    position: absolute;
+    background: repeating-linear-gradient(
+      45deg, #f0c040, #f0c040 14px, #1a1208 14px, #1a1208 28px
+    );
+    opacity: 0.85; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    width: 150%; height: 32px;
+  }
+  .tape-stripe.diag1 { bottom: -8px; left: -25%; transform: rotate(0deg); }
+  .tape-stripe.diag2 { top: -8px; left: -25%; transform: rotate(0deg); }
+
+  .confidential-stamp {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-6deg);
+    background: rgba(180,45,45,0.12);
+    border: 2px solid var(--stamp-red); color: var(--stamp-red);
+    padding: 10px 18px;
+    font-size: clamp(14px, 4vw, 26px);
+    letter-spacing: 4px; font-weight: bold; text-transform: uppercase;
+    font-family: 'SpecialEliteCyrillic', monospace;
+    backdrop-filter: blur(2px);
+    z-index: 12; pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3); border-radius: 6px;
+  }
+
+  .preview-note {
+    font-size: 10px; letter-spacing: 2px; color: #6b4c2c;
+    background: rgba(0,0,0,0.03); padding: 8px 12px;
+    border-left: 3px solid var(--cork); text-transform: uppercase;
+    width: fit-content; margin-top: 8px; line-height: 1.6;
+  }
+  .preview-note span { font-weight: bold; color: var(--stamp-red); }
+
+  .answer-section {
+    background: rgba(139,26,26,0.08); border: 1px solid rgba(139,26,26,0.2);
+    padding: 18px 22px; position: relative; z-index: 2;
+  }
+  .answer-btn {
+    display: block; width: 100%; text-align: center; text-decoration: none;
+    background: none; border: 1px solid var(--stamp-red); color: var(--stamp-red);
+    font-family: 'SpecialEliteCyrillic', serif; font-size: 12px; letter-spacing: 3px;
+    padding: 10px 24px; cursor: pointer; text-transform: uppercase; transition: all 0.2s;
+  }
+  .answer-btn:hover { background: var(--stamp-red); color: white; }
+  .answer-btn:focus-visible { outline: 2px solid var(--stamp-red); outline-offset: 3px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10,8,3,0.88); backdrop-filter: blur(3px);
+    z-index: 1000; display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0s 0.25s;
+    cursor: default;
+  }
+  .modal-overlay.active {
+    opacity: 1; visibility: visible;
+    transition: opacity 0.25s ease, visibility 0s 0s;
+  }
+  .modal-case {
+    background: transparent; width: 90%; max-width: 680px;
+    position: relative;
+    transform: scale(0.96); transition: transform 0.2s cubic-bezier(0.2,0.9,0.4,1.1);
+    cursor: auto;
+  }
+  .modal-overlay.active .modal-case { transform: scale(1); }
+
+  .modal-folder {
+    background: var(--case-color);
+    border-radius: 6px 6px 12px 12px;
+    box-shadow: 0 20px 35px rgba(0,0,0,0.5), 8px 12px 20px rgba(0,0,0,0.3);
+    padding: 8px 0 20px 0; position: relative;
+  }
+  .modal-folder::before {
+    content: ''; position: absolute; top: -12px; left: 24px;
+    width: 80px; height: 26px; background: var(--case-color); filter: brightness(0.85);
+    border-radius: 12px 12px 0 0; z-index: 2;
+  }
+  .modal-paper {
+    background: var(--paper); margin: 12px 18px 22px 18px;
+    padding: 28px 24px 32px; position: relative;
+    box-shadow: inset 0 0 0 1px rgba(255,245,215,0.5), 0 8px 20px rgba(0,0,0,0.2);
+  }
+  .modal-paper::before {
+    content: ''; position: absolute; inset: 8px;
+    border: 1px solid rgba(139,69,19,0.12); pointer-events: none;
+  }
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px dashed #b48c5c; padding-bottom: 12px; margin-bottom: 20px;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .modal-header h3 {
+    font-size: 16px; letter-spacing: 3px; color: var(--ink);
+    text-transform: uppercase; background: #e9dbc9; padding: 4px 12px;
+    border-left: 6px solid var(--cork);
+    font-family: 'SpecialEliteCyrillic', serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal-close {
+    background: none; border: none; font-size: 26px; line-height: 1;
+    color: #7a4a2a; cursor: pointer; transition: 0.2s; font-family: monospace;
+    padding: 0 6px; flex-shrink: 0;
+  }
+  .modal-close:hover { color: var(--stamp-red); transform: scale(1.1); }
+
+  .lupa-info-content { display: flex; flex-direction: column; gap: 16px; }
+  .info-artifact-img { text-align: center; margin-bottom: 8px; }
+  .info-artifact-img img {
+    max-width: 280px; width: 100%; transform: rotate(4deg);
+    filter: drop-shadow(6px 10px 14px rgba(0,0,0,0.3));
+  }
+  .artifact-specs {
+    background: #e5d9c4; padding: 14px 18px; border-radius: 3px;
+    font-size: 12px; line-height: 1.75; color: #3a2a1a;
+    box-shadow: inset 0 0 0 1px #fff6e6, 0 2px 6px rgba(0,0,0,0.1);
+    font-family: 'SpecialEliteCyrillic', monospace;
+  }
+  .artifact-specs p { margin: 8px 0; }
+  .artifact-specs strong { letter-spacing: 1px; color: #6b2e2e; }
+  .modal-footer-stamp {
+    margin-top: 18px; text-align: right; font-size: 9px; color: #9e6e3e;
+    border-top: 1px dotted rgba(0,0,0,0.15); padding-top: 12px;
+    font-family: 'SpecialEliteCyrillic', serif;
+  }
+
+  .lens-interactive-area {
+    position: relative; width: 100%; aspect-ratio: 3 / 2;
+    background: #d9cfb0; overflow: hidden; margin: 16px 0 10px;
+    box-shadow: inset 0 0 0 2px #c2a575, 0 6px 14px rgba(0,0,0,0.2);
+    cursor: crosshair;
+    touch-action: none;
+  }
+  .modal-game-canvas { position: absolute; top:0; left:0; width:100%; height:100%; display:block; }
+  .modal-lens {
+    position: absolute; border-radius: 50%;
+    pointer-events: none; opacity: 0;
+    box-shadow: 0 0 0 3px #c4874a, 0 0 0 8px rgba(196,135,74,0.3), inset 0 0 20px rgba(0,0,0,0.2);
+    overflow: hidden; display: none; transition: opacity 0.1s; z-index: 50;
+  }
+  .modal-lens-handle {
+    position: absolute; bottom: -6px; right: -6px; width: 36px; height: 8px;
+    background: linear-gradient(135deg, #aa7844, #5a3a1a); border-radius: 20px;
+    transform: rotate(35deg);
+  }
+  .modal-hint {
+    text-align: center; font-size: 9px; letter-spacing: 2px; color: #6b4a28;
+    background: #f3ecd9; display: block; padding: 6px 14px;
+    border-radius: 30px; text-transform: uppercase; margin-top: 8px;
+    font-family: 'SpecialEliteCyrillic', serif;
+  }
+  .red-pin { color: var(--stamp-red); margin-right: 4px; font-size: 0.9em; }
+
+  @media (max-width: 860px) {
+    .case-wrap { grid-template-columns: 1fr; gap: 32px; padding: 0 16px; margin: 28px auto; }
+    .folder-outer { padding-right: 22px; }
+    .lupa-on-folder { width: 180px; }
+    .folder-lupa-area { margin-top: -50px; }
+    .fingerprint-sheet { min-height: auto; }
+    .confidential-stamp { padding: 7px 12px; letter-spacing: 2px; }
+  }
+  @media (max-width: 600px) {
+    header { padding: 12px 16px; }
+    .back-btn { font-size: 10px; padding: 6px 10px; }
+    .header-case { font-size: 14px; }
+    .case-title { font-size: 17px; }
+    .folder-paper { padding: 44px 16px 20px; }
+    .investigate-btn { font-size: 10px; padding: 11px 20px; letter-spacing: 2px; }
+    .lupa-on-folder { width: 150px; }
+    .folder-lupa-area { margin-top: -40px; gap: 14px; }
+    .tape-stripe { height: 22px; }
+    .modal-case { width: 95%; }
+    .modal-paper { padding: 18px 14px 22px; margin: 8px 10px 14px; }
+    .info-artifact-img img { max-width: 240px; }
+  }
+  @media (hover: none) {
+    body { cursor: auto; }
+    .back-btn, .investigate-btn, .answer-btn, .lupa-on-folder, .modal-close { cursor: pointer; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../index.html" class="back-btn">← К делам</a>
+  <div class="header-case">
+    Дело №01
+    <span>Следственный Отдел Хогвартса · Факультет Пуффендуй</span>
+  </div>
+</header>
+
+<div class="case-wrap">
+
+  <!-- ЛЕВАЯ ПАПКА -->
+  <div class="folder-outer">
+    <div class="folder-back"></div>
+    <div class="folder-front">
+      <div class="folder-body">
+        <div class="folder-side-tab"><span>HGW · PUF · 001</span></div>
+        <div class="folder-paper">
+          <div class="paper-clip"></div>
+          <div class="folder-icon">
+            <img src="/img/logo0.png" alt="герб">
+          </div>
+          <div class="case-number">HGW · PUF · 001 · 2026</div>
+          <div class="case-title">Тайна вырванного квадрата</div>
+          <div class="info-row">
+            <div class="info-block">
+              <div class="info-label">Место происшествия</div>
+              <div class="info-value">
+                <i class="fas fa-map-pin red-pin"></i>
+                <a href="https://huffhd.mybb.ru/viewtopic.php?id=348&p=2" target="_blank" rel="noopener noreferrer">Лужайка перед окнами</a>
+              </div>
+            </div>
+            <div class="info-block">
+              <div class="info-label">Дата</div>
+              <div class="info-value">14 мая 1993, 22:40</div>
+            </div>
+          </div>
+          <hr class="divider">
+          <div class="section-label">Описание произошедшего</div>
+          <div class="case-text">На лужайке, где обычно идеальный газон, так и зовущий играть в летние игры, валяться на травке или выгуливать своих гномов, образовалась незапланированная ландшафтными дизайнерами инсталляция. Почти натюрморт. Обломанные ветки, ровным квадратом вынутый газон, разорванные в клочья письма. Кто мог такое учинить — совершенно не ясно, но вот трава… трава примята странным образом, и в ней можно поискать улику. Нужно только взять правильную лупу!</div>
+          <hr class="divider">
+          <div class="section-label">Фото с места событий</div>
+          <div class="polaroid-wrap">
+            <div class="polaroid">
+              <div class="polaroid-img-area">
+                <img src="/img/case01/scene.jpg" alt="квадрат вырванного газона">
+              </div>
+              <div class="polaroid-caption">улика: ровный квадрат в траве</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="folder-lupa-area">
+          <img class="lupa-on-folder"
+            src="/img/case01/loupe.png"
+            alt="следственная лупа"
+            id="lupaImageTrigger"
+            role="button"
+            tabindex="0"
+            aria-label="Открыть информацию о лупе">
+          <button class="investigate-btn" id="openFingerprintModalBtn">
+            Исследовать отпечатки
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ПРАВАЯ СЕКЦИЯ: улика-отпечаток -->
+  <div class="magnifier-section">
+    <div class="fingerprint-sheet">
+      <div class="sheet-label">Вещественное доказательство · Отпечаток пальца</div>
+      <div class="static-fingerprint">
+        <div class="fingerprint-preview">
+          <div class="tape-cross">
+            <div class="tape-stripe diag1"></div>
+            <div class="tape-stripe diag2"></div>
+          </div>
+          <div class="confidential-stamp">КОНФИДЕНЦИАЛЬНО</div>
+          <img src="/img/fingerprint.png"
+               alt="отпечаток пальца с места преступления">
+        </div>
+        <div class="preview-note">
+          <span>Совершенно секретно</span> — для детального анализа используйте магическую лупу (нажмите «Исследовать отпечатки»)
+        </div>
+      </div>
+    </div>
+
+    <div class="answer-section">
+      <a class="answer-btn"
+         href="https://forms.gle/example-hogwarts-case01"
+         target="_blank"
+         rel="noopener noreferrer">
+        Раскрыть дело — назвать виновного
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// Модал: информация о лупе
+function openLoupeInfoModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.innerHTML = `
+    <div class="modal-case">
+      <div class="modal-folder">
+        <div class="modal-paper">
+          <div class="modal-header">
+            <h3>Следственная лупа №01</h3>
+            <button class="modal-close" aria-label="Закрыть">✕</button>
+          </div>
+          <div class="lupa-info-content">
+            <div class="info-artifact-img">
+              <img src="/img/case01/loupe.png" alt="магическая лупа" loading="lazy">
+            </div>
+            <div class="artifact-specs">
+              <p><strong>Регистрационный номер:</strong> HGW · ART · 001</p>
+              <p><strong>Магические свойства:</strong> Увеличивает скрытые детали, проявляет невидимые чернила и остаточную магию. Линза из горного хрусталя, оправа — благородный дуб, пропитанный экстрактом мандрагоры.</p>
+            </div>
+            <div class="modal-footer-stamp">Собственность Следственного Отдела Хогвартса · Печать Пуффендуя</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('active'));
+
+  const close = () => { overlay.classList.remove('active'); setTimeout(() => overlay.remove(), 260); };
+  overlay.querySelector('.modal-close').addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  overlay.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  overlay.querySelector('.modal-close').focus();
+}
+
+// Модал: интерактивная лупа для анализа отпечатка
+let activeFingerprintModal = null;
+
+function openFingerprintModal() {
+  if (activeFingerprintModal) return;
+
+  const BASE_URL   = '/img/fingerprint.png';
+  const HIDDEN_URL = '/img/case01/hs1.png';
+  const lensRadius = 60;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.innerHTML = `
+    <div class="modal-case">
+      <div class="modal-folder">
+        <div class="modal-paper">
+          <div class="modal-header">
+            <h3>Магическая лупа · Анализ отпечатка</h3>
+            <button class="modal-close" aria-label="Закрыть">✕</button>
+          </div>
+          <div class="lens-interactive-area" id="modalInteractiveArea">
+            <canvas id="modalBaseCanvas" class="modal-game-canvas"></canvas>
+            <div id="modalLens" class="modal-lens">
+              <canvas id="modalLensCanvas"></canvas>
+              <div class="modal-lens-handle"></div>
+            </div>
+          </div>
+          <p class="modal-hint">Двигайте лупой по отпечатку — проявится скрытый символ (улика факультета)</p>
+          <div class="modal-footer-stamp">Отдел магических расследований · Одобрено М. Макгонагалл</div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  activeFingerprintModal = overlay;
+  requestAnimationFrame(() => overlay.classList.add('active'));
+
+  const area       = overlay.querySelector('#modalInteractiveArea');
+  const baseCanvas = overlay.querySelector('#modalBaseCanvas');
+  const lensDiv    = overlay.querySelector('#modalLens');
+  const lensCanvas = overlay.querySelector('#modalLensCanvas');
+  const closeBtn   = overlay.querySelector('.modal-close');
+
+  const ld = lensRadius * 2;
+  lensDiv.style.width  = ld + 'px';
+  lensDiv.style.height = ld + 'px';
+  lensCanvas.width  = ld;
+  lensCanvas.height = ld;
+
+  let imgBase = null, imgHidden = null;
+  let aW = 0, aH = 0;
+  let ro = null;
+
+  function fit(img, w, h) {
+    const s = Math.max(w / img.width, h / img.height);
+    return { sw: img.width * s, sh: img.height * s, s };
+  }
+
+  function redrawBase() {
+    const rect = area.getBoundingClientRect();
+    aW = rect.width; aH = rect.height;
+    if (!aW || !aH || !imgBase) return;
+    baseCanvas.width  = aW;
+    baseCanvas.height = aH;
+    const ctx = baseCanvas.getContext('2d');
+    const { sw, sh } = fit(imgBase, aW, aH);
+    ctx.clearRect(0, 0, aW, aH);
+    ctx.drawImage(imgBase, (aW - sw) / 2, (aH - sh) / 2, sw, sh);
+  }
+
+  function moveLens(cx, cy) {
+    if (!imgHidden) return;
+    const rect = area.getBoundingClientRect();
+    const rx = cx - rect.left, ry = cy - rect.top;
+    if (rx < 0 || ry < 0 || rx > aW || ry > aH) {
+      lensDiv.style.opacity = '0'; return;
+    }
+    lensDiv.style.opacity = '1';
+    lensDiv.style.left = (rx - lensRadius) + 'px';
+    lensDiv.style.top  = (ry - lensRadius) + 'px';
+    const lCtx = lensCanvas.getContext('2d');
+    lCtx.clearRect(0, 0, ld, ld);
+    lCtx.save();
+    lCtx.beginPath(); lCtx.arc(lensRadius, lensRadius, lensRadius - 2, 0, Math.PI * 2); lCtx.clip();
+    const { sw, sh } = fit(imgHidden, aW, aH);
+    const ox = (aW - sw) / 2, oy = (aH - sh) / 2;
+    lCtx.drawImage(imgHidden, ox - (rx - lensRadius), oy - (ry - lensRadius), sw, sh);
+    lCtx.restore();
+  }
+
+  function onPointerMove(e) {
+    if (e.touches) {
+      if (!e.touches.length) return;
+      moveLens(e.touches[0].clientX, e.touches[0].clientY);
+    } else {
+      moveLens(e.clientX, e.clientY);
+    }
+  }
+
+  function attachEvents() {
+    lensDiv.style.display = 'block';
+    lensDiv.style.opacity = '0';
+    area.addEventListener('mousemove',  onPointerMove);
+    area.addEventListener('mouseleave', () => { lensDiv.style.opacity = '0'; });
+    area.addEventListener('touchmove',  onPointerMove, { passive: false });
+    area.addEventListener('touchend',   () => { lensDiv.style.opacity = '0'; });
+    ro = new ResizeObserver(redrawBase);
+    ro.observe(area);
+    window.addEventListener('resize', redrawBase);
+  }
+
+  function destroy() {
+    if (ro) ro.disconnect();
+    window.removeEventListener('resize', redrawBase);
+    overlay.classList.remove('active');
+    setTimeout(() => { overlay.remove(); activeFingerprintModal = null; }, 260);
+  }
+
+  closeBtn.addEventListener('click', destroy);
+  overlay.addEventListener('click', e => { if (e.target === overlay) destroy(); });
+  overlay.addEventListener('keydown', e => { if (e.key === 'Escape') destroy(); });
+
+  Promise.all([
+    new Promise((res, rej) => { const i = new Image(); i.crossOrigin='anonymous'; i.onload=()=>res(i); i.onerror=rej; i.src=BASE_URL; }),
+    new Promise((res, rej) => { const i = new Image(); i.crossOrigin='anonymous'; i.onload=()=>res(i); i.onerror=rej; i.src=HIDDEN_URL; })
+  ]).then(([b, h]) => {
+    imgBase = b; imgHidden = h;
+    redrawBase();
+    attachEvents();
+    closeBtn.focus();
+  }).catch(() => {
+    overlay.querySelector('.modal-hint').textContent = 'Ошибка загрузки улики. Обратитесь к смотрителю.';
+  });
+}
+
+document.getElementById('lupaImageTrigger').addEventListener('click', e => { e.stopPropagation(); openLoupeInfoModal(); });
+document.getElementById('lupaImageTrigger').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLoupeInfoModal(); } });
+document.getElementById('openFingerprintModalBtn').addEventListener('click', e => { e.preventDefault(); openFingerprintModal(); });
+</script>
+</body>
+</html>
