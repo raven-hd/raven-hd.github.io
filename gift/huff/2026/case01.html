@@ -161,6 +161,7 @@
   .polaroid-img-area {
     width: 100%; height: 150px; background: #d8d2c4; overflow: hidden;
     display: flex; align-items: center; justify-content: center;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%23c4874a' stroke-width='2'/%3E%3Cline x1='10' y1='6' x2='10' y2='14' stroke='%23c4874a' stroke-width='2'/%3E%3Cline x1='6' y1='10' x2='14' y2='10' stroke='%23c4874a' stroke-width='2'/%3E%3C/svg%3E") 10 10, zoom-in;
   }
   .polaroid-img-area img { width: 100%; height: 100%; object-fit: cover; }
   .polaroid-caption { font-size: 11px; color: #5a4a3a; text-align: center; margin-top: 7px; letter-spacing: 1px; }
@@ -188,7 +189,8 @@
     background: #497175; border: none; color: #e8dcc8;
     font-family: 'SpecialEliteCyrillic', serif;
     font-size: 12px; letter-spacing: 4px; padding: 13px 28px;
-    cursor: pointer; text-transform: uppercase;
+    cursor: pointer;
+    text-transform: uppercase;
     clip-path: polygon(6% 0%, 94% 0%, 100% 100%, 0% 100%);
     box-shadow: 3px 3px 0px #466E75, 5px 5px 0px #2e4e52;
     transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
@@ -227,22 +229,20 @@
     max-width: 420px; width: 90%;
     background: #f3ede2; padding: 12px; border-radius: 5px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,245,215,0.8);
-    transform: rotate(1.5deg); transition: transform 0.2s, box-shadow 0.2s;
-    margin: 0 auto; overflow: hidden;
-    cursor: zoom-in;
+    transform: rotate(1.5deg);
+    margin: 0 auto;
+    overflow: hidden;
+    /* Убираем любой курсор-лупу и hover-эффекты */
+    cursor: default;
+    transition: none;
   }
   .fingerprint-preview:hover {
-    transform: rotate(0deg) scale(1.02);
-    box-shadow: 0 16px 32px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,245,215,0.8);
+    transform: rotate(1.5deg);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,245,215,0.8);
   }
   .fingerprint-preview::after {
-    content: '🔍';
-    position: absolute; bottom: 10px; right: 14px;
-    font-size: 18px; opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
+    display: none; /* убираем появившийся псевдоэлемент с лупой */
   }
-  .fingerprint-preview:hover::after { opacity: 0.6; }
 
   .static-fingerprint .investigate-btn {
     margin-top: 14px;
@@ -251,6 +251,7 @@
   .fingerprint-preview img {
     width: 100%; height: auto; display: block;
     filter: sepia(0.12) contrast(1.02); border-radius: 2px;
+    pointer-events: none; /* чтобы клик не срабатывал на картинку */
   }
 
   .tape-cross {
@@ -301,9 +302,9 @@
     width: 100%;
     text-align: center;
     text-decoration: none;
-    background: var(--stamp-red);      /* всегда красный */
+    background: var(--stamp-red);
     border: 1px solid var(--stamp-red);
-    color: #ffffff;                   /* белый текст */
+    color: #ffffff;
     font-family: 'SpecialEliteCyrillic', serif;
     font-size: 12px;
     letter-spacing: 3px;
@@ -314,7 +315,7 @@
   }
   .answer-btn:hover {
     background: var(--stamp-red);
-    filter: brightness(0.85);         /* лёгкое затемнение при наведении */
+    filter: brightness(0.85);
     border-color: var(--stamp-red);
     color: #ffffff;
   }
@@ -361,7 +362,6 @@
     content: ''; position: absolute; inset: 8px;
     border: 1px solid rgba(139,69,19,0.12); pointer-events: none;
   }
-  /* Заголовок модала: кнопка справа, текст не переносится, но на мобильных уменьшается шрифт */
   .modal-header {
     display: flex;
     justify-content: space-between;
@@ -383,7 +383,7 @@
     font-family: 'SpecialEliteCyrillic', serif;
     margin: 0;
     flex: 1;
-    white-space: nowrap;      /* текст в одну строку */
+    white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
     line-height: 1.4;
@@ -402,7 +402,6 @@
   }
   .modal-close:hover { color: var(--stamp-red); transform: scale(1.1); }
 
-  /* На телефонах и планшетах уменьшаем размер шрифта заголовка модала, чтобы не было переноса */
   @media (max-width: 700px) {
     .modal-header h3 {
       font-size: 12px;
@@ -489,7 +488,7 @@
   }
   @media (hover: none) {
     body { cursor: auto; }
-    .back-btn, .investigate-btn, .answer-btn, .lupa-on-folder, .modal-close { cursor: pointer; }
+    .back-btn, .investigate-btn, .answer-btn, .lupa-on-folder, .modal-close, .polaroid-img-area { cursor: pointer; }
   }
 </style>
 </head>
@@ -538,7 +537,7 @@
           <div class="section-label">Фото с места событий</div>
           <div class="polaroid-wrap">
             <div class="polaroid">
-              <div class="polaroid-img-area" id="openScenePhotoBtn" role="button" tabindex="0" aria-label="Увеличить фото с места преступления" title="Нажмите для увеличения" style="cursor:zoom-in;">
+              <div class="polaroid-img-area" id="openScenePhotoBtn" role="button" tabindex="0" aria-label="Увеличить фото с места преступления" title="Нажмите для увеличения">
                 <img src="/gift/huff/2026/img/case01/scene.jpg" alt="квадрат вырванного газона">
               </div>
               <div class="polaroid-caption">Лужайка перед окнами</div>
@@ -564,7 +563,7 @@
     <div class="fingerprint-sheet">
       <div class="sheet-label">Вещественное доказательство · Отпечаток с места преступления</div>
       <div class="static-fingerprint">
-        <div class="fingerprint-preview" role="button" tabindex="0" aria-label="Увеличить фото с места преступления" title="Нажмите для увеличения">
+        <div class="fingerprint-preview">
           <div class="tape-cross">
             <div class="tape-stripe diag1"></div>
             <div class="tape-stripe diag2"></div>
@@ -596,7 +595,7 @@
 <script>
 'use strict';
 
-// Модал: информация о лупе (заголовок без <br>, уменьшается шрифт на мобильных)
+// Модал: информация о лупе
 function openLoupeInfoModal() {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
@@ -633,7 +632,7 @@ function openLoupeInfoModal() {
   overlay.querySelector('.modal-close').focus();
 }
 
-// Модал: интерактивная лупа для анализа отпечатка (заголовок без <br>)
+// Модал: интерактивная лупа для анализа отпечатка
 let activeFingerprintModal = null;
 
 function openFingerprintModal() {
@@ -773,7 +772,7 @@ document.getElementById('lupaImageTrigger').addEventListener('click', e => { e.s
 document.getElementById('lupaImageTrigger').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLoupeInfoModal(); } });
 document.getElementById('openFingerprintModalBtn').addEventListener('click', e => { e.preventDefault(); openFingerprintModal(); });
 
-// Модал: фото с места преступления — открывается как увеличенный поляроид
+// Увеличение фото места преступления
 function openScenePhotoModal() {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
