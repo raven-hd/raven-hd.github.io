@@ -232,7 +232,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   filter:drop-shadow(0 0 14px rgba(212,168,67,0.7));
   transform:scale(1.01);
 }
-/* Удалена подсветка для активного элемента */
 .historic-item img{
   width:100%;
   height:auto;
@@ -276,7 +275,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   max-height: 55vh;
 }
 
-/* Исправлено: max-width совпадает с шириной портрета */
 .detail-info{
   width: 100%;
   max-width: 391px;
@@ -360,8 +358,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   margin: 0;
 }
 
-@media (max-width:700px){
-  /* Скрываем левую колонку полностью */
+/* Базовое состояние — стрелки портретной навигации скрыты на всех устройствах */
+.portrait-nav {
+  display: none;
+}
+
+/* === Мобильная версия (до 700px) === */
+@media (max-width: 700px) {
   .museum-layout {
     grid-template-columns: 1fr;
   }
@@ -385,62 +388,80 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   .detail-info {
     max-width: 88vw;
   }
-
-  /* Кнопки листания портретов под описанием */
+  
+  /* На мобильных показываем панель навигации между портретами */
   .portrait-nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.2rem;
-    margin-top: 0.2rem;
+    gap: 0.8rem;
+    margin-top: 0.1rem;
   }
-
-  /* Нижние кнопки — переключение категорий */
-  .nav-controls { gap: 2rem; }
-  .nav-arrow { width: 40px; height: 40px; font-size: 1.1rem; }
-
-  .logo-img { height: 36px; }
-  .logo-text { height: 36px; font-size: 0.7rem; }
-  .header-logo, .header-placeholder { width: 150px; }
-  .header-top { letter-spacing: 0.05em; }
-  .collage-area { padding: 0.8rem 0.5rem 1rem; }
+  .portrait-side-btn {
+    background: none;
+    border: none;
+    color: rgba(212, 168, 67, 0.5);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.3rem;
+    transition: color 0.2s;
+    font-family: serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .portrait-side-btn:disabled {
+    opacity: 0.15;
+  }
+  .portrait-side-btn:not(:disabled):active {
+    color: rgba(212, 168, 67, 0.9);
+  }
+  .portrait-nav-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .portrait-nav-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(212, 168, 67, 0.2);
+    border: 1px solid rgba(139, 105, 20, 0.45);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .portrait-nav-dot.active {
+    background: rgba(212, 168, 67, 0.6);
+  }
+  
+  /* Нижние кнопки — только переключение категорий */
+  .nav-controls {
+    gap: 2rem;
+  }
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  .logo-img {
+    height: 36px;
+  }
+  .logo-text {
+    height: 36px;
+    font-size: 0.7rem;
+  }
+  .header-logo, .header-placeholder {
+    width: 150px;
+  }
+  .header-top {
+    letter-spacing: 0.05em;
+  }
+  .collage-area {
+    padding: 0.8rem 0.5rem 1rem;
+  }
 }
 
-/* Кнопки листания портретов — скрыты на десктопе */
-.portrait-nav {
-  display: none;
-}
-.portrait-nav-btn {
-  background: none;
-  border: none;
-  color: rgba(212, 168, 67, 0.45);
-  font-size: 1.3rem;
-  cursor: pointer;
-  padding: 0.2rem 0.5rem;
-  transition: color 0.2s;
-  line-height: 1;
-}
-.portrait-nav-btn:hover { color: rgba(212, 168, 67, 0.8); }
-.portrait-nav-btn:disabled { opacity: 0.15; cursor: default; }
-.portrait-nav-dots {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-.portrait-nav-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(212, 168, 67, 0.25);
-  border: 1px solid rgba(139, 105, 20, 0.5);
-  transition: all 0.3s;
-}
-.portrait-nav-dot.active {
-  background: rgba(212, 168, 67, 0.65);
-}
-
-@media (min-width:701px) and (max-width:1100px){
-  /* Планшет: правая колонка выравнивается по верху */
+/* === Планшетная версия (701px – 1100px) — стрелок портретной навигации нет, только десктопное поведение === */
+@media (min-width: 701px) and (max-width: 1100px) {
   .right-panel {
     justify-content: flex-start;
     padding-top: 1.4rem;
@@ -456,6 +477,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   }
   .detail-info {
     max-width: 85%;
+  }
+  /* Явно скрываем портретную навигацию на планшетах — наследуется от базового display: none, но для надежности */
+  .portrait-nav {
+    display: none !important;
   }
 }
 </style>
@@ -496,11 +521,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
           <p class="di-text" id="diText">Выберите портрет слева</p>
         </div>
       </div>
-      <!-- Кнопки листания портретов (только мобиль) -->
+      <!-- Панель навигации между портретами (отображается только на мобильных) -->
       <div class="portrait-nav" id="portraitNav">
-        <button class="portrait-nav-btn" id="portraitPrev">‹</button>
+        <button class="portrait-side-btn" id="portraitPrev">&#8249;</button>
         <div class="portrait-nav-dots" id="portraitDots"></div>
-        <button class="portrait-nav-btn" id="portraitNext">›</button>
+        <button class="portrait-side-btn" id="portraitNext">&#8250;</button>
       </div>
     </div>
   </div>
@@ -606,7 +631,6 @@ function createHistoricCard(elf) {
 }
 
 function selectItem(id) {
-  // больше никакой визуальной подсветки — убираем классы active полностью
   currentItemId = id;
   const section = sections[currentSectionIdx];
   const item = section.data.find(i => i.id === id);
@@ -627,99 +651,58 @@ function selectItem(id) {
   diName.textContent = item.name;
   diOwner.textContent = item.owner || '';
   diText.textContent = item.text;
-  // Обновляем активную точку на мобиле
-  if(isMobile()) {
-    document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
-    const activeDot = document.getElementById(`dot-${id}`);
-    if(activeDot) activeDot.classList.add('active');
-  }
-  updateArrows();
   updatePortraitNav();
 }
 
 function updateNav() {
   catTitle.textContent = sections[currentSectionIdx].label;
   navTabName.textContent = sections[currentSectionIdx].label;
+  updateBottomArrows();
   navDots.innerHTML = '';
-
-  if(isMobile()) {
-    // На мобиле точки = портреты текущей секции
-    sections[currentSectionIdx].data.forEach((item, idx) => {
-      const dot = document.createElement('div');
-      dot.className = 'nav-dot' + (idx === 0 ? ' active' : '');
-      dot.id = `dot-${item.id}`;
-      dot.onclick = () => selectItem(item.id);
-      navDots.appendChild(dot);
-    });
-  } else {
-    // На десктопе точки = секции
-    sections.forEach((_,idx) => {
-      const dot = document.createElement('div');
-      dot.className = 'nav-dot' + (idx === currentSectionIdx ? ' active' : '');
-      dot.onclick = () => goToSection(idx);
-      navDots.appendChild(dot);
-    });
-  }
-
+  sections.forEach((_,idx) => {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot' + (idx === currentSectionIdx ? ' active' : '');
+    dot.onclick = () => goToSection(idx);
+    navDots.appendChild(dot);
+  });
   renderCollage();
-  if(sections[currentSectionIdx].data.length) selectItem(sections[currentSectionIdx].data[0].id);
-  else { detailFrameWrap.innerHTML = ''; diName.textContent = '—'; diOwner.textContent = ''; diText.textContent = 'Нет экспонатов'; updateArrows(); }
+  const data = sections[currentSectionIdx].data;
+  if(data.length) selectItem(data[0].id);
+  else { detailFrameWrap.innerHTML = ''; diName.textContent = '—'; diOwner.textContent = ''; diText.textContent = 'Нет экспонатов'; updatePortraitNav(); }
 }
 
 function goToSection(idx) { if(idx>=0 && idx<sections.length) { currentSectionIdx = idx; updateNav(); } }
 
 function isMobile() { return window.innerWidth <= 700; }
 
-btnPrev.onclick = () => {
-  if(isMobile()) {
-    const data = sections[currentSectionIdx].data;
-    const idx = data.findIndex(i => i.id === currentItemId);
-    if(idx > 0) selectItem(data[idx-1].id);
-  } else {
-    goToSection(currentSectionIdx - 1);
-  }
-};
-btnNext.onclick = () => {
-  if(isMobile()) {
-    const data = sections[currentSectionIdx].data;
-    const idx = data.findIndex(i => i.id === currentItemId);
-    if(idx < data.length - 1) selectItem(data[idx+1].id);
-  } else {
-    goToSection(currentSectionIdx + 1);
-  }
-};
+// Нижние кнопки — всегда переключают категории
+btnPrev.onclick = () => goToSection(currentSectionIdx - 1);
+btnNext.onclick = () => goToSection(currentSectionIdx + 1);
 
-// Обновляем состояние кнопок с учётом мобильного режима
-function updateArrows() {
-  if(isMobile()) {
-    const data = sections[currentSectionIdx].data;
-    const idx = data.findIndex(i => i.id === currentItemId);
-    btnPrev.disabled = (idx <= 0);
-    btnNext.disabled = (idx >= data.length - 1);
-  } else {
-    btnPrev.disabled = (currentSectionIdx === 0);
-    btnNext.disabled = (currentSectionIdx === sections.length - 1);
-  }
+function updateBottomArrows() {
+  btnPrev.disabled = (currentSectionIdx === 0);
+  btnNext.disabled = (currentSectionIdx === sections.length - 1);
 }
 
+// Портретные кнопки (только мобиль)
 const portraitPrev = document.getElementById('portraitPrev');
 const portraitNext = document.getElementById('portraitNext');
 const portraitDots = document.getElementById('portraitDots');
 
 function updatePortraitNav() {
-  if(!isMobile()) return;
   const data = sections[currentSectionIdx].data;
   const idx = data.findIndex(i => i.id === currentItemId);
-  portraitPrev.disabled = (idx <= 0);
-  portraitNext.disabled = (idx >= data.length - 1);
-  // Точки
-  portraitDots.innerHTML = '';
-  data.forEach((item, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'portrait-nav-dot' + (i === idx ? ' active' : '');
-    dot.onclick = () => selectItem(item.id);
-    portraitDots.appendChild(dot);
-  });
+  if (portraitPrev && portraitNext && portraitDots) {
+    portraitPrev.disabled = (idx <= 0);
+    portraitNext.disabled = (idx >= data.length - 1);
+    portraitDots.innerHTML = '';
+    data.forEach((item, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'portrait-nav-dot' + (i === idx ? ' active' : '');
+      dot.onclick = () => selectItem(item.id);
+      portraitDots.appendChild(dot);
+    });
+  }
 }
 
 portraitPrev.onclick = () => {
@@ -733,9 +716,8 @@ portraitNext.onclick = () => {
   if(idx < data.length - 1) selectItem(data[idx + 1].id);
 };
 
-// Свайп
-let touchStartX = 0;
-let touchStartY = 0;
+// Свайп для мобильных
+let touchStartX = 0, touchStartY = 0;
 document.addEventListener('touchstart', e => {
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
@@ -744,12 +726,14 @@ document.addEventListener('touchend', e => {
   if(!isMobile()) return;
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = e.changedTouches[0].clientY - touchStartY;
-  if(Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return; // не свайп
+  if(Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
   const data = sections[currentSectionIdx].data;
   const idx = data.findIndex(i => i.id === currentItemId);
   if(dx < 0 && idx < data.length - 1) selectItem(data[idx + 1].id);
   if(dx > 0 && idx > 0) selectItem(data[idx - 1].id);
 }, { passive: true });
+
+let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
@@ -757,6 +741,9 @@ window.addEventListener('resize', () => {
     if(currentItemId) selectItem(currentItemId);
   }, 150);
 });
+
+// Инициализация
+updateNav();
 </script>
 </body>
 </html>
