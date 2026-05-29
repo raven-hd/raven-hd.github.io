@@ -358,12 +358,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   margin: 0;
 }
 
-/* Базовое состояние — стрелки портретной навигации скрыты на всех устройствах */
-.portrait-nav {
-  display: none;
-}
-
-/* === Мобильная версия (до 700px) === */
+/* Мобильные стрелки по бокам от портрета (без рамок и фона) */
 @media (max-width: 700px) {
   .museum-layout {
     grid-template-columns: 1fr;
@@ -377,63 +372,57 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     justify-content: flex-start;
     padding-top: 1.2rem;
   }
-  .detail-frame-wrap img {
-    max-width: 72vw;
-    max-height: 52vh;
-  }
-  .detail-frame-wrap img.winky-portrait {
-    max-width: 48vw;
-    max-height: 52vh;
-  }
   .detail-info {
     max-width: 88vw;
   }
   
-  /* На мобильных показываем панель навигации между портретами */
-  .portrait-nav {
+  /* Контейнер для портрета и боковых стрелок */
+  .detail-frame-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  .portrait-arrow {
+    background: transparent;
+    border: none;
+    color: rgba(212, 168, 67, 0.65);
+    font-size: 2.4rem;
+    font-weight: 300;
+    width: 48px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.8rem;
-    margin-top: 0.1rem;
-  }
-  .portrait-side-btn {
-    background: none;
-    border: none;
-    color: rgba(212, 168, 67, 0.5);
-    font-size: 1.8rem;
-    line-height: 1;
     cursor: pointer;
-    padding: 0 0.3rem;
-    transition: color 0.2s;
-    font-family: serif;
+    transition: color 0.2s, opacity 0.2s;
+    flex-shrink: 0;
     -webkit-tap-highlight-color: transparent;
+    padding: 0;
+    line-height: 1;
+    font-family: serif;
   }
-  .portrait-side-btn:disabled {
+  .portrait-arrow:active {
+    color: var(--gold-light);
+    opacity: 0.9;
+  }
+  .portrait-arrow.disabled {
     opacity: 0.15;
+    pointer-events: none;
+    color: rgba(212, 168, 67, 0.3);
   }
-  .portrait-side-btn:not(:disabled):active {
-    color: rgba(212, 168, 67, 0.9);
+  .detail-frame-wrap img {
+    max-width: 65vw;
+    max-height: 52vh;
+    width: auto;
   }
-  .portrait-nav-dots {
-    display: flex;
-    gap: 5px;
-    align-items: center;
+  .detail-frame-wrap img.winky-portrait {
+    max-width: 45vw;
+    max-height: 52vh;
   }
-  .portrait-nav-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgba(212, 168, 67, 0.2);
-    border: 1px solid rgba(139, 105, 20, 0.45);
-    transition: all 0.3s;
-    cursor: pointer;
-  }
-  .portrait-nav-dot.active {
-    background: rgba(212, 168, 67, 0.6);
-  }
-  
-  /* Нижние кнопки — только переключение категорий */
+  /* Нижние кнопки категорий остаются без изменений */
   .nav-controls {
     gap: 2rem;
   }
@@ -460,7 +449,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   }
 }
 
-/* === Планшетная версия (701px – 1100px) — стрелок портретной навигации нет, только десктопное поведение === */
 @media (min-width: 701px) and (max-width: 1100px) {
   .right-panel {
     justify-content: flex-start;
@@ -477,10 +465,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   }
   .detail-info {
     max-width: 85%;
-  }
-  /* Явно скрываем портретную навигацию на планшетах — наследуется от базового display: none, но для надежности */
-  .portrait-nav {
-    display: none !important;
   }
 }
 </style>
@@ -510,6 +494,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     </div>
 
     <div class="right-panel" id="rightPanel">
+      <!-- Контейнер, в который динамически будет помещаться портрет + кнопки (на мобилках) -->
       <div class="detail-frame-wrap" id="detailFrameWrap"></div>
       <div class="detail-info" id="detailInfo">
         <div class="detail-header">
@@ -520,12 +505,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
         <div class="detail-text-scroll">
           <p class="di-text" id="diText">Выберите портрет слева</p>
         </div>
-      </div>
-      <!-- Панель навигации между портретами (отображается только на мобильных) -->
-      <div class="portrait-nav" id="portraitNav">
-        <button class="portrait-side-btn" id="portraitPrev">&#8249;</button>
-        <div class="portrait-nav-dots" id="portraitDots"></div>
-        <button class="portrait-side-btn" id="portraitNext">&#8250;</button>
       </div>
     </div>
   </div>
@@ -565,6 +544,7 @@ const sections = [
 
 let currentSectionIdx = 0;
 let currentItemId = null;
+let currentItem = null; // для быстрого доступа
 
 const collageArea = document.getElementById('collageArea');
 const detailFrameWrap = document.getElementById('detailFrameWrap');
@@ -576,6 +556,97 @@ const navTabName = document.getElementById('navTabName');
 const btnPrev = document.getElementById('btnPrev');
 const btnNext = document.getElementById('btnNext');
 const navDots = document.getElementById('navDots');
+
+function isMobile() {
+  return window.innerWidth <= 700;
+}
+
+// Отображение портрета и, при необходимости, стрелок по бокам
+function renderPortrait(item) {
+  if (!item) return;
+  const mobile = isMobile();
+  detailFrameWrap.innerHTML = '';
+  
+  if (mobile) {
+    // Мобильная версия: создаём контейнер с двумя кнопками и изображением посередине
+    const leftArrow = document.createElement('button');
+    leftArrow.textContent = '‹';
+    leftArrow.className = 'portrait-arrow';
+    leftArrow.setAttribute('aria-label', 'Предыдущий портрет');
+    const rightArrow = document.createElement('button');
+    rightArrow.textContent = '›';
+    rightArrow.className = 'portrait-arrow';
+    rightArrow.setAttribute('aria-label', 'Следующий портрет');
+    
+    let img;
+    if (sections[currentSectionIdx].type === 'historic' && item.fullImg) {
+      img = document.createElement('img');
+      img.src = item.fullImg;
+      img.alt = item.name;
+      if (item.id === 'winky') img.classList.add('winky-portrait');
+    } else {
+      img = document.createElement('div');
+      img.style.fontSize = '5rem';
+      img.style.opacity = '0.7';
+      img.textContent = '🧝';
+    }
+    
+    detailFrameWrap.appendChild(leftArrow);
+    detailFrameWrap.appendChild(img);
+    detailFrameWrap.appendChild(rightArrow);
+    
+    // Обновляем активность кнопок (вкл/выкл)
+    const data = sections[currentSectionIdx].data;
+    const idx = data.findIndex(i => i.id === currentItemId);
+    if (idx <= 0) leftArrow.classList.add('disabled');
+    else leftArrow.classList.remove('disabled');
+    if (idx >= data.length - 1) rightArrow.classList.add('disabled');
+    else rightArrow.classList.remove('disabled');
+    
+    // Обработчики
+    leftArrow.onclick = (e) => {
+      e.stopPropagation();
+      const newIdx = idx - 1;
+      if (newIdx >= 0) selectItem(data[newIdx].id);
+    };
+    rightArrow.onclick = (e) => {
+      e.stopPropagation();
+      const newIdx = idx + 1;
+      if (newIdx < data.length) selectItem(data[newIdx].id);
+    };
+  } else {
+    // Десктопная версия: только изображение (без стрелок)
+    if (sections[currentSectionIdx].type === 'historic' && item.fullImg) {
+      const img = document.createElement('img');
+      img.src = item.fullImg;
+      img.alt = item.name;
+      if (item.id === 'winky') img.classList.add('winky-portrait');
+      detailFrameWrap.appendChild(img);
+    } else {
+      const placeholder = document.createElement('div');
+      placeholder.style.fontSize = '5rem';
+      placeholder.style.opacity = '0.7';
+      placeholder.textContent = '🧝';
+      detailFrameWrap.appendChild(placeholder);
+    }
+  }
+}
+
+function selectItem(id) {
+  currentItemId = id;
+  const section = sections[currentSectionIdx];
+  const item = section.data.find(i => i.id === id);
+  if (!item) return;
+  currentItem = item;
+  
+  // Отрисовка портрета со стрелками или без
+  renderPortrait(item);
+  
+  // Заполнение текстовой информации
+  diName.textContent = item.name;
+  diOwner.textContent = item.owner || '';
+  diText.textContent = item.text;
+}
 
 function renderCollage() {
   const section = sections[currentSectionIdx];
@@ -630,30 +701,6 @@ function createHistoricCard(elf) {
   return card;
 }
 
-function selectItem(id) {
-  currentItemId = id;
-  const section = sections[currentSectionIdx];
-  const item = section.data.find(i => i.id === id);
-  if(!item) return;
-
-  if(section.type === 'historic' && item.fullImg) {
-    const img = document.createElement('img');
-    img.src = item.fullImg;
-    img.alt = item.name;
-    if (item.id === 'winky') {
-      img.classList.add('winky-portrait');
-    }
-    detailFrameWrap.innerHTML = '';
-    detailFrameWrap.appendChild(img);
-  } else {
-    detailFrameWrap.innerHTML = `<div style="font-size:5rem; opacity:0.7;">🧝</div>`;
-  }
-  diName.textContent = item.name;
-  diOwner.textContent = item.owner || '';
-  diText.textContent = item.text;
-  updatePortraitNav();
-}
-
 function updateNav() {
   catTitle.textContent = sections[currentSectionIdx].label;
   navTabName.textContent = sections[currentSectionIdx].label;
@@ -667,78 +714,60 @@ function updateNav() {
   });
   renderCollage();
   const data = sections[currentSectionIdx].data;
-  if(data.length) selectItem(data[0].id);
-  else { detailFrameWrap.innerHTML = ''; diName.textContent = '—'; diOwner.textContent = ''; diText.textContent = 'Нет экспонатов'; updatePortraitNav(); }
+  if(data.length) {
+    selectItem(data[0].id);
+  } else {
+    detailFrameWrap.innerHTML = '<div style="font-size:2rem;">🧹</div>';
+    diName.textContent = '—';
+    diOwner.textContent = '';
+    diText.textContent = 'Нет экспонатов';
+  }
 }
 
-function goToSection(idx) { if(idx>=0 && idx<sections.length) { currentSectionIdx = idx; updateNav(); } }
-
-function isMobile() { return window.innerWidth <= 700; }
-
-// Нижние кнопки — всегда переключают категории
-btnPrev.onclick = () => goToSection(currentSectionIdx - 1);
-btnNext.onclick = () => goToSection(currentSectionIdx + 1);
+function goToSection(idx) {
+  if(idx>=0 && idx<sections.length) {
+    currentSectionIdx = idx;
+    updateNav();
+  }
+}
 
 function updateBottomArrows() {
   btnPrev.disabled = (currentSectionIdx === 0);
   btnNext.disabled = (currentSectionIdx === sections.length - 1);
 }
 
-// Портретные кнопки (только мобиль)
-const portraitPrev = document.getElementById('portraitPrev');
-const portraitNext = document.getElementById('portraitNext');
-const portraitDots = document.getElementById('portraitDots');
+// Обработчики нижних кнопок (переключение категорий)
+btnPrev.onclick = () => goToSection(currentSectionIdx - 1);
+btnNext.onclick = () => goToSection(currentSectionIdx + 1);
 
-function updatePortraitNav() {
-  const data = sections[currentSectionIdx].data;
-  const idx = data.findIndex(i => i.id === currentItemId);
-  if (portraitPrev && portraitNext && portraitDots) {
-    portraitPrev.disabled = (idx <= 0);
-    portraitNext.disabled = (idx >= data.length - 1);
-    portraitDots.innerHTML = '';
-    data.forEach((item, i) => {
-      const dot = document.createElement('div');
-      dot.className = 'portrait-nav-dot' + (i === idx ? ' active' : '');
-      dot.onclick = () => selectItem(item.id);
-      portraitDots.appendChild(dot);
-    });
-  }
-}
-
-portraitPrev.onclick = () => {
-  const data = sections[currentSectionIdx].data;
-  const idx = data.findIndex(i => i.id === currentItemId);
-  if(idx > 0) selectItem(data[idx - 1].id);
-};
-portraitNext.onclick = () => {
-  const data = sections[currentSectionIdx].data;
-  const idx = data.findIndex(i => i.id === currentItemId);
-  if(idx < data.length - 1) selectItem(data[idx + 1].id);
-};
-
-// Свайп для мобильных
+// Свайп для мобильных (перелистывание портретов)
 let touchStartX = 0, touchStartY = 0;
 document.addEventListener('touchstart', e => {
   touchStartX = e.touches[0].clientX;
   touchStartY = e.touches[0].clientY;
 }, { passive: true });
 document.addEventListener('touchend', e => {
-  if(!isMobile()) return;
+  if (!isMobile()) return;
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = e.changedTouches[0].clientY - touchStartY;
-  if(Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
+  if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
   const data = sections[currentSectionIdx].data;
   const idx = data.findIndex(i => i.id === currentItemId);
-  if(dx < 0 && idx < data.length - 1) selectItem(data[idx + 1].id);
-  if(dx > 0 && idx > 0) selectItem(data[idx - 1].id);
+  if (dx < 0 && idx < data.length - 1) selectItem(data[idx + 1].id);
+  if (dx > 0 && idx > 0) selectItem(data[idx - 1].id);
 }, { passive: true });
 
+// Адаптация при изменении размера окна (перерисовка портрета без потери выбранного элемента)
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     renderCollage();
-    if(currentItemId) selectItem(currentItemId);
+    if (currentItemId) {
+      const section = sections[currentSectionIdx];
+      const item = section.data.find(i => i.id === currentItemId);
+      if (item) renderPortrait(item);
+    }
   }, 150);
 });
 
