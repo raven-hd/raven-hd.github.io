@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Дела Пуффендуя 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  @font-face {
+    font-family: 'SpecialEliteCyrillic';
+    src: url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/main/gift/huff/2026/specialelite-cyrillic.ttf') format('truetype');
+    font-weight: normal; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --cork: #c4874a; --cork-dark: #a0642a;
+    --paper: #f5ead6; --paper-aged: #e8d5b0;
+    --ink: #2a1a08; --ink-faded: #5a3e22;
+    --stamp-red: #8b2020;
+    --hufflepuff-yellow: #f0c040; --hufflepuff-black: #1a1208;
+    --cork-main: #5E5242; --cork-border-outer: #1E3B36; --cork-border-inner: #4D7459;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--hufflepuff-black);
+    font-family: 'Alegreya', serif;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='10' cy='10' r='7' fill='none' stroke='%23c4874a' stroke-width='2'/%3E%3Cline x1='15' y1='15' x2='22' y2='22' stroke='%23c4874a' stroke-width='2'/%3E%3C/svg%3E") 10 10, default;
+  }
+
+  /* INTRO */
+  #intro {
+    position: fixed; inset: 0;
+    background: var(--hufflepuff-black);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 1000; transition: opacity 0.8s ease, visibility 0.8s;
+  }
+  #intro.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .intro-logo-wrap {
+    position: relative; width: 320px; height: 320px; margin-bottom: 48px;
+  }
+  .intro-logo-wrap img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;
+  }
+  #logo0 { opacity: 0; animation: fadeInLogo 2s ease forwards; animation-delay: 0.3s; z-index: 1; }
+  #logo2 {
+    opacity: 0; animation: fadeInLogo 2s ease forwards; animation-delay: 1.2s;
+    filter: drop-shadow(0 0 18px rgba(73,113,117,0.9)) drop-shadow(0 0 40px rgba(73,113,117,0.5));
+    transform: translateY(-14px); z-index: 2;
+  }
+  @keyframes fadeInLogo { from { opacity: 0; } to { opacity: 1; } }
+  .intro-btn-wrap { position: relative; display: inline-block; margin-top: 8px; }
+  .intro-btn {
+    position: relative; background: #497175; border: none; color: #e8dcc8;
+    font-family: 'SpecialEliteCyrillic', 'Alegreya', serif;
+    font-size: 14px; letter-spacing: 5px; padding: 16px 52px; cursor: pointer;
+    text-transform: uppercase; clip-path: polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%);
+    transition: background 0.3s, box-shadow 0.3s;
+    box-shadow: 4px 4px 0px #466E75, 6px 6px 0px #2e4e52, inset 0 1px 0 rgba(255,255,255,0.12);
+  }
+  .intro-btn:hover {
+    background: #5a8a8e;
+    box-shadow: 4px 4px 0px #466E75, 6px 6px 0px #2e4e52, 0 0 24px rgba(73,113,117,0.6), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .intro-btn:active { transform: translate(3px,3px); box-shadow: 1px 1px 0px #466E75; }
+
+  /* HEADER */
+  header {
+    background: var(--hufflepuff-black); border-bottom: 2px solid var(--hufflepuff-yellow);
+    padding: 20px 40px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-title { font-family: 'Alegreya', serif; font-weight: 700; font-size: 22px; color: var(--hufflepuff-yellow); letter-spacing: 2px; }
+  .header-subtitle { font-family: 'Alegreya', serif; font-size: 11px; color: var(--cork); letter-spacing: 5px; text-transform: uppercase; margin-top: 2px; }
+  .header-badge img { width: 100px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); transition: transform 0.2s; }
+  .header-badge img:hover { transform: scale(1.05); }
+
+  /* LETTER — весь текст на Alegreya */
+  .letter-wrap { max-width: 780px; margin: 60px auto 0; padding: 0 24px; }
+  .letter {
+    background: var(--paper); padding: 48px 56px; position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 0 60px rgba(180,130,60,0.08);
+    border-top: 4px solid var(--hufflepuff-yellow);
+  }
+  .letter::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(180,130,60,0.2); pointer-events: none; }
+  .letter-wax {
+    position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+    width: 44px; height: 44px; background: radial-gradient(circle at 35% 35%, #497175, #466E75);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4); color: #e8dcc8;
+  }
+  .letter-wax i { font-size: 22px; }
+  .letter-from {
+    font-family: 'SpecialEliteCyrillic', serif; font-size: 12px; letter-spacing: 5px;
+    color: var(--ink-faded); text-transform: uppercase; margin-bottom: 24px;
+  }
+  .letter-heading {
+    font-family: 'SpecialEliteCyrillic', serif; font-weight: 700; font-size: 27px;
+    color: var(--ink); margin-bottom: 20px; line-height: 1.3;
+  }
+  .letter-body {
+    font-family: 'SpecialEliteCyrillic', serif; font-size: 17px; line-height: 1.9; color: var(--ink-faded);
+  }
+  .letter-body p { margin-bottom: 16px; }
+  .letter-signature {
+    margin-top: 32px; font-family: 'SpecialEliteCyrillic', serif; font-style: italic;
+    font-weight: 600; font-size: 21px; color: var(--ink); text-align: right;
+  }
+
+  /* BOARD */
+  .board-section { padding: 60px 40px 80px; max-width: 980px; margin: 0 auto; }
+  .board-label {
+    font-family: 'Alegreya', serif; font-size: 13px; letter-spacing: 8px;
+    color: var(--cork); text-transform: uppercase; text-align: center; margin-bottom: 40px;
+  }
+  .corkboard {
+    background-color: var(--cork-main);
+    background-image:
+      radial-gradient(ellipse at 20% 30%, rgba(85,70,55,0.45) 0%, transparent 70%),
+      radial-gradient(ellipse at 80% 70%, rgba(70,60,45,0.35) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+    border: 12px solid var(--cork-border-outer);
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 3px var(--cork-border-inner), inset 0 0 80px rgba(0,0,0,0.25), 0 20px 60px rgba(0,0,0,0.6);
+    padding: 48px 36px 56px;
+    position: relative;
+    min-height: 700px;
+  }
+
+  /* БУЛАВКИ — HTML-элементы, не искажаются при масштабировании */
+  .pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 7;
+    pointer-events: none;
+  }
+  .pin[data-size="large"] {
+    width: 11px; height: 11px;
+    background: radial-gradient(circle at 35% 35%, #ff4444, #cc1111);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+    opacity: 0.95;
+  }
+  .pin[data-size="large"]::after {
+    content: '';
+    position: absolute;
+    top: 1px; left: 2px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+  }
+  .pin[data-size="small"] {
+    width: 10px; height: 10px;
+    background: radial-gradient(circle at 35% 35%, #ee3333, #bb0000);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.25);
+    opacity: 0.9;
+  }
+
+  /* THREADS — поверх карточек */
+  .threads {
+    position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 6;
+  }
+  .threads svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+  /* GRID */
+  .files-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 24px; position: relative; z-index: 2; margin-top: 150px;
+  }
+
+  /* FILE CARDS */
+  .file-card {
+    background: var(--paper-aged); padding: 0; position: relative; cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 3px 4px 12px rgba(0,0,0,0.35);
+    transform: rotate(var(--rot, 0deg));
+    text-decoration: none; display: block;
+  }
+  .file-card:hover {
+    transform: rotate(0deg) translateY(-8px) scale(1.04) !important;
+    box-shadow: 6px 12px 30px rgba(0,0,0,0.5); z-index: 10;
+  }
+  .file-card::before {
+    content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 14px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, var(--pin-color, #c44), #600);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4); z-index: 5;
+  }
+  .file-tab {
+    background: var(--tab-color, #d4a050); height: 20px; width: 60%;
+    border-radius: 4px 4px 0 0; margin-left: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Alegreya', serif; font-size: 8px; letter-spacing: 2px;
+    color: rgba(0,0,0,0.6); text-transform: uppercase;
+  }
+  .file-body { padding: 12px 14px 16px; border-top: 1px solid rgba(0,0,0,0.1); }
+  .file-number { font-family: 'Alegreya', serif; font-size: 9px; letter-spacing: 3px; color: var(--ink-faded); text-transform: uppercase; margin-bottom: 6px; opacity: 0.7; }
+  .file-title { font-family: 'SpecialEliteCyrillic', serif; font-size: 13px; color: var(--ink); line-height: 1.4; margin-bottom: 8px; font-style: italic; }
+  .file-location { font-family: 'Alegreya', serif; font-size: 9px; letter-spacing: 1px; color: var(--ink-faded); opacity: 0.8; margin-bottom: 10px; }
+  .file-location i { margin-right: 4px; font-size: 9px; }
+  .file-qmark {
+    position: absolute; bottom: 10px; right: 10px; width: 28px; height: 28px;
+    border-radius: 50%; background: var(--stamp-red); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Alegreya', serif; font-size: 16px; font-weight: 700; opacity: 0.85;
+  }
+  .file-classified {
+    position: absolute; top: 28px; right: 6px;
+    font-family: 'SpecialEliteCyrillic', serif; font-size: 9px; letter-spacing: 2px;
+    color: var(--stamp-red); border: 1.5px solid var(--stamp-red);
+    padding: 2px 5px; transform: rotate(15deg); opacity: 0.75; text-transform: uppercase;
+    background: rgba(139, 32, 32, 0.08);
+    border-radius: 3px;
+  }
+
+  /* STICKERS — декоративные, z-index НИЖЕ карточек (z-index:1) и НИЖЕ нитей */
+  .board-note, .board-note2 {
+    position: absolute; background: #fffde8; padding: 16px 20px;
+    box-shadow: 3px 4px 10px rgba(0,0,0,0.3);
+    font-family: 'SpecialEliteCyrillic', 'Alegreya', serif;
+    font-size: 12px; color: var(--ink); line-height: 1.6;
+    z-index: 1; /* ниже карточек и нитей */
+    letter-spacing: 0.3px; pointer-events: none;
+  }
+  /* Равномерно по доске, разные углы, не перекрывают карточки */
+  .board-note {
+    top: 18px; left: 50%; transform: translateX(-50%) rotate(-5deg);
+    width: 200px; font-size: 13px;
+  }
+  .board-note2 {
+    top: 18px; right: 30px; width: 175px;
+    transform: rotate(7deg);
+    font-size: 11px; color: var(--ink-faded); background: #fff8e8;
+  }
+  .board-note::before {
+    content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 14px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #4a90d9, #1a4a8a);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+  .board-note2::before {
+    content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 14px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #d9a44a, #8a5a1a);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 40px; font-family: 'Alegreya', serif;
+    color: var(--cork-dark); font-size: 12px; letter-spacing: 4px; text-transform: uppercase;
+    border-top: 1px solid rgba(196,135,74,0.2);
+  }
+
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .files-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 100px; }
+    .corkboard { padding: 48px 20px 56px; }
+    .board-note { left: 30px; transform: rotate(-5deg); }
+    .board-note2 { right: 20px; }
+  }
+  @media (max-width: 820px) {
+    .files-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 110px; }
+    .board-note { font-size: 11px; width: 170px; padding: 12px 14px; }
+    .board-note2 { font-size: 10px; width: 150px; padding: 10px 12px; }
+  }
+  @media (max-width: 600px) {
+    .files-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 120px; }
+    .board-note { left: 50%; transform: translateX(-50%) rotate(-4deg); top: 14px; }
+    .board-note2 { display: none; }
+    header { flex-direction: column; gap: 8px; text-align: center; padding: 14px 20px; }
+    .letter { padding: 32px 20px; }
+  }
+  @media (max-width: 420px) {
+    .files-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <div class="intro-logo-wrap">
+    <img id="logo0" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/huff/2026/img/logo1.png" alt="ЛОГО">
+    <img id="logo2" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/huff/2026/img/logo2.png" alt="БАРСУКОГ">
+  </div>
+  <div class="intro-btn-wrap">
+    <button class="intro-btn" onclick="document.getElementById('intro').classList.add('hidden')">Начать расследование</button>
+  </div>
+</div>
+
+<header>
+  <div>
+    <div class="header-title">Следствие ведут барсуки</div>
+    <div class="header-subtitle">Дела факультета Пуффендуй · Совершенно секретно</div>
+  </div>
+  <div class="header-badge">
+    <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/huff/2026/img/logo3.png" alt="ЛОГО">
+  </div>
+</header>
+
+<div class="letter-wrap fade-in">
+  <div class="letter">
+    <div class="letter-wax"><i class="fas fa-paw"></i></div>
+    <div class="letter-from">Совиная почта · Хогвартс Дамблдора</div>
+    <div class="letter-heading">Дорогие пуффендуйцы,<br>у нас для вас две новости. Хорошая и не очень.</div>
+    <div class="letter-body">
+      <p>Пока вы готовились к празднованию дня факультета и встрече гостей, пекли любимые всеми пироги и сахарные плюшки, на территории вашего факультета произошло нечто из ряда вон выходящее. Десять загадочных преступлений!</p>
+      <p>Мы, разумеется, не могли остаться в стороне. Нам удалось осмотреть места преступлений, собрать материалы по каждому делу и, что самое ценное, обнаружить улики. На каждом месте преступления остались отпечатки, которые должны помочь найти виновных, скрывающихся прямо у вас под носом.</p>
+      <p>А хорошая новость заключается в том, что по невероятному стечению обстоятельств в качестве подарка на День Пуффендуя мы вручаем вам набор специальных луп. Каждая лупа подходит для работы в определённых условиях, и с их помощью вы сможете разглядеть спрятанные отпечатки и установить личность каждого виновника.</p>
+      <p>Удачи вам в расследовании. Хотя нужна ли удача настоящим детективам?</p>
+    </div>
+    <div class="letter-signature">С любовью, не замешанные ни в одном подозрительном деле, когтевранцы.</div>
+    <div class="letter-body" style="margin-top:20px; font-size:15px;"><p><em>P.S. Однако одна тайна остаётся нераскрытой даже для нас: кто окажется лучшим детективом и сумеет найти всех десятерых виновников? Тех, кому это удастся, будет ждать особая пуффендуйская лупа — знак настоящего мастера расследований.</em></p></div>
+  </div>
+</div>
+
+<div id="board" class="board-section fade-in">
+  <div class="board-label">— Материалы дел —</div>
+  <div class="corkboard">
+
+    <!-- Красные нити поверх всего z-index:6 -->
+    <div class="threads">
+      <svg viewBox="0 0 1200 700" preserveAspectRatio="none" style="width:100%;height:100%;">
+        <!-- яркие нити -->
+        <line x1="185" y1="95" x2="430" y2="210" stroke="#cc1111" stroke-width="1.8" opacity="0.85"/>
+        <line x1="430" y1="210" x2="670" y2="130" stroke="#cc1111" stroke-width="1.8" opacity="0.85"/>
+        <line x1="670" y1="130" x2="910" y2="255" stroke="#cc1111" stroke-width="1.8" opacity="0.85"/>
+        <line x1="910" y1="255" x2="1080" y2="160" stroke="#cc1111" stroke-width="1.6" opacity="0.8"/>
+        <line x1="185" y1="95" x2="310" y2="420" stroke="#cc1111" stroke-width="1.4" opacity="0.7"/>
+        <line x1="310" y1="420" x2="560" y2="490" stroke="#cc1111" stroke-width="1.4" opacity="0.7"/>
+        <line x1="560" y1="490" x2="800" y2="400" stroke="#cc1111" stroke-width="1.4" opacity="0.7"/>
+        <line x1="800" y1="400" x2="1030" y2="530" stroke="#cc1111" stroke-width="1.4" opacity="0.65"/>
+        <line x1="430" y1="210" x2="560" y2="490" stroke="#aa0000" stroke-width="1.2" opacity="0.5"/>
+        <line x1="670" y1="130" x2="800" y2="400" stroke="#aa0000" stroke-width="1.2" opacity="0.5"/>
+        <!-- булавки вынесены в HTML-элементы для сохранения формы при масштабировании -->
+      </svg>
+    </div>
+
+    <!-- Булавки как HTML-элементы — не искажаются при масштабировании -->
+    <div class="pin" style="left:15.42%;top:13.57%;" data-size="large"></div>
+    <div class="pin" style="left:35.83%;top:30%;" data-size="large"></div>
+    <div class="pin" style="left:55.83%;top:18.57%;" data-size="large"></div>
+    <div class="pin" style="left:75.83%;top:36.43%;" data-size="large"></div>
+    <div class="pin" style="left:90%;top:22.86%;" data-size="large"></div>
+    <div class="pin" style="left:25.83%;top:60%;" data-size="small"></div>
+    <div class="pin" style="left:46.67%;top:70%;" data-size="small"></div>
+    <div class="pin" style="left:66.67%;top:57.14%;" data-size="small"></div>
+    <div class="pin" style="left:85.83%;top:75.71%;" data-size="small"></div>
+
+    <!-- Декоративные стикеры (z-index:1 — под карточками) -->
+    <div class="board-note">
+      Всего 10 дел.<br>У каждого — своя лупа.<br>Удачи, детективы!
+    </div>
+    <div class="board-note2">
+      Отпечатки не врут.<br>Виновник всегда<br>оставляет след.
+    </div>
+
+    <!-- СЕТКА ДЕЛ (z-index:2) -->
+    <div class="files-grid">
+      <a href="https://raven-hd.github.io/gift/huff/2026/case01.html" class="file-card" style="--rot:-2deg; --pin-color:#c44; --tab-color:#d4a050;">
+        <div class="file-tab">Дело №01</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 001</div>
+          <div class="file-title">Тайна вырванного квадрата</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Лужайка перед окнами</div>
+        </div>
+        <div class="file-qmark">?</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case02.html" class="file-card" style="--rot:1.5deg; --pin-color:#4a90d9; --tab-color:#c4d870;">
+        <div class="file-tab">Дело №02</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 002</div>
+          <div class="file-title">Тепличный вандал</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Главная теплица</div>
+        </div>
+        <div class="file-qmark">?</div>
+        <div class="file-classified">Срочно</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case03.html" class="file-card" style="--rot:-1deg; --pin-color:#50a050; --tab-color:#e8a070;">
+        <div class="file-tab">Дело №03</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 003</div>
+          <div class="file-title">Липкое дельце</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Кухня</div>
+        </div>
+        <div class="file-qmark">?</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case04.html" class="file-card" style="--rot:2.5deg; --pin-color:#c44; --tab-color:#a0c0d4;">
+        <div class="file-tab">Дело №04</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 004</div>
+          <div class="file-title">Этюд в пыли и муке</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Хозяйственный уголок</div>
+        </div>
+        <div class="file-qmark">?</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case05.html" class="file-card" style="--rot:-3deg; --pin-color:#d4a050; --tab-color:#d4b0e0;">
+        <div class="file-tab">Дело №05</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 005</div>
+          <div class="file-title">Шепот каменного сада</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Сад камней</div>
+        </div>
+        <div class="file-qmark">?</div>
+        <div class="file-classified">Срочно</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case06.html" class="file-card" style="--rot:1deg; --pin-color:#50a050; --tab-color:#d4a050;">
+        <div class="file-tab">Дело №06</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 006</div>
+          <div class="file-title">Внимание, облачно</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Лагуна</div>
+        </div>
+        <div class="file-qmark">?</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case07.html" class="file-card" style="--rot:-2deg; --pin-color:#c44; --tab-color:#c4d870;">
+        <div class="file-tab">Дело №07</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 007</div>
+          <div class="file-title">Знаки на стене</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Малая Вербеновая гостиная</div>
+        </div>
+        <div class="file-qmark">?</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case08.html" class="file-card" style="--rot:3deg; --pin-color:#4a90d9; --tab-color:#e8a070;">
+        <div class="file-tab">Дело №08</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 008</div>
+          <div class="file-title">Дело о мебельном хищнике</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Комната Всегоделанья</div>
+        </div>
+        <div class="file-qmark">?</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case09.html" class="file-card" style="--rot:-1.5deg; --pin-color:#d4a050; --tab-color:#a0c0d4;">
+        <div class="file-tab">Дело №09</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 009</div>
+          <div class="file-title">Тот самый след</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Загон с верблюдом мисс Унсет</div>
+        </div>
+        <div class="file-qmark">?</div>
+        <div class="file-classified">Особо опасный</div>
+      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case10.html" class="file-card" style="--rot:2deg; --pin-color:#c44; --tab-color:#d4b0e0;">
+        <div class="file-tab">Дело №10</div>
+        <div class="file-body">
+          <div class="file-number">HGW · PUF · 010</div>
+          <div class="file-title">Чернильно черные пятна</div>
+          <div class="file-location"><i class="fas fa-map-pin"></i> Читальный зал</div>
+        </div>
+        <div class="file-qmark">?</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>День Пуффендуя · 2026 · С любовью, Когтевран</footer>
+
+<script>
+  const fadeElements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, idx) => {
+      if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('visible'), idx * 100);
+    });
+  }, { threshold: 0.15 });
+  fadeElements.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
