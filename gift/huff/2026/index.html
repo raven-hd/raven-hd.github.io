@@ -134,7 +134,7 @@
     min-height: 700px;
   }
 
-  /* БУЛАВКИ */
+  /* БУЛАВКИ (для нитей) */
   .pin {
     position: absolute;
     transform: translate(-50%, -50%);
@@ -163,7 +163,7 @@
     opacity: 0.9;
   }
 
-  /* THREADS */
+  /* НИТИ */
   .threads {
     position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 6;
   }
@@ -272,6 +272,10 @@
     .files-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 110px; }
     .board-note { font-size: 11px; width: 170px; padding: 12px 14px; }
     .board-note2 { font-size: 10px; width: 150px; padding: 10px 12px; }
+    /* Мобильные: убираем красные нити и булавки, которые их соединяют */
+    .threads, .pin {
+      display: none;
+    }
   }
   @media (max-width: 600px) {
     .files-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 120px; }
@@ -284,7 +288,7 @@
     .files-grid { grid-template-columns: 1fr; }
   }
 </style>
-<!-- ⭐ Раннее скрытие интро при переходе по якорю #board (без мерцания) -->
+<!-- Раннее скрытие интро при переходе по якорю #board (без мерцания) -->
 <script>
   (function() {
     if (window.location.hash === '#board') {
@@ -359,8 +363,10 @@
     <div class="pin" style="left:46.67%;top:70%;" data-size="small"></div>
     <div class="pin" style="left:66.67%;top:57.14%;" data-size="small"></div>
     <div class="pin" style="left:85.83%;top:75.71%;" data-size="small"></div>
+
     <div class="board-note">Всего 10 дел.<br>У каждого — своя лупа.<br>Удачи, детективы!</div>
     <div class="board-note2">Отпечатки не врут.<br>Виновник всегда<br>оставляет след.</div>
+
     <div class="files-grid">
       <a href="https://raven-hd.github.io/gift/huff/2026/case01.html" class="file-card" style="--rot:-2deg; --pin-color:#c44; --tab-color:#d4a050;"><div class="file-tab">Дело №01</div><div class="file-body"><div class="file-number">HGW · PUF · 001</div><div class="file-title">Тайна вырванного квадрата</div><div class="file-location"><i class="fas fa-map-pin"></i> Лужайка перед окнами</div></div><div class="file-qmark">?</div></a>
       <a href="https://raven-hd.github.io/gift/huff/2026/case02.html" class="file-card" style="--rot:1.5deg; --pin-color:#4a90d9; --tab-color:#c4d870;"><div class="file-tab">Дело №02</div><div class="file-body"><div class="file-number">HGW · PUF · 002</div><div class="file-title">Тепличный вандал</div><div class="file-location"><i class="fas fa-map-pin"></i> Главная теплица</div></div><div class="file-qmark">?</div><div class="file-classified">Срочно</div></a>
@@ -376,7 +382,7 @@
   </div>
 </div>
 
-<footer>День Пуффендуя 2026 · С любовью, Когтевран</footer>
+<footer>День Пуффендуя · 2026 · С любовью, Когтевран</footer>
 
 <script>
   const intro = document.getElementById('intro');
@@ -393,7 +399,6 @@
   }
 
   if (window.location.hash === '#board') {
-    // дополнительная защита: скрываем интро, если вдруг стиль не сработал
     if (intro) intro.classList.add('hidden');
     setTimeout(() => {
       const boardElement = document.getElementById('board');
