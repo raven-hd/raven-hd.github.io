@@ -81,7 +81,7 @@
   .header-badge img { width: 100px; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); transition: transform 0.2s; }
   .header-badge img:hover { transform: scale(1.05); }
 
-  /* LETTER — весь текст на Alegreya */
+  /* LETTER */
   .letter-wrap { max-width: 780px; margin: 60px auto 0; padding: 0 24px; }
   .letter {
     background: var(--paper); padding: 48px 56px; position: relative;
@@ -134,7 +134,7 @@
     min-height: 700px;
   }
 
-  /* БУЛАВКИ — HTML-элементы, не искажаются при масштабировании */
+  /* БУЛАВКИ */
   .pin {
     position: absolute;
     transform: translate(-50%, -50%);
@@ -163,7 +163,7 @@
     opacity: 0.9;
   }
 
-  /* THREADS — поверх карточек */
+  /* THREADS */
   .threads {
     position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 6;
   }
@@ -220,16 +220,15 @@
     border-radius: 3px;
   }
 
-  /* STICKERS — декоративные, z-index НИЖЕ карточек (z-index:1) и НИЖЕ нитей */
+  /* STICKERS */
   .board-note, .board-note2 {
     position: absolute; background: #fffde8; padding: 16px 20px;
     box-shadow: 3px 4px 10px rgba(0,0,0,0.3);
     font-family: 'SpecialEliteCyrillic', 'Alegreya', serif;
     font-size: 12px; color: var(--ink); line-height: 1.6;
-    z-index: 1; /* ниже карточек и нитей */
+    z-index: 1;
     letter-spacing: 0.3px; pointer-events: none;
   }
-  /* Равномерно по доске, разные углы, не перекрывают карточки */
   .board-note {
     top: 18px; left: 50%; transform: translateX(-50%) rotate(-5deg);
     width: 200px; font-size: 13px;
@@ -288,13 +287,14 @@
 </head>
 <body>
 
+<!-- ИНТРО -->
 <div id="intro">
   <div class="intro-logo-wrap">
     <img id="logo0" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/huff/2026/img/logo1.png" alt="ЛОГО">
     <img id="logo2" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/huff/2026/img/logo2.png" alt="БАРСУКОГ">
   </div>
   <div class="intro-btn-wrap">
-    <button class="intro-btn" onclick="document.getElementById('intro').classList.add('hidden')">Начать расследование</button>
+    <button class="intro-btn" id="startBtn">Начать расследование</button>
   </div>
 </div>
 
@@ -328,10 +328,8 @@
   <div class="board-label">— Материалы дел —</div>
   <div class="corkboard">
 
-    <!-- Красные нити поверх всего z-index:6 -->
     <div class="threads">
       <svg viewBox="0 0 1200 700" preserveAspectRatio="none" style="width:100%;height:100%;">
-        <!-- яркие нити -->
         <line x1="185" y1="95" x2="430" y2="210" stroke="#cc1111" stroke-width="1.8" opacity="0.85"/>
         <line x1="430" y1="210" x2="670" y2="130" stroke="#cc1111" stroke-width="1.8" opacity="0.85"/>
         <line x1="670" y1="130" x2="910" y2="255" stroke="#cc1111" stroke-width="1.8" opacity="0.85"/>
@@ -342,11 +340,9 @@
         <line x1="800" y1="400" x2="1030" y2="530" stroke="#cc1111" stroke-width="1.4" opacity="0.65"/>
         <line x1="430" y1="210" x2="560" y2="490" stroke="#aa0000" stroke-width="1.2" opacity="0.5"/>
         <line x1="670" y1="130" x2="800" y2="400" stroke="#aa0000" stroke-width="1.2" opacity="0.5"/>
-        <!-- булавки вынесены в HTML-элементы для сохранения формы при масштабировании -->
       </svg>
     </div>
 
-    <!-- Булавки как HTML-элементы — не искажаются при масштабировании -->
     <div class="pin" style="left:15.42%;top:13.57%;" data-size="large"></div>
     <div class="pin" style="left:35.83%;top:30%;" data-size="large"></div>
     <div class="pin" style="left:55.83%;top:18.57%;" data-size="large"></div>
@@ -357,7 +353,6 @@
     <div class="pin" style="left:66.67%;top:57.14%;" data-size="small"></div>
     <div class="pin" style="left:85.83%;top:75.71%;" data-size="small"></div>
 
-    <!-- Декоративные стикеры (z-index:1 — под карточками) -->
     <div class="board-note">
       Всего 10 дел.<br>У каждого — своя лупа.<br>Удачи, детективы!
     </div>
@@ -365,7 +360,6 @@
       Отпечатки не врут.<br>Виновник всегда<br>оставляет след.
     </div>
 
-    <!-- СЕТКА ДЕЛ (z-index:2) -->
     <div class="files-grid">
       <a href="https://raven-hd.github.io/gift/huff/2026/case01.html" class="file-card" style="--rot:-2deg; --pin-color:#c44; --tab-color:#d4a050;">
         <div class="file-tab">Дело №01</div>
@@ -467,6 +461,35 @@
 <footer>День Пуффендуя · 2026 · С любовью, Когтевран</footer>
 
 <script>
+  const intro = document.getElementById('intro');
+  const startBtn = document.getElementById('startBtn');
+
+  // Функция скрытия интро
+  function hideIntro() {
+    if (intro && !intro.classList.contains('hidden')) {
+      intro.classList.add('hidden');
+    }
+  }
+
+  // Обработчик кнопки
+  if (startBtn) {
+    startBtn.addEventListener('click', hideIntro);
+  }
+
+  // Проверяем URL при загрузке
+  if (window.location.hash === '#board') {
+    // Сразу скрываем интро
+    hideIntro();
+    // После скрытия (чтобы браузер успел перестроить layout) прокручиваем к доске
+    setTimeout(() => {
+      const boardElement = document.getElementById('board');
+      if (boardElement) {
+        boardElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  }
+
+  // Анимация появления элементов при скролле (fade-in)
   const fadeElements = document.querySelectorAll('.fade-in');
   const observer = new IntersectionObserver(entries => {
     entries.forEach((entry, idx) => {
