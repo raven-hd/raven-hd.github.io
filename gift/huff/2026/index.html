@@ -284,10 +284,19 @@
     .files-grid { grid-template-columns: 1fr; }
   }
 </style>
+<!-- ⭐ Раннее скрытие интро при переходе по якорю #board (без мерцания) -->
+<script>
+  (function() {
+    if (window.location.hash === '#board') {
+      var style = document.createElement('style');
+      style.textContent = '#intro { display: none !important; }';
+      document.head.appendChild(style);
+    }
+  })();
+</script>
 </head>
 <body>
 
-<!-- ИНТРО -->
 <div id="intro">
   <div class="intro-logo-wrap">
     <img id="logo0" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/huff/2026/img/logo1.png" alt="ЛОГО">
@@ -327,7 +336,6 @@
 <div id="board" class="board-section fade-in">
   <div class="board-label">— Материалы дел —</div>
   <div class="corkboard">
-
     <div class="threads">
       <svg viewBox="0 0 1200 700" preserveAspectRatio="none" style="width:100%;height:100%;">
         <line x1="185" y1="95" x2="430" y2="210" stroke="#cc1111" stroke-width="1.8" opacity="0.85"/>
@@ -342,7 +350,6 @@
         <line x1="670" y1="130" x2="800" y2="400" stroke="#aa0000" stroke-width="1.2" opacity="0.5"/>
       </svg>
     </div>
-
     <div class="pin" style="left:15.42%;top:13.57%;" data-size="large"></div>
     <div class="pin" style="left:35.83%;top:30%;" data-size="large"></div>
     <div class="pin" style="left:55.83%;top:18.57%;" data-size="large"></div>
@@ -352,135 +359,42 @@
     <div class="pin" style="left:46.67%;top:70%;" data-size="small"></div>
     <div class="pin" style="left:66.67%;top:57.14%;" data-size="small"></div>
     <div class="pin" style="left:85.83%;top:75.71%;" data-size="small"></div>
-
-    <div class="board-note">
-      Всего 10 дел.<br>У каждого — своя лупа.<br>Удачи, детективы!
-    </div>
-    <div class="board-note2">
-      Отпечатки не врут.<br>Виновник всегда<br>оставляет след.
-    </div>
-
+    <div class="board-note">Всего 10 дел.<br>У каждого — своя лупа.<br>Удачи, детективы!</div>
+    <div class="board-note2">Отпечатки не врут.<br>Виновник всегда<br>оставляет след.</div>
     <div class="files-grid">
-      <a href="https://raven-hd.github.io/gift/huff/2026/case01.html" class="file-card" style="--rot:-2deg; --pin-color:#c44; --tab-color:#d4a050;">
-        <div class="file-tab">Дело №01</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 001</div>
-          <div class="file-title">Тайна вырванного квадрата</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Лужайка перед окнами</div>
-        </div>
-        <div class="file-qmark">?</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case02.html" class="file-card" style="--rot:1.5deg; --pin-color:#4a90d9; --tab-color:#c4d870;">
-        <div class="file-tab">Дело №02</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 002</div>
-          <div class="file-title">Тепличный вандал</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Главная теплица</div>
-        </div>
-        <div class="file-qmark">?</div>
-        <div class="file-classified">Срочно</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case03.html" class="file-card" style="--rot:-1deg; --pin-color:#50a050; --tab-color:#e8a070;">
-        <div class="file-tab">Дело №03</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 003</div>
-          <div class="file-title">Липкое дельце</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Кухня</div>
-        </div>
-        <div class="file-qmark">?</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case04.html" class="file-card" style="--rot:2.5deg; --pin-color:#c44; --tab-color:#a0c0d4;">
-        <div class="file-tab">Дело №04</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 004</div>
-          <div class="file-title">Этюд в пыли и муке</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Хозяйственный уголок</div>
-        </div>
-        <div class="file-qmark">?</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case05.html" class="file-card" style="--rot:-3deg; --pin-color:#d4a050; --tab-color:#d4b0e0;">
-        <div class="file-tab">Дело №05</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 005</div>
-          <div class="file-title">Шепот каменного сада</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Сад камней</div>
-        </div>
-        <div class="file-qmark">?</div>
-        <div class="file-classified">Срочно</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case06.html" class="file-card" style="--rot:1deg; --pin-color:#50a050; --tab-color:#d4a050;">
-        <div class="file-tab">Дело №06</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 006</div>
-          <div class="file-title">Внимание, облачно</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Лагуна</div>
-        </div>
-        <div class="file-qmark">?</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case07.html" class="file-card" style="--rot:-2deg; --pin-color:#c44; --tab-color:#c4d870;">
-        <div class="file-tab">Дело №07</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 007</div>
-          <div class="file-title">Знаки на стене</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Малая Вербеновая гостиная</div>
-        </div>
-        <div class="file-qmark">?</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case08.html" class="file-card" style="--rot:3deg; --pin-color:#4a90d9; --tab-color:#e8a070;">
-        <div class="file-tab">Дело №08</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 008</div>
-          <div class="file-title">Дело о мебельном хищнике</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Комната Всегоделанья</div>
-        </div>
-        <div class="file-qmark">?</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case09.html" class="file-card" style="--rot:-1.5deg; --pin-color:#d4a050; --tab-color:#a0c0d4;">
-        <div class="file-tab">Дело №09</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 009</div>
-          <div class="file-title">Тот самый след</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Загон с верблюдом мисс Унсет</div>
-        </div>
-        <div class="file-qmark">?</div>
-        <div class="file-classified">ВАЖНО</div>
-      </a>
-      <a href="https://raven-hd.github.io/gift/huff/2026/case10.html" class="file-card" style="--rot:2deg; --pin-color:#c44; --tab-color:#d4b0e0;">
-        <div class="file-tab">Дело №10</div>
-        <div class="file-body">
-          <div class="file-number">HGW · PUF · 010</div>
-          <div class="file-title">Чернильно черные пятна</div>
-          <div class="file-location"><i class="fas fa-map-pin"></i> Читальный зал</div>
-        </div>
-        <div class="file-qmark">?</div>
-      </a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case01.html" class="file-card" style="--rot:-2deg; --pin-color:#c44; --tab-color:#d4a050;"><div class="file-tab">Дело №01</div><div class="file-body"><div class="file-number">HGW · PUF · 001</div><div class="file-title">Тайна вырванного квадрата</div><div class="file-location"><i class="fas fa-map-pin"></i> Лужайка перед окнами</div></div><div class="file-qmark">?</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case02.html" class="file-card" style="--rot:1.5deg; --pin-color:#4a90d9; --tab-color:#c4d870;"><div class="file-tab">Дело №02</div><div class="file-body"><div class="file-number">HGW · PUF · 002</div><div class="file-title">Тепличный вандал</div><div class="file-location"><i class="fas fa-map-pin"></i> Главная теплица</div></div><div class="file-qmark">?</div><div class="file-classified">Срочно</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case03.html" class="file-card" style="--rot:-1deg; --pin-color:#50a050; --tab-color:#e8a070;"><div class="file-tab">Дело №03</div><div class="file-body"><div class="file-number">HGW · PUF · 003</div><div class="file-title">Липкое дельце</div><div class="file-location"><i class="fas fa-map-pin"></i> Кухня</div></div><div class="file-qmark">?</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case04.html" class="file-card" style="--rot:2.5deg; --pin-color:#c44; --tab-color:#a0c0d4;"><div class="file-tab">Дело №04</div><div class="file-body"><div class="file-number">HGW · PUF · 004</div><div class="file-title">Этюд в пыли и муке</div><div class="file-location"><i class="fas fa-map-pin"></i> Хозяйственный уголок</div></div><div class="file-qmark">?</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case05.html" class="file-card" style="--rot:-3deg; --pin-color:#d4a050; --tab-color:#d4b0e0;"><div class="file-tab">Дело №05</div><div class="file-body"><div class="file-number">HGW · PUF · 005</div><div class="file-title">Шепот каменного сада</div><div class="file-location"><i class="fas fa-map-pin"></i> Сад камней</div></div><div class="file-qmark">?</div><div class="file-classified">Срочно</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case06.html" class="file-card" style="--rot:1deg; --pin-color:#50a050; --tab-color:#d4a050;"><div class="file-tab">Дело №06</div><div class="file-body"><div class="file-number">HGW · PUF · 006</div><div class="file-title">Внимание, облачно</div><div class="file-location"><i class="fas fa-map-pin"></i> Лагуна</div></div><div class="file-qmark">?</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case07.html" class="file-card" style="--rot:-2deg; --pin-color:#c44; --tab-color:#c4d870;"><div class="file-tab">Дело №07</div><div class="file-body"><div class="file-number">HGW · PUF · 007</div><div class="file-title">Знаки на стене</div><div class="file-location"><i class="fas fa-map-pin"></i> Малая Вербеновая гостиная</div></div><div class="file-qmark">?</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case08.html" class="file-card" style="--rot:3deg; --pin-color:#4a90d9; --tab-color:#e8a070;"><div class="file-tab">Дело №08</div><div class="file-body"><div class="file-number">HGW · PUF · 008</div><div class="file-title">Дело о мебельном хищнике</div><div class="file-location"><i class="fas fa-map-pin"></i> Комната Всегоделанья</div></div><div class="file-qmark">?</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case09.html" class="file-card" style="--rot:-1.5deg; --pin-color:#d4a050; --tab-color:#a0c0d4;"><div class="file-tab">Дело №09</div><div class="file-body"><div class="file-number">HGW · PUF · 009</div><div class="file-title">Тот самый след</div><div class="file-location"><i class="fas fa-map-pin"></i> Загон с верблюдом мисс Унсет</div></div><div class="file-qmark">?</div><div class="file-classified">ВАЖНО</div></a>
+      <a href="https://raven-hd.github.io/gift/huff/2026/case10.html" class="file-card" style="--rot:2deg; --pin-color:#c44; --tab-color:#d4b0e0;"><div class="file-tab">Дело №10</div><div class="file-body"><div class="file-number">HGW · PUF · 010</div><div class="file-title">Чернильно черные пятна</div><div class="file-location"><i class="fas fa-map-pin"></i> Читальный зал</div></div><div class="file-qmark">?</div></a>
     </div>
   </div>
 </div>
 
-<footer>День Пуффендуя · 2026 · С любовью, Когтевран</footer>
+<footer>День Пуффендуя 2026 · С любовью, Когтевран</footer>
 
 <script>
   const intro = document.getElementById('intro');
   const startBtn = document.getElementById('startBtn');
 
-  // Функция скрытия интро
   function hideIntro() {
     if (intro && !intro.classList.contains('hidden')) {
       intro.classList.add('hidden');
     }
   }
 
-  // Обработчик кнопки
   if (startBtn) {
     startBtn.addEventListener('click', hideIntro);
   }
 
-  // Проверяем URL при загрузке
   if (window.location.hash === '#board') {
-    // Сразу скрываем интро
-    hideIntro();
-    // После скрытия (чтобы браузер успел перестроить layout) прокручиваем к доске
+    // дополнительная защита: скрываем интро, если вдруг стиль не сработал
+    if (intro) intro.classList.add('hidden');
     setTimeout(() => {
       const boardElement = document.getElementById('board');
       if (boardElement) {
@@ -489,7 +403,6 @@
     }, 100);
   }
 
-  // Анимация появления элементов при скролле (fade-in)
   const fadeElements = document.querySelectorAll('.fade-in');
   const observer = new IntersectionObserver(entries => {
     entries.forEach((entry, idx) => {
