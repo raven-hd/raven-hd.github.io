@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Крыло Домовых Эльфов · Исторические портреты</title>
+<title>Зал Домовых Эльфов · Исторические портреты</title>
 <link rel="icon" type="image/x-icon" href="/gift/house-elf/2026/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -216,6 +216,262 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
 .collage-area::-webkit-scrollbar-track{background:rgba(0,0,0,0.3);border-radius:3px;}
 .collage-area::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:3px;}
 
+
+/* Стили для раздела прессы (десктоп) */
+.press-desktop-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;   /* обе карточки прижаты к верху → выровнены по высоте */
+  height: 100%;
+  width: 100%;
+}
+.press-card-large {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+/* Специальный класс для правой карточки (доска почёта) — увеличенный размер */
+.press-card-large-right {
+  max-width: 500px;
+}
+.press-card-large img,
+.press-card-large-right img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  background: transparent;
+}
+/* Фиксированная по высоте область изображения — одинаковая для билля и доски почёта,
+   благодаря чему плашки с описаниями начинаются на одной высоте (выровнены) */
+.press-img-box {
+  width: 100%;
+  height: 46vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.2rem;
+}
+.press-img-box img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  background: transparent;
+}
+.press-plate {
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(14,7,3,.93), rgba(20,10,4,.96));
+  border: 1px solid rgba(212,168,67,.3);
+  border-top: 2px solid var(--gold-dark);
+  border-bottom: 2px solid var(--gold-dark);
+  padding: 0.6rem 1.2rem 0.8rem;
+  position: relative;
+}
+.press-plate::before,
+.press-plate::after {
+  content: '✦';
+  position: absolute;
+  color: var(--gold-dark);
+  font-size: .55rem;
+  line-height: 1;
+}
+.press-plate::before { top: 5px; left: 8px; }
+.press-plate::after  { top: 5px; right: 8px; }
+.press-plate-name {
+  font-family: "Jura", sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+  color: var(--gold-light);
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+.press-plate-owner {
+  font-family: "Jura", sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  color: var(--gold-dark);
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 0.1rem;
+}
+.press-plate-rule {
+  width: 65%;
+  height: 1px;
+  margin: 0.3rem auto 0.4rem;
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+.press-plate-text {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  line-height: 1.45;
+  color: var(--cream-dim);
+  text-align: center;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139,105,20,.4) transparent;
+}
+.press-plate-text::-webkit-scrollbar {
+  width: 4px;
+}
+.press-plate-text::-webkit-scrollbar-track {
+  background: transparent;
+}
+.press-plate-text::-webkit-scrollbar-thumb {
+  background: rgba(139,105,20,.4);
+  border-radius: 4px;
+}
+.press-plate-text a {
+  color: var(--gold-light);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.press-plate-text a:hover {
+  color: var(--gold);
+}
+
+/* Глобальный заголовок для раздела прессы (центрированный) */
+.press-global-title {
+  position: absolute;
+  top: var(--header-h);
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 1.2rem 1rem 0.6rem;
+  z-index: 15;
+  pointer-events: none;
+}
+.press-global-title h2 {
+  font-family: "Jura", sans-serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: var(--gold-light);
+  text-shadow: 0 0 16px rgba(212,168,67,.45);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.press-global-title .subtitle {
+  font-family: "Jura", sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  color: var(--gold-dark);
+  letter-spacing: .04em;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+.press-global-title .rule {
+  width: 60%;
+  height: 1px;
+  margin: 0.5rem auto 0;
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+
+/* Отступ сверху под глобальный заголовок — ОДИНАКОВЫЙ для обеих панелей,
+   чтобы билль и доска почёта были выровнены по верхней кромке */
+.press-section-active .collage-area,
+.press-section-active .right-panel {
+  padding-top: calc(1rem + 64px);
+}
+
+/* Планшеты и мобильные / масштабированные экраны: пресса в одну колонку,
+   показывается одно изображение с листанием (как остальные портреты) */
+@media (max-width: 1100px) {
+  .press-section-active.museum-layout {
+    grid-template-columns: 1fr;
+  }
+  .press-section-active .left-panel {
+    display: none;
+  }
+  .press-section-active .right-panel {
+    padding-top: calc(1rem + 62px);
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+@media (max-width: 700px) {
+  .press-section-active .right-panel {
+    padding-top: calc(0.6rem + 56px);
+  }
+}
+
+/* Карусель прессы (планшеты / мобильные / масштабированные экраны):
+   одно изображение со стрелками-листалками */
+@media (max-width: 1100px) {
+  .press-section-active .detail-frame-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  .press-section-active .portrait-arrow {
+    background: transparent;
+    border: none;
+    color: rgba(212, 168, 67, 0.65);
+    font-size: 2.4rem;
+    font-weight: 300;
+    width: 48px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s, opacity 0.2s;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+    padding: 0;
+    line-height: 1;
+    font-family: serif;
+  }
+  .press-section-active .portrait-arrow:active {
+    color: var(--gold-light);
+    opacity: 0.9;
+  }
+  .press-section-active .portrait-arrow.disabled {
+    opacity: 0.15;
+    pointer-events: none;
+    color: rgba(212, 168, 67, 0.3);
+  }
+  .press-carousel-img {
+    max-width: 60vw;
+    max-height: 44vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    border-radius: 6px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    background: transparent;
+  }
+  .press-section-active .detail-info {
+    max-width: 88vw;
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 700px) {
+  .press-carousel-img {
+    max-width: 72vw;
+    max-height: 46vh;
+  }
+}
+
+
 .historic-grid{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
@@ -319,6 +575,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   max-width: 295px;
   max-height: 55vh;
 }
+.detail-frame-wrap img.inktober-portrait {
+  max-width: 420px;
+  max-height: 55vh;
+}
 
 .detail-info{
   width: 100%;
@@ -404,6 +664,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   color:var(--cream-dim);
   text-align:center;
   margin: 0;
+  white-space: pre-line;
+}
+.di-text a {
+  color: var(--gold-light);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+.di-text a:hover {
+  color: var(--gold);
 }
 
 /* Мобильная базовая адаптация */
@@ -422,7 +691,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     overflow-y: auto;
     overflow-x: hidden;
   }
-  /* Для тарелок особенно важно — большое изображение + длинный текст */
   .right-panel .detail-frame-wrap img {
     max-height: 42vh;
   }
@@ -479,6 +747,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     max-width: 45vw;
     max-height: 52vh;
   }
+  .detail-frame-wrap img.inktober-portrait {
+    max-width: 70vw;
+    max-height: 52vh;
+  }
   .nav-controls {
     gap: 2rem;
   }
@@ -499,6 +771,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   }
   .header-top {
     letter-spacing: 0.05em;
+  }
+  /* На мобильном глобальный заголовок прессы остаётся (показывается над каруселью) */
+  .press-global-title {
+    padding: 0.8rem 1rem 0.4rem;
   }
 }
 
@@ -534,7 +810,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   overflow: hidden;
 }
 
-/* Заголовок раздела моды */
 .fashion-title {
   flex-shrink: 0;
   text-align: center;
@@ -555,7 +830,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
 }
 
-/* Основная зона: стрелки + viewport слайдера */
 .fashion-stage {
   flex: 1;
   display: flex;
@@ -568,11 +842,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   padding: 0 0 0.8rem;
 }
 
-/* Viewport — обрезает то, что выезжает; ширина по содержимому тройки */
 .fashion-viewport {
   overflow: hidden;
   flex: 0 1 auto;
-  max-width: calc(3 * 18vw + 2 * 1.8rem); /* 3 манекена + 2 зазора */
+  max-width: calc(3 * 18vw + 2 * 1.8rem);
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -580,7 +853,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   box-sizing: border-box;
 }
 
-/* Лента всех манекенов — двигается через translateX */
 .fashion-track {
   display: flex;
   flex-direction: row;
@@ -589,10 +861,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   justify-content: center;
   will-change: transform;
   width: 100%;
-  /* transition задаётся динамически через JS */
 }
 
-/* Один манекен + плашка под ним */
 .fashion-unit {
   display: flex;
   flex-direction: column;
@@ -609,7 +879,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
 }
 
 .fashion-img {
-  max-height: 54vh;
+  max-height: 46vh;
   max-width: 18vw;
   width: auto;
   height: auto;
@@ -622,7 +892,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   transition: filter 0.2s;
 }
 
-/* Плашка под манекеном */
 .fashion-plate {
   width: 100%;
   background: linear-gradient(to bottom, rgba(14,7,3,.93), rgba(20,10,4,.96));
@@ -672,7 +941,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   line-height: 1.4;
   color: var(--cream-dim);
   text-align: center;
-  max-height: 80px;
+  max-height: 110px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(139,105,20,.4) transparent;
@@ -691,8 +960,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   cursor: pointer;
   flex-shrink: 0;
   width: 32px;
-  /* центрируем по изображению: 54vh / 2 минус половина кнопки */
-  margin-top: calc(27vh - 1.8rem);
+  margin-top: calc(23vh - 1.8rem);
   transition: color 0.2s, text-shadow 0.2s, transform 0.15s;
   display: flex;
   align-items: center;
@@ -709,6 +977,213 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
 }
 .fashion-arrow:disabled { opacity: 0.13; cursor: default; transform: none; }
 
+/* ══ ПУБЛИКАЦИИ: слайдер по принципу «Моды», по одной публикации ══ */
+.press-mode .left-panel { display: none; }
+.press-mode .museum-layout { grid-template-columns: 1fr; }
+.press-mode .right-panel {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.press-fashion-title {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 1.2rem 1rem 0.6rem;
+  width: 100%;
+}
+.press-fashion-title h2 {
+  font-family: "Jura", sans-serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: var(--gold-light);
+  text-shadow: 0 0 16px rgba(212,168,67,.45);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.press-fashion-title .subtitle {
+  font-family: "Jura", sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  color: var(--gold-dark);
+  letter-spacing: .04em;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+.press-fashion-title .rule {
+  width: 60%; height: 1px; margin: 0.5rem auto 0;
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+
+.press-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 0 0.8rem;
+}
+.press-viewport {
+  overflow: hidden;
+  flex: 0 1 auto;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+}
+.press-track {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  will-change: transform;
+  width: 100%;
+}
+.press-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 0 0 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0 0.4rem;
+}
+.press-unit-imgbox {
+  width: 100%;
+  height: 44vh;            /* фиксированная высота → плашка и стрелки не «прыгают» */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.press-unit-img {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 6px;
+  filter:
+    drop-shadow(0 0 18px rgba(255,210,120,.12))
+    drop-shadow(0 0 6px rgba(255,200,100,.08))
+    drop-shadow(8px 14px 32px rgba(0,0,0,.85));
+}
+.press-unit-plate {
+  width: 100%;
+  max-width: 540px;
+  background: linear-gradient(to bottom, rgba(14,7,3,.93), rgba(20,10,4,.96));
+  border: 1px solid rgba(212,168,67,.3);
+  border-top: 2px solid var(--gold-dark);
+  border-bottom: 2px solid var(--gold-dark);
+  padding: 0.6rem 1.2rem 0.8rem;
+  position: relative;
+  box-sizing: border-box;
+}
+.press-unit-plate::before, .press-unit-plate::after {
+  content: '✦';
+  position: absolute;
+  color: var(--gold-dark);
+  font-size: .55rem;
+  line-height: 1;
+}
+.press-unit-plate::before { top: 5px; left: 8px; }
+.press-unit-plate::after  { top: 5px; right: 8px; }
+.press-unit-name {
+  font-family: "Jura", sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+  color: var(--gold-light);
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+.press-unit-owner {
+  font-family: "Jura", sans-serif;
+  font-weight: 400;
+  font-size: clamp(0.6rem, 1vw, 0.75rem);
+  color: var(--gold-dark);
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 0.1rem;
+}
+.press-unit-rule {
+  width: 65%; height: 1px; margin: 0.3rem auto 0.4rem;
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+.press-unit-text {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  line-height: 1.45;
+  color: var(--cream-dim);
+  text-align: center;
+  max-height: 16vh;
+  overflow-y: auto;
+  padding-right: 0.4rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139,105,20,.4) transparent;
+}
+.press-unit-text::-webkit-scrollbar { width: 4px; }
+.press-unit-text::-webkit-scrollbar-track { background: transparent; }
+.press-unit-text::-webkit-scrollbar-thumb { background: rgba(139,105,20,.4); border-radius: 4px; }
+.press-unit-text a { color: var(--gold-light); text-decoration: underline; transition: color .2s; }
+.press-unit-text a:hover { color: var(--gold); }
+
+.press-arrow {
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  color: rgba(212,168,67,.8);
+  font-size: 3.6rem;
+  font-family: serif;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 32px;
+  margin-top: calc(22vh - 1.8rem);
+  transition: color 0.2s, text-shadow 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  text-shadow: 0 2px 10px rgba(0,0,0,.9);
+}
+.press-arrow:hover {
+  color: #f5d97a;
+  text-shadow: 0 0 20px rgba(212,168,67,0.9), 0 2px 10px rgba(0,0,0,.9);
+  transform: scale(1.18);
+}
+.press-arrow:disabled { opacity: 0.13; cursor: default; transform: none; }
+
+@media (max-width: 1100px) {
+  .press-arrow { font-size: 2.8rem; width: 44px; margin-top: calc(21vh - 1.4rem); }
+  .press-unit-imgbox { height: 42vh; }
+  .press-unit-img { max-width: 82vw; }
+  .press-viewport { max-width: 92vw; }
+  .press-unit-plate { max-width: 480px; }
+}
+@media (max-width: 700px) {
+  .press-arrow { font-size: 2.2rem; width: 34px; margin-top: calc(20vh - 1.2rem); }
+  .press-unit-imgbox { height: 40vh; }
+  .press-unit-img { max-width: 74vw; }
+  .press-unit-plate { max-width: 90vw; }
+  .press-unit-text { max-height: 20vh; }
+  .press-stage { gap: 0.2rem; padding-bottom: 0.5rem; }
+}
+
 /* ══ ФАКУЛЬТЕТСКИЕ ЭЛЬФЫ: двухрядная раскладка ══ */
 .faculty-layout {
   display: flex;
@@ -718,7 +1193,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   width: 100%;
   padding: 0.5rem 0.5rem 1rem;
 }
-/* Верхний ряд: Тедди + Плюш */
 .faculty-row-top {
   display: flex;
   flex-direction: row;
@@ -727,7 +1201,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   align-items: flex-end;
   width: 100%;
 }
-/* Нижний ряд: Нико + Эмма (крупнее) + Саму */
 .faculty-row-bottom {
   display: flex;
   flex-direction: row;
@@ -751,11 +1224,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   height: auto;
   border-radius: 3px;
 }
-/* Тедди и Саму — верхний ряд */
 .faculty-card-small img  { width: clamp(90px, 9vw, 195px); }
-/* Нико и Плюш — нижний ряд */
 .faculty-card-medium img { width: clamp(100px, 10vw, 210px); }
-/* Эмма — центр, крупнее */
 .faculty-card-large img  { width: clamp(130px, 13vw, 270px); }
 .faculty-card-large { align-self: flex-start; }
 
@@ -765,9 +1235,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   .faculty-card-large img  { width: clamp(110px, 17vw, 210px); }
 }
 
-/* убираем отдельный узкий-десктоп для faculty — clamp справляется */
-
-/* ══ УЗКИЙ ДЕСКТОП (1100–1350px) — уменьшаем манекены ══ */
 @media (min-width: 1101px) and (max-width: 1350px) {
   .fashion-img {
     max-height: 46vh;
@@ -783,8 +1250,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   .fashion-track { gap: 1.2rem; }
 }
 
-/* ══ ПЛАНШЕТЫ (до 1100px) И МОБИЛЬНАЯ АДАПТАЦИЯ ДЛЯ РАЗДЕЛА МОДЫ: 
-     делаем как с портретами исторических эльфов (вертикальная колонка, плашка с описанием НЕ фиксированной высоты) ══ */
 @media (max-width: 1100px) {
   .fashion-mode .right-panel {
     flex-direction: column;
@@ -796,16 +1261,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     width: 100%;
     justify-content: center;
   }
-  /* Убираем фиксированную высоту, плашка подстраивается под содержимое — логика исторических эльфов */
   .fashion-mode .detail-info {
-    max-width: 92%;
+    max-width: 46%;
     width: auto;
     height: auto;
     min-height: auto;
     flex: none;
   }
   .fashion-mode .detail-text-scroll {
-    max-height: 160px; /* комфортная прокрутка, но высота панели определяется контентом */
+    max-height: 160px;
   }
   .fashion-img {
     max-width: 65vw;
@@ -819,16 +1283,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     color: var(--gold-light);
     opacity: 0.8;
   }
-  /* На планшете показываем одного манекена */
   .fashion-pair { gap: 1rem; }
   .fashion-unit:last-child { display: none; }
   .fashion-img { max-width: 50vw; max-height: 52vh; }
 }
 
-/* ══ ПЛАНШЕТЫ 700–1100px ══ */
 @media (max-width: 1100px) and (min-width: 701px) {
   .right-panel {
-    overflow-y: hidden; /* скролл внутри плашки, не снаружи */
+    overflow-y: hidden;
     justify-content: flex-start;
     padding-top: 1.4rem;
     gap: 0.7rem;
@@ -841,7 +1303,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     max-width: 92%;
     width: auto;
     flex-shrink: 0;
-    /* ограничиваем высоту плашки чтобы текст скроллился внутри */
     max-height: 35vh;
     display: flex;
     flex-direction: column;
@@ -854,7 +1315,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   }
 }
 
-/* мобильная доработка: полностью единый стиль с историческими портретами (без зафиксированной высоты) */
 @media (max-width: 700px) {
   .fashion-mode .right-panel {
     flex-direction: column;
@@ -882,7 +1342,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   .fashion-mode .detail-text-scroll {
     max-height: 150px;
   }
-  /* Мобиль: тоже один манекен */
   .fashion-unit:last-child { display: none; }
   .fashion-plate { max-width: 90vw; min-width: unset; }
 }
@@ -900,7 +1359,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
       <div class="logo-text">КОГТЕВРАНСКИЙ<br>МУЗЕЙ</div>
     </div>
     <div class="header-center">
-      <div class="header-top">Крыло Домовых Эльфов</div>
+      <div class="header-top">Зал Домовых Эльфов</div>
     </div>
     <div class="header-placeholder"></div>
     <div class="header-rule"></div>
@@ -946,117 +1405,117 @@ const historicElves = [
 ];
 
 const platesElves = [
-  { 
-    id:'brummi', name:'Брумми', owner:'Хогвартс (мастер уюта)', 
-    fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/brummi.png',
-    text:'Брумми терпеть не может сидеть на месте и постоянно что-то чинит, таскает, переставляет или украшает. Если где-то в замке ночью слышится грохот, звон ведер и возмущённое «ой-ой-ой!», скорее всего это снова Брумми решил «сделать как лучше». Раньше он работал у семьи волшебников, которые держали маленькую лавку артефактов. Брумми помогал в мастерской и научился обращаться с магическими предметами. Хозяева сменили место жительства, а его попросту оставили. В Хогвартсе Дамблдора он оказался как раз во время подготовки к большому празднику. Пока преподаватели спорили, как украсить Большой зал, Брумми за одну ночь развесил сотни зачарованных фонариков, починил половину мебели и заставил старые доспехи танцевать в такт музыке. С тех пор он остался в замке и отвечает за всё, что связано с уютом и подготовкой мероприятий.'
-  },
-  { 
-    id:'tinker', name:'Тинкир', owner:'Библиотека Хогвартса', 
-    fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/tinker.png',
-    text:'Тинкир работает в библиотеке Хогвартса Дамблдора. Раньше он жил в доме одной пожилой волшебницы, у которой было много книг. Когда старушка отправилась к праотцам, он стал свободным и скитался по городам. Доподлинно не известно, как именно он нашёл Хогвартс, но однажды поздним вечером директор услышал странное шуршание между стеллажами. Среди груды книг сидел домовик, который пытался аккуратно подклеить порванный учебник нитками от собственной наволочки. Оказалось, Тинкир долго скитался после исчезновения своей хозяйки и в итоге прятался в библиотеке, потому что «книги не кричат и не обижают». Директор не стал прогонять его и предложил остаться — при условии, что никогда больше не прятаться. С тех пор Тинкир знает, где лежит каждая книга, ворчит на шумных студентов и ставит чай библиотекарям.'
-  },
-  { 
-    id:'rokki', name:'Рокки', owner:'Астрономическая башня', 
-    fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/rokki.png',
-    text:'Домовики шептались, что этот эльф прибыл с Луны. Возможно, так оно и есть, ведь как иначе объяснить ту любовь к звёздам, что хранит в себе Рокки? Он любит всё время проводить в астрономической башне, любоваться планетами, считать звёзды и искать созвездия. Для этого он приобрёл свой личный телескоп на вырученные галлеоны за порядок, что он поддерживает в астрономической башне. Рокки — настоящий хранитель звёздного неба над школой.'
-  },
-  { 
-    id:'romashka', name:'Ромашка', owner:'Оранжерея Хогвартса', 
-    fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/romashka.png',
-    text:'Её часто можно встретить в школьной оранжерее, так как она не может пройти мимо любого растения и не полюбоваться им. Ромашка следит за чистотой и порядком в школьной оранжерее, а также в садах и парках окрестностей Хогвартса Дамблдора. Любовь к растениям передалась ей от родителей, которые тоже когда-то присматривали за цветниками волшебной школы. Благодаря её заботе, даже самые капризные магические цветы чувствуют себя превосходно.'
-  }
+  { id:'brummi', name:'Брумми', owner:'Хогвартс (мастер уюта)', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/brummi.png', text:'Брумми терпеть не может сидеть на месте и постоянно что-то чинит, таскает, переставляет или украшает. Если где-то в замке ночью слышится грохот, звон ведер и возмущённое «ой-ой-ой!», скорее всего это снова Брумми решил «сделать как лучше». Раньше он работал у семьи волшебников, которые держали маленькую лавку артефактов. Брумми помогал в мастерской и научился обращаться с магическими предметами. Хозяева сменили место жительства, а его попросту оставили. В Хогвартсе Дамблдора он оказался как раз во время подготовки к большому празднику. Пока преподаватели спорили, как украсить Большой зал, Брумми за одну ночь развесил сотни зачарованных фонариков, починил половину мебели и заставил старые доспехи танцевать в такт музыке. С тех пор он остался в замке и отвечает за всё, что связано с уютом и подготовкой мероприятий.' },
+  { id:'tinker', name:'Тинкир', owner:'Библиотека Хогвартса', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/tinker.png', text:'Тинкир работает в библиотеке Хогвартса Дамблдора. Раньше он жил в доме одной пожилой волшебницы, у которой было много книг. Когда старушка отправилась к праотцам, он стал свободным и скитался по городам. Доподлинно не известно, как именно он нашёл Хогвартс, но однажды поздним вечером директор услышал странное шуршание между стеллажами. Среди груды книг сидел домовик, который пытался аккуратно подклеить порванный учебник нитками от собственной наволочки. Оказалось, Тинкир долго скитался после исчезновения своей хозяйки и в итоге прятался в библиотеке, потому что «книги не кричат и не обижают». Директор не стал прогонять его и предложил остаться — при условии, что никогда больше не прятаться. С тех пор Тинкир знает, где лежит каждая книга, ворчит на шумных студентов и ставит чай библиотекарям.' },
+  { id:'rokki', name:'Рокки', owner:'Астрономическая башня', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/rokki.png', text:'Домовики шептались, что этот эльф прибыл с Луны. Возможно, так оно и есть, ведь как иначе объяснить ту любовь к звёздам, что хранит в себе Рокки? Он любит всё время проводить в астрономической башне, любоваться планетами, считать звёзды и искать созвездия. Для этого он приобрёл свой личный телескоп на вырученные галлеоны за порядок, что он поддерживает в астрономической башне. Рокки — настоящий хранитель звёздного неба над школой.' },
+  { id:'romashka', name:'Ромашка', owner:'Оранжерея Хогвартса', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/romashka.png', text:'Её часто можно встретить в школьной оранжерее, так как она не может пройти мимо любого растения и не полюбоваться им. Ромашка следит за чистотой и порядком в школьной оранжерее, а также в садах и парках окрестностей Хогвартса Дамблдора. Любовь к растениям передалась ей от родителей, которые тоже когда-то присматривали за цветниками волшебной школы. Благодаря её заботе, даже самые капризные магические цветы чувствуют себя превосходно.' }
 ];
 
 const facultyElves = [
-  {
-    id: 'teddy', name: 'Тедди', owner: 'Факультет Когтевран',
-    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/teddi2.png',
-    text: 'Появился в башне в 2013 году после нападения Жуткого Нечто и с тех пор стал главным эльфом по когтевранской башне. На его плечах лежит всё хозяйство башни: комфорт гостей на мероприятиях, подарки студентам, ремонт и уборка комнат, помощь старостам в организации развлечений.'
-  },
-  {
-    id: 'plush', name: 'Плюш', owner: 'Факультет Гриффиндор',
-    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/plush.png',
-    text: 'Появился на факультете после открытия теплиц и теперь занимается их благоустройством, помогая студентам и не только выращивать свои культуры.'
-  },
-  {
-    id: 'niko', name: 'Нико', owner: 'Факультет Слизерин',
-    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/niko.png',
-    text: 'Очень полезный эльф. Любит порядок, чистоту и аккуратность — и уборку тоже. Занимается жилым крылом и вообще обстановкой в Слизерине. Ведь и весьма милый, но когда речь о чистоте может быть немного душным.'
-  },
-  {
-    id: 'emma', name: 'Эмма', owner: 'Пуффендуй (временно)',
-    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/emma2.png',
-    text: 'Эльфийка, принадлежащая Женевьеве Ханнем (Пресли), но временно живёт в Пуффендуе, помогая декану Энни Мур. В основном занимается помощью в выращивании пуффендуйских гномов.'
-  },
-  {
-    id: 'samu', name: 'Саму', owner: 'Факультет Слизерин',
-    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/samu.png',
-    text: 'Ранее у него был хозяин, который скоропостижно скончался. Саму очень долго искал, что случилось — в итоге, с помощью студентов, выяснил, и остался в Слизерине. Очень добрая душа, а ещё весьма умный. Занимается помощью с мероприятиями, а ещё гостями: например, готовит кинотеатр под шоу костюм в честь Всадника Тыквовина.'
-  },
+  { id:'teddy', name:'Тедди', owner:'Факультет Когтевран', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/teddi2.png', text:'Появился в башне в 2013 году после нападения Жуткого Нечто и с тех пор стал главным эльфом по когтевранской башне. На его плечах лежит всё хозяйство башни: комфорт гостей на мероприятиях, подарки студентам, ремонт и уборка комнат, помощь старостам в организации развлечений.' },
+  { id:'plush', name:'Плюш', owner:'Факультет Гриффиндор', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/plush.png', text:'Появился на факультете после открытия теплиц и теперь занимается их благоустройством, помогая студентам и не только выращивать свои культуры.' },
+  { id:'niko', name:'Нико', owner:'Факультет Слизерин', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/niko.png', text:'Очень полезный эльф. Любит порядок, чистоту и аккуратность — и уборку тоже. Занимается жилым крылом и вообще обстановкой в Слизерине. Ведь и весьма милый, но когда речь о чистоте может быть немного душным.' },
+  { id:'emma', name:'Эмма', owner:'Пуффендуй (временно)', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/emma2.png', text:'Эльфийка, принадлежащая Женевьеве Ханнем (Пресли), но временно живёт в Пуффендуе, помогая декану Энни Мур. В основном занимается помощью в выращивании пуффендуйских гномов.' },
+  { id:'samu', name:'Саму', owner:'Факультет Слизерин', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/samu.png', text:'Ранее у него был хозяин, который скоропостижно скончался. Саму очень долго искал, что случилось — в итоге, с помощью студентов, выяснил, и остался в Слизерине. Очень добрая душа, а ещё весьма умный. Занимается помощью с мероприятиями, а ещё гостями: например, готовит кинотеатр под шоу костюм в честь Всадника Тыквовина.' },
 ];
 
+const OTHER = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/other/';
 const hogwartsElves = [
-  { id:'teddy', name:'Тедди', owner:'Кухни Хогвартса', text:'Легендарный повар Большого зала. Готовил пиры для четырёх факультетов.' },
-  { id:'thomas', name:'Томас', owner:'Подземелья', text:'Хранитель винных подвалов, знаток выдержанных элей.' }
+  { id:'winky2', name:'Винки №2', owner:'Хогвартс Дамблдора', fullImg: OTHER+'winky2.png', text:'Домовой эльф. Родилась в медном горшке на кухне Хогвартса, любит интересные поручения. Истинная кокетка, хоть и тщательно это скрывает. Страдает от тоски по другу. Перенесет статую Аполлона с 5 этажа на 1 за 0.1 секунды.\n\nОсобенности: добрая душа; любит бантики и морковные пироги; не любит Ганса.' },
+  { id:'tomas', name:'Томас', owner:'Хогвартс Дамблдора (покинул)', fullImg: OTHER+'tomas.png', text:'Эльф Ливы Унсет и выполнял её поручения. В данный момент покинул Хогвартс вместе с мисс Унсет, но является легендой Хогвартса Дамблдора после похищения.' },
+  { id:'gans', name:'Ганс', owner:'Хогвартс Дамблдора', fullImg: OTHER+'gans.png', text:'Домовой эльф, который вернулся два года назад из длительного отпуска (но это не точно — есть подозрение, что таким образом он просто проник в замок пожить), и с тех пор следит (когда есть на то настроение) за чистотой в замке. При этом, «следит» не равно «обеспечивает». В большинстве случаев просто ходит по замку и ворчит.\n\nОсобенности: ценит авторитет и чистоту; не ценит студентов; ворчлив только снаружи, внутри способен на тёплые чувства; дотошен.' },
 ];
 
 const BASE = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/fashion/';
 const fashionElves = [
   { id:'m_moda3', name:'Наряд №1',   owner:'', fullImg: BASE+'m_moda3.png', text:'—' },
-  { id:'h_moda2', name:'Наряд №2',   owner:'', fullImg: BASE+'h_moda2.png', text:'—' },
-  { id:'b_moda4', name:'Наряд №3',   owner:'', fullImg: BASE+'b_moda4.png', text:'—' },
+  { id:'h_moda2', name:'Наряд №2',   owner:'', fullImg: BASE+'h_moda2.png', text:'Выходное одеяние «Выходное». Когда Тедди тоже хочет отдыхать, а не наряжаться.' },
+  { id:'b_moda4', name:'Наряд №3',   owner:'', fullImg: BASE+'b_moda4.png', text:'Днём кажется обычной наволочкой, ничего необычного. Но ночью свет фонаря особенно пугающе путается в чёрных как смоль прядях парика, играет отблесками на звенящей в ночи цепи, а белоснежное одеяние некоторые не соблюдающие режим студенты путали с призраком Башни. Говорят, среди младшекурсников появилась легенда о домовике-полтергейсте.' },
   { id:'m_moda1', name:'Наряд №4',   owner:'', fullImg: BASE+'m_moda1.png', text:'—' },
-  { id:'p_moda1', name:'Наряд №5',   owner:'', fullImg: BASE+'p_moda1.png', text:'—' },
-  { id:'h_moda4', name:'Наряд №6',   owner:'', fullImg: BASE+'h_moda4.png', text:'—' },
-  { id:'b_moda2', name:'Наряд №7',   owner:'', fullImg: BASE+'b_moda2.png', text:'—' },
-  { id:'jb_moda1',name:'Наряд №8',   owner:'', fullImg: BASE+'jb_moda1.png', text:'—' },
+  { id:'p_moda1', name:'Наряд №5',   owner:'', fullImg: BASE+'p_moda1.png', text:'Кэжуал никогда не выходит из моды: практичность, удобство и уют — то, что привлекает волшебников всех возрастов. Домовики подхватили тренд на ugly-свитера и представили вязаную когтевранскую коллекцию шерстяного оверсайза.' },
+  { id:'h_moda4', name:'Наряд №6',   owner:'', fullImg: BASE+'h_moda4.png', text:'Стильное одеяние «Ценности». Когда настроение превозносить факультет, который опекаешь.' },
+  { id:'b_moda2', name:'Наряд №7',   owner:'', fullImg: BASE+'b_moda2.png', text:'Эксклюзив ко Дню Святого Валентина. Домовикам так понравилось перевоплощаться в купидонов, что розовая наволочка стала частью гардероба некоторых трудяжек. Всем хорошо: обитатели Башни радуются, домовики расширяют ассортимент новыми цветами. К следующему ДСВ обещают разнообразную палитру, а пока — любуемся розовым трикотажем и ищем ковёр-самолёт, который точно шёл в комплект к тапочкам.' },
+  { id:'jb_moda1',name:'Наряд №8',   owner:'', fullImg: BASE+'jb_moda1.png', text:'Мерчевые тапки «Домашние», потому что домовой эльф — это тот, кто создаёт домашний уют. С такими тапочками каждый когтевранец и когтевранка помнит о том, кто делает их дом лучше.' },
   { id:'m_moda5', name:'Наряд №9',   owner:'', fullImg: BASE+'m_moda5.png', text:'—' },
-  { id:'h_moda1', name:'Наряд №10',  owner:'', fullImg: BASE+'h_moda1.png', text:'—' },
-  { id:'b_moda1', name:'Наряд №11',  owner:'', fullImg: BASE+'b_moda1.png', text:'—' },
+  { id:'h_moda1', name:'Наряд №10',  owner:'', fullImg: BASE+'h_moda1.png', text:'Парадное одеяние «Элегантная простота». Когда нужно встречать в гостях приличное общество.' },
+  { id:'b_moda1', name:'Наряд №11',  owner:'', fullImg: BASE+'b_moda1.png', text:'Стиль кантри просили? Если не просили, то нуждались — как и наши домовики, предпочитающие дышащий хлопок и практичный лён. Материал для каждой ниточки в этом наряде был собран в саду на крыше Башни, переработан заботливыми ручками в ткань и представлен в виде коллекции, приуроченной к Фруктокогу. Классика фермерских луков, но со вкусом.' },
   { id:'m_moda6', name:'Наряд №12',  owner:'', fullImg: BASE+'m_moda6.png', text:'—' },
-  { id:'h_moda3', name:'Наряд №13',  owner:'', fullImg: BASE+'h_moda3.png', text:'—' },
+  { id:'h_moda3', name:'Наряд №13',  owner:'', fullImg: BASE+'h_moda3.png', text:'Неформальное одеяние «Символы». Когда дети опять что-то на своём лалакают, а ты модный, молодёжный и вообще +вайб.' },
   { id:'m_moda2', name:'Наряд №14',  owner:'', fullImg: BASE+'m_moda2.png', text:'—' },
-  { id:'b_moda3', name:'Наряд №15',  owner:'', fullImg: BASE+'b_moda3.png', text:'—' },
+  { id:'b_moda3', name:'Наряд №15',  owner:'', fullImg: BASE+'b_moda3.png', text:'Уже ни для кого не секрет, что домовики подхватывают тренды быстрее модных журналов. Только вошёл в моду восточный шик на ММХД’25, как на производстве увеличился запрос на шёлк и парчу. Роскошное напоминание о том, как это было: стильно, элегантно и в лучших традициях Востока. Запах специй и чёрного чая не выветрился до сих пор, потому этот экземпляр хранится под стеклом, как настоящее сокровище.' },
   { id:'m_moda4', name:'Наряд №16',  owner:'', fullImg: BASE+'m_moda4.png', text:'—' },
 ];
 
 const PASTA = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/pasta/';
 const pastaElves = [
+  { id:'pancho', name:'Панчо', owner:'Хогвартс (Дерево пожеланий)', fullImg: PASTA+'pancho.png', text:'Попал в Хогвартс по программе обмена домовиками из Перу. Никто не знает, проводилось ли это мероприятие на самом деле, ведь было это ещё во времена наших прадедов; но Панчо здесь, в Хогвартсе, и ответственно следит за Деревом пожеланий и садом (по выходным).' },
+  { id:'derish', name:'Дэриш', owner:'Хогвартс', fullImg: PASTA+'derish.png', text:'Уникальный и неповторимый свободный эльф Хогвартса. Свободным эльфом быть никогда не хотел, но был выбран общиной как самый эксцентричный — для поддержания статуса Хогвартса, потому что свободные эльфы это круто. Занимается чисткой каминов, поэтому сер, но при этом всегда держит в чистоте свою наволочку. А почему он ходит в наволочке, если он свободный эльф? Потому что его свобода отражается сказочными ПАНТАЛОНАМИ.\n\nОсобенности: знает 1001 притчу и 999 анекдотов (поэтому считается мудрым, а не смешным).' },
+  { id:'vorcun', name:'Ворчун', owner:'Сады и старые теплицы', fullImg: PASTA+'vorchun.png', text:'Вот уже несколько десятков лет он обитает в запутанных садах и старых теплицах. Растения отвечают ему преданностью: даже самый чахлый цветок под его пальцами тянется к свету. Ворчун не терпит суеты, предпочитает тишину, запах грозы и право провести целый день, перебирая корни и негромко ругая каждого, кто случайно наступит на грядку или заговорит громче шороха листвы.' },
+  { id:'mefisto', name:'Мефистофель', owner:'Архив школьной библиотеки', fullImg: PASTA+'mefistophel.png', text:'Работает в архиве школьной библиотеки. Питает слабость к древним свиткам, все записи ведёт в длинном свитке, бережно сворачивая в рулон. Обладает миролюбивым характером, пока все соблюдают тишину и правила пользования древними фолиантами.' },
+  { id:'otrits', name:"О'Трицания", owner:'Голова Блейк', fullImg: PASTA+"o'tritsaniya.png", text:'Блейкоэльф. Она главная в голове Блейк во время стройки музеев.' },
+];
+
+// ТВОРЧЕСТВО ХОГВОРТЧАН (INKTOBER)
+const inktoberElves = [
+  { id:'daniel', name:'СЕРЫЙ ЭЛЬФ', owner:'Даниэль Рейван', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/inktober/daniel.png', text:'Нарисовано в рамках мероприятия Inctober 2025.' },
+  { id:'luci',   name:'КРИЧАЩИЙ ЭЛЬФ', owner:'Люсиль Готвольф', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/inktober/luci.png', text:'Нарисовано в рамках мероприятия Inctober 2025.' },
+  { id:'kemerin',name:'САДОВЫЙ ЭЛЬФ', owner:'Кэмерин Ствайн', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/inktober/kemerin.png', text:'Нарисовано в рамках мероприятия Inctober 2025.' },
+  { id:'enny',   name:'ЧАЙНЫЙ ЭЛЬФ', owner:'Энни Мур', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/inktober/enny.png', text:'Нарисовано в рамках мероприятия Inctober 2025.' },
+  { id:'helena', name:'УСТАВШИЙ ЭЛЬФ', owner:'Хелена Кейн', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/inktober/helena.png', text:'Нарисовано в рамках мероприятия Inctober 2025.' },
+  { id:'luci2',  name:'ТЕДДИ', owner:'Люсиль Готвольф', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/inktober/luci2.png', text:'Подарок домовому Тедди от чистого сердца' }
+];
+
+// ПУБЛИКАЦИИ В «ОРАКУЛЕ»
+const pressElves = [
   {
-    id:'pancho', name:'Панчо', owner:'Хогвартс (Дерево пожеланий)',
-    fullImg: PASTA+'pancho.png',
-    text:'Попал в Хогвартс по программе обмена домовиками из Перу. Никто не знает, проводилось ли это мероприятие на самом деле, ведь было это ещё во времена наших прадедов; но Панчо здесь, в Хогвартсе, и ответственно следит за Деревом пожеланий и садом (по выходным).'
+    id: 'bill',
+    name: 'Билль о правах эльфов',
+    owner: 'Школьная газета «Оракул», 2023',
+    fullImg: 'https://oraclehd.wordpress.com/wp-content/uploads/2023/06/d18dd0bbd18cd184d18b.png?w=1640',
+    text: 'Билль о правах и свободах эльфов, опубликованный в 2023 году в школьной газете «Оракул» неравнодушными доброжелателями.'
+      + '<br><br>'
+      + '<a href="https://oraclehd.wordpress.com/2023/06/04/билль-эльфийских-прав-и-свобод/" target="_blank" rel="noopener noreferrer">📜 Читать в «Оракуле» →</a>'
   },
   {
-    id:'derish', name:'Дэриш', owner:'Хогвартс',
-    fullImg: PASTA+'derish.png',
-    text:'Его покусали Джарви, поэтому он любит на всех ругаться.'
-  },
-  {
-    id:'vorcun', name:'Ворчун', owner:'Сады и старые теплицы',
-    fullImg: PASTA+'vorchun.png',
-    text:'Вот уже несколько десятков лет он обитает в запутанных садах и старых теплицах. Растения отвечают ему преданностью: даже самый чахлый цветок под его пальцами тянется к свету. Ворчун не терпит суеты, предпочитает тишину, запах грозы и право провести целый день, перебирая корни и негромко ругая каждого, кто случайно наступит на грядку или заговорит громче шороха листвы.'
-  },
-  {
-    id:'mefisto', name:'Мефистофель', owner:'Архив школьной библиотеки',
-    fullImg: PASTA+'mefistophel.png',
-    text:'Работает в архиве школьной библиотеки. Питает слабость к древним свиткам, все записи ведёт в длинном свитке, бережно сворачивая в рулон. Обладает миролюбивым характером, пока все соблюдают тишину и правила пользования древними фолиантами.'
-  },
-  {
-    id:'otrits', name:"О'Трицания", owner:'Голова Блейк',
-    fullImg: PASTA+"o'tritsaniya.png",
-    text:'Блейкоэльф. Она главная в голове Блейк во время стройки музеев.'
-  },
+    id: 'congrats',
+    name: 'Доска почёта',
+    owner: 'Школьная газета «Оракул», 2023 · художник Блейк Эллингтон',
+    fullImg: 'https://oraclehd.wordpress.com/wp-content/uploads/2023/06/a496ab9f-ebfb-4c75-89b2-fda67b1d5b47.png',
+    text: 'Поздравление, подготовленное студентами Хогвартса Дамблдора и опубликованное три года назад ко Дню Домового Эльфа.<br><br>'
+      + '«В это первый летний день<br>'
+      + 'Встать пораньше нам не лень,<br>'
+      + 'Чтобы сказать спасибо вам —<br>'
+      + 'Эльфам, мол, Домовикам!<br><br>'
+      + 'Мы желаем вам здоровья,<br>'
+      + 'Долгих и счастливых лет!<br>'
+      + 'Чтобы не ведали вы горя,<br>'
+      + 'Чтоб не ведали вы бед!<br><br>'
+      + 'Чтобы был хозяин добрым,<br>'
+      + 'Чтоб к вам добр был студент,<br>'
+      + 'Чтобы каждый день — веселым<br>'
+      + 'Чтобы вкусным был обед.<br><br>'
+      + 'Чтоб как песнь лилась работа,<br>'
+      + 'Чтобы вам не уставать,<br>'
+      + 'Чтоб ценилась та забота,<br>'
+      + 'Что спешите отдавать.<br><br>'
+      + 'С праздником мы поздравляем,<br>'
+      + 'Очень-очень любим вас<br>'
+      + 'И от всей души желаем<br>'
+      + 'Всех вам благ и светлый час!»<br><br>'
+      + '— Гюго Хелвелл<br><br>'
+      + '<a href="https://oraclehd.wordpress.com/2023/06/01/хогвартс-ими-гордится/" target="_blank" rel="noopener noreferrer">📰 Читать в «Оракуле» →</a>'
+  }
 ];
 
 const sections = [
   { type:'historic', label:'Исторические эльфы',  data: historicElves },
   { type:'faculty',  label:'Факультетские эльфы', data: facultyElves },
-  { type:'default',  label:'Эльфы Хогвартса',     data: hogwartsElves },
+  { type:'hogwarts', label:'Эльфы Хогвартса Дамблдора', data: hogwartsElves },
   { type:'pasta',    label:'Эльфы в нашей жизни', subtitle:'(эльфы обнаруженные и нарисованные когтевранцами)', data: pastaElves },
   { type:'plates',   label:'Эльфы в нашей жизни', subtitle:'(эльфы обнаруженные и нарисованные когтевранцами)', data: platesElves },
+  { type:'inktober', label:'ТВОРЧЕСТВО ХОГВОРТЧАН', subtitle:'(INCTOBER)', data: inktoberElves },
   { type:'fashion',  label:'Мода',                 data: fashionElves },
+  { type:'press',    label:'Публикации в «Оракуле»', subtitle:'Школьная газета', data: pressElves }
 ];
 
 let currentSectionIdx = 0;
@@ -1064,6 +1523,7 @@ let currentItemId = null;
 
 const collageArea = document.getElementById('collageArea');
 const detailFrameWrap = document.getElementById('detailFrameWrap');
+const detailInfo = document.getElementById('detailInfo');
 const diName = document.getElementById('diName');
 const diOwner = document.getElementById('diOwner');
 const diText = document.getElementById('diText');
@@ -1072,9 +1532,169 @@ const navTabName = document.getElementById('navTabName');
 const btnPrev = document.getElementById('btnPrev');
 const btnNext = document.getElementById('btnNext');
 const navDots = document.getElementById('navDots');
+const rightPanel = document.getElementById('rightPanel');
+const museumLayout = document.querySelector('.museum-layout');
+
+let pressGlobalTitle = null;
 
 function isMobile()  { return window.innerWidth <= 700; }
 function isDesktop() { return window.innerWidth > 1100; }
+
+// ── РАЗДЕЛ «ПУБЛИКАЦИИ»: слайдер по принципу «Моды», по одной публикации ──
+let pressOffset = 0;
+let pressAnimating = false;
+
+// Единичный блок публикации: изображение + плашка (название/источник/текст)
+function makePressUnit(item) {
+  const unit = document.createElement('div');
+  unit.className = 'press-unit';
+
+  const imgBox = document.createElement('div');
+  imgBox.className = 'press-unit-imgbox';
+  const img = document.createElement('img');
+  img.src = item.fullImg;
+  img.alt = item.name;
+  img.className = 'press-unit-img';
+  imgBox.appendChild(img);
+  unit.appendChild(imgBox);
+
+  const plate = document.createElement('div');
+  plate.className = 'press-unit-plate';
+  const pName = document.createElement('div');
+  pName.className = 'press-unit-name';
+  pName.textContent = item.name;
+  plate.appendChild(pName);
+  if (item.owner) {
+    const pOwner = document.createElement('div');
+    pOwner.className = 'press-unit-owner';
+    pOwner.textContent = item.owner;
+    plate.appendChild(pOwner);
+  }
+  const rule = document.createElement('div');
+  rule.className = 'press-unit-rule';
+  plate.appendChild(rule);
+  const pText = document.createElement('div');
+  pText.className = 'press-unit-text';
+  pText.innerHTML = item.text;
+  plate.appendChild(pText);
+  unit.appendChild(plate);
+
+  return unit;
+}
+
+function updatePressArrows() {
+  const l = document.querySelector('.press-arrow-left');
+  const r = document.querySelector('.press-arrow-right');
+  if (l) l.disabled = (pressOffset <= 0);
+  if (r) r.disabled = (pressOffset >= pressElves.length - 1);
+}
+
+// Анимация листания (две дорожки уезжают/приезжают), как в «Моде», но по одному элементу
+function pressSlide(newOffset) {
+  if (pressAnimating || newOffset === pressOffset) return;
+  const track = document.querySelector('.press-track');
+  if (!track) return;
+  const direction = newOffset > pressOffset ? 1 : -1;
+  pressAnimating = true;
+  pressOffset = newOffset;
+  currentItemId = pressElves[pressOffset].id;
+
+  const newTrack = document.createElement('div');
+  newTrack.className = 'press-track';
+  newTrack.style.transition = 'none';
+  newTrack.style.transform = `translateX(${direction * 100}%)`;
+  newTrack.appendChild(makePressUnit(pressElves[pressOffset]));
+
+  const viewport = document.querySelector('.press-viewport');
+  const vRect = viewport.getBoundingClientRect();
+  viewport.style.width = vRect.width + 'px';
+  viewport.style.height = vRect.height + 'px';
+  viewport.style.position = 'relative';
+  track.style.position = 'absolute';
+  track.style.top = '0'; track.style.left = '0'; track.style.width = '100%';
+  newTrack.style.position = 'absolute';
+  newTrack.style.top = '0'; newTrack.style.left = '0'; newTrack.style.width = '100%';
+  viewport.appendChild(newTrack);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const dur = '380ms';
+      const ease = 'cubic-bezier(0.4, 0, 0.2, 1)';
+      track.style.transition = `transform ${dur} ${ease}`;
+      newTrack.style.transition = `transform ${dur} ${ease}`;
+      track.style.transform = `translateX(${-direction * 100}%)`;
+      newTrack.style.transform = 'translateX(0)';
+      track.addEventListener('transitionend', () => {
+        track.remove();
+        newTrack.style.position = '';
+        newTrack.style.top = ''; newTrack.style.left = ''; newTrack.style.width = '';
+        viewport.style.position = '';
+        viewport.style.width = ''; viewport.style.height = '';
+        pressAnimating = false;
+        updatePressArrows();
+      }, { once: true });
+    });
+  });
+  updatePressArrows();
+}
+
+// Рендер раздела «Публикации» как слайдер (одна публикация на экране)
+function renderPressSlider() {
+  // Режим как у «Моды»: одна колонка, левая панель скрыта
+  document.getElementById('museum').classList.add('press-mode');
+  museumLayout.classList.remove('press-section-active');
+  if (pressGlobalTitle) pressGlobalTitle.style.display = 'none';
+  const catTitleElem = document.querySelector('.left-panel .cat-title');
+  if (catTitleElem) catTitleElem.style.display = 'none';
+
+  // Текущий элемент
+  if (!pressElves.find(e => e.id === currentItemId)) currentItemId = pressElves[0].id;
+  pressOffset = Math.max(0, pressElves.findIndex(e => e.id === currentItemId));
+  pressAnimating = false;
+
+  // Деталь-панель не используется в этом режиме
+  detailInfo.style.display = 'none';
+  detailFrameWrap.style.display = 'none';
+
+  rightPanel.style.justifyContent = 'flex-start';
+  rightPanel.style.padding = '';
+  rightPanel.innerHTML = '';
+
+  const sec = sections[currentSectionIdx];
+  const subHtml = sec.subtitle ? `<div class="subtitle">${sec.subtitle}</div>` : '';
+  const titleEl = document.createElement('div');
+  titleEl.className = 'press-fashion-title';
+  titleEl.innerHTML = `<h2>${sec.label}</h2>${subHtml}<div class="rule"></div>`;
+
+  const stage = document.createElement('div');
+  stage.className = 'press-stage';
+
+  const leftArrow = document.createElement('button');
+  leftArrow.textContent = '‹';
+  leftArrow.className = 'press-arrow press-arrow-left';
+  leftArrow.disabled = (pressOffset <= 0);
+  leftArrow.onclick = () => { if (!pressAnimating) pressSlide(Math.max(0, pressOffset - 1)); };
+
+  const viewport = document.createElement('div');
+  viewport.className = 'press-viewport';
+  const track = document.createElement('div');
+  track.className = 'press-track';
+  track.appendChild(makePressUnit(pressElves[pressOffset]));
+  viewport.appendChild(track);
+
+  const rightArrow = document.createElement('button');
+  rightArrow.textContent = '›';
+  rightArrow.className = 'press-arrow press-arrow-right';
+  rightArrow.disabled = (pressOffset >= pressElves.length - 1);
+  rightArrow.onclick = () => { if (!pressAnimating) pressSlide(Math.min(pressElves.length - 1, pressOffset + 1)); };
+
+  stage.appendChild(leftArrow);
+  stage.appendChild(viewport);
+  stage.appendChild(rightArrow);
+
+  rightPanel.appendChild(titleEl);
+  rightPanel.appendChild(stage);
+}
 
 function renderPortrait(item) {
   if (!item) return;
@@ -1082,9 +1702,21 @@ function renderPortrait(item) {
   detailFrameWrap.innerHTML = '';
   const section = sections[currentSectionIdx];
   const isFashion = section.type === 'fashion';
+  const isInktober = section.type === 'inktober';
+  const isPress = section.type === 'press';
+  
+  if (isPress) {
+    renderPressSlider();
+    return;
+  }
+  
+  // Для остальных разделов: убираем класс отступа и глобальный заголовок
+  museumLayout.classList.remove('press-section-active');
+  if (pressGlobalTitle) pressGlobalTitle.style.display = 'none';
+  const catTitleElem = document.querySelector('.left-panel .cat-title');
+  if (catTitleElem) catTitleElem.style.display = '';
   
   if (mobile) {
-    // Мобильный формат: стрелки по бокам (как у исторических эльфов)
     const leftArrow = document.createElement('button');
     leftArrow.textContent = '‹';
     leftArrow.className = 'portrait-arrow';
@@ -1093,13 +1725,14 @@ function renderPortrait(item) {
     rightArrow.className = 'portrait-arrow';
     
     let img;
-    const hasImg = (section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta' || isFashion) && item.fullImg;
+    const hasImg = (section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta' || section.type === 'inktober' || isFashion) && item.fullImg;
     if (hasImg) {
       img = document.createElement('img');
       img.src = item.fullImg;
       img.alt = item.name;
       if (item.id === 'winky') img.classList.add('winky-portrait');
       if (isFashion) img.classList.add('fashion-img');
+      if (isInktober) img.classList.add('inktober-portrait');
     } else {
       img = document.createElement('div');
       img.style.fontSize = '4rem';
@@ -1119,14 +1752,11 @@ function renderPortrait(item) {
     rightArrow.onclick = (e) => { e.stopPropagation(); if(idx < data.length-1) selectItem(data[idx+1].id); };
   } 
   else {
-    // Десктоп (шире 1100px) — слайдер с тройками
     if (isFashion && item.fullImg && isDesktop()) {
       renderFashionDesktop(item);
       return;
     }
-    // Планшет/мобиль для fashion и всё остальное — стандартный вид
     if (isFashion && item.fullImg) {
-      // Одиночный манекен со стрелками (как у исторических, но fashion-img)
       const data = section.data;
       const idx = data.findIndex(i => i.id === currentItemId);
       const leftArrow = document.createElement('button');
@@ -1146,12 +1776,18 @@ function renderPortrait(item) {
       detailFrameWrap.appendChild(leftArrow);
       detailFrameWrap.appendChild(img);
       detailFrameWrap.appendChild(rightArrow);
+      // Заполняем плашку сразу здесь, чтобы не оставалось «чужого» описания
+      // из ранее просмотренного раздела (например, при изменении масштаба окна)
+      diName.textContent = item.name;
+      diOwner.textContent = item.owner || '';
+      diText.textContent = item.text;
     }
-    else if ((section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta') && item.fullImg) {
+    else if ((section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta' || section.type === 'hogwarts' || section.type === 'inktober') && item.fullImg) {
       const img = document.createElement('img');
       img.src = item.fullImg;
       img.alt = item.name;
       if (item.id === 'winky') img.classList.add('winky-portrait');
+      if (isInktober) img.classList.add('inktober-portrait');
       detailFrameWrap.appendChild(img);
     } 
     else {
@@ -1169,11 +1805,12 @@ function selectItem(id) {
   const item = section.data.find(i => i.id === id);
   if (!item) return;
   renderPortrait(item);
-  // Для fashion на десктопе плашки рендерятся внутри fashion-unit, не в detail-info
   if (section.type === 'fashion' && isDesktop()) return;
   diName.textContent = item.name;
   diOwner.textContent = item.owner || '';
-  diText.textContent = item.text;
+  if (section.type !== 'press') {
+    diText.textContent = item.text;
+  }
 }
 
 function createPlateCard(elf, className) {
@@ -1185,124 +1822,6 @@ function createPlateCard(elf, className) {
   img.alt = elf.name;
   card.appendChild(img);
   return card;
-}
-
-function renderCollage() {
-  const section = sections[currentSectionIdx];
-  collageArea.innerHTML = '';
-  if (section.type === 'historic') {
-    const grid = document.createElement('div'); grid.className = 'historic-grid';
-    const pohleba = section.data.find(e=>e.id==='pohleba');
-    const kreacher = section.data.find(e=>e.id==='kreacher');
-    const dobby = section.data.find(e=>e.id==='dobby');
-    const winky = section.data.find(e=>e.id==='winky');
-    const col1 = document.createElement('div'); col1.className='historic-col';
-    if(pohleba) col1.appendChild(createHistoricCard(pohleba));
-    const col2 = document.createElement('div'); col2.className='historic-col';
-    if(kreacher) col2.appendChild(createHistoricCard(kreacher));
-    if(dobby) col2.appendChild(createHistoricCard(dobby));
-    const col3 = document.createElement('div'); col3.className='historic-col';
-    if(winky) col3.appendChild(createHistoricCard(winky));
-    grid.append(col1, col2, col3);
-    collageArea.appendChild(grid);
-  } 
-  else if (section.type === 'pasta') {
-    const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.7rem;align-items:center;padding:0.5rem;width:100%;box-sizing:border-box;';
-
-    const col1 = document.createElement('div');
-    col1.style.cssText = 'display:flex;flex-direction:column;gap:0.7rem;align-items:center;';
-    const col2 = document.createElement('div');
-    col2.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;';
-    const col3 = document.createElement('div');
-    col3.style.cssText = 'display:flex;flex-direction:column;gap:0.7rem;align-items:center;';
-
-    // Порядок: col1 = Дэриш + Ворчун, col2 = Панчо, col3 = Мефистофель + О'Трицания
-    const pancho  = section.data.find(e => e.id === 'pancho');
-    const derish  = section.data.find(e => e.id === 'derish');
-    const vorcun  = section.data.find(e => e.id === 'vorcun');
-    const mefisto = section.data.find(e => e.id === 'mefisto');
-    const otrits  = section.data.find(e => e.id === 'otrits');
-
-    const mkCard = (elf, large) => {
-      const c = document.createElement('div');
-      c.style.cssText = 'cursor:pointer;transition:filter 0.2s,transform 0.2s;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.55));width:100%;display:flex;justify-content:center;';
-      c.onmouseenter = () => { c.style.filter='drop-shadow(0 0 16px rgba(212,168,67,0.7))'; c.style.transform='scale(1.03)'; };
-      c.onmouseleave = () => { c.style.filter='drop-shadow(0 6px 14px rgba(0,0,0,0.55))'; c.style.transform=''; };
-      c.onclick = () => selectItem(elf.id);
-      const img = document.createElement('img');
-      img.src = elf.fullImg; img.alt = elf.name;
-      img.style.cssText = `width:${large ? '95%' : '80%'};height:auto;display:block;border-radius:3px;`;
-      c.appendChild(img);
-      return c;
-    };
-
-    if (derish)  col1.appendChild(mkCard(derish,  false));
-    if (vorcun)  col1.appendChild(mkCard(vorcun,  false));
-    if (pancho)  col2.appendChild(mkCard(pancho,  true));
-    if (mefisto) col3.appendChild(mkCard(mefisto, false));
-    if (otrits)  col3.appendChild(mkCard(otrits,  false));
-
-    wrapper.append(col1, col2, col3);
-    collageArea.appendChild(wrapper);
-  }
-  else if (section.type === 'plates') {
-    const data = section.data;
-    const chaoticContainer = document.createElement('div');
-    chaoticContainer.className = 'chaotic-layout';
-    chaoticContainer.appendChild(createPlateCard(data[0], 'plate-left'));
-    chaoticContainer.appendChild(createPlateCard(data[1], 'plate-right'));
-    chaoticContainer.appendChild(createPlateCard(data[2], 'plate-top'));
-    chaoticContainer.appendChild(createPlateCard(data[3], 'plate-bottom'));
-    collageArea.appendChild(chaoticContainer);
-  }
-  else if (section.type === 'faculty') {
-    const teddy  = section.data.find(e => e.id === 'teddy');
-    const plush  = section.data.find(e => e.id === 'plush');
-    const niko   = section.data.find(e => e.id === 'niko');
-    const emma   = section.data.find(e => e.id === 'emma');
-    const samu   = section.data.find(e => e.id === 'samu');
-
-    const layout = document.createElement('div');
-    layout.className = 'faculty-layout';
-
-    // Верхний ряд: Тедди  Саму
-    const rowTop = document.createElement('div');
-    rowTop.className = 'faculty-row-top';
-    if (teddy) rowTop.appendChild(createFacultyCard(teddy, 'faculty-card-small'));
-    if (samu) rowTop.appendChild(createFacultyCard(samu, 'faculty-card-small'));
-
-    // Нижний ряд: Нико  Эмма(крупная)  Плюш
-    const rowBottom = document.createElement('div');
-    rowBottom.className = 'faculty-row-bottom';
-    if (niko) rowBottom.appendChild(createFacultyCard(niko, 'faculty-card-medium'));
-    if (emma) rowBottom.appendChild(createFacultyCard(emma, 'faculty-card-large'));
-    if (plush) rowBottom.appendChild(createFacultyCard(plush, 'faculty-card-medium'));
-
-    layout.appendChild(rowTop);
-    layout.appendChild(rowBottom);
-    collageArea.appendChild(layout);
-  }
-  else {
-    const grid = document.createElement('div');
-    grid.style.display = 'grid';
-    grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))';
-    grid.style.gap = '1rem';
-    grid.style.padding = '0.5rem';
-    section.data.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'default-card';
-      card.style.background = 'rgba(0,0,0,0.4)';
-      card.style.borderRadius = '8px';
-      card.style.padding = '0.5rem';
-      card.style.textAlign = 'center';
-      card.style.cursor = 'pointer';
-      card.innerHTML = `<div style="font-size:3rem;">🧝</div><div style="font-family:Jura,sans-serif;color:var(--gold-light);">${item.name}</div>`;
-      card.onclick = () => selectItem(item.id);
-      grid.appendChild(card);
-    });
-    collageArea.appendChild(grid);
-  }
 }
 
 function createHistoricCard(elf) {
@@ -1327,7 +1846,151 @@ function createFacultyCard(elf, sizeClass) {
   return card;
 }
 
-// Определяем модельера по префиксу id
+function renderCollage() {
+  const section = sections[currentSectionIdx];
+  collageArea.innerHTML = '';
+  
+  // Восстанавливаем стандартный вид правой панели для не-press разделов
+  if (section.type !== 'press') {
+    detailInfo.style.display = '';
+    detailFrameWrap.style.display = '';
+    rightPanel.style.justifyContent = 'center';
+    rightPanel.style.padding = '1rem 1.2rem';
+    rightPanel.innerHTML = '';
+    rightPanel.appendChild(detailFrameWrap);
+    rightPanel.appendChild(detailInfo);
+  }
+  
+  if (section.type === 'press') {
+    renderPressSlider();
+    return;
+  }
+  
+  if (section.type === 'historic') {
+    const grid = document.createElement('div'); grid.className = 'historic-grid';
+    const pohleba = section.data.find(e=>e.id==='pohleba');
+    const kreacher = section.data.find(e=>e.id==='kreacher');
+    const dobby = section.data.find(e=>e.id==='dobby');
+    const winky = section.data.find(e=>e.id==='winky');
+    const col1 = document.createElement('div'); col1.className='historic-col';
+    if(pohleba) col1.appendChild(createHistoricCard(pohleba));
+    const col2 = document.createElement('div'); col2.className='historic-col';
+    if(kreacher) col2.appendChild(createHistoricCard(kreacher));
+    if(dobby) col2.appendChild(createHistoricCard(dobby));
+    const col3 = document.createElement('div'); col3.className='historic-col';
+    if(winky) col3.appendChild(createHistoricCard(winky));
+    grid.append(col1, col2, col3);
+    collageArea.appendChild(grid);
+  } 
+  else if (section.type === 'pasta') {
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.7rem;align-items:center;padding:0.5rem;width:100%;box-sizing:border-box;';
+    const col1 = document.createElement('div'); col1.style.cssText = 'display:flex;flex-direction:column;gap:0.7rem;align-items:center;';
+    const col2 = document.createElement('div'); col2.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;';
+    const col3 = document.createElement('div'); col3.style.cssText = 'display:flex;flex-direction:column;gap:0.7rem;align-items:center;';
+    const pancho  = section.data.find(e => e.id === 'pancho');
+    const derish  = section.data.find(e => e.id === 'derish');
+    const vorcun  = section.data.find(e => e.id === 'vorcun');
+    const mefisto = section.data.find(e => e.id === 'mefisto');
+    const otrits  = section.data.find(e => e.id === 'otrits');
+    const mkCard = (elf, large) => {
+      const c = document.createElement('div');
+      c.style.cssText = 'cursor:pointer;transition:filter 0.2s,transform 0.2s;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.55));width:100%;display:flex;justify-content:center;';
+      c.onmouseenter = () => { c.style.filter='drop-shadow(0 0 16px rgba(212,168,67,0.7))'; c.style.transform='scale(1.03)'; };
+      c.onmouseleave = () => { c.style.filter='drop-shadow(0 6px 14px rgba(0,0,0,0.55))'; c.style.transform=''; };
+      c.onclick = () => selectItem(elf.id);
+      const img = document.createElement('img');
+      img.src = elf.fullImg; img.alt = elf.name;
+      img.style.cssText = `width:${large ? '95%' : '80%'};height:auto;display:block;border-radius:3px;`;
+      c.appendChild(img);
+      return c;
+    };
+    if (derish)  col1.appendChild(mkCard(derish,  false));
+    if (vorcun)  col1.appendChild(mkCard(vorcun,  false));
+    if (pancho)  col2.appendChild(mkCard(pancho,  true));
+    if (mefisto) col3.appendChild(mkCard(mefisto, false));
+    if (otrits)  col3.appendChild(mkCard(otrits,  false));
+    wrapper.append(col1, col2, col3);
+    collageArea.appendChild(wrapper);
+  }
+  else if (section.type === 'plates') {
+    const data = section.data;
+    const chaoticContainer = document.createElement('div');
+    chaoticContainer.className = 'chaotic-layout';
+    chaoticContainer.appendChild(createPlateCard(data[0], 'plate-left'));
+    chaoticContainer.appendChild(createPlateCard(data[1], 'plate-right'));
+    chaoticContainer.appendChild(createPlateCard(data[2], 'plate-top'));
+    chaoticContainer.appendChild(createPlateCard(data[3], 'plate-bottom'));
+    collageArea.appendChild(chaoticContainer);
+  }
+  else if (section.type === 'faculty') {
+    const teddy  = section.data.find(e => e.id === 'teddy');
+    const plush  = section.data.find(e => e.id === 'plush');
+    const niko   = section.data.find(e => e.id === 'niko');
+    const emma   = section.data.find(e => e.id === 'emma');
+    const samu   = section.data.find(e => e.id === 'samu');
+    const layout = document.createElement('div');
+    layout.className = 'faculty-layout';
+    const rowTop = document.createElement('div');
+    rowTop.className = 'faculty-row-top';
+    if (teddy) rowTop.appendChild(createFacultyCard(teddy, 'faculty-card-small'));
+    if (samu) rowTop.appendChild(createFacultyCard(samu, 'faculty-card-small'));
+    const rowBottom = document.createElement('div');
+    rowBottom.className = 'faculty-row-bottom';
+    if (niko) rowBottom.appendChild(createFacultyCard(niko, 'faculty-card-medium'));
+    if (emma) rowBottom.appendChild(createFacultyCard(emma, 'faculty-card-large'));
+    if (plush) rowBottom.appendChild(createFacultyCard(plush, 'faculty-card-medium'));
+    layout.appendChild(rowTop);
+    layout.appendChild(rowBottom);
+    collageArea.appendChild(layout);
+  }
+  else if (section.type === 'hogwarts') {
+    const winky2 = section.data.find(e => e.id === 'winky2');
+    const tomas  = section.data.find(e => e.id === 'tomas');
+    const gans   = section.data.find(e => e.id === 'gans');
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;flex-direction:row;align-items:center;justify-content:center;gap:0.6rem;padding:0.5rem;width:100%;box-sizing:border-box;';
+    const mkHCard = (elf, large) => {
+      const c = document.createElement('div');
+      c.style.cssText = `cursor:pointer;transition:filter 0.2s,transform 0.2s;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.55));flex:0 0 auto;width:${large ? '36%' : '28%'};`;
+      c.onmouseenter = () => { c.style.filter='drop-shadow(0 0 16px rgba(212,168,67,0.75))'; c.style.transform='scale(1.02)'; };
+      c.onmouseleave = () => { c.style.filter='drop-shadow(0 6px 14px rgba(0,0,0,0.55))'; c.style.transform=''; };
+      c.onclick = () => selectItem(elf.id);
+      const img = document.createElement('img');
+      img.src = elf.fullImg; img.alt = elf.name;
+      img.style.cssText = 'width:100%;height:auto;display:block;border-radius:3px;';
+      c.appendChild(img);
+      return c;
+    };
+    if (winky2) row.appendChild(mkHCard(winky2, false));
+    if (tomas)  row.appendChild(mkHCard(tomas,  true));
+    if (gans)   row.appendChild(mkHCard(gans,   false));
+    collageArea.appendChild(row);
+  }
+  else if (section.type === 'inktober') {
+    // Раскладка по принципу раздела "Исторические эльфы": сетка 3 колонки,
+    // выравнивание по верху, без вертикального центрирования.
+    const grid = document.createElement('div'); grid.className = 'historic-grid';
+    const daniel = section.data.find(e=>e.id==='daniel');
+    const luci   = section.data.find(e=>e.id==='luci');
+    const kemerin= section.data.find(e=>e.id==='kemerin');
+    const enny   = section.data.find(e=>e.id==='enny');
+    const helena = section.data.find(e=>e.id==='helena');
+    const luci2  = section.data.find(e=>e.id==='luci2');
+    const col1 = document.createElement('div'); col1.className='historic-col';
+    if (daniel) col1.appendChild(createHistoricCard(daniel));
+    if (luci)   col1.appendChild(createHistoricCard(luci));
+    const col2 = document.createElement('div'); col2.className='historic-col';
+    if (kemerin)col2.appendChild(createHistoricCard(kemerin));
+    if (enny)   col2.appendChild(createHistoricCard(enny));
+    const col3 = document.createElement('div'); col3.className='historic-col';
+    if (helena) col3.appendChild(createHistoricCard(helena));
+    if (luci2)  col3.appendChild(createHistoricCard(luci2));
+    grid.append(col1, col2, col3);
+    collageArea.appendChild(grid);
+  }
+}
+
 function getDesigner(id) {
   if (id.startsWith('jb_')) return 'Блейк и Джульетта Хелвелл-де-Кур';
   if (id.startsWith('h_'))  return 'Хелена Кейн';
@@ -1341,21 +2004,17 @@ function makeFashionUnit(item) {
   const unit = document.createElement('div');
   unit.className = 'fashion-unit';
   unit.onclick = () => slideFashionTo(fashionElves.findIndex(e => e.id === item.id));
-
   const img = document.createElement('img');
   img.src = item.fullImg;
   img.alt = item.name;
   img.className = 'fashion-img';
   unit.appendChild(img);
-
   const plate = document.createElement('div');
   plate.className = 'fashion-plate';
-
   const pName = document.createElement('div');
   pName.className = 'fashion-plate-name';
   pName.textContent = item.name;
   plate.appendChild(pName);
-
   const designer = getDesigner(item.id);
   if (designer) {
     const pDes = document.createElement('div');
@@ -1363,64 +2022,48 @@ function makeFashionUnit(item) {
     pDes.textContent = designer;
     plate.appendChild(pDes);
   }
-
   const rule = document.createElement('div');
   rule.className = 'fashion-plate-rule';
   plate.appendChild(rule);
-
   const pText = document.createElement('p');
   pText.className = 'fashion-plate-text';
   pText.textContent = item.text;
   plate.appendChild(pText);
-
   unit.appendChild(plate);
   return unit;
 }
 
-// Текущий индекс начала видимой тройки
 let fashionOffset = 0;
 let fashionAnimating = false;
 
 function slideFashionTo(targetIdx) {
   const newOffset = Math.floor(targetIdx / 3) * 3;
-  if (newOffset !== fashionOffset) {
-    fashionSlide(newOffset);
-  }
+  if (newOffset !== fashionOffset) fashionSlide(newOffset);
 }
 
 function fashionSlide(newOffset) {
   if (fashionAnimating) return;
   const track = document.querySelector('.fashion-track');
   if (!track) return;
-
   const direction = newOffset > fashionOffset ? 1 : -1;
   fashionAnimating = true;
   fashionOffset = newOffset;
-
   const newTrack = document.createElement('div');
   newTrack.className = 'fashion-track';
   newTrack.style.transition = 'none';
   newTrack.style.transform = `translateX(${direction * 100}%)`;
-
   const slice = fashionElves.slice(fashionOffset, fashionOffset + 3);
   slice.forEach(item => newTrack.appendChild(makeFashionUnit(item)));
-
   const viewport = document.querySelector('.fashion-viewport');
-
-  // Фиксируем размеры viewport перед анимацией, чтобы не схлопнулся
   const vRect = viewport.getBoundingClientRect();
   viewport.style.width  = vRect.width  + 'px';
   viewport.style.height = vRect.height + 'px';
   viewport.style.position = 'relative';
-
   track.style.position = 'absolute';
   track.style.top = '0'; track.style.left = '0'; track.style.width = '100%';
-
   newTrack.style.position = 'absolute';
   newTrack.style.top = '0'; newTrack.style.left = '0'; newTrack.style.width = '100%';
-
   viewport.appendChild(newTrack);
-
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       const dur = '380ms';
@@ -1429,10 +2072,8 @@ function fashionSlide(newOffset) {
       newTrack.style.transition = `transform ${dur} ${ease}`;
       track.style.transform    = `translateX(${-direction * 100}%)`;
       newTrack.style.transform = 'translateX(0)';
-
       track.addEventListener('transitionend', () => {
         track.remove();
-        // Снимаем фиксацию
         newTrack.style.position = '';
         newTrack.style.top = ''; newTrack.style.left = ''; newTrack.style.width = '';
         viewport.style.position = '';
@@ -1442,7 +2083,6 @@ function fashionSlide(newOffset) {
       }, { once: true });
     });
   });
-
   updateFashionArrows();
 }
 
@@ -1458,67 +2098,60 @@ function renderFashionDesktop(item) {
   const detailInfo = document.getElementById('detailInfo');
   detailInfo.style.display = 'none';
   detailFrameWrap.style.display = 'none';
-
-  // Если stage уже построен — только обновляем стрелки
   if (rightPanel.querySelector('.fashion-stage')) {
     updateFashionArrows();
     return;
   }
-
-  // Сбрасываем offset при первом входе в раздел
   fashionOffset = 0;
   fashionAnimating = false;
-
-  // Убираем старые элементы
   const oldStage = rightPanel.querySelector('.fashion-stage');
   if (oldStage) oldStage.remove();
   const oldTitle = rightPanel.querySelector('.fashion-title');
   if (oldTitle) oldTitle.remove();
-
-  // Заголовок
   const titleEl = document.createElement('div');
   titleEl.className = 'fashion-title';
   titleEl.innerHTML = '<h2>Эльфийская мода</h2><div class="rule"></div>';
-
-  // Stage
   const stage = document.createElement('div');
   stage.className = 'fashion-stage';
-
   const leftArrow = document.createElement('button');
   leftArrow.textContent = '‹';
   leftArrow.className = 'fashion-arrow fashion-arrow-left';
   leftArrow.disabled = true;
   leftArrow.onclick = () => { if (!fashionAnimating) fashionSlide(Math.max(0, fashionOffset - 3)); };
-
   const viewport = document.createElement('div');
   viewport.className = 'fashion-viewport';
-
   const track = document.createElement('div');
   track.className = 'fashion-track';
-
   const slice = fashionElves.slice(0, 3);
   slice.forEach(itm => track.appendChild(makeFashionUnit(itm)));
-
   viewport.appendChild(track);
-
   const rightArrow = document.createElement('button');
   rightArrow.textContent = '›';
   rightArrow.className = 'fashion-arrow fashion-arrow-right';
   rightArrow.disabled = (fashionElves.length <= 3);
   rightArrow.onclick = () => { if (!fashionAnimating) fashionSlide(fashionOffset + 3); };
-
   stage.appendChild(leftArrow);
   stage.appendChild(viewport);
   stage.appendChild(rightArrow);
-
   rightPanel.insertBefore(titleEl, rightPanel.firstChild);
   rightPanel.appendChild(stage);
 }
 
 function updateNav() {
   const sec = sections[currentSectionIdx];
-  const sub = sec.subtitle ? `<div class="subtitle">${sec.subtitle}</div>` : '';
-  catTitle.innerHTML = sec.label + sub;
+  // Для прессы заголовок обрабатывается отдельно, стандартный скрываем
+  if (sec.type !== 'press') {
+    const sub = sec.subtitle ? `<div class="subtitle">${sec.subtitle}</div>` : '';
+    catTitle.innerHTML = sec.label + sub;
+    // Показываем стандартный заголовок
+    const catTitleElem = document.querySelector('.left-panel .cat-title');
+    if (catTitleElem) catTitleElem.style.display = '';
+    if (pressGlobalTitle) pressGlobalTitle.style.display = 'none';
+    museumLayout.classList.remove('press-section-active');
+  } else {
+    // Для прессы заголовок создаётся в renderPressSlider
+    catTitle.innerHTML = ''; // очищаем
+  }
   navTabName.textContent = sec.label;
   updateBottomArrows();
   navDots.innerHTML = '';
@@ -1528,30 +2161,31 @@ function updateNav() {
     dot.onclick = () => goToSection(idx);
     navDots.appendChild(dot);
   });
-  const detailInfo = document.getElementById('detailInfo');
   const isFashion = sections[currentSectionIdx].type === 'fashion';
-
-  // Сбрасываем fashion-специфичные элементы при уходе
+  const isPress = sections[currentSectionIdx].type === 'press';
+  
   if (!isFashion || !isDesktop()) {
     fashionOffset = 0;
     fashionAnimating = false;
-    detailInfo.style.display = '';
-    detailFrameWrap.style.display = '';
+    if (!isPress) {
+      detailInfo.style.display = '';
+      detailFrameWrap.style.display = '';
+    }
     const rightPanel = document.getElementById('rightPanel');
     const oldStage = rightPanel.querySelector('.fashion-stage');
     if (oldStage) oldStage.remove();
     const oldTitle = rightPanel.querySelector('.fashion-title');
     if (oldTitle) oldTitle.remove();
   }
-
   if(detailInfo) detailInfo.classList.toggle('wide', sections[currentSectionIdx].type === 'plates');
-  collageArea.style.overflowY = (sections[currentSectionIdx].type === 'plates' || sections[currentSectionIdx].type === 'fashion' || sections[currentSectionIdx].type === 'faculty') ? 'hidden' : 'auto';
+  collageArea.style.overflowY = (sections[currentSectionIdx].type === 'plates' || sections[currentSectionIdx].type === 'fashion' || sections[currentSectionIdx].type === 'faculty' || sections[currentSectionIdx].type === 'press') ? 'hidden' : 'auto';
   document.getElementById('museum').classList.toggle('fashion-mode', sections[currentSectionIdx].type === 'fashion');
+  document.getElementById('museum').classList.toggle('press-mode', sections[currentSectionIdx].type === 'press');
   renderCollage();
   const data = sections[currentSectionIdx].data;
-  if(data.length) {
+  if(data.length && sections[currentSectionIdx].type !== 'press') {
     selectItem(data[0].id);
-  } else {
+  } else if (sections[currentSectionIdx].type !== 'press') {
     detailFrameWrap.innerHTML = '<div style="font-size:2rem;">🧹</div>';
     diName.textContent = '—';
     diOwner.textContent = '';
@@ -1584,7 +2218,15 @@ document.addEventListener('touchend', e => {
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = e.changedTouches[0].clientY - touchStartY;
   if (Math.abs(dx) < 40 || Math.abs(dy) > Math.abs(dx)) return;
-  const data = sections[currentSectionIdx].data;
+  const section = sections[currentSectionIdx];
+  // Публикации: листаем слайдером с анимацией
+  if (section.type === 'press') {
+    if (pressAnimating) return;
+    if (dx < 0) pressSlide(Math.min(pressElves.length - 1, pressOffset + 1));
+    if (dx > 0) pressSlide(Math.max(0, pressOffset - 1));
+    return;
+  }
+  const data = section.data;
   const idx = data.findIndex(i => i.id === currentItemId);
   if (dx < 0 && idx < data.length - 1) selectItem(data[idx + 1].id);
   if (dx > 0 && idx > 0) selectItem(data[idx - 1].id);
@@ -1595,10 +2237,12 @@ window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     renderCollage();
-    if (currentItemId) {
+    if (currentItemId && sections[currentSectionIdx].type !== 'press') {
       const section = sections[currentSectionIdx];
       const item = section.data.find(i => i.id === currentItemId);
-      if (item) renderPortrait(item);
+      // Используем selectItem, чтобы описание в плашке всегда соответствовало
+      // текущему экспонату (а не оставалось от предыдущего раздела)
+      if (item) selectItem(currentItemId);
     }
   }, 150);
 });
