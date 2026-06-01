@@ -900,7 +900,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
       <div class="logo-text">КОГТЕВРАНСКИЙ<br>МУЗЕЙ</div>
     </div>
     <div class="header-center">
-      <div class="header-top">Зал Домовых Эльфов</div>
+      <div class="header-top">Крыло Домовых Эльфов</div>
     </div>
     <div class="header-placeholder"></div>
     <div class="header-rule"></div>
@@ -996,23 +996,9 @@ const facultyElves = [
   },
 ];
 
-const OTHER = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/other/';
 const hogwartsElves = [
-  {
-    id:'winky2', name:'Винки №2', owner:'Хогвартс Дамблдора',
-    fullImg: OTHER+'winky2.png',
-    text:'Домовой эльф. Родилась в медном горшке на кухне Хогвартса, любит интересные поручения. Истинная кокетка, хоть и тщательно это скрывает. Страдает от тоски по другу. Перенесет статую Аполлона с 5 этажа на 1 за 0.1 секунды.\n\nОсобенности: добрая душа; любит бантики и морковные пироги; не любит Ганса.'
-  },
-  {
-    id:'tomas', name:'Томас', owner:'Хогвартс Дамблдора (покинул)',
-    fullImg: OTHER+'tomas.png',
-    text:'Эльф Ливы Унсет и выполнял её поручения. В данный момент покинул Хогвартс вместе с мисс Унсет, но является легендой Хогвартса Дамблдора после похищения.'
-  },
-  {
-    id:'gans', name:'Ганс', owner:'Хогвартс Дамблдора',
-    fullImg: OTHER+'gans.png',
-    text:'Домовой эльф, который вернулся два года назад из длительного отпуска (но это не точно — есть подозрение, что таким образом он просто проник в замок пожить), и с тех пор следит (когда есть на то настроение) за чистотой в замке. При этом, «следит» не равно «обеспечивает». В большинстве случаев просто ходит по замку и ворчит.\n\nОсобенности: ценит авторитет и чистоту; не ценит студентов; ворчлив только снаружи, внутри способен на тёплые чувства; дотошен.'
-  },
+  { id:'teddy', name:'Тедди', owner:'Кухни Хогвартса', text:'Легендарный повар Большого зала. Готовил пиры для четырёх факультетов.' },
+  { id:'thomas', name:'Томас', owner:'Подземелья', text:'Хранитель винных подвалов, знаток выдержанных элей.' }
 ];
 
 const BASE = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/fashion/';
@@ -1067,7 +1053,7 @@ const pastaElves = [
 const sections = [
   { type:'historic', label:'Исторические эльфы',  data: historicElves },
   { type:'faculty',  label:'Факультетские эльфы', data: facultyElves },
-  { type:'hogwarts', label:'Эльфы Хогвартса Дамблдора', data: hogwartsElves },
+  { type:'default',  label:'Эльфы Хогвартса',     data: hogwartsElves },
   { type:'pasta',    label:'Эльфы в нашей жизни', subtitle:'(эльфы обнаруженные и нарисованные когтевранцами)', data: pastaElves },
   { type:'plates',   label:'Эльфы в нашей жизни', subtitle:'(эльфы обнаруженные и нарисованные когтевранцами)', data: platesElves },
   { type:'fashion',  label:'Мода',                 data: fashionElves },
@@ -1161,7 +1147,7 @@ function renderPortrait(item) {
       detailFrameWrap.appendChild(img);
       detailFrameWrap.appendChild(rightArrow);
     }
-    else if ((section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta' || section.type === 'hogwarts') && item.fullImg) {
+    else if ((section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta') && item.fullImg) {
       const img = document.createElement('img');
       img.src = item.fullImg;
       img.alt = item.name;
@@ -1297,33 +1283,10 @@ function renderCollage() {
     layout.appendChild(rowBottom);
     collageArea.appendChild(layout);
   }
-  else if (section.type === 'hogwarts') {
-    const winky2 = section.data.find(e => e.id === 'winky2');
-    const tomas  = section.data.find(e => e.id === 'tomas');
-    const gans   = section.data.find(e => e.id === 'gans');
-
-    const row = document.createElement('div');
-    row.style.cssText = 'display:flex;flex-direction:row;align-items:flex-end;justify-content:center;gap:0.6rem;padding:0.5rem;width:100%;box-sizing:border-box;';
-
-    const mkHCard = (elf, large) => {
-      const c = document.createElement('div');
-      c.style.cssText = `cursor:pointer;transition:filter 0.2s,transform 0.2s;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.55));flex:0 0 auto;width:${large ? '36%' : '28%'};`;
-      c.onmouseenter = () => { c.style.filter='drop-shadow(0 0 16px rgba(212,168,67,0.75))'; c.style.transform='scale(1.02)'; };
-      c.onmouseleave = () => { c.style.filter='drop-shadow(0 6px 14px rgba(0,0,0,0.55))'; c.style.transform=''; };
-      c.onclick = () => selectItem(elf.id);
-      const img = document.createElement('img');
-      img.src = elf.fullImg; img.alt = elf.name;
-      img.style.cssText = 'width:100%;height:auto;display:block;border-radius:3px;';
-      c.appendChild(img);
-      return c;
-    };
-
-    if (winky2) row.appendChild(mkHCard(winky2, false));
-    if (tomas)  row.appendChild(mkHCard(tomas,  true));
-    if (gans)   row.appendChild(mkHCard(gans,   false));
-
-    collageArea.appendChild(row);
-  }
+  else {
+    const grid = document.createElement('div');
+    grid.style.display = 'grid';
+    grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))';
     grid.style.gap = '1rem';
     grid.style.padding = '0.5rem';
     section.data.forEach(item => {
