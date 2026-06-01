@@ -190,6 +190,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   letter-spacing:.08em;
   text-transform:uppercase;
 }
+.cat-title .subtitle {
+  font-family:"Jura", sans-serif;
+  font-weight:400;
+  font-size:clamp(0.6rem, 1vw, 0.75rem);
+  color:var(--gold-dark);
+  letter-spacing:.04em;
+  margin-top:0.25rem;
+  font-style:italic;
+}
 .cat-title .rule{
   width:60%;height:1px;margin:0.6rem auto 0.2rem;
   background:linear-gradient(to right,transparent,var(--gold-dark),transparent);
@@ -241,6 +250,41 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   background:rgba(0,0,0,0.2);
 }
 
+/* Хаотичная композиция для тарелок */
+.chaotic-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.3rem 0.2rem;
+  align-items: end;
+  justify-items: center;
+  width: 100%;
+  padding: 0.3rem 0.3rem 0.5rem;
+}
+.plate-card {
+  cursor: pointer;
+  transition: filter 0.2s ease;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
+  background: transparent;
+}
+.plate-card:hover {
+  filter: drop-shadow(0 0 22px rgba(212,168,67,0.8));
+}
+.plate-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.plate-left { width: 85%; grid-column: 1; grid-row: 1 / 3; align-self: center; }
+.plate-right { width: 95%; grid-column: 2; grid-row: 1; align-self: start; }
+.plate-top { width: 80%; grid-column: 3; grid-row: 1 / 3; align-self: center; }
+.plate-bottom { width: 72%; grid-column: 2; grid-row: 2; align-self: start; margin-top: 0.1rem; }
+
+@media (max-width: 700px) {
+  .chaotic-layout { gap: 0.2rem; }
+  .plate-left, .plate-top, .plate-right, .plate-bottom { width: 90%; }
+}
+
 .right-panel{
   display:flex;
   flex-direction:column;
@@ -288,6 +332,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  transition: max-width 0.3s ease;
+}
+.detail-info.wide {
+  max-width: 520px;
 }
 .detail-info::before,.detail-info::after{
   content:'✦';
@@ -333,7 +381,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   scrollbar-color: rgba(139, 105, 20, 0.4) transparent;
   margin-top: 0.1rem;
   padding-right: 0.3rem;
-  max-height: 120px;
+  max-height: 150px;
 }
 .detail-text-scroll::-webkit-scrollbar {
   width: 3px;
@@ -344,7 +392,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
 .detail-text-scroll::-webkit-scrollbar-thumb {
   background: rgba(139, 105, 20, 0.35);
   border-radius: 2px;
-  transition: background 0.3s;
 }
 .detail-text-scroll:hover::-webkit-scrollbar-thumb {
   background: rgba(212, 168, 67, 0.6);
@@ -359,7 +406,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   margin: 0;
 }
 
-/* Мобильные стрелки по бокам от портрета (без рамок и фона) */
+/* Мобильная базовая адаптация */
 @media (max-width: 700px) {
   .museum-layout {
     grid-template-columns: 1fr;
@@ -372,12 +419,21 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     gap: 0.6rem;
     justify-content: flex-start;
     padding-top: 1.2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  /* Для тарелок особенно важно — большое изображение + длинный текст */
+  .right-panel .detail-frame-wrap img {
+    max-height: 42vh;
   }
   .detail-info {
     max-width: 88vw;
+    flex-shrink: 0;
+  }
+  .detail-text-scroll {
+    max-height: 120px;
   }
   
-  /* Контейнер для портрета и боковых стрелок */
   .detail-frame-wrap {
     display: flex;
     flex-direction: row;
@@ -423,7 +479,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     max-width: 45vw;
     max-height: 52vh;
   }
-  /* Нижние кнопки категорий остаются без изменений */
   .nav-controls {
     gap: 2rem;
   }
@@ -445,9 +500,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
   .header-top {
     letter-spacing: 0.05em;
   }
-  .collage-area {
-    padding: 0.8rem 0.5rem 1rem;
-  }
 }
 
 @media (min-width: 701px) and (max-width: 1100px) {
@@ -468,6 +520,372 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     max-width: 85%;
   }
 }
+
+/* ══ ОСНОВНОЙ РЕЖИМ МОДЫ (десктоп) ══ */
+.fashion-mode .left-panel { display: none; }
+.fashion-mode .museum-layout { grid-template-columns: 1fr; }
+
+.fashion-mode .right-panel {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Заголовок раздела моды */
+.fashion-title {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 1.2rem 1rem 0.6rem;
+  width: 100%;
+}
+.fashion-title h2 {
+  font-family: "Jura", sans-serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: var(--gold-light);
+  text-shadow: 0 0 16px rgba(212,168,67,.45);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.fashion-title .rule {
+  width: 60%; height: 1px; margin: 0.5rem auto 0;
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+
+/* Основная зона: стрелки + viewport слайдера */
+.fashion-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 0 0.8rem;
+}
+
+/* Viewport — обрезает то, что выезжает; ширина по содержимому тройки */
+.fashion-viewport {
+  overflow: hidden;
+  flex: 0 1 auto;
+  max-width: calc(3 * 18vw + 2 * 1.8rem); /* 3 манекена + 2 зазора */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Лента всех манекенов — двигается через translateX */
+.fashion-track {
+  display: flex;
+  flex-direction: row;
+  gap: 1.8rem;
+  align-items: flex-start;
+  justify-content: center;
+  will-change: transform;
+  width: 100%;
+  /* transition задаётся динамически через JS */
+}
+
+/* Один манекен + плашка под ним */
+.fashion-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 0 0 auto;
+  cursor: pointer;
+  min-width: 0;
+}
+.fashion-unit:hover .fashion-img {
+  filter:
+    drop-shadow(0 0 22px rgba(212,168,67,0.55))
+    drop-shadow(8px 14px 32px rgba(0,0,0,.85));
+}
+
+.fashion-img {
+  max-height: 54vh;
+  max-width: 18vw;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter:
+    drop-shadow(0 0 18px rgba(255,210,120,.15))
+    drop-shadow(0 0 6px rgba(255,200,100,.10))
+    drop-shadow(8px 14px 32px rgba(0,0,0,.85));
+  transition: filter 0.2s;
+}
+
+/* Плашка под манекеном */
+.fashion-plate {
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(14,7,3,.93), rgba(20,10,4,.96));
+  border: 1px solid rgba(212,168,67,.3);
+  border-top: 2px solid var(--gold-dark);
+  border-bottom: 2px solid var(--gold-dark);
+  padding: 0.5rem 1.1rem 0.6rem;
+  position: relative;
+  min-width: 180px;
+  max-width: 300px;
+  box-sizing: border-box;
+}
+.fashion-plate::before, .fashion-plate::after {
+  content: '✦';
+  position: absolute;
+  color: var(--gold-dark);
+  font-size: .5rem;
+  line-height: 1;
+}
+.fashion-plate::before { top: 4px; left: 6px; }
+.fashion-plate::after  { top: 4px; right: 6px; }
+.fashion-plate-name {
+  font-family: "Jura", sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.7rem, 1.1vw, 0.95rem);
+  color: var(--gold-light);
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 0.1rem;
+}
+.fashion-plate-designer {
+  font-family: "Jura", sans-serif;
+  font-size: clamp(0.6rem, 0.9vw, 0.75rem);
+  color: var(--gold-dark);
+  text-align: center;
+  margin-bottom: 0.15rem;
+  font-style: italic;
+}
+.fashion-plate-rule {
+  width: 60%; height: 1px; margin: 0.2rem auto 0.3rem;
+  background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+}
+.fashion-plate-text {
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  font-size: clamp(0.6rem, 0.95vw, 0.75rem);
+  line-height: 1.4;
+  color: var(--cream-dim);
+  text-align: center;
+  max-height: 80px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(139,105,20,.4) transparent;
+}
+.fashion-plate-text::-webkit-scrollbar { width: 3px; }
+.fashion-plate-text::-webkit-scrollbar-thumb { background: rgba(139,105,20,.35); border-radius: 2px; }
+
+.fashion-arrow {
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  color: rgba(212,168,67,.8);
+  font-size: 3.6rem;
+  font-family: serif;
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 32px;
+  /* центрируем по изображению: 54vh / 2 минус половина кнопки */
+  margin-top: calc(27vh - 1.8rem);
+  transition: color 0.2s, text-shadow 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0;
+  text-shadow: 0 2px 10px rgba(0,0,0,.9);
+}
+.fashion-arrow:hover {
+  color: #f5d97a;
+  text-shadow: 0 0 20px rgba(212,168,67,0.9), 0 2px 10px rgba(0,0,0,.9);
+  transform: scale(1.18);
+}
+.fashion-arrow:disabled { opacity: 0.13; cursor: default; transform: none; }
+
+/* ══ ФАКУЛЬТЕТСКИЕ ЭЛЬФЫ: двухрядная раскладка ══ */
+.faculty-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 0.5rem 1rem;
+}
+/* Верхний ряд: Тедди + Плюш */
+.faculty-row-top {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-end;
+  width: 100%;
+}
+/* Нижний ряд: Нико + Эмма (крупнее) + Саму */
+.faculty-row-bottom {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+.faculty-card {
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.2s ease;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.55));
+  flex-shrink: 0;
+}
+.faculty-card:hover {
+  filter: drop-shadow(0 0 16px rgba(212,168,67,0.75));
+  transform: scale(1.02);
+}
+.faculty-card img {
+  display: block;
+  height: auto;
+  border-radius: 3px;
+}
+/* Тедди и Саму — верхний ряд */
+.faculty-card-small img  { width: clamp(90px, 9vw, 195px); }
+/* Нико и Плюш — нижний ряд */
+.faculty-card-medium img { width: clamp(100px, 10vw, 210px); }
+/* Эмма — центр, крупнее */
+.faculty-card-large img  { width: clamp(130px, 13vw, 270px); }
+.faculty-card-large { align-self: flex-start; }
+
+@media (max-width: 1100px) {
+  .faculty-card-small img  { width: clamp(75px, 12vw, 150px); }
+  .faculty-card-medium img { width: clamp(85px, 13vw, 165px); }
+  .faculty-card-large img  { width: clamp(110px, 17vw, 210px); }
+}
+
+/* убираем отдельный узкий-десктоп для faculty — clamp справляется */
+
+/* ══ УЗКИЙ ДЕСКТОП (1100–1350px) — уменьшаем манекены ══ */
+@media (min-width: 1101px) and (max-width: 1350px) {
+  .fashion-img {
+    max-height: 46vh;
+    max-width: 15vw;
+  }
+  .fashion-plate {
+    min-width: 120px;
+    max-width: 200px;
+  }
+  .fashion-viewport {
+    max-width: calc(3 * 15vw + 2 * 1.2rem);
+  }
+  .fashion-track { gap: 1.2rem; }
+}
+
+/* ══ ПЛАНШЕТЫ (до 1100px) И МОБИЛЬНАЯ АДАПТАЦИЯ ДЛЯ РАЗДЕЛА МОДЫ: 
+     делаем как с портретами исторических эльфов (вертикальная колонка, плашка с описанием НЕ фиксированной высоты) ══ */
+@media (max-width: 1100px) {
+  .fashion-mode .right-panel {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem;
+  }
+  .fashion-mode .detail-frame-wrap {
+    width: 100%;
+    justify-content: center;
+  }
+  /* Убираем фиксированную высоту, плашка подстраивается под содержимое — логика исторических эльфов */
+  .fashion-mode .detail-info {
+    max-width: 92%;
+    width: auto;
+    height: auto;
+    min-height: auto;
+    flex: none;
+  }
+  .fashion-mode .detail-text-scroll {
+    max-height: 160px; /* комфортная прокрутка, но высота панели определяется контентом */
+  }
+  .fashion-img {
+    max-width: 65vw;
+    max-height: 55vh;
+  }
+  .fashion-arrow {
+    font-size: 2.6rem;
+    width: 48px;
+  }
+  .fashion-arrow:active {
+    color: var(--gold-light);
+    opacity: 0.8;
+  }
+  /* На планшете показываем одного манекена */
+  .fashion-pair { gap: 1rem; }
+  .fashion-unit:last-child { display: none; }
+  .fashion-img { max-width: 50vw; max-height: 52vh; }
+}
+
+/* ══ ПЛАНШЕТЫ 700–1100px ══ */
+@media (max-width: 1100px) and (min-width: 701px) {
+  .right-panel {
+    overflow-y: hidden; /* скролл внутри плашки, не снаружи */
+    justify-content: flex-start;
+    padding-top: 1.4rem;
+    gap: 0.7rem;
+  }
+  .detail-frame-wrap img {
+    max-width: 85%;
+    max-height: 44vh;
+  }
+  .detail-info {
+    max-width: 92%;
+    width: auto;
+    flex-shrink: 0;
+    /* ограничиваем высоту плашки чтобы текст скроллился внутри */
+    max-height: 35vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .detail-text-scroll {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+  }
+}
+
+/* мобильная доработка: полностью единый стиль с историческими портретами (без зафиксированной высоты) */
+@media (max-width: 700px) {
+  .fashion-mode .right-panel {
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem;
+  }
+  .fashion-mode .detail-frame-wrap {
+    gap: 0.5rem;
+  }
+  .fashion-arrow {
+    font-size: 2.2rem;
+    width: 44px;
+    height: auto;
+    padding-bottom: 0;
+  }
+  .fashion-img {
+    max-width: 70vw;
+    max-height: 48vh;
+  }
+  .fashion-mode .detail-info {
+    max-width: 95vw;
+    min-height: auto;
+    height: auto;
+  }
+  .fashion-mode .detail-text-scroll {
+    max-height: 150px;
+  }
+  /* Мобиль: тоже один манекен */
+  .fashion-unit:last-child { display: none; }
+  .fashion-plate { max-width: 90vw; min-width: unset; }
+}
 </style>
 </head>
 <body>
@@ -482,7 +900,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
       <div class="logo-text">КОГТЕВРАНСКИЙ<br>МУЗЕЙ</div>
     </div>
     <div class="header-center">
-      <div class="header-top">Крыло Домовых Эльфов</div>
+      <div class="header-top">Зал Домовых Эльфов</div>
     </div>
     <div class="header-placeholder"></div>
     <div class="header-rule"></div>
@@ -495,7 +913,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);
     </div>
 
     <div class="right-panel" id="rightPanel">
-      <!-- Контейнер, в который динамически будет помещаться портрет + кнопки (на мобилках) -->
       <div class="detail-frame-wrap" id="detailFrameWrap"></div>
       <div class="detail-info" id="detailInfo">
         <div class="detail-header">
@@ -528,24 +945,136 @@ const historicElves = [
   { id:'winky',    name:'Винки', owner:'Свободный эльф (ранее Краучи)', fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/history/winki.png', text:'Появилась в Хогвартсе вместе с Добби после того, как её выгнали из служения Краучам. Была верна своим бывшим хозяевам и после освобождения. Долго пьянствовала из-за горя на свободе, но потихоньку начала оправляться и в итоге участвовала в Битве за Хогвартс среди эльфов, выступивших против Пожирателей Смерти. От пьянства не избавилась, но стала пить гораздо меньше, вернувшись в работу.' }
 ];
 
-const otherTabs = [
-  { label:'Эльфы Хогвартса', items:[
-    { id:'teddy', name:'Тедди', owner:'Кухни Хогвартса', text:'Легендарный повар Большого зала. Готовил пиры для четырёх факультетов.' },
-    { id:'thomas', name:'Томас', owner:'Подземелья', text:'Хранитель винных подвалов, знаток выдержанных элей.' }
-  ]},
-  { label:'Тарелки', items:[
-    { id:'rocky', name:'Рокки', owner:'Фарфоровая мастерская', text:'Мастер посуды, его тарелки никогда не бьются.' }
-  ]}
+const platesElves = [
+  { 
+    id:'brummi', name:'Брумми', owner:'Хогвартс (мастер уюта)', 
+    fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/brummi.png',
+    text:'Брумми терпеть не может сидеть на месте и постоянно что-то чинит, таскает, переставляет или украшает. Если где-то в замке ночью слышится грохот, звон ведер и возмущённое «ой-ой-ой!», скорее всего это снова Брумми решил «сделать как лучше». Раньше он работал у семьи волшебников, которые держали маленькую лавку артефактов. Брумми помогал в мастерской и научился обращаться с магическими предметами. Хозяева сменили место жительства, а его попросту оставили. В Хогвартсе Дамблдора он оказался как раз во время подготовки к большому празднику. Пока преподаватели спорили, как украсить Большой зал, Брумми за одну ночь развесил сотни зачарованных фонариков, починил половину мебели и заставил старые доспехи танцевать в такт музыке. С тех пор он остался в замке и отвечает за всё, что связано с уютом и подготовкой мероприятий.'
+  },
+  { 
+    id:'tinker', name:'Тинкир', owner:'Библиотека Хогвартса', 
+    fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/tinker.png',
+    text:'Тинкир работает в библиотеке Хогвартса Дамблдора. Раньше он жил в доме одной пожилой волшебницы, у которой было много книг. Когда старушка отправилась к праотцам, он стал свободным и скитался по городам. Доподлинно не известно, как именно он нашёл Хогвартс, но однажды поздним вечером директор услышал странное шуршание между стеллажами. Среди груды книг сидел домовик, который пытался аккуратно подклеить порванный учебник нитками от собственной наволочки. Оказалось, Тинкир долго скитался после исчезновения своей хозяйки и в итоге прятался в библиотеке, потому что «книги не кричат и не обижают». Директор не стал прогонять его и предложил остаться — при условии, что никогда больше не прятаться. С тех пор Тинкир знает, где лежит каждая книга, ворчит на шумных студентов и ставит чай библиотекарям.'
+  },
+  { 
+    id:'rokki', name:'Рокки', owner:'Астрономическая башня', 
+    fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/rokki.png',
+    text:'Домовики шептались, что этот эльф прибыл с Луны. Возможно, так оно и есть, ведь как иначе объяснить ту любовь к звёздам, что хранит в себе Рокки? Он любит всё время проводить в астрономической башне, любоваться планетами, считать звёзды и искать созвездия. Для этого он приобрёл свой личный телескоп на вырученные галлеоны за порядок, что он поддерживает в астрономической башне. Рокки — настоящий хранитель звёздного неба над школой.'
+  },
+  { 
+    id:'romashka', name:'Ромашка', owner:'Оранжерея Хогвартса', 
+    fullImg:'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/plate/romashka.png',
+    text:'Её часто можно встретить в школьной оранжерее, так как она не может пройти мимо любого растения и не полюбоваться им. Ромашка следит за чистотой и порядком в школьной оранжерее, а также в садах и парках окрестностей Хогвартса Дамблдора. Любовь к растениям передалась ей от родителей, которые тоже когда-то присматривали за цветниками волшебной школы. Благодаря её заботе, даже самые капризные магические цветы чувствуют себя превосходно.'
+  }
+];
+
+const facultyElves = [
+  {
+    id: 'teddy', name: 'Тедди', owner: 'Факультет Когтевран',
+    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/teddi2.png',
+    text: 'Появился в башне в 2013 году после нападения Жуткого Нечто и с тех пор стал главным эльфом по когтевранской башне. На его плечах лежит всё хозяйство башни: комфорт гостей на мероприятиях, подарки студентам, ремонт и уборка комнат, помощь старостам в организации развлечений.'
+  },
+  {
+    id: 'plush', name: 'Плюш', owner: 'Факультет Гриффиндор',
+    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/plush.png',
+    text: 'Появился на факультете после открытия теплиц и теперь занимается их благоустройством, помогая студентам и не только выращивать свои культуры.'
+  },
+  {
+    id: 'niko', name: 'Нико', owner: 'Факультет Слизерин',
+    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/niko.png',
+    text: 'Очень полезный эльф. Любит порядок, чистоту и аккуратность — и уборку тоже. Занимается жилым крылом и вообще обстановкой в Слизерине. Ведь и весьма милый, но когда речь о чистоте может быть немного душным.'
+  },
+  {
+    id: 'emma', name: 'Эмма', owner: 'Пуффендуй (временно)',
+    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/emma2.png',
+    text: 'Эльфийка, принадлежащая Женевьеве Ханнем (Пресли), но временно живёт в Пуффендуе, помогая декану Энни Мур. В основном занимается помощью в выращивании пуффендуйских гномов.'
+  },
+  {
+    id: 'samu', name: 'Саму', owner: 'Факультет Слизерин',
+    fullImg: 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/faculty/samu.png',
+    text: 'Ранее у него был хозяин, который скоропостижно скончался. Саму очень долго искал, что случилось — в итоге, с помощью студентов, выяснил, и остался в Слизерине. Очень добрая душа, а ещё весьма умный. Занимается помощью с мероприятиями, а ещё гостями: например, готовит кинотеатр под шоу костюм в честь Всадника Тыквовина.'
+  },
+];
+
+const OTHER = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/other/';
+const hogwartsElves = [
+  {
+    id:'winky2', name:'Винки №2', owner:'Хогвартс Дамблдора',
+    fullImg: OTHER+'winky2.png',
+    text:'Домовой эльф. Родилась в медном горшке на кухне Хогвартса, любит интересные поручения. Истинная кокетка, хоть и тщательно это скрывает. Страдает от тоски по другу. Перенесет статую Аполлона с 5 этажа на 1 за 0.1 секунды.\n\nОсобенности: добрая душа; любит бантики и морковные пироги; не любит Ганса.'
+  },
+  {
+    id:'tomas', name:'Томас', owner:'Хогвартс Дамблдора (покинул)',
+    fullImg: OTHER+'tomas.png',
+    text:'Эльф Ливы Унсет и выполнял её поручения. В данный момент покинул Хогвартс вместе с мисс Унсет, но является легендой Хогвартса Дамблдора после похищения.'
+  },
+  {
+    id:'gans', name:'Ганс', owner:'Хогвартс Дамблдора',
+    fullImg: OTHER+'gans.png',
+    text:'Домовой эльф, который вернулся два года назад из длительного отпуска (но это не точно — есть подозрение, что таким образом он просто проник в замок пожить), и с тех пор следит (когда есть на то настроение) за чистотой в замке. При этом, «следит» не равно «обеспечивает». В большинстве случаев просто ходит по замку и ворчит.\n\nОсобенности: ценит авторитет и чистоту; не ценит студентов; ворчлив только снаружи, внутри способен на тёплые чувства; дотошен.'
+  },
+];
+
+const BASE = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/fashion/';
+const fashionElves = [
+  { id:'m_moda3', name:'Наряд №1',   owner:'', fullImg: BASE+'m_moda3.png', text:'—' },
+  { id:'h_moda2', name:'Наряд №2',   owner:'', fullImg: BASE+'h_moda2.png', text:'—' },
+  { id:'b_moda4', name:'Наряд №3',   owner:'', fullImg: BASE+'b_moda4.png', text:'—' },
+  { id:'m_moda1', name:'Наряд №4',   owner:'', fullImg: BASE+'m_moda1.png', text:'—' },
+  { id:'p_moda1', name:'Наряд №5',   owner:'', fullImg: BASE+'p_moda1.png', text:'—' },
+  { id:'h_moda4', name:'Наряд №6',   owner:'', fullImg: BASE+'h_moda4.png', text:'—' },
+  { id:'b_moda2', name:'Наряд №7',   owner:'', fullImg: BASE+'b_moda2.png', text:'—' },
+  { id:'jb_moda1',name:'Наряд №8',   owner:'', fullImg: BASE+'jb_moda1.png', text:'—' },
+  { id:'m_moda5', name:'Наряд №9',   owner:'', fullImg: BASE+'m_moda5.png', text:'—' },
+  { id:'h_moda1', name:'Наряд №10',  owner:'', fullImg: BASE+'h_moda1.png', text:'—' },
+  { id:'b_moda1', name:'Наряд №11',  owner:'', fullImg: BASE+'b_moda1.png', text:'—' },
+  { id:'m_moda6', name:'Наряд №12',  owner:'', fullImg: BASE+'m_moda6.png', text:'—' },
+  { id:'h_moda3', name:'Наряд №13',  owner:'', fullImg: BASE+'h_moda3.png', text:'—' },
+  { id:'m_moda2', name:'Наряд №14',  owner:'', fullImg: BASE+'m_moda2.png', text:'—' },
+  { id:'b_moda3', name:'Наряд №15',  owner:'', fullImg: BASE+'b_moda3.png', text:'—' },
+  { id:'m_moda4', name:'Наряд №16',  owner:'', fullImg: BASE+'m_moda4.png', text:'—' },
+];
+
+const PASTA = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/pasta/';
+const pastaElves = [
+  {
+    id:'pancho', name:'Панчо', owner:'Хогвартс (Дерево пожеланий)',
+    fullImg: PASTA+'pancho.png',
+    text:'Попал в Хогвартс по программе обмена домовиками из Перу. Никто не знает, проводилось ли это мероприятие на самом деле, ведь было это ещё во времена наших прадедов; но Панчо здесь, в Хогвартсе, и ответственно следит за Деревом пожеланий и садом (по выходным).'
+  },
+  {
+    id:'derish', name:'Дэриш', owner:'Хогвартс',
+    fullImg: PASTA+'derish.png',
+    text:'Его покусали Джарви, поэтому он любит на всех ругаться.'
+  },
+  {
+    id:'vorcun', name:'Ворчун', owner:'Сады и старые теплицы',
+    fullImg: PASTA+'vorchun.png',
+    text:'Вот уже несколько десятков лет он обитает в запутанных садах и старых теплицах. Растения отвечают ему преданностью: даже самый чахлый цветок под его пальцами тянется к свету. Ворчун не терпит суеты, предпочитает тишину, запах грозы и право провести целый день, перебирая корни и негромко ругая каждого, кто случайно наступит на грядку или заговорит громче шороха листвы.'
+  },
+  {
+    id:'mefisto', name:'Мефистофель', owner:'Архив школьной библиотеки',
+    fullImg: PASTA+'mefistophel.png',
+    text:'Работает в архиве школьной библиотеки. Питает слабость к древним свиткам, все записи ведёт в длинном свитке, бережно сворачивая в рулон. Обладает миролюбивым характером, пока все соблюдают тишину и правила пользования древними фолиантами.'
+  },
+  {
+    id:'otrits', name:"О'Трицания", owner:'Голова Блейк',
+    fullImg: PASTA+"o'tritsaniya.png",
+    text:'Блейкоэльф. Она главная в голове Блейк во время стройки музеев.'
+  },
 ];
 
 const sections = [
-  { type:'historic', label:'Исторические эльфы', data: historicElves },
-  ...otherTabs.map(tab => ({ type:'default', label: tab.label, data: tab.items }))
+  { type:'historic', label:'Исторические эльфы',  data: historicElves },
+  { type:'faculty',  label:'Факультетские эльфы', data: facultyElves },
+  { type:'hogwarts', label:'Эльфы Хогвартса Дамблдора', data: hogwartsElves },
+  { type:'pasta',    label:'Эльфы в нашей жизни', subtitle:'(эльфы обнаруженные и нарисованные когтевранцами)', data: pastaElves },
+  { type:'plates',   label:'Эльфы в нашей жизни', subtitle:'(эльфы обнаруженные и нарисованные когтевранцами)', data: platesElves },
+  { type:'fashion',  label:'Мода',                 data: fashionElves },
 ];
 
 let currentSectionIdx = 0;
 let currentItemId = null;
-let currentItem = null; // для быстрого доступа
 
 const collageArea = document.getElementById('collageArea');
 const detailFrameWrap = document.getElementById('detailFrameWrap');
@@ -558,37 +1087,36 @@ const btnPrev = document.getElementById('btnPrev');
 const btnNext = document.getElementById('btnNext');
 const navDots = document.getElementById('navDots');
 
-function isMobile() {
-  return window.innerWidth <= 700;
-}
+function isMobile()  { return window.innerWidth <= 700; }
+function isDesktop() { return window.innerWidth > 1100; }
 
-// Отображение портрета и, при необходимости, стрелок по бокам
 function renderPortrait(item) {
   if (!item) return;
   const mobile = isMobile();
   detailFrameWrap.innerHTML = '';
+  const section = sections[currentSectionIdx];
+  const isFashion = section.type === 'fashion';
   
   if (mobile) {
-    // Мобильная версия: создаём контейнер с двумя кнопками и изображением посередине
+    // Мобильный формат: стрелки по бокам (как у исторических эльфов)
     const leftArrow = document.createElement('button');
     leftArrow.textContent = '‹';
     leftArrow.className = 'portrait-arrow';
-    leftArrow.setAttribute('aria-label', 'Предыдущий портрет');
     const rightArrow = document.createElement('button');
     rightArrow.textContent = '›';
     rightArrow.className = 'portrait-arrow';
-    rightArrow.setAttribute('aria-label', 'Следующий портрет');
     
     let img;
-    if (sections[currentSectionIdx].type === 'historic' && item.fullImg) {
+    const hasImg = (section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta' || isFashion) && item.fullImg;
+    if (hasImg) {
       img = document.createElement('img');
       img.src = item.fullImg;
       img.alt = item.name;
       if (item.id === 'winky') img.classList.add('winky-portrait');
+      if (isFashion) img.classList.add('fashion-img');
     } else {
       img = document.createElement('div');
-      img.style.fontSize = '5rem';
-      img.style.opacity = '0.7';
+      img.style.fontSize = '4rem';
       img.textContent = '🧝';
     }
     
@@ -596,37 +1124,53 @@ function renderPortrait(item) {
     detailFrameWrap.appendChild(img);
     detailFrameWrap.appendChild(rightArrow);
     
-    // Обновляем активность кнопок (вкл/выкл)
-    const data = sections[currentSectionIdx].data;
+    const data = section.data;
     const idx = data.findIndex(i => i.id === currentItemId);
-    if (idx <= 0) leftArrow.classList.add('disabled');
-    else leftArrow.classList.remove('disabled');
-    if (idx >= data.length - 1) rightArrow.classList.add('disabled');
-    else rightArrow.classList.remove('disabled');
+    leftArrow.classList.toggle('disabled', idx <= 0);
+    rightArrow.classList.toggle('disabled', idx >= data.length - 1);
     
-    // Обработчики
-    leftArrow.onclick = (e) => {
-      e.stopPropagation();
-      const newIdx = idx - 1;
-      if (newIdx >= 0) selectItem(data[newIdx].id);
-    };
-    rightArrow.onclick = (e) => {
-      e.stopPropagation();
-      const newIdx = idx + 1;
-      if (newIdx < data.length) selectItem(data[newIdx].id);
-    };
-  } else {
-    // Десктопная версия: только изображение (без стрелок)
-    if (sections[currentSectionIdx].type === 'historic' && item.fullImg) {
+    leftArrow.onclick = (e) => { e.stopPropagation(); if(idx > 0) selectItem(data[idx-1].id); };
+    rightArrow.onclick = (e) => { e.stopPropagation(); if(idx < data.length-1) selectItem(data[idx+1].id); };
+  } 
+  else {
+    // Десктоп (шире 1100px) — слайдер с тройками
+    if (isFashion && item.fullImg && isDesktop()) {
+      renderFashionDesktop(item);
+      return;
+    }
+    // Планшет/мобиль для fashion и всё остальное — стандартный вид
+    if (isFashion && item.fullImg) {
+      // Одиночный манекен со стрелками (как у исторических, но fashion-img)
+      const data = section.data;
+      const idx = data.findIndex(i => i.id === currentItemId);
+      const leftArrow = document.createElement('button');
+      leftArrow.textContent = '‹';
+      leftArrow.className = 'fashion-arrow';
+      leftArrow.disabled = (idx <= 0);
+      leftArrow.onclick = () => { if(idx > 0) selectItem(data[idx-1].id); };
+      const img = document.createElement('img');
+      img.src = item.fullImg;
+      img.alt = item.name;
+      img.className = 'fashion-img';
+      const rightArrow = document.createElement('button');
+      rightArrow.textContent = '›';
+      rightArrow.className = 'fashion-arrow';
+      rightArrow.disabled = (idx >= data.length - 1);
+      rightArrow.onclick = () => { if(idx < data.length-1) selectItem(data[idx+1].id); };
+      detailFrameWrap.appendChild(leftArrow);
+      detailFrameWrap.appendChild(img);
+      detailFrameWrap.appendChild(rightArrow);
+    }
+    else if ((section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta' || section.type === 'hogwarts') && item.fullImg) {
       const img = document.createElement('img');
       img.src = item.fullImg;
       img.alt = item.name;
       if (item.id === 'winky') img.classList.add('winky-portrait');
       detailFrameWrap.appendChild(img);
-    } else {
+    } 
+    else {
       const placeholder = document.createElement('div');
       placeholder.style.fontSize = '5rem';
-      placeholder.style.opacity = '0.7';
       placeholder.textContent = '🧝';
       detailFrameWrap.appendChild(placeholder);
     }
@@ -638,15 +1182,23 @@ function selectItem(id) {
   const section = sections[currentSectionIdx];
   const item = section.data.find(i => i.id === id);
   if (!item) return;
-  currentItem = item;
-  
-  // Отрисовка портрета со стрелками или без
   renderPortrait(item);
-  
-  // Заполнение текстовой информации
+  // Для fashion на десктопе плашки рендерятся внутри fashion-unit, не в detail-info
+  if (section.type === 'fashion' && isDesktop()) return;
   diName.textContent = item.name;
   diOwner.textContent = item.owner || '';
   diText.textContent = item.text;
+}
+
+function createPlateCard(elf, className) {
+  const card = document.createElement('div');
+  card.className = `plate-card ${className}`;
+  card.onclick = () => selectItem(elf.id);
+  const img = document.createElement('img');
+  img.src = elf.fullImg;
+  img.alt = elf.name;
+  card.appendChild(img);
+  return card;
 }
 
 function renderCollage() {
@@ -667,16 +1219,116 @@ function renderCollage() {
     if(winky) col3.appendChild(createHistoricCard(winky));
     grid.append(col1, col2, col3);
     collageArea.appendChild(grid);
-  } else {
-    const grid = document.createElement('div');
-    grid.style.display = 'grid';
-    grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))';
+  } 
+  else if (section.type === 'pasta') {
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.7rem;align-items:center;padding:0.5rem;width:100%;box-sizing:border-box;';
+
+    const col1 = document.createElement('div');
+    col1.style.cssText = 'display:flex;flex-direction:column;gap:0.7rem;align-items:center;';
+    const col2 = document.createElement('div');
+    col2.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;';
+    const col3 = document.createElement('div');
+    col3.style.cssText = 'display:flex;flex-direction:column;gap:0.7rem;align-items:center;';
+
+    // Порядок: col1 = Дэриш + Ворчун, col2 = Панчо, col3 = Мефистофель + О'Трицания
+    const pancho  = section.data.find(e => e.id === 'pancho');
+    const derish  = section.data.find(e => e.id === 'derish');
+    const vorcun  = section.data.find(e => e.id === 'vorcun');
+    const mefisto = section.data.find(e => e.id === 'mefisto');
+    const otrits  = section.data.find(e => e.id === 'otrits');
+
+    const mkCard = (elf, large) => {
+      const c = document.createElement('div');
+      c.style.cssText = 'cursor:pointer;transition:filter 0.2s,transform 0.2s;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.55));width:100%;display:flex;justify-content:center;';
+      c.onmouseenter = () => { c.style.filter='drop-shadow(0 0 16px rgba(212,168,67,0.7))'; c.style.transform='scale(1.03)'; };
+      c.onmouseleave = () => { c.style.filter='drop-shadow(0 6px 14px rgba(0,0,0,0.55))'; c.style.transform=''; };
+      c.onclick = () => selectItem(elf.id);
+      const img = document.createElement('img');
+      img.src = elf.fullImg; img.alt = elf.name;
+      img.style.cssText = `width:${large ? '95%' : '80%'};height:auto;display:block;border-radius:3px;`;
+      c.appendChild(img);
+      return c;
+    };
+
+    if (derish)  col1.appendChild(mkCard(derish,  false));
+    if (vorcun)  col1.appendChild(mkCard(vorcun,  false));
+    if (pancho)  col2.appendChild(mkCard(pancho,  true));
+    if (mefisto) col3.appendChild(mkCard(mefisto, false));
+    if (otrits)  col3.appendChild(mkCard(otrits,  false));
+
+    wrapper.append(col1, col2, col3);
+    collageArea.appendChild(wrapper);
+  }
+  else if (section.type === 'plates') {
+    const data = section.data;
+    const chaoticContainer = document.createElement('div');
+    chaoticContainer.className = 'chaotic-layout';
+    chaoticContainer.appendChild(createPlateCard(data[0], 'plate-left'));
+    chaoticContainer.appendChild(createPlateCard(data[1], 'plate-right'));
+    chaoticContainer.appendChild(createPlateCard(data[2], 'plate-top'));
+    chaoticContainer.appendChild(createPlateCard(data[3], 'plate-bottom'));
+    collageArea.appendChild(chaoticContainer);
+  }
+  else if (section.type === 'faculty') {
+    const teddy  = section.data.find(e => e.id === 'teddy');
+    const plush  = section.data.find(e => e.id === 'plush');
+    const niko   = section.data.find(e => e.id === 'niko');
+    const emma   = section.data.find(e => e.id === 'emma');
+    const samu   = section.data.find(e => e.id === 'samu');
+
+    const layout = document.createElement('div');
+    layout.className = 'faculty-layout';
+
+    // Верхний ряд: Тедди  Саму
+    const rowTop = document.createElement('div');
+    rowTop.className = 'faculty-row-top';
+    if (teddy) rowTop.appendChild(createFacultyCard(teddy, 'faculty-card-small'));
+    if (samu) rowTop.appendChild(createFacultyCard(samu, 'faculty-card-small'));
+
+    // Нижний ряд: Нико  Эмма(крупная)  Плюш
+    const rowBottom = document.createElement('div');
+    rowBottom.className = 'faculty-row-bottom';
+    if (niko) rowBottom.appendChild(createFacultyCard(niko, 'faculty-card-medium'));
+    if (emma) rowBottom.appendChild(createFacultyCard(emma, 'faculty-card-large'));
+    if (plush) rowBottom.appendChild(createFacultyCard(plush, 'faculty-card-medium'));
+
+    layout.appendChild(rowTop);
+    layout.appendChild(rowBottom);
+    collageArea.appendChild(layout);
+  }
+  else if (section.type === 'hogwarts') {
+    const winky2 = section.data.find(e => e.id === 'winky2');
+    const tomas  = section.data.find(e => e.id === 'tomas');
+    const gans   = section.data.find(e => e.id === 'gans');
+
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;flex-direction:row;align-items:flex-end;justify-content:center;gap:0.6rem;padding:0.5rem;width:100%;box-sizing:border-box;';
+
+    const mkHCard = (elf, large) => {
+      const c = document.createElement('div');
+      c.style.cssText = `cursor:pointer;transition:filter 0.2s,transform 0.2s;filter:drop-shadow(0 6px 14px rgba(0,0,0,0.55));flex:0 0 auto;width:${large ? '36%' : '28%'};`;
+      c.onmouseenter = () => { c.style.filter='drop-shadow(0 0 16px rgba(212,168,67,0.75))'; c.style.transform='scale(1.02)'; };
+      c.onmouseleave = () => { c.style.filter='drop-shadow(0 6px 14px rgba(0,0,0,0.55))'; c.style.transform=''; };
+      c.onclick = () => selectItem(elf.id);
+      const img = document.createElement('img');
+      img.src = elf.fullImg; img.alt = elf.name;
+      img.style.cssText = 'width:100%;height:auto;display:block;border-radius:3px;';
+      c.appendChild(img);
+      return c;
+    };
+
+    if (winky2) row.appendChild(mkHCard(winky2, false));
+    if (tomas)  row.appendChild(mkHCard(tomas,  true));
+    if (gans)   row.appendChild(mkHCard(gans,   false));
+
+    collageArea.appendChild(row);
+  }
     grid.style.gap = '1rem';
     grid.style.padding = '0.5rem';
     section.data.forEach(item => {
       const card = document.createElement('div');
       card.className = 'default-card';
-      card.id = `card-${item.id}`;
       card.style.background = 'rgba(0,0,0,0.4)';
       card.style.borderRadius = '8px';
       card.style.padding = '0.5rem';
@@ -693,7 +1345,6 @@ function renderCollage() {
 function createHistoricCard(elf) {
   const card = document.createElement('div');
   card.className = 'historic-item';
-  card.id = `cf-${elf.id}`;
   card.onclick = () => selectItem(elf.id);
   const img = document.createElement('img');
   img.src = elf.fullImg;
@@ -702,9 +1353,210 @@ function createHistoricCard(elf) {
   return card;
 }
 
+function createFacultyCard(elf, sizeClass) {
+  const card = document.createElement('div');
+  card.className = `faculty-card ${sizeClass}`;
+  card.onclick = () => selectItem(elf.id);
+  const img = document.createElement('img');
+  img.src = elf.fullImg;
+  img.alt = elf.name;
+  card.appendChild(img);
+  return card;
+}
+
+// Определяем модельера по префиксу id
+function getDesigner(id) {
+  if (id.startsWith('jb_')) return 'Блейк и Джульетта Хелвелл-де-Кур';
+  if (id.startsWith('h_'))  return 'Хелена Кейн';
+  if (id.startsWith('m_'))  return 'Мерида Морграфт';
+  if (id.startsWith('b_'))  return 'Блейк Эллингтон';
+  if (id.startsWith('p_'))  return 'Патриция Роксинбург';
+  return '';
+}
+
+function makeFashionUnit(item) {
+  const unit = document.createElement('div');
+  unit.className = 'fashion-unit';
+  unit.onclick = () => slideFashionTo(fashionElves.findIndex(e => e.id === item.id));
+
+  const img = document.createElement('img');
+  img.src = item.fullImg;
+  img.alt = item.name;
+  img.className = 'fashion-img';
+  unit.appendChild(img);
+
+  const plate = document.createElement('div');
+  plate.className = 'fashion-plate';
+
+  const pName = document.createElement('div');
+  pName.className = 'fashion-plate-name';
+  pName.textContent = item.name;
+  plate.appendChild(pName);
+
+  const designer = getDesigner(item.id);
+  if (designer) {
+    const pDes = document.createElement('div');
+    pDes.className = 'fashion-plate-designer';
+    pDes.textContent = designer;
+    plate.appendChild(pDes);
+  }
+
+  const rule = document.createElement('div');
+  rule.className = 'fashion-plate-rule';
+  plate.appendChild(rule);
+
+  const pText = document.createElement('p');
+  pText.className = 'fashion-plate-text';
+  pText.textContent = item.text;
+  plate.appendChild(pText);
+
+  unit.appendChild(plate);
+  return unit;
+}
+
+// Текущий индекс начала видимой тройки
+let fashionOffset = 0;
+let fashionAnimating = false;
+
+function slideFashionTo(targetIdx) {
+  const newOffset = Math.floor(targetIdx / 3) * 3;
+  if (newOffset !== fashionOffset) {
+    fashionSlide(newOffset);
+  }
+}
+
+function fashionSlide(newOffset) {
+  if (fashionAnimating) return;
+  const track = document.querySelector('.fashion-track');
+  if (!track) return;
+
+  const direction = newOffset > fashionOffset ? 1 : -1;
+  fashionAnimating = true;
+  fashionOffset = newOffset;
+
+  const newTrack = document.createElement('div');
+  newTrack.className = 'fashion-track';
+  newTrack.style.transition = 'none';
+  newTrack.style.transform = `translateX(${direction * 100}%)`;
+
+  const slice = fashionElves.slice(fashionOffset, fashionOffset + 3);
+  slice.forEach(item => newTrack.appendChild(makeFashionUnit(item)));
+
+  const viewport = document.querySelector('.fashion-viewport');
+
+  // Фиксируем размеры viewport перед анимацией, чтобы не схлопнулся
+  const vRect = viewport.getBoundingClientRect();
+  viewport.style.width  = vRect.width  + 'px';
+  viewport.style.height = vRect.height + 'px';
+  viewport.style.position = 'relative';
+
+  track.style.position = 'absolute';
+  track.style.top = '0'; track.style.left = '0'; track.style.width = '100%';
+
+  newTrack.style.position = 'absolute';
+  newTrack.style.top = '0'; newTrack.style.left = '0'; newTrack.style.width = '100%';
+
+  viewport.appendChild(newTrack);
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const dur = '380ms';
+      const ease = 'cubic-bezier(0.4, 0, 0.2, 1)';
+      track.style.transition    = `transform ${dur} ${ease}`;
+      newTrack.style.transition = `transform ${dur} ${ease}`;
+      track.style.transform    = `translateX(${-direction * 100}%)`;
+      newTrack.style.transform = 'translateX(0)';
+
+      track.addEventListener('transitionend', () => {
+        track.remove();
+        // Снимаем фиксацию
+        newTrack.style.position = '';
+        newTrack.style.top = ''; newTrack.style.left = ''; newTrack.style.width = '';
+        viewport.style.position = '';
+        viewport.style.width = ''; viewport.style.height = '';
+        fashionAnimating = false;
+        updateFashionArrows();
+      }, { once: true });
+    });
+  });
+
+  updateFashionArrows();
+}
+
+function updateFashionArrows() {
+  const leftArrow = document.querySelector('.fashion-arrow-left');
+  const rightArrow = document.querySelector('.fashion-arrow-right');
+  if (leftArrow)  leftArrow.disabled  = (fashionOffset <= 0);
+  if (rightArrow) rightArrow.disabled = (fashionOffset + 3 >= fashionElves.length);
+}
+
+function renderFashionDesktop(item) {
+  const rightPanel = document.getElementById('rightPanel');
+  const detailInfo = document.getElementById('detailInfo');
+  detailInfo.style.display = 'none';
+  detailFrameWrap.style.display = 'none';
+
+  // Если stage уже построен — только обновляем стрелки
+  if (rightPanel.querySelector('.fashion-stage')) {
+    updateFashionArrows();
+    return;
+  }
+
+  // Сбрасываем offset при первом входе в раздел
+  fashionOffset = 0;
+  fashionAnimating = false;
+
+  // Убираем старые элементы
+  const oldStage = rightPanel.querySelector('.fashion-stage');
+  if (oldStage) oldStage.remove();
+  const oldTitle = rightPanel.querySelector('.fashion-title');
+  if (oldTitle) oldTitle.remove();
+
+  // Заголовок
+  const titleEl = document.createElement('div');
+  titleEl.className = 'fashion-title';
+  titleEl.innerHTML = '<h2>Эльфийская мода</h2><div class="rule"></div>';
+
+  // Stage
+  const stage = document.createElement('div');
+  stage.className = 'fashion-stage';
+
+  const leftArrow = document.createElement('button');
+  leftArrow.textContent = '‹';
+  leftArrow.className = 'fashion-arrow fashion-arrow-left';
+  leftArrow.disabled = true;
+  leftArrow.onclick = () => { if (!fashionAnimating) fashionSlide(Math.max(0, fashionOffset - 3)); };
+
+  const viewport = document.createElement('div');
+  viewport.className = 'fashion-viewport';
+
+  const track = document.createElement('div');
+  track.className = 'fashion-track';
+
+  const slice = fashionElves.slice(0, 3);
+  slice.forEach(itm => track.appendChild(makeFashionUnit(itm)));
+
+  viewport.appendChild(track);
+
+  const rightArrow = document.createElement('button');
+  rightArrow.textContent = '›';
+  rightArrow.className = 'fashion-arrow fashion-arrow-right';
+  rightArrow.disabled = (fashionElves.length <= 3);
+  rightArrow.onclick = () => { if (!fashionAnimating) fashionSlide(fashionOffset + 3); };
+
+  stage.appendChild(leftArrow);
+  stage.appendChild(viewport);
+  stage.appendChild(rightArrow);
+
+  rightPanel.insertBefore(titleEl, rightPanel.firstChild);
+  rightPanel.appendChild(stage);
+}
+
 function updateNav() {
-  catTitle.textContent = sections[currentSectionIdx].label;
-  navTabName.textContent = sections[currentSectionIdx].label;
+  const sec = sections[currentSectionIdx];
+  const sub = sec.subtitle ? `<div class="subtitle">${sec.subtitle}</div>` : '';
+  catTitle.innerHTML = sec.label + sub;
+  navTabName.textContent = sec.label;
   updateBottomArrows();
   navDots.innerHTML = '';
   sections.forEach((_,idx) => {
@@ -713,6 +1565,25 @@ function updateNav() {
     dot.onclick = () => goToSection(idx);
     navDots.appendChild(dot);
   });
+  const detailInfo = document.getElementById('detailInfo');
+  const isFashion = sections[currentSectionIdx].type === 'fashion';
+
+  // Сбрасываем fashion-специфичные элементы при уходе
+  if (!isFashion || !isDesktop()) {
+    fashionOffset = 0;
+    fashionAnimating = false;
+    detailInfo.style.display = '';
+    detailFrameWrap.style.display = '';
+    const rightPanel = document.getElementById('rightPanel');
+    const oldStage = rightPanel.querySelector('.fashion-stage');
+    if (oldStage) oldStage.remove();
+    const oldTitle = rightPanel.querySelector('.fashion-title');
+    if (oldTitle) oldTitle.remove();
+  }
+
+  if(detailInfo) detailInfo.classList.toggle('wide', sections[currentSectionIdx].type === 'plates');
+  collageArea.style.overflowY = (sections[currentSectionIdx].type === 'plates' || sections[currentSectionIdx].type === 'fashion' || sections[currentSectionIdx].type === 'faculty') ? 'hidden' : 'auto';
+  document.getElementById('museum').classList.toggle('fashion-mode', sections[currentSectionIdx].type === 'fashion');
   renderCollage();
   const data = sections[currentSectionIdx].data;
   if(data.length) {
@@ -737,11 +1608,9 @@ function updateBottomArrows() {
   btnNext.disabled = (currentSectionIdx === sections.length - 1);
 }
 
-// Обработчики нижних кнопок (переключение категорий)
 btnPrev.onclick = () => goToSection(currentSectionIdx - 1);
 btnNext.onclick = () => goToSection(currentSectionIdx + 1);
 
-// Свайп для мобильных (перелистывание портретов)
 let touchStartX = 0, touchStartY = 0;
 document.addEventListener('touchstart', e => {
   touchStartX = e.touches[0].clientX;
@@ -758,7 +1627,6 @@ document.addEventListener('touchend', e => {
   if (dx > 0 && idx > 0) selectItem(data[idx - 1].id);
 }, { passive: true });
 
-// Адаптация при изменении размера окна (перерисовка портрета без потери выбранного элемента)
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
@@ -772,7 +1640,6 @@ window.addEventListener('resize', () => {
   }, 150);
 });
 
-// Инициализация
 updateNav();
 </script>
 </body>
