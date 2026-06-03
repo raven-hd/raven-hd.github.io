@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Зал Домовых Эльфов · Вход</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=MedievalSharp&family=Stalinist+One&family=Jura:wght@300..700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#d8b15a;
+    --warm:#ffcf7a;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden;background:#1a120c;}
+
+  .viewport{
+    position:fixed;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+
+  .stage{
+    position:relative;
+    width:1440px;
+    height:900px;
+    flex-shrink:0;
+    overflow:hidden;
+
+    background-image:url("https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/mus_background.png");
+    background-repeat:repeat;
+    background-position:top center;
+    background-size:auto 50%;
+
+    font-family:"MedievalSharp",serif;
+  }
+
+  .stage::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(120% 90% at 50% 18%, rgba(255,205,130,.16), transparent 55%),
+      radial-gradient(140% 120% at 50% 60%, transparent 40%, rgba(0,0,0,.55) 100%);
+    pointer-events:none;z-index:5;
+  }
+  .stage::after{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(to right, rgba(0,0,0,0.65) 0%, transparent 12%, transparent 88%, rgba(0,0,0,0.65) 100%),
+      linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 25%);
+    pointer-events:none;
+    z-index:6;
+  }
+
+  .floor{
+    position:absolute;
+    left:0;bottom:0;
+    width:100%;height:270px;
+    background-image:url("https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/mus_pol.png");
+    background-size:cover;
+    background-position:center top;
+    z-index:2;
+  }
+  .floor::before{
+    content:"";position:absolute;left:0;top:-40px;width:100%;height:80px;
+    background:linear-gradient(to bottom,rgba(0,0,0,.45),transparent);
+  }
+
+  .title{
+    position:absolute;
+    top:32px;left:50%;
+    transform:translateX(-50%);
+    z-index:10;
+    text-align:center;
+    color:var(--gold);
+    text-shadow:0 2px 0 #000, 0 0 26px rgba(255,190,90,.35);
+    pointer-events:none;
+  }
+  .title h1{
+    font-family: "Stalinist One", sans-serif;
+    font-weight: 400;
+    font-size: 40px;
+    letter-spacing: .04em;
+    line-height:1.1;
+    margin:0;
+    white-space: normal;
+    text-align: center;
+    max-width: 700px;
+  }
+  .title span{
+    display:block;
+    margin-top: 12px;
+    font-family: "Jura", sans-serif;
+    font-size: 15px;
+    letter-spacing: .32em;
+    color: #e8d9b5;
+    opacity: .85;
+    font-weight: 500;
+  }
+
+  .art{
+    position:absolute;z-index:3;
+    filter:drop-shadow(0 18px 22px rgba(0,0,0,.6));
+  }
+  .art img{display:block;width:100%;height:auto}
+  .art::after{
+    content:"";position:absolute;inset:6% 10%;
+    background:radial-gradient(ellipse at 50% 30%,rgba(255,210,140,.12),transparent 70%);
+    pointer-events:none;mix-blend-mode:screen;
+  }
+  .pic-left{ left:340px; top:260px; width:210px; }
+  .pic-far-left{ left:100px; top:180px; width:185px; }
+  .pic-right{ right:420px; top:180px; width:145px; }
+
+  /* ДВЕРЬ */
+  .entrance{
+    position:absolute;
+    left:50%;
+    bottom:270px;
+    transform:translateX(-50%) translateY(100px);
+    width:280px;
+    height:560px;
+    z-index:12;
+    cursor:pointer;
+  }
+  .entrance:hover{
+    transform:translateX(-50%) translateY(100px);
+  }
+  .door-painting{
+    position:absolute;inset:0;z-index:2;
+    filter:drop-shadow(0 22px 26px rgba(0,0,0,.7));
+    transition: filter .3s ease;
+  }
+  .entrance:hover .door-painting{
+    filter:drop-shadow(0 22px 26px rgba(0,0,0,.7)) drop-shadow(0 0 22px rgba(216,177,90,.4));
+  }
+  .door-painting img{display:block;width:100%;height:100%;object-fit:contain}
+  /* ТЕНЬ ПОД ДВЕРЬЮ — новые размеры: width 145px, height 35px, bottom 70px */
+  .entrance::after{
+    content:"";position:absolute;left:50%;bottom:70px;
+    width:145px;
+    height:35px;
+    transform:translateX(-50%);
+    background:radial-gradient(ellipse, rgba(0,0,0,0.75), transparent 80%);
+    z-index:0;
+    border-radius:50%;
+  }
+
+  .pots{
+    position:absolute;
+    left:250px;
+    bottom:255px;
+    width:230px;
+    z-index:11;
+    filter:drop-shadow(0 12px 18px rgba(0,0,0,.5));
+    cursor:default;
+  }
+  .pots img{display:block;width:100%;height:auto}
+  .pots::after{
+    content:"";position:absolute;left:50%;bottom:0px;
+    width:90%;height:16px;
+    transform:translateX(-50%);
+    background:radial-gradient(ellipse, rgba(0,0,0,0.65), transparent 75%);
+    z-index:-1;
+    border-radius:50%;
+  }
+
+  .graffiti{
+    position:absolute;
+    left:80px;
+    bottom:340px;
+    width:140px;
+    z-index:9;
+    filter:drop-shadow(2px 4px 8px rgba(0,0,0,0.5));
+    cursor:default;
+    transform:rotate(-1deg);
+  }
+  .graffiti img{display:block;width:100%;height:auto;opacity:0.92}
+
+  .lavka{
+    position:absolute;
+    right:75px;
+    bottom:230px;
+    width:320px;
+    z-index:6;
+    cursor:pointer;
+    transition: transform .3s ease;
+  }
+
+  .lavka img{
+    display:block;
+    width:100%;
+    height:auto;
+    filter:drop-shadow(0 26px 22px rgba(0,0,0,.55));
+    transition: filter .3s ease;
+  }
+  .lavka:hover img{
+    filter:drop-shadow(0 26px 22px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(216,177,90,.35));
+  }
+  .lavka::after{
+    content:"";position:absolute;left:50%;bottom:2%;
+    width:78%;height:6%;transform:translateX(-50%);
+    background:radial-gradient(ellipse,rgba(0,0,0,.5),transparent 70%);
+    z-index:-1;
+  }
+
+  /* Модальные окна */
+  .modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.2s ease;
+    font-family: "Jura", sans-serif;
+  }
+  .modal.active {
+    visibility: visible;
+    opacity: 1;
+  }
+  .modal-content {
+    background: #2a1e14;
+    border: 2px solid var(--gold);
+    border-radius: 28px;
+    padding: 32px 28px 28px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 0 2px rgba(216,177,90,0.3);
+  }
+  .modal-content p {
+    color: var(--warm);
+    font-size: 20px;
+    margin-bottom: 28px;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px black;
+  }
+  .modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .modal-btn {
+    background: rgba(30,20,12,0.9);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 12px 16px;
+    font-size: 18px;
+    font-family: "Jura", sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 40px;
+  }
+  .modal-btn:hover {
+    background: var(--gold);
+    color: #1a120c;
+    border-color: #ffdf9c;
+    transform: scale(1.02);
+    box-shadow: 0 0 12px rgba(216,177,90,0.6);
+  }
+  .close-modal {
+    margin-top: 24px;
+    background: none;
+    border: none;
+    color: #b89a6a;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    letter-spacing: 0.1em;
+    font-family: "Jura", sans-serif;
+  }
+  .close-modal:hover {
+    color: var(--warm);
+  }
+
+  .mote{
+    position:absolute;border-radius:50%;
+    background:rgba(255,220,160,.7);
+    z-index:7;pointer-events:none;filter:blur(.4px);
+    animation:float linear infinite;
+  }
+  @keyframes float{
+    0%{transform:translateY(0) translateX(0);opacity:0}
+    10%{opacity:.6}90%{opacity:.5}
+    100%{transform:translateY(-800px) translateX(20px);opacity:0}
+  }
+
+  /* ============================================================
+     МОБИЛЬНАЯ / ПЛАНШЕТНАЯ ВЕРСИЯ  (< 900px)
+     Сцена отключается, показывается адаптивный layout
+  ============================================================ */
+  @media (max-width: 899px) {
+
+    html, body {
+      overflow: auto;
+      background: #1a120c;
+    }
+
+    /* Скрываем десктопный viewport со stage */
+    .viewport { display: none !important; }
+
+    /* Модалки остаются рабочими */
+    .modal { font-family: "Jura", sans-serif; }
+
+    /* ── Мобильная обёртка ── */
+    .mobile-shell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 100dvh;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      background-image: url("https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/mus_background.png");
+      background-repeat: repeat;
+      background-size: auto 40%;
+      background-position: top center;
+    }
+
+    /* Виньетки поверх фона */
+    .mobile-shell::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(120% 80% at 50% 15%, rgba(255,205,130,.14), transparent 55%),
+        linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, transparent 22%, transparent 65%, rgba(0,0,0,0.6) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.45) 0%, transparent 15%, transparent 85%, rgba(0,0,0,0.45) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Пол внизу — занимает больше экрана */
+    .mobile-shell::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 100%; height: 220px;
+      background-image: url("https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/mus_pol.png");
+      background-size: cover;
+      background-position: center top;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── Заголовок ── */
+    .mobile-title {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 36px 20px 0;
+      color: var(--gold);
+      text-shadow: 0 2px 0 #000, 0 0 20px rgba(255,190,90,.3);
+    }
+    .mobile-title h1 {
+      font-family: "Stalinist One", sans-serif;
+      font-weight: 400;
+      font-size: clamp(22px, 5vw, 38px);
+      letter-spacing: .03em;
+      line-height: 1.15;
+      white-space: normal;
+      word-break: break-word;
+      max-width: 90vw;
+    }
+    .mobile-title span {
+      display: block;
+      margin-top: 10px;
+      font-family: "Jura", sans-serif;
+      font-size: clamp(9px, 2.4vw, 13px);
+      letter-spacing: .28em;
+      color: #e8d9b5;
+      opacity: .8;
+      font-weight: 500;
+    }
+
+    /* ── Дверь — прижата к полу ── */
+    .mobile-door-wrap {
+      position: absolute;
+      /* низ двери совпадает с верхом пола (220px) */
+      bottom: 180px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .mobile-door {
+      width: clamp(200px, 56vw, 340px);
+      cursor: pointer;
+      filter: drop-shadow(0 16px 22px rgba(0,0,0,.7));
+      transition: filter .3s ease;
+    }
+    .mobile-door:hover,
+    .mobile-door:focus {
+      filter: drop-shadow(0 16px 28px rgba(0,0,0,.8)) drop-shadow(0 0 22px rgba(216,177,90,.4));
+      outline: none;
+    }
+    .mobile-door img {
+      display: block;
+      width: 100%; height: auto;
+    }
+    /* Тень вплотную к двери */
+    .mobile-door::after {
+      content: "";
+      display: block;
+      width: 65%;
+      height: 14px;
+      margin: -4px auto 0;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.72), transparent 78%);
+      border-radius: 50%;
+    }
+
+    /* ── Нижнее меню ── */
+    .mobile-nav {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 0 24px 32px;
+    }
+    .mobile-nav-btn {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      padding: 13px 20px;
+      border: 1px solid var(--gold);
+      border-radius: 40px;
+      background: rgba(26,18,12,0.88);
+      color: var(--gold);
+      font-family: "Jura", sans-serif;
+      font-size: clamp(14px, 3.8vw, 17px);
+      font-weight: 600;
+      letter-spacing: .07em;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .2s, color .2s, transform .15s, box-shadow .2s;
+    }
+    .mobile-nav-btn:hover,
+    .mobile-nav-btn:active {
+      background: var(--gold);
+      color: #1a120c;
+      transform: scale(1.02);
+      box-shadow: 0 0 14px rgba(216,177,90,.55);
+    }
+
+
+    /* Граффити слева от двери */
+    .mobile-graffiti {
+      position: absolute;
+      z-index: 10;
+      /* середина двери: door bottom=180px + ~половина высоты двери */
+      bottom: clamp(360px, 48vh, 520px);
+      left: clamp(4px, 2vw, 20px);
+      width: clamp(52px, 13vw, 90px);
+      transform: rotate(-1deg);
+      filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.55));
+      pointer-events: none;
+    }
+    .mobile-graffiti img {
+      display: block;
+      width: 100%;
+      height: auto;
+      opacity: 0.88;
+    }
+
+    /* Частицы на мобильном — через .mobile-shell */
+    .mobile-mote {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,220,160,.7);
+      pointer-events: none;
+      filter: blur(.4px);
+      animation: float linear infinite;
+      z-index: 3;
+    }
+  }
+
+  /* На десктопе мобильная оболочка скрыта */
+  @media (min-width: 900px) {
+    .mobile-shell { display: none !important; }
+  }
+</style>
+
+</head>
+<body>
+<div class="viewport">
+  <div class="stage" id="stage">
+
+    <div class="title" id="siteTitle">
+      <h1>Зал Домовых Эльфов</h1>
+
+    </div>
+
+    <div class="art pic-far-left">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/pic3.png" alt="Картина">
+    </div>
+    <div class="art pic-left">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/pic1.png" alt="Картина">
+    </div>
+    <div class="art pic-right">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/pic2.png" alt="Портрет">
+    </div>
+    <div class="graffiti">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/graffiti-hel.png" alt="Граффити">
+    </div>
+    <div class="pots">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/POTTS.png" alt="Горшки">
+    </div>
+    <div class="entrance" id="entrance" role="button" tabindex="0" aria-label="Войти в музей">
+      <div class="door-painting">
+        <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/door.png" alt="Картина-вход">
+      </div>
+    </div>
+    <div class="floor"></div>
+    <div class="lavka" id="lavka" role="button" tabindex="0" aria-label="Открыть меню сувенирной лавки">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/shop2.png" alt="Сувенирная лавка">
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     МОБИЛЬНАЯ ВЕРСИЯ (скрыта на десктопе)
+══════════════════════════════════════ -->
+<div class="mobile-shell" id="mobileShell">
+
+  <div class="mobile-title">
+    <h1>Зал Домовых Эльфов</h1>
+
+  </div>
+
+  <div class="mobile-graffiti">
+    <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/graffiti-hel.png" alt="Граффити">
+  </div>
+
+  <div class="mobile-door-wrap">
+    <div class="mobile-door" id="mobileDoor" role="button" tabindex="0" aria-label="Войти в музей">
+      <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/door.png" alt="Вход">
+    </div>
+  </div>
+
+  <nav class="mobile-nav">
+    <a href="#" class="mobile-nav-btn" id="mobileShopLink">Сувенирная лавка</a>
+  </nav>
+
+</div>
+
+<!-- Модальное окно выбора (три кнопки) -->
+<div id="choiceModal" class="modal">
+  <div class="modal-content">
+    <p>Вы подошли к натюрморту с подозрительно аппетитными овощами. Что вы сделаете дальше?</p>
+    <div class="modal-buttons" id="choiceButtons">
+      <!-- кнопки рендерятся динамически -->
+    </div>
+    <button class="close-modal" id="closeChoiceModal">Закрыть</button>
+  </div>
+</div>
+
+<!-- Модальное окно результата с кнопкой "Осмотреть другие овощи" -->
+<div id="resultModal" class="modal">
+  <div class="modal-content">
+    <p id="resultMessage"></p>
+    <div class="modal-buttons">
+      <button class="modal-btn" id="backToChoiceBtn">Осмотреть другие овощи</button>
+    </div>
+    <button class="close-modal" id="closeResultModal">Закрыть</button>
+  </div>
+</div>
+
+<script>
+  // ===================== ИЗМЕНЕНА ССЫЛКА НА МУЗЕЙ =====================
+  const MUSEUM_URL = "https://raven-hd.github.io/gift/house-elf/2026/index.html";
+  const MENU_URL   = "#";   // ссылка на лавку (пока заглушка)
+  // =================================================================
+
+  const choiceModal  = document.getElementById('choiceModal');
+  const resultModal  = document.getElementById('resultModal');
+  const resultMessage = document.getElementById('resultMessage');
+  const choiceButtons = document.getElementById('choiceButtons');
+
+  // Все «неправильные» варианты
+  const WRONG = [
+    { label: "Пощекотать морковку",   text: "Вы стоите и пытаетесь рассмешить морковку... Она молчит, но, кажется, ей приятно." },
+    { label: "Потрогать луковицу",     text: "Кажется, вы чувствуете тот самый луковый запах. Главное — не расплакаться. (Глаза слезятся, но вы держитесь!)" },
+    { label: "Понюхать баклажан",      text: "Баклажан пахнет достоинством. Вы не уверены, что это значит, но впечатлены." },
+    { label: "Постучать по репе",      text: "Репа отзывается глухим звуком. Внутри явно что-то есть. Или кто-то." },
+    { label: "Поприветствовать свёклу",text: "Свёкла смотрит на вас с нескрываемым превосходством. Вы отводите взгляд." },
+    { label: "Пересчитать горошины",   text: "Вы насчитали семь. Потом восемь. Потом снова семь. Горошины явно издеваются." },
+  ];
+  const CORRECT = { label: "Погладить тыкву", action: () => { window.location.href = MUSEUM_URL; } };
+
+  // Состояние: два «показанных» неправильных варианта (индексы)
+  let shownWrong = [];
+
+  function pickInitialWrong() {
+    // Случайно выбираем 2 из всех неправильных
+    const indices = WRONG.map((_, i) => i);
+    shuffle(indices);
+    shownWrong = indices.slice(0, 2);
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+  }
+
+  function replaceWrong(usedIndex) {
+    // Заменяем использованный вариант на случайный из оставшихся
+    const available = WRONG.map((_, i) => i).filter(i => !shownWrong.includes(i));
+    if (available.length === 0) {
+      // Если все показаны — сбрасываем кроме только что использованного
+      const fallback = WRONG.map((_, i) => i).filter(i => i !== usedIndex);
+      shuffle(fallback);
+      const posToReplace = shownWrong.indexOf(usedIndex);
+      shownWrong[posToReplace] = fallback[0];
+    } else {
+      shuffle(available);
+      const posToReplace = shownWrong.indexOf(usedIndex);
+      shownWrong[posToReplace] = available[0];
+    }
+  }
+
+  function renderChoiceButtons() {
+    choiceButtons.innerHTML = '';
+    // Собираем три кнопки: два неправильных + тыква, потом перемешиваем
+    const items = [
+      ...shownWrong.map(i => ({
+        label: WRONG[i].label,
+        onClick: () => {
+          const wrongIndex = i;
+          closeChoiceModal();
+          openResultModal(WRONG[wrongIndex].text);
+          replaceWrong(wrongIndex);
+        }
+      })),
+      { label: CORRECT.label, onClick: () => CORRECT.action() }
+    ];
+    shuffle(items);
+    items.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'modal-btn';
+      btn.textContent = item.label;
+      btn.addEventListener('click', item.onClick);
+      choiceButtons.appendChild(btn);
+    });
+  }
+
+  function openChoiceModal() {
+    renderChoiceButtons();
+    choiceModal.classList.add('active');
+  }
+  function closeChoiceModal() {
+    choiceModal.classList.remove('active');
+  }
+  function openResultModal(text) {
+    resultMessage.innerText = text;
+    resultModal.classList.add('active');
+  }
+  function closeResultModal() {
+    resultModal.classList.remove('active');
+  }
+
+  // Инициализация при первом открытии
+  pickInitialWrong();
+
+  document.getElementById('backToChoiceBtn').addEventListener('click', () => {
+    closeResultModal();
+    openChoiceModal();
+  });
+
+  document.getElementById('closeResultModal').addEventListener('click', closeResultModal);
+  document.getElementById('closeChoiceModal').addEventListener('click', closeChoiceModal);
+
+  choiceModal.addEventListener('click', (e) => {
+    if (e.target === choiceModal) closeChoiceModal();
+  });
+  resultModal.addEventListener('click', (e) => {
+    if (e.target === resultModal) closeResultModal();
+  });
+
+  const entrance = document.getElementById('entrance');
+  entrance.addEventListener('click', (e) => {
+    e.preventDefault();
+    openChoiceModal();
+  });
+  entrance.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openChoiceModal();
+    }
+  });
+
+  const lavka = document.getElementById('lavka');
+  function openShop() {
+    if (MENU_URL !== "#") window.location.href = MENU_URL;
+  }
+  lavka.addEventListener('click', openShop);
+  lavka.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openShop();
+    }
+  });
+
+  const STAGE_W = 1440, STAGE_H = 900;
+  const TITLE_MARGIN = 32; // px от видимого верха сцены
+  const stage = document.getElementById('stage');
+  const titleEl = document.getElementById('siteTitle');
+  function rescale() {
+    if (window.innerWidth < 900) return;
+    const scaleX = window.innerWidth / STAGE_W;
+    const scaleY = window.innerHeight / STAGE_H;
+    const s = Math.max(scaleX, scaleY);
+    stage.style.transform = `scale(${s})`;
+    stage.style.transformOrigin = 'center center';
+    // При cover scale верхний край сцены уходит за viewport.
+    // Смещение в пикселях сцены: (scaledH - viewH) / 2 / s
+    const scaledH = STAGE_H * s;
+    const viewH = window.innerHeight;
+    const cropTop = scaledH > viewH ? (scaledH - viewH) / 2 / s : 0;
+    titleEl.style.top = (cropTop + TITLE_MARGIN) + 'px';
+    // Уменьшаем шрифт при маленьком масштабе (маленькое окно)
+    const h1 = titleEl.querySelector('h1');
+    if (h1) {
+      // При s < 0.75 шрифт начинает уменьшаться пропорционально
+      const fs = s < 0.75 ? Math.max(26, Math.round(40 * s / 0.75)) : 40;
+      h1.style.fontSize = fs + 'px';
+    }
+  }
+  rescale();
+  window.addEventListener('resize', rescale);
+
+  for (let i = 0; i < 22; i++) {
+    const m = document.createElement('div');
+    m.className = 'mote';
+    const s = Math.random() * 3 + 1;
+    m.style.width = m.style.height = s + 'px';
+    m.style.left = Math.random() * 1440 + 'px';
+    m.style.bottom = Math.random() * 540 + 'px';
+    m.style.animationDuration = (Math.random() * 14 + 10) + 's';
+    m.style.animationDelay = (-Math.random() * 14) + 's';
+    stage.appendChild(m);
+  }
+
+  // -- МОБИЛЬНАЯ ВЕРСИЯ
+  const mobileDoor     = document.getElementById('mobileDoor');
+  const mobileShopLink = document.getElementById('mobileShopLink');
+  const mobileShell    = document.getElementById('mobileShell');
+
+  function mobileEnter() { openChoiceModal(); }
+
+  if (mobileDoor) {
+    mobileDoor.addEventListener('click', mobileEnter);
+    mobileDoor.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mobileEnter(); }
+    });
+  }
+
+
+  if (mobileShopLink) {
+    mobileShopLink.href = MENU_URL;
+    if (MENU_URL === '#') {
+      mobileShopLink.addEventListener('click', e => e.preventDefault());
+    }
+  }
+
+  if (mobileShell) {
+    for (let i = 0; i < 14; i++) {
+      const m = document.createElement('div');
+      m.className = 'mobile-mote';
+      const s = Math.random() * 2.5 + 1;
+      m.style.width = m.style.height = s + 'px';
+      m.style.left = (Math.random() * 100) + 'vw';
+      m.style.bottom = (Math.random() * 60) + 'vh';
+      m.style.animationDuration = (Math.random() * 14 + 10) + 's';
+      m.style.animationDelay = (-Math.random() * 14) + 's';
+      mobileShell.appendChild(m);
+    }
+  }
+</script>
+</body>
+</html>
