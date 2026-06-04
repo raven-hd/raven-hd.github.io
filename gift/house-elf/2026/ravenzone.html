@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAVENZONE · Лавка при Музее домовых эльфов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=Dela+Gothic+One&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:        #0b1820;
+  --bg2:       #0f1f2e;
+  --surface:   #122030;
+  --surface2:  #172840;
+  --card:      #16283a;
+  --border:    #1e3a52;
+  --border2:   #265c7d;
+  --blue:      #265c7d;
+  --blue2:     #3278a0;
+  --blue3:     #4a9cc8;
+  --gold:      #f9d59a;
+  --gold2:     #e8c070;
+  --gold3:     #c8a040;
+  --text:      #e8f0f8;
+  --text2:     #7a9ab8;
+  --text3:     #4a6a88;
+}
+
+body{
+  font-family:'Oswald',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse at 0% 0%, rgba(38,92,125,.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(249,213,154,.05) 0%, transparent 50%)
+}
+
+/* ══════════ ШАПКА — МАРКЕТПЛЕЙС ══════════ */
+.topbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50
+}
+.topbar-inner{
+  max-width:1200px;margin:0 auto;
+  padding:0 24px;height:56px;
+  display:flex;align-items:center;gap:20px
+}
+
+/* Логотип */
+.logo{
+  display:flex;align-items:baseline;gap:4px;flex-shrink:0;text-decoration:none
+}
+.logo-raven{
+  font-family:'Dela Gothic One',sans-serif;
+  font-size:20px;letter-spacing:.06em;
+  color:var(--text)
+}
+.logo-zone{
+  font-family:'Dela Gothic One',sans-serif;
+  font-size:20px;letter-spacing:.06em;
+  color:var(--gold)
+}
+.logo-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--blue3);margin:0 1px 3px;align-self:flex-end
+}
+
+/* Суббренд */
+.logo-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:11px;
+  color:var(--text2);letter-spacing:.08em;
+  border-left:1px solid var(--border2);
+  padding-left:12px;white-space:nowrap
+}
+
+/* Разделитель */
+.topbar-spacer{flex:1}
+
+/* Категории навигации */
+.topbar-nav{
+  display:flex;gap:4px;
+  font-size:11px;letter-spacing:.08em;text-transform:uppercase
+}
+.nav-item{
+  color:var(--text2);padding:6px 10px;border-radius:6px;
+  cursor:pointer;transition:color .15s,background .15s;
+  white-space:nowrap
+}
+.nav-item:hover,.nav-item.active{color:var(--gold);background:rgba(249,213,154,.07)}
+
+/* Корзина в шапке */
+.topbar-cart{
+  display:flex;align-items:center;gap:8px;
+  background:var(--blue);
+  border:none;border-radius:8px;
+  padding:7px 14px;cursor:pointer;
+  transition:background .15s;flex-shrink:0
+}
+.topbar-cart:hover{background:var(--blue2)}
+.cart-icon{
+  width:18px;height:18px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0
+}
+.cart-icon svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cart-badge{
+  background:var(--gold);color:var(--bg);
+  font-family:'Dela Gothic One',sans-serif;font-size:13px;
+  min-width:22px;height:22px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 4px
+}
+.cart-total-top{
+  font-size:13px;font-weight:500;color:var(--gold);letter-spacing:.04em
+}
+
+/* ══════════ HERO ПОЛОСКА ══════════ */
+.hero{
+  background:linear-gradient(135deg, var(--surface2) 0%, var(--bg2) 60%, #0d1e2c 100%);
+  border-bottom:1px solid var(--border);
+  padding:20px 24px;
+  position:relative;overflow:hidden
+}
+.hero::before{
+  content:'';position:absolute;
+  top:-40px;right:-40px;
+  width:240px;height:240px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(38,92,125,.3) 0%, transparent 70%)
+}
+.hero::after{
+  content:'';position:absolute;
+  bottom:-20px;left:30%;
+  width:160px;height:160px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(249,213,154,.06) 0%, transparent 70%)
+}
+.hero-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;font-size:clamp(18px,3vw,28px);
+  color:var(--text);letter-spacing:.04em;
+  line-height:1.2
+}
+.hero-title span{color:var(--gold)}
+.hero-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:14px;
+  color:var(--text2);margin-top:6px
+}
+.hero-tags{
+  display:flex;gap:8px;margin-top:12px;flex-wrap:wrap
+}
+.hero-tag{
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--border2);color:var(--text2);
+  padding:3px 10px;border-radius:20px
+}
+
+/* ══════════ КОНТЕНТ ══════════ */
+.main{padding:28px 24px 110px;max-width:1200px;margin:0 auto}
+
+/* ══════════ СЕКЦИЯ / ПОЛКА ══════════ */
+.shelf{margin-bottom:48px}
+.shelf-header{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:16px
+}
+.shelf-title{
+  font-family:'Dela Gothic One',sans-serif;
+  font-size:13px;letter-spacing:.18em;
+  color:var(--text);text-transform:uppercase
+}
+.shelf-line{
+  flex:1;height:1px;
+  background:linear-gradient(90deg,var(--border2) 0%,transparent 100%)
+}
+
+/* ══════════ СЕТКА КАРТОЧЕК ══════════ */
+.shelf-items{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:14px
+}
+
+/* ══════════ КАРТОЧКА ТОВАРА ══════════ */
+.product{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px 12px 12px;
+  display:flex;flex-direction:column;
+  transition:border-color .18s,box-shadow .18s;
+  cursor:default;
+  position:relative
+}
+.product:hover{
+  border-color:var(--border2);
+  box-shadow:0 6px 24px rgba(38,92,125,.2)
+}
+
+/* ══════════ КАРУСЕЛЬ ══════════ */
+.car{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-bottom:10px
+}
+.car-btn{
+  background:transparent;border:1px solid var(--border);
+  color:var(--text3);width:24px;height:24px;border-radius:6px;
+  cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .15s,color .15s,background .15s;flex-shrink:0
+}
+.car-btn:hover{border-color:var(--blue3);color:var(--gold);background:rgba(38,92,125,.2)}
+
+.car-img{
+  width:128px;height:128px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border-radius:8px;overflow:hidden;
+  background:rgba(255,255,255,.02);position:relative
+}
+.car-img::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(38,92,125,.08) 0%,transparent 60%);
+  pointer-events:none;border-radius:8px
+}
+.car-img img{
+  max-width:116px;max-height:116px;
+  width:auto;height:auto;object-fit:contain;
+  transition:transform .2s;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))
+}
+.car-img:hover img{transform:scale(1.07)}
+
+/* Точки */
+.dots{display:flex;justify-content:center;gap:4px;margin-bottom:9px}
+.dot{
+  width:4px;height:4px;border-radius:50%;
+  background:var(--border2);border:none;padding:0;cursor:pointer;
+  transition:background .15s,width .15s
+}
+.dot.on{background:var(--gold);width:10px;border-radius:2px}
+
+/* Название */
+.var-name{
+  font-size:12px;font-weight:400;letter-spacing:.04em;
+  color:var(--text);text-align:center;
+  min-height:2.6em;
+  display:flex;align-items:center;justify-content:center;
+  line-height:1.3;margin-bottom:5px
+}
+
+/* Цена */
+.var-price{
+  font-family:'Dela Gothic One',sans-serif;
+  font-size:16px;color:var(--gold);
+  text-align:center;margin-bottom:10px
+}
+
+/* Кнопка */
+.add-btn{
+  background:var(--blue);color:var(--text);
+  border:none;border-radius:8px;
+  padding:8px 10px;
+  font-family:'Oswald',sans-serif;font-size:11px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:background .15s;
+  width:100%;margin-top:auto
+}
+.add-btn:hover{background:var(--blue2)}
+.add-btn.added{
+  background:rgba(38,92,125,.15);
+  color:var(--blue3);
+  border:1px solid var(--border2);
+  cursor:default
+}
+
+/* ══════════ НИЖНЯЯ ПОЛОСА ══════════ */
+.bar{
+  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 32px);max-width:900px;
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  border-radius:12px;padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  box-shadow:0 8px 40px rgba(0,0,0,.6),0 0 0 1px rgba(38,92,125,.2);
+  z-index:100
+}
+.bar-left{display:flex;align-items:center;gap:10px}
+.bar-ico{
+  background:var(--blue);color:var(--gold);
+  font-family:'Dela Gothic One',sans-serif;font-size:13px;
+  width:30px;height:30px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center
+}
+.bar-label{font-size:12px;letter-spacing:.06em;color:var(--text2)}
+.bar-total{
+  font-family:'Dela Gothic One',sans-serif;font-size:17px;color:var(--gold)
+}
+.bar-btns{display:flex;gap:8px}
+.bar-btn{
+  font-size:11px;letter-spacing:.07em;font-family:'Oswald',sans-serif;
+  text-transform:uppercase;cursor:pointer;padding:7px 14px;
+  border-radius:8px;border:none;transition:background .15s
+}
+.bar-ok{background:var(--gold);color:var(--bg);font-weight:600}
+.bar-ok:hover{background:var(--gold2)}
+.bar-cl{
+  background:transparent;color:var(--text2);
+  border:1px solid var(--border);display:none
+}
+.bar-cl:hover{color:var(--text);background:rgba(255,255,255,.05)}
+
+/* ══════════ ЧЕК ══════════ */
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:20px
+}
+.overlay.on{display:flex}
+.receipt{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:16px;max-width:440px;width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.8);max-height:88vh;overflow-y:auto
+}
+.r-head{
+  text-align:center;padding:20px 20px 14px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,var(--surface2) 0%,var(--surface) 100%);
+  border-radius:16px 16px 0 0
+}
+.r-logo{
+  font-family:'Dela Gothic One',sans-serif;font-size:18px;
+  color:var(--text)
+}
+.r-logo span{color:var(--gold)}
+.r-date{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:var(--text2);margin-top:5px}
+.r-rows{padding:10px 18px}
+.r-row{
+  display:flex;align-items:center;padding:9px 0;
+  border-bottom:1px solid var(--border);gap:8px
+}
+.r-name{flex:1;font-size:12px;letter-spacing:.03em;color:var(--text)}
+.r-controls{display:flex;align-items:center;gap:4px}
+.qty-btn{
+  background:var(--card);color:var(--text);border:1px solid var(--border);
+  width:22px;height:22px;border-radius:5px;cursor:pointer;
+  font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .1s,border-color .1s
+}
+.qty-btn:hover{background:var(--blue);border-color:var(--blue3);color:var(--gold)}
+.qty-val{font-size:12px;min-width:20px;text-align:center}
+.r-sum{font-size:13px;font-weight:700;color:var(--gold);min-width:48px;text-align:right}
+.del-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:0 3px;transition:color .1s}
+.del-btn:hover{color:#e05050}
+.r-total{
+  margin:6px 18px 10px;padding:10px 0;
+  border-top:2px solid var(--border2);
+  display:flex;justify-content:space-between;
+  font-family:'Dela Gothic One',sans-serif;font-size:16px;color:var(--text)
+}
+.r-actions{padding:6px 18px 20px;display:flex;flex-direction:column;gap:8px}
+.r-pay,.r-back{
+  width:100%;padding:11px;border-radius:10px;
+  font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;
+  letter-spacing:.08em;cursor:pointer;border:none;transition:background .15s
+}
+.r-pay{background:var(--blue);color:var(--text)}
+.r-pay:hover{background:var(--blue2)}
+.r-back{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.r-back:hover{background:rgba(255,255,255,.05);color:var(--text)}
+
+/* ══════════ ЗУМОВОЕ ОКНО ══════════ */
+.zoom-overlay{
+  position:fixed;inset:0;
+  background:rgba(7,14,22,.92);
+  z-index:300;display:none;align-items:center;justify-content:center;
+  padding:20px;
+  /* Фон: тонкий паттерн из звёзд */
+  background-image:
+    radial-gradient(circle, rgba(249,213,154,.12) 1px, transparent 1px),
+    radial-gradient(circle, rgba(38,92,125,.18) 1px, transparent 1px);
+  background-size:48px 48px, 72px 72px;
+  background-position:0 0, 24px 24px
+}
+.zoom-overlay.on{display:flex}
+
+.zoom-box{
+  display:flex;flex-direction:column;align-items:center;
+  gap:16px;max-width:520px;width:100%;cursor:default;
+  animation:zoomIn .18s ease
+}
+@keyframes zoomIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+
+.zoom-img-wrap{
+  background:linear-gradient(135deg,var(--surface2) 0%,var(--card) 100%);
+  border:1px solid var(--border2);
+  border-radius:20px;padding:28px;
+  display:flex;align-items:center;justify-content:center;
+  min-width:300px;min-height:300px;
+  width:100%;
+  box-shadow:
+    0 0 0 1px rgba(249,213,154,.06),
+    0 24px 60px rgba(0,0,0,.7),
+    inset 0 1px 0 rgba(255,255,255,.05)
+}
+.zoom-img-wrap img{
+  max-width:min(400px,75vw);max-height:55vh;
+  width:auto;height:auto;object-fit:contain;
+  filter:drop-shadow(0 8px 28px rgba(0,0,0,.5))
+}
+
+.zoom-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;gap:16px
+}
+.zoom-nav-btn{
+  background:var(--surface2);
+  border:1px solid var(--border2);
+  color:var(--text2);border-radius:10px;
+  width:44px;height:44px;
+  font-size:22px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s,border-color .15s;flex-shrink:0
+}
+.zoom-nav-btn:hover{background:var(--blue);color:var(--gold);border-color:var(--blue3)}
+.zoom-meta{flex:1;text-align:center;min-width:0}
+.zoom-name{
+  font-family:'Oswald',sans-serif;font-size:15px;letter-spacing:.05em;
+  color:var(--text);line-height:1.3;margin-bottom:4px
+}
+.zoom-price{
+  font-family:'Dela Gothic One',sans-serif;font-size:20px;color:var(--gold)
+}
+.zoom-counter{
+  font-size:11px;letter-spacing:.1em;color:var(--text3);margin-top:4px
+}
+.zoom-actions{display:flex;gap:10px;width:100%}
+.zoom-add-btn{
+  flex:1;background:var(--blue);color:var(--text);
+  border:none;border-radius:10px;padding:12px 20px;
+  font-family:'Oswald',sans-serif;font-size:13px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+  transition:background .15s
+}
+.zoom-add-btn:hover{background:var(--blue2)}
+.zoom-add-btn.added{
+  background:rgba(38,92,125,.15);color:var(--blue3);
+  border:1px solid var(--border2);cursor:default
+}
+.zoom-close{
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text2);border-radius:10px;
+  width:44px;height:44px;
+  font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;flex-shrink:0
+}
+.zoom-close:hover{background:rgba(255,255,255,.08);color:var(--text)}
+
+footer{
+  text-align:center;margin-top:24px;
+  font-size:10px;letter-spacing:.2em;
+  color:var(--text3);text-transform:uppercase;
+  padding:16px 0;border-top:1px solid var(--border)
+}
+
+@media(max-width:640px){
+  .topbar-nav,.logo-sub{display:none}
+  .topbar-inner{padding:0 16px}
+  .hero{padding:16px}
+  .main{padding:20px 14px 100px}
+  .bar{left:10px;right:10px;transform:none;width:auto;flex-wrap:wrap;border-radius:12px}
+  .shelf-items{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ ШАПКА МАРКЕТПЛЕЙСА ══ -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="#">
+      <span class="logo-raven">RAVEN</span><div class="logo-dot"></div><span class="logo-zone">ZONE</span>
+    </a>
+    <span class="logo-sub">Сувенирная продукция Когтевранского музея</span>
+    <div class="topbar-spacer"></div>
+    <nav class="topbar-nav">
+      <div class="nav-item active" onclick="scrollToShelf('souvenirs-container')">Сувениры</div>
+      <div class="nav-item" onclick="scrollToShelf('accessories-container')">Аксессуары</div>
+      <div class="nav-item" onclick="scrollToShelf('clothing-container')">Одежда</div>
+    </nav>
+    <button class="topbar-cart" onclick="openReceipt()">
+      <div class="cart-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <div class="cart-badge" id="bar-ico">0</div>
+      <div class="cart-total-top" id="bar-sum"></div>
+    </button>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-title">Сувенирная продукция, посвященная выставке домовых эльфов, <br><span>доступна для заказа до конца июня.</span></div>
+    <div class="hero-tags">
+      <span class="hero-tag">Хогвартс Дамблдора · Когтевран</span>
+      <span class="hero-tag">Официальный магазин</span>
+      <span class="hero-tag">Доставка по Хогвартсу и Хогсмиду</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ПОЛКИ ══ -->
+<div class="main">
+
+  <div class="shelf">
+    <div class="shelf-header">
+      <div class="shelf-title">Сувениры</div>
+      <div class="shelf-line"></div>
+    </div>
+    <div class="shelf-items" id="souvenirs-container"></div>
+  </div>
+
+  <div class="shelf">
+    <div class="shelf-header">
+      <div class="shelf-title">Аксессуары</div>
+      <div class="shelf-line"></div>
+    </div>
+    <div class="shelf-items" id="accessories-container"></div>
+  </div>
+
+  <div class="shelf">
+    <div class="shelf-header">
+      <div class="shelf-title">Одежда</div>
+      <div class="shelf-line"></div>
+    </div>
+    <div class="shelf-items" id="clothing-container"></div>
+  </div>
+
+  <footer>RAVENZONE · Сувенирная продукция Когтевранского музея </footer>
+</div>
+
+<!-- ══ НИЖНЯЯ ПОЛОСА ══ -->
+<div class="bar" id="bar">
+  <div class="bar-left">
+    <div class="bar-ico" id="bar-ico-bottom">—</div>
+    <span class="bar-label" id="bar-label">Корзина пуста</span>
+  </div>
+  <div class="bar-total" id="bar-sum-bottom"></div>
+  <div class="bar-btns">
+    <button class="bar-btn bar-cl" id="bar-cl" onclick="clearCart()">Очистить</button>
+    <button class="bar-btn bar-ok" onclick="openReceipt()">Показать чек</button>
+  </div>
+</div>
+
+<!-- ══ ЧЕК ══ -->
+<div class="overlay" id="overlay" onclick="event.target===this&&closeReceipt()">
+  <div class="receipt">
+    <div class="r-head">
+      <div class="r-logo">RAVEN<span>ZONE</span></div>
+      <div class="r-date" id="r-date"></div>
+    </div>
+    <div class="r-rows" id="r-rows"></div>
+    <div class="r-total"><span>Итого</span><span id="r-total-sum"></span></div>
+    <div class="r-actions">
+      <button class="r-pay" id="r-pay">Перейти к оплате</button>
+      <button class="r-back" onclick="closeReceipt()">← Вернуться</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ЗУМОВОЕ ОКНО ══ -->
+<div class="zoom-overlay" id="zoom-overlay" onclick="event.target===this&&closeZoom()">
+  <div class="zoom-box" onclick="event.stopPropagation()">
+    <div class="zoom-img-wrap">
+      <img id="zoom-img" src="" alt="">
+    </div>
+    <div class="zoom-nav">
+      <button class="zoom-nav-btn" onclick="zoomStep(-1)">‹</button>
+      <div class="zoom-meta">
+        <div class="zoom-name" id="zoom-name"></div>
+        <div class="zoom-price" id="zoom-price"></div>
+        <div class="zoom-counter" id="zoom-counter"></div>
+      </div>
+      <button class="zoom-nav-btn" onclick="zoomStep(1)">›</button>
+    </div>
+    <div class="zoom-actions">
+      <button class="zoom-add-btn" id="zoom-add-btn" onclick="zoomAddToCart()">В корзину</button>
+      <button class="zoom-close" onclick="closeZoom()">✕</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ──────────────── ДАННЫЕ ────────────────
+const BASE = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/lavka/';
+
+const figurinesCarousel = [
+  {name:'Эмма',  price:15, imgUrl:BASE+'emma.PNG',  comment:'фигурка_эмма'},
+  {name:'Ганс',  price:15, imgUrl:BASE+'gans.PNG',  comment:'фигурка_ганс'},
+  {name:'Нико',  price:15, imgUrl:BASE+'niko.PNG',  comment:'фигурка_нико'},
+  {name:'Саму',  price:15, imgUrl:BASE+'samu.PNG',  comment:'фигурка_саму'},
+  {name:'Тедди', price:15, imgUrl:BASE+'teddy.PNG', comment:'фигурка_тедди'},
+  {name:'Плюш',  price:15, imgUrl:BASE+'plush.PNG', comment:'фигурка_плюш'},
+  {name:'Томас', price:15, imgUrl:BASE+'tomas.PNG', comment:'фигурка_томас'},
+  {name:'Винки', price:15, imgUrl:BASE+'winky.PNG', comment:'фигурка_винки'}
+];
+
+const magnets = Array.from({length:16},(_,i)=>({
+  name:`Магнит #${i+1}`, price:10,
+  imgUrl:BASE+`m${i+1}.png`, comment:`магнит_${i+1}`
+}));
+
+const frames = Array.from({length:7},(_,i)=>({
+  name:`Рамка для колдографий #${i+1}`, price:12,
+  imgUrl:BASE+`frame${i+1}.png`, comment:`рамка_${i+1}`
+}));
+
+const keychainsFaculty = [
+  {name:'Брелок «Свободный эльф Гриффиндор»', price:10, imgUrl:BASE+'gry.PNG',   comment:'брелок_гриффиндор'},
+  {name:'Брелок «Свободный эльф Слизерин»',   price:10, imgUrl:BASE+'sly.PNG',   comment:'брелок_слизерин'},
+  {name:'Брелок «Свободный эльф Когтевран»',  price:10, imgUrl:BASE+'rav.PNG',   comment:'брелок_когтевран'},
+  {name:'Брелок «Свободный эльф Пуффендуй»',  price:10, imgUrl:BASE+'huf.PNG',   comment:'брелок_пуффендуй'}
+];
+
+const keychainsPlaces = [
+  {name:'Брелок «Свабооодный эльф Магического Лондона»',    price:10, imgUrl:BASE+'d_lond.PNG', comment:'брелок_лондон'},
+  {name:'Брелок «Свабооодный эльф Хогвартса Дамблдора»',    price:10, imgUrl:BASE+'d_hogw.PNG', comment:'брелок_хогвартс_дамблдор'},
+  {name:'Брелок «Свабооодный эльф Хогсмида»',               price:10, imgUrl:BASE+'d_hogs.PNG', comment:'брелок_хогсмид'},
+  {name:'Брелок «Свабооодный эльф Хогвартса Гриффиндора»',  price:10, imgUrl:BASE+'d_gry.PNG',  comment:'брелок_хогвартс_гриффиндор'},
+  {name:'Брелок «Свабооодный эльф Хогвартса Слизерина»',    price:10, imgUrl:BASE+'d_sly.PNG',  comment:'брелок_хогвартс_слизерин'},
+  {name:'Брелок «Свабооодный эльф Хогвартса Когтеврана»',   price:10, imgUrl:BASE+'d_rav.PNG',  comment:'брелок_хогвартс_когтевран'},
+  {name:'Брелок «Свабооодный эльф Хогвартса Пуффендуя»',    price:10, imgUrl:BASE+'d_huf.PNG',  comment:'брелок_хогвартс_пуффендуй'}
+];
+
+const pins = Array.from({length:4},(_,i)=>({
+  name:`Значок #${i+1}`, price:5,
+  imgUrl:BASE+`pin${i+1}.png`, comment:`значок_${i+1}`
+}));
+
+const bookmarks = Array.from({length:4},(_,i)=>({
+  name:`Закладка #${i+1}`, price:10,
+  imgUrl:BASE+`z${i+1}.png`, comment:`закладка_${i+1}`
+}));
+
+const socksCarousel = [
+  {name:'Носки Гриффиндор', price:15, imgUrl:BASE+'s_gry.PNG', comment:'носки_гриффиндор'},
+  {name:'Носки Слизерин',   price:15, imgUrl:BASE+'s_sly.PNG', comment:'носки_слизерин'},
+  {name:'Носки Когтевран',  price:15, imgUrl:BASE+'s_rav.PNG', comment:'носки_когтевран'},
+  {name:'Носки Пуффендуй',  price:15, imgUrl:BASE+'s_huf.PNG', comment:'носки_пуффендуй'}
+];
+
+const tshirtsCarousel = Array.from({length:6},(_,i)=>({
+  name:`Футболка из наволочки #${i+1}`, price:18,
+  imgUrl:BASE+`n${i+1}.png`, comment:`футболка_наволочка${i+1}`
+}));
+
+// ──────────────── КОРЗИНА ────────────────
+let cart = [];
+const SELLER  = 217;
+const PAY_URL = 'https://hogsmeade.dhog.org/ucp.php?i=-hogsmeade-bank-ucp-main_module&mode=personal_transactions';
+
+const sum   = () => cart.reduce((s,i)=>s+i.p*i.q, 0);
+const count = () => cart.reduce((s,i)=>s+i.q, 0);
+
+function addItem(n,p,c,btn){
+  const f=cart.find(i=>i.n===n&&i.c===c);
+  f?f.q++:cart.push({n,p,c,q:1});
+  if(btn) btn.classList.add('added');
+  renderBar();
+}
+
+function chQty(idx,d){
+  cart[idx].q+=d;
+  if(cart[idx].q<=0)cart.splice(idx,1);
+  renderBar();
+  cart.length?renderRows():closeReceipt();
+}
+function delRow(idx){
+  cart.splice(idx,1);
+  renderBar();
+  cart.length?renderRows():closeReceipt();
+}
+function clearCart(){
+  cart=[];
+  document.querySelectorAll('.add-btn.added,.zoom-add-btn.added').forEach(b=>b.classList.remove('added'));
+  renderBar();
+  closeReceipt();
+}
+function renderBar(){
+  const n=count();
+  // шапка
+  document.getElementById('bar-ico').textContent=n>0?n:'0';
+  document.getElementById('bar-sum').textContent=n>0?sum()+' G':'';
+  // нижняя полоса
+  document.getElementById('bar-ico-bottom').textContent=n>0?n:'—';
+  document.getElementById('bar-label').textContent=n>0?'позиций в заказе':'Корзина пуста';
+  document.getElementById('bar-sum-bottom').textContent=n>0?sum()+' G':'';
+  document.getElementById('bar-cl').style.display=n>0?'':'none';
+}
+function renderRows(){
+  const rows=cart.map((it,i)=>`
+    <div class="r-row">
+      <span class="r-name">${it.n}</span>
+      <div class="r-controls">
+        <button class="qty-btn" onclick="chQty(${i},-1)">−</button>
+        <span class="qty-val">${it.q}</span>
+        <button class="qty-btn" onclick="chQty(${i},1)">+</button>
+      </div>
+      <span class="r-sum">${it.p*it.q} G</span>
+      <button class="del-btn" onclick="delRow(${i})">✕</button>
+    </div>`).join('');
+  document.getElementById('r-rows').innerHTML=rows||`<div style="text-align:center;padding:28px;color:var(--text2)">Выберите товары</div>`;
+  document.getElementById('r-total-sum').textContent=sum()+' G';
+  const pay=document.getElementById('r-pay');
+  pay.style.display=cart.length?'':'none';
+  if(cart.length){
+    const comment=cart.map(i=>i.q>1?i.c+'x'+i.q:i.c).join(', ');
+    pay.onclick=()=>window.open(PAY_URL+'&to='+SELLER+'&amount='+sum()+'&comment='+encodeURIComponent(comment),'_top');
+  }
+}
+function openReceipt(){
+  renderRows();
+  document.getElementById('r-date').textContent=new Date().toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('overlay').classList.add('on');
+}
+function closeReceipt(){document.getElementById('overlay').classList.remove('on')}
+
+// ──────────────── ЗУМОВОЕ ОКНО ────────────────
+let zoomState = {variants:[], idx:0};
+
+function openZoom(variants, idx){
+  zoomState = {variants, idx};
+  renderZoom();
+  document.getElementById('zoom-overlay').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function renderZoom(){
+  const {variants,idx} = zoomState;
+  const v = variants[idx];
+  document.getElementById('zoom-img').src   = v.imgUrl;
+  document.getElementById('zoom-img').alt   = v.name;
+  document.getElementById('zoom-name').textContent  = v.name;
+  document.getElementById('zoom-price').textContent = v.price+' G';
+  document.getElementById('zoom-counter').textContent = (idx+1)+' / '+variants.length;
+  const btn = document.getElementById('zoom-add-btn');
+  btn.classList.toggle('added', !!cart.find(i=>i.n===v.name&&i.c===v.comment));
+  btn.textContent = btn.classList.contains('added') ? 'В корзине' : 'В корзину';
+}
+function zoomStep(d){
+  const {variants,idx} = zoomState;
+  zoomState.idx = (idx+d+variants.length)%variants.length;
+  renderZoom();
+}
+function closeZoom(){
+  document.getElementById('zoom-overlay').classList.remove('on');
+  document.body.style.overflow='';
+}
+function zoomAddToCart(){
+  const btn=document.getElementById('zoom-add-btn');
+  if(btn.classList.contains('added'))return;
+  const v=zoomState.variants[zoomState.idx];
+  addItem(v.name,v.price,v.comment,null);
+  btn.classList.add('added');btn.textContent='В корзине';
+  document.querySelectorAll('.add-btn').forEach(b=>{
+    if(b.dataset.comment===v.comment)b.classList.add('added');
+  });
+}
+
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('zoom-overlay').classList.contains('on')){
+    if(e.key==='Escape')closeZoom();
+    if(e.key==='ArrowLeft')zoomStep(-1);
+    if(e.key==='ArrowRight')zoomStep(1);
+  }
+});
+
+// ──────────────── НАВИГАЦИЯ ────────────────
+function scrollToShelf(id){
+  const el=document.getElementById(id);
+  if(el)el.closest('.shelf').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ──────────────── РЕНДЕР КАРУСЕЛИ ────────────────
+function buildCarouselCard(variants){
+  const sid='s'+Math.random().toString(36).slice(2,8);
+  let idx=0;
+
+  const el=document.createElement('div');
+  el.className='product';
+  el.innerHTML=`
+    <div class="car">
+      <button class="car-btn" id="l-${sid}">‹</button>
+      <div class="car-img" id="ci-${sid}" title="Нажмите для увеличения">
+        <img id="img-${sid}" src="" alt="" loading="lazy">
+      </div>
+      <button class="car-btn" id="r-${sid}">›</button>
+    </div>
+    <div class="dots" id="dots-${sid}">${variants.map((_,i)=>`<button class="dot${i===0?' on':''}"></button>`).join('')}</div>
+    <div class="var-name" id="name-${sid}"></div>
+    <div class="var-price" id="price-${sid}"></div>
+    <button class="add-btn" id="btn-${sid}">В корзину</button>`;
+
+  const imgEl   = el.querySelector(`#img-${sid}`);
+  const nameEl  = el.querySelector(`#name-${sid}`);
+  const priceEl = el.querySelector(`#price-${sid}`);
+  const addBtn  = el.querySelector(`#btn-${sid}`);
+  const dotBtns = [...el.querySelector(`#dots-${sid}`).querySelectorAll('.dot')];
+
+  function setIdx(i){
+    idx=(i+variants.length)%variants.length;
+    const v=variants[idx];
+    imgEl.src=v.imgUrl;imgEl.alt=v.name;
+    nameEl.textContent=v.name;
+    priceEl.textContent=v.price+' G';
+    addBtn.classList.remove('added');
+    addBtn.dataset.comment=v.comment;
+    if(cart.find(c=>c.n===v.name&&c.c===v.comment))addBtn.classList.add('added');
+    dotBtns.forEach((d,di)=>d.classList.toggle('on',di===idx));
+  }
+
+  el.querySelector(`#l-${sid}`).onclick=(e)=>{e.stopPropagation();setIdx(idx-1)};
+  el.querySelector(`#r-${sid}`).onclick=(e)=>{e.stopPropagation();setIdx(idx+1)};
+  dotBtns.forEach((d,di)=>d.onclick=()=>setIdx(di));
+  el.querySelector(`#ci-${sid}`).onclick=()=>openZoom(variants, idx);
+  addBtn.onclick=()=>{
+    if(addBtn.classList.contains('added'))return;
+    addItem(variants[idx].name,variants[idx].price,variants[idx].comment,addBtn);
+  };
+
+  setIdx(0);
+  return el;
+}
+
+// ──────────────── ИНИЦИАЛИЗАЦИЯ ────────────────
+function renderShop(){
+  const s1=document.getElementById('souvenirs-container');
+  const s2=document.getElementById('accessories-container');
+  const s3=document.getElementById('clothing-container');
+  [figurinesCarousel,magnets,frames].forEach(v=>s1.appendChild(buildCarouselCard(v)));
+  [keychainsFaculty,keychainsPlaces,pins,bookmarks].forEach(v=>s2.appendChild(buildCarouselCard(v)));
+  [socksCarousel,tshirtsCarousel].forEach(v=>s3.appendChild(buildCarouselCard(v)));
+}
+
+renderShop();
+</script>
+</body>
+</html>
