@@ -1725,7 +1725,8 @@ function renderPortrait(item) {
     rightArrow.className = 'portrait-arrow';
     
     let img;
-    const hasImg = (section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta' || section.type === 'inktober' || isFashion) && item.fullImg;
+    // ИСПРАВЛЕНИЕ: добавлен тип 'hogwarts' в условие
+    const hasImg = (section.type === 'historic' || section.type === 'plates' || section.type === 'faculty' || section.type === 'pasta' || section.type === 'hogwarts' || section.type === 'inktober' || isFashion) && item.fullImg;
     if (hasImg) {
       img = document.createElement('img');
       img.src = item.fullImg;
