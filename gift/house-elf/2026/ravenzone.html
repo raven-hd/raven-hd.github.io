@@ -33,6 +33,7 @@ body{
   background:var(--bg);
   color:var(--text);
   min-height:100vh;
+  overflow-x:hidden;
   background-image:
     radial-gradient(ellipse at 0% 0%, rgba(38,92,125,.18) 0%, transparent 50%),
     radial-gradient(ellipse at 100% 100%, rgba(249,213,154,.05) 0%, transparent 50%)
@@ -222,12 +223,7 @@ body{
   width:128px;height:128px;
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;border-radius:8px;overflow:hidden;
-  background:rgba(255,255,255,.02);position:relative
-}
-.car-img::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(38,92,125,.08) 0%,transparent 60%);
-  pointer-events:none;border-radius:8px
+  background:transparent;position:relative
 }
 .car-img img{
   max-width:116px;max-height:116px;
@@ -402,7 +398,7 @@ body{
   border:1px solid var(--border2);
   border-radius:20px;padding:28px;
   display:flex;align-items:center;justify-content:center;
-  min-width:300px;min-height:300px;
+  min-width:0;min-height:260px;
   width:100%;
   box-shadow:
     0 0 0 1px rgba(249,213,154,.06),
@@ -470,13 +466,71 @@ footer{
   padding:16px 0;border-top:1px solid var(--border)
 }
 
+/* ══════════ РЕКЛАМНОЕ ОБЛАКО ══════════ */
+.promo-cloud{
+  position:relative;
+  display:inline-flex;
+  flex-direction:column;
+  align-items:flex-start;
+  background:linear-gradient(135deg,var(--surface2) 0%,#0e2235 100%);
+  border:1px solid var(--border2);
+  border-radius:20px 20px 20px 20px;
+  padding:16px 18px 14px;
+  min-width:0;max-width:240px;
+  box-shadow:0 4px 20px rgba(38,92,125,.25),inset 0 1px 0 rgba(255,255,255,.05);
+  align-self:flex-start;
+  margin-top:4px
+}
+.promo-cloud::before,.promo-cloud::after{display:none}
+.promo-badge{
+  font-family:'Dela Gothic One',sans-serif;
+  font-size:11px;letter-spacing:.12em;
+  background:var(--gold);color:var(--bg);
+  padding:2px 8px;border-radius:12px;
+  margin-bottom:8px;text-transform:uppercase
+}
+.promo-title{
+  font-family:'Dela Gothic One',sans-serif;
+  font-size:22px;color:var(--gold);
+  line-height:1;margin-bottom:6px
+}
+.promo-text{
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;line-height:1.45;
+  color:var(--text)
+}
+.promo-text em{
+  font-style:italic;color:var(--text2)
+}
+.accessories-row{
+  display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap
+}
+.accessories-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+  gap:14px;
+  flex:1;min-width:0
+}
+
 @media(max-width:640px){
   .topbar-nav,.logo-sub{display:none}
   .topbar-inner{padding:0 16px}
   .hero{padding:16px}
   .main{padding:20px 14px 100px}
-  .bar{left:10px;right:10px;transform:none;width:auto;flex-wrap:wrap;border-radius:12px}
-  .shelf-items{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
+  .bar{left:10px;right:10px;transform:translateX(0);width:auto;flex-wrap:wrap;border-radius:12px}
+  .shelf-items{grid-template-columns:repeat(2,1fr);gap:10px}
+  .product{padding:10px 8px 10px}
+  .car{gap:4px}
+  .car-btn{width:20px;height:20px;font-size:13px;flex-shrink:0}
+  .car-img{width:auto;height:auto;aspect-ratio:1;max-width:100%;flex:1;min-width:0}
+  .car-img img{max-width:90%;max-height:90%}
+  .var-name{font-size:11px}
+  .var-price{font-size:14px}
+  .add-btn{font-size:10px;padding:7px 6px}
+  .promo-cloud{max-width:100%;min-width:unset;border-radius:16px}
+  .promo-cloud::before,.promo-cloud::after{display:none}
+  .accessories-row{flex-direction:column}
+  .accessories-grid{grid-template-columns:repeat(2,1fr);gap:10px}
 }
 </style>
 </head>
@@ -533,7 +587,16 @@ footer{
       <div class="shelf-title">Аксессуары</div>
       <div class="shelf-line"></div>
     </div>
-    <div class="shelf-items" id="accessories-container"></div>
+    <div class="accessories-row">
+      <div class="accessories-grid" id="accessories-container"></div>
+      <div class="promo-cloud">
+        <div class="promo-badge">Акция</div>
+        <div class="promo-title">−50%</div>
+        <div class="promo-text">
+          На все закладки — при предъявлении отзыва в&nbsp;<strong>Когтевранском Литературном клубе</strong> на любую книгу, датированного датой оформления заказа.
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="shelf">
@@ -661,6 +724,14 @@ const tshirtsCarousel = Array.from({length:6},(_,i)=>({
   name:`Футболка из наволочки #${i+1}`, price:18,
   imgUrl:BASE+`n${i+1}.png`, comment:`футболка_наволочка${i+1}`
 }));
+
+const slippers = [
+  {name:'Тапочки Тедди', price:20, imgUrl:BASE+'Teddy-tapky.png', comment:'тапки_тедди'}
+];
+
+const dakimakura = [
+  {name:'Подушка для сна Тедди', price:35, imgUrl:BASE+'Teddy-dakimakura.png', comment:'подушка_тедди'}
+];
 
 // ──────────────── КОРЗИНА ────────────────
 let cart = [];
@@ -844,9 +915,9 @@ function renderShop(){
   const s1=document.getElementById('souvenirs-container');
   const s2=document.getElementById('accessories-container');
   const s3=document.getElementById('clothing-container');
-  [figurinesCarousel,magnets,frames].forEach(v=>s1.appendChild(buildCarouselCard(v)));
+  [figurinesCarousel,magnets,frames,dakimakura].forEach(v=>s1.appendChild(buildCarouselCard(v)));
   [keychainsFaculty,keychainsPlaces,pins,bookmarks].forEach(v=>s2.appendChild(buildCarouselCard(v)));
-  [socksCarousel,tshirtsCarousel].forEach(v=>s3.appendChild(buildCarouselCard(v)));
+  [socksCarousel,tshirtsCarousel,slippers].forEach(v=>s3.appendChild(buildCarouselCard(v)));
 }
 
 renderShop();
