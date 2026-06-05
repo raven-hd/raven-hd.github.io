@@ -12,6 +12,7 @@
   :root{
     --gold:#d8b15a;
     --warm:#ffcf7a;
+    --contrast-sand:#D4A77D;
   }
 
   *{margin:0;padding:0;box-sizing:border-box}
@@ -495,6 +496,135 @@
   @media (min-width: 900px) {
     .mobile-shell { display: none !important; }
   }
+
+  /* ══════════════════════════════════
+     НОСОК НА ПОЛУ (опущен ниже)
+  ══════════════════════════════════ */
+  .sock {
+    position: absolute;
+    left: 820px;
+    bottom: 180px;    /* было 255px — опустили значительно ниже, почти к полу */
+    width: 64px;
+    z-index: 12;
+    cursor: pointer;
+    transition: transform .2s ease, filter .2s ease;
+    filter: drop-shadow(2px 4px 8px rgba(0,0,0,.55));
+    transform: rotate(-8deg);
+  }
+.sock::after {
+  content: '';
+  position: absolute;
+  bottom: 5px; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  height: 8px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.6), transparent 75%);
+  border-radius: 50%;
+}
+  }
+  .sock:hover {
+    transform: rotate(-8deg) scale(1.12);
+    filter: drop-shadow(2px 6px 12px rgba(0,0,0,.7)) drop-shadow(0 0 10px rgba(255,220,160,.3));
+  }
+  .sock img { display: block; width: 100%; height: auto; }
+
+  /* Скрыть носок на мобильном (там кнопка в меню) */
+  @media (max-width: 899px) { .sock { display: none; } }
+
+  /* ============================================================
+     МОДАЛЬНОЕ ОКНО КОМАНДЫ — ПРИГЛУШЕННЫЙ СИНИЙ + КОНТРАСТНЫЙ ПЕСОЧНЫЙ ДЛЯ ЗАГОЛОВКА И ИМЕН
+  ============================================================ */
+  .crew-modal-content {
+    background: #1e3a5f;  /* глубокий приглушенный синий */
+    border: none;
+    border-radius: 6px;
+    padding: 30px 28px 24px;
+    max-width: 520px;
+    width: 92%;
+    max-height: 82vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 0 #143048, 0 12px 40px rgba(0,0,0,.7), inset 0 0 0 1px rgba(90, 150, 200, 0.3);
+    text-align: left;
+    position: relative;
+  }
+  /* Верхняя дырка под скрепку — синий оттенок */
+  .crew-modal-content::before {
+    content: '';
+    position: absolute;
+    top: 14px; left: 50%;
+    transform: translateX(-50%);
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #2b5a7c, #1a3650);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.5);
+  }
+  /* Главный заголовок — контрастный песочный #D4A77D */
+  .crew-modal-content h2 {
+    font-family: "Stalinist One", sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: #D4A77D;   /* контрастный тёплый оттенок */
+    text-align: center;
+    letter-spacing: .06em;
+    line-height: 1.2;
+    margin-bottom: 2px;
+    margin-top: 16px;
+    text-shadow: 0 1px 0 rgba(60, 40, 20, 0.4);
+  }
+  .crew-modal-content .crew-subtitle {
+    font-family: "Jura", sans-serif;
+    font-size: 9px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: #cdc2a0;
+    text-align: center;
+    margin-bottom: 18px;
+    opacity: 0.9;
+  }
+  .crew-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .crew-member {
+    padding: 10px 0;
+    border-bottom: 1px dashed rgba(110, 180, 220, 0.35);
+  }
+  .crew-member:last-child { border-bottom: none; }
+  /* Имена сотрудников — также контрастный песочный #D4A77D */
+  .crew-name {
+    font-family: "Jura", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #D4A77D;   /* тот же тёплый цвет для единства */
+    letter-spacing: .04em;
+    margin-bottom: 2px;
+  }
+  .crew-role {
+    font-family: "Jura", sans-serif;
+    font-size: 11px;
+    color: #b0d0ec;   /* приглушенный голубой для описания */
+    line-height: 1.45;
+    letter-spacing: .01em;
+  }
+  .crew-close {
+    display: block;
+    margin: 18px auto 0;
+    background: none;
+    border: none;
+    color: #8ebcdb;
+    font-family: "Jura", sans-serif;
+    font-size: 12px;
+    letter-spacing: .12em;
+    cursor: pointer;
+    text-decoration: underline;
+    text-align: center;
+    transition: color 0.2s ease;
+  }
+  .crew-close:hover {
+    color: #eaf6ff;
+  }
 </style>
 
 </head>
@@ -531,10 +661,14 @@
     <div class="lavka" id="lavka" role="button" tabindex="0" aria-label="Открыть меню сувенирной лавки">
       <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/enter/shop2.png" alt="Сувенирная лавка">
     </div>
-  </div>
-</div>
 
-<!-- ══════════════════════════════════════
+    <!-- Носок на полу (опущен ниже) -->
+    <div class="sock" id="sockBtn" role="button" tabindex="0" aria-label="Посмотреть команду музея">
+      <img src="https://github.com/raven-hd/raven-hd.github.io/blob/main/gift/house-elf/2026/sock.png?raw=true" alt="Носок">
+    </div>
+
+  </div><!-- /stage -->
+</div><!-- /viewport --><!-- ══════════════════════════════════════
      МОБИЛЬНАЯ ВЕРСИЯ (скрыта на десктопе)
 ══════════════════════════════════════ -->
 <div class="mobile-shell" id="mobileShell">
@@ -556,8 +690,56 @@
 
   <nav class="mobile-nav">
     <a href="#" class="mobile-nav-btn" id="mobileShopLink">Сувенирная лавка</a>
+    <button class="mobile-nav-btn" id="mobileCrewBtn">Команда музея</button>
   </nav>
 
+</div>
+
+<!-- Модальное окно команды (синий фон + контрастные имена и заголовок) -->
+<div id="crewModal" class="modal">
+  <div class="crew-modal-content">
+    <h2>Зал Домовых Эльфов</h2>
+    <div class="crew-subtitle">Над выставкой работали</div>
+    <div class="crew-list">
+
+      <div class="crew-member">
+        <div class="crew-name">Блейк Эллингтон</div>
+        <div class="crew-role">Содержание эльфов в организме — 95%. Рыдал, но сделал</div>
+      </div>
+
+      <div class="crew-member">
+        <div class="crew-name">Хелена Кейн</div>
+        <div class="crew-role">Историк моды и искусств. Исследователь аналов истории. Главная по гонгу</div>
+      </div>
+
+      <div class="crew-member">
+        <div class="crew-name">Julietta Helwell-de-Kur</div>
+        <div class="crew-role">Председатель когтевранского отделения Г.А.В.Н.Э. Историк-эльфовед</div>
+      </div>
+
+      <div class="crew-member">
+        <div class="crew-name">Нимерия Блэкхорн</div>
+        <div class="crew-role">Портретописец</div>
+      </div>
+
+      <div class="crew-member">
+        <div class="crew-name">Беата ЛаВей</div>
+        <div class="crew-role">Координатор программы обмена домовиками</div>
+      </div>
+
+      <div class="crew-member">
+        <div class="crew-name">Амилия Лиссаранд</div>
+        <div class="crew-role">Главный распределитель Наволочек. Секретарь пыльных интриг</div>
+      </div>
+
+      <div class="crew-member">
+        <div class="crew-name">Мерида Морграфт</div>
+        <div class="crew-role">Амбассадор эльфийского бренда «Всё в дом». Экскурсовод отдела домашних эльфов</div>
+      </div>
+
+    </div>
+    <button class="crew-close" id="closeCrewModal">Закрыть</button>
+  </div>
 </div>
 
 <!-- Модальное окно выбора (три кнопки) -->
@@ -583,9 +765,9 @@
 </div>
 
 <script>
-  // ===================== ИЗМЕНЕНА ССЫЛКА НА МУЗЕЙ =====================
+  // ===================== ССЫЛКИ НА МУЗЕЙ И ЛАВКУ =====================
   const MUSEUM_URL = "https://raven-hd.github.io/gift/house-elf/2026/index.html";
-  const MENU_URL   = "https://raven-hd.github.io/gift/house-elf/2026/ravenzone.html";   // ссылка на лавку (пока заглушка)
+  const MENU_URL   = "https://raven-hd.github.io/gift/house-elf/2026/ravenzone.html";
   // =================================================================
 
   const choiceModal  = document.getElementById('choiceModal');
@@ -604,11 +786,9 @@
   ];
   const CORRECT = { label: "Погладить тыкву", action: () => { window.location.href = MUSEUM_URL; } };
 
-  // Состояние: два «показанных» неправильных варианта (индексы)
   let shownWrong = [];
 
   function pickInitialWrong() {
-    // Случайно выбираем 2 из всех неправильных
     const indices = WRONG.map((_, i) => i);
     shuffle(indices);
     shownWrong = indices.slice(0, 2);
@@ -622,10 +802,8 @@
   }
 
   function replaceWrong(usedIndex) {
-    // Заменяем использованный вариант на случайный из оставшихся
     const available = WRONG.map((_, i) => i).filter(i => !shownWrong.includes(i));
     if (available.length === 0) {
-      // Если все показаны — сбрасываем кроме только что использованного
       const fallback = WRONG.map((_, i) => i).filter(i => i !== usedIndex);
       shuffle(fallback);
       const posToReplace = shownWrong.indexOf(usedIndex);
@@ -639,7 +817,6 @@
 
   function renderChoiceButtons() {
     choiceButtons.innerHTML = '';
-    // Собираем три кнопки: два неправильных + тыква, потом перемешиваем
     const items = [
       ...shownWrong.map(i => ({
         label: WRONG[i].label,
@@ -677,7 +854,6 @@
     resultModal.classList.remove('active');
   }
 
-  // Инициализация при первом открытии
   pickInitialWrong();
 
   document.getElementById('backToChoiceBtn').addEventListener('click', () => {
@@ -694,6 +870,27 @@
   resultModal.addEventListener('click', (e) => {
     if (e.target === resultModal) closeResultModal();
   });
+
+  // ── КОМАНДА (НОСОК И МОБИЛЬНАЯ КНОПКА) ──
+  const crewModal     = document.getElementById('crewModal');
+  const sockBtn       = document.getElementById('sockBtn');
+  const mobileCrewBtn = document.getElementById('mobileCrewBtn');
+
+  function openCrewModal()  { crewModal.classList.add('active'); }
+  function closeCrewModal() { crewModal.classList.remove('active'); }
+
+  document.getElementById('closeCrewModal').addEventListener('click', closeCrewModal);
+  crewModal.addEventListener('click', e => { if (e.target === crewModal) closeCrewModal(); });
+
+  if (sockBtn) {
+    sockBtn.addEventListener('click', openCrewModal);
+    sockBtn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCrewModal(); }
+    });
+  }
+  if (mobileCrewBtn) {
+    mobileCrewBtn.addEventListener('click', openCrewModal);
+  }
 
   const entrance = document.getElementById('entrance');
   entrance.addEventListener('click', (e) => {
@@ -720,7 +917,7 @@
   });
 
   const STAGE_W = 1440, STAGE_H = 900;
-  const TITLE_MARGIN = 32; // px от видимого верха сцены
+  const TITLE_MARGIN = 32;
   const stage = document.getElementById('stage');
   const titleEl = document.getElementById('siteTitle');
   function rescale() {
@@ -730,16 +927,12 @@
     const s = Math.max(scaleX, scaleY);
     stage.style.transform = `scale(${s})`;
     stage.style.transformOrigin = 'center center';
-    // При cover scale верхний край сцены уходит за viewport.
-    // Смещение в пикселях сцены: (scaledH - viewH) / 2 / s
     const scaledH = STAGE_H * s;
     const viewH = window.innerHeight;
     const cropTop = scaledH > viewH ? (scaledH - viewH) / 2 / s : 0;
     titleEl.style.top = (cropTop + TITLE_MARGIN) + 'px';
-    // Уменьшаем шрифт при маленьком масштабе (маленькое окно)
     const h1 = titleEl.querySelector('h1');
     if (h1) {
-      // При s < 0.75 шрифт начинает уменьшаться пропорционально
       const fs = s < 0.75 ? Math.max(26, Math.round(40 * s / 0.75)) : 40;
       h1.style.fontSize = fs + 'px';
     }
@@ -772,7 +965,6 @@
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mobileEnter(); }
     });
   }
-
 
   if (mobileShopLink) {
     mobileShopLink.href = MENU_URL;
