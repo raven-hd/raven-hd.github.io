@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RAVENZONE · Лавка при Музее домовых эльфов</title>
+<link rel="icon" type="image/x-icon" href="/gift/house-elf/2026/faviconRZ.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=Dela+Gothic+One&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
@@ -703,10 +704,17 @@ const keychainsPlaces = [
   {name:'Брелок «Свабооодный эльф Хогвартса Пуффендуя»',    price:10, imgUrl:BASE+'d_huf.PNG',  comment:'брелок_хогвартс_пуффендуй'}
 ];
 
-const pins = Array.from({length:4},(_,i)=>({
-  name:`Значок #${i+1}`, price:5,
-  imgUrl:BASE+`pin${i+1}.png`, comment:`значок_${i+1}`
-}));
+// ========= ИСПРАВЛЕННЫЙ МАССИВ ЗНАЧКОВ (7 штук, включая новые pin5, pin6, pin7) =========
+const pins = [
+  {name:'Значок #1', price:5, imgUrl:BASE+'pin1.png', comment:'значок_1'},
+  {name:'Значок #2', price:5, imgUrl:BASE+'pin2.png', comment:'значок_2'},
+  {name:'Значок #3', price:5, imgUrl:BASE+'pin3.png', comment:'значок_3'},
+  {name:'Значок #4', price:5, imgUrl:BASE+'pin4.png', comment:'значок_4'},
+  {name:'Значок #5', price:5, imgUrl:BASE+'pin5.png', comment:'значок_5'},
+  {name:'Значок #6', price:5, imgUrl:BASE+'pin6.png', comment:'значок_6'},
+  {name:'Значок #7', price:5, imgUrl:BASE+'pin7.png', comment:'значок_7'}
+];
+// =============================================================================
 
 const bookmarks = Array.from({length:4},(_,i)=>({
   name:`Закладка #${i+1}`, price:10,
