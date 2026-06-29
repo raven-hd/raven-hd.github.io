@@ -857,7 +857,7 @@ function exportSite() {
 
   // 2. Убираем экранирование закрывающих тегов
   //    Заменяем все \</ на </ (это превращает \</div> в </div>)
-  html = html.replace(/\\</g, '<');
+  html = html.split('\\<').join('<');
 
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
