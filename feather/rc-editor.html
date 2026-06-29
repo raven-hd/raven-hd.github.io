@@ -849,13 +849,14 @@ function exportSite() {
   const jsonData = JSON.stringify(archive);
   let html = PUBLIC_TEMPLATE;
 
-  // 1. Вставляем данные вместо маркера @ARCHIVE_JSON@
+  // 1. Вставляем данные
   html = html.replace(
     /archive\s*=\s*\[\];\s*\/\/\s*@ARCHIVE_JSON@/,
     'archive = ' + jsonData + ';'
   );
 
-  // 2. Убираем экранирование закрывающих тегов (исправляет белую страницу)
+  // 2. Убираем экранирование закрывающих тегов
+  //    Заменяем все \</ на </ (это превращает \</div> в </div>)
   html = html.replace(/\\</g, '<');
 
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
