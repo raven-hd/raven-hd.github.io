@@ -848,11 +848,16 @@ function exportSite() {
   }
   const jsonData = JSON.stringify(archive);
   let html = PUBLIC_TEMPLATE;
+
+  // 1. Вставляем данные вместо маркера @ARCHIVE_JSON@
   html = html.replace(
     /archive\s*=\s*\[\];\s*\/\/\s*@ARCHIVE_JSON@/,
     'archive = ' + jsonData + ';'
   );
-  html = html.replace(/\\<\//g, '</');  
+
+  // 2. Убираем экранирование закрывающих тегов (исправляет белую страницу)
+  html = html.replace(/\\<\//g, '</');
+
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -862,7 +867,6 @@ function exportSite() {
   URL.revokeObjectURL(url);
   toast('Сайт экспортирован — загрузите файл на GitHub');
 }
-
 // ═══════════════════════════════════════════════
 //  JSON IMPORT / EXPORT
 // ═══════════════════════════════════════════════
