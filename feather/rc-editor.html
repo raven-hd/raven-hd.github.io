@@ -846,13 +846,29 @@ function exportSite() {
     toast('Нет выпусков для экспорта');
     return;
   }
+
   const jsonData = JSON.stringify(archive);
   let html = PUBLIC_TEMPLATE;
-  // Заменяем маркер на реальные данные
+
+  // 1. Вставляем данные вместо маркера @ARCHIVE_JSON@
   html = html.replace(
     /archive\s*=\s*\[\];\s*\/\/\s*@ARCHIVE_JSON@/,
     'archive = ' + jsonData + ';'
   );
+
+  // 2. Заменяем старую инициализацию (которая перезаписывает архив из localStorage)
+  html = html.replace(
+    /document\.addEventListener\s*\(\s*['"]DOMContentLoaded['"]\s*,\s*\(\s*\)\s*=>\s*\{\s*archive\s*=\s*JSON\.parse\(\s*localStorage\.getItem\(['"]rc_archive['"]\)\s*\|\|\s*['"]['"]\s*\)\s*;\s*renderArchive\(\)\s*;\s*document\.addEventListener\(['"]keydown['"],\s*onKey\)\s*;\s*\}/,
+    `document.addEventListener('DOMContentLoaded', () => {
+  const stored = localStorage.getItem('rc_archive');
+  if (stored) {
+    try { archive = JSON.parse(stored); } catch(e) {}
+  }
+  renderArchive();
+  document.addEventListener('keydown', onKey);
+});`
+  );
+
   const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
