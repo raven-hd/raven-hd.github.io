@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор — Архив Когтеврана</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <style>
+        :root {
+            --gold:   #BA9868;
+            --gold2:  #EBCEA7;
+            --navy:   #15273F;
+            --navy2:  #23385A;
+            --navy3:  #1a2d4a;
+            --text:   #CCCCCC;
+            --text2:  #8fa8c0;
+            --border: #404A5B;
+            --outline:#2E3952;
+            --speed:  0.2s;
+            --green:  #2e7a40;
+            --red:    #7a2020;
+        }
+        @font-face {
+            font-family: 'Romul';
+            src: url('https://drive.dhog.org/rave/fonts/Romul.woff2') format('woff2'),
+                 url('https://drive.dhog.org/rave/fonts/Romul.woff') format('woff');
+        }
+        @font-face {
+            font-family: 'BebasNeue';
+            src: url('https://raven-hd.github.io/feather/font/BebasNeue-Bold.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'SpecialElite';
+            src: url('https://raven-hd.github.io/feather/font/specialelite-cyrillic.ttf') format('truetype');
+        }
+
+        *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
+
+        body {
+            background-image: url('https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/background.jpg');
+            background-repeat: repeat;
+            background-position: top left;
+            background-attachment: fixed;
+            font-family: "Open Sans","Segoe UI",Tahoma,sans-serif;
+            font-size: 14px;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: var(--text);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1066px;
+            min-width: 320px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+        }
+
+        .outer-border {
+            background: var(--navy);
+            padding: 14px;
+            border: 40px solid transparent;
+            border-image: url('https://drive.dhog.org/rave/images/border.svg') 40 40 40 40 / 40px 40px 40px 40px stretch;
+        }
+
+        /* ── BANNER ── */
+        .banner-wrapper { display: flex; justify-content: center; margin-bottom: 20px; }
+        .banner {
+            width: 100%; max-width: 1010px;
+            height: auto; aspect-ratio: 1010 / 315;
+            position: relative; overflow: hidden;
+        }
+        .banner-bg { width:100%; height:100%; object-fit:cover; object-position:center; }
+        .banner-overlay {
+            position:absolute; top:0; left:0; width:100%; height:100%;
+            object-fit:cover; object-position:center; z-index:2;
+        }
+        .banner-frame {
+            position:absolute; top:0; left:0; width:100%; height:100%;
+            border:30px solid transparent;
+            border-image:url('https://drive.dhog.org/rave/images/inner-border.svg') 30 30 30 30 / 30px 30px 30px 30px stretch;
+            box-sizing:border-box; z-index:3; pointer-events:none;
+        }
+        .banner-title {
+            position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+            z-index:4; font-family:'Romul',serif;
+            font-size:clamp(18px,3.5vw,26px); color:var(--gold);
+            text-shadow:-2px -2px 0 #2E3952,2px -2px 0 #2E3952,-2px 2px 0 #2E3952,2px 2px 0 #2E3952;
+            letter-spacing:2px; white-space:nowrap;
+        }
+
+        /* ── BREADCRUMBS ── */
+        .breadcrumb {
+            background:var(--navy); padding:8px 20px; margin-bottom:5px;
+            display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text);
+        }
+        .breadcrumb a { text-decoration:none; transition:opacity .2s; }
+        .breadcrumb a:hover { opacity:.8; }
+        .breadcrumb-sep { color:var(--text); }
+        .breadcrumb-cur { color:var(--gold); }
+
+        /* ── CONTENT ── */
+        .content { background:var(--navy); padding:30px 40px 50px; min-height:300px; }
+
+        /* ── TOOLBAR ROW ── */
+        .toolbar {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 28px; flex-wrap: wrap;
+        }
+        .toolbar-title {
+            font-family: 'Romul', serif; color: var(--gold);
+            font-size: 20px; letter-spacing: 2px; flex: 1; min-width: 160px;
+        }
+        .btn {
+            font-family: 'Romul', serif; font-size: 13px; letter-spacing: 1.5px;
+            border: 1px solid; padding: 6px 16px; cursor: pointer;
+            background: transparent; transition: all .2s; white-space: nowrap;
+        }
+        .btn-primary { border-color: var(--gold); color: var(--gold); }
+        .btn-primary:hover { background: var(--gold); color: var(--navy); }
+        .btn-secondary { border-color: var(--outline); color: var(--text2); }
+        .btn-secondary:hover { border-color: var(--text2); color: var(--text); }
+        .btn-danger { border-color: rgba(180,60,60,.5); color: #c06060; }
+        .btn-danger:hover { background: rgba(180,60,60,.15); }
+        .btn-export { border-color: #4a8a5a; color: #7abf8a; }
+        .btn-export:hover { background: rgba(74,138,90,.15); }
+
+        /* ── ISSUE LIST ── */
+        .issues-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px; margin-bottom: 32px;
+        }
+        .issue-chip {
+            background: var(--navy2); border: 1px solid var(--outline);
+            padding: 11px 13px 12px; cursor: pointer;
+            transition: border-color .2s, background .2s;
+            position: relative; overflow: hidden;
+        }
+        .issue-chip::after {
+            content:''; position:absolute; top:0; left:0; right:0; height:2px;
+            background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform .2s;
+        }
+        .issue-chip:hover { border-color:var(--gold); background:rgba(35,56,90,.9); }
+        .issue-chip:hover::after { transform:scaleX(1); }
+        .issue-chip.active { border-color:var(--gold); background:rgba(35,56,90,.9); }
+        .issue-chip.active::after { transform:scaleX(1); }
+        .chip-num { font-family:'BebasNeue',serif; font-size:19px; letter-spacing:1.5px; color:var(--gold); line-height:1; margin-bottom:3px; }
+        .chip-dates { font-family:'SpecialElite',serif; font-size:10px; color:var(--text2); margin-bottom:2px; }
+        .chip-season { font-size:11px; color:var(--text2); opacity:.6; }
+        .chip-new {
+            background:transparent; border:1px dashed var(--outline); color:var(--text2);
+            display:flex; align-items:center; justify-content:center;
+            font-family:'Romul',serif; font-size:22px; padding:20px;
+            cursor:pointer; transition:all .2s; min-height:80px;
+        }
+        .chip-new:hover { border-color:var(--gold); color:var(--gold); }
+
+        /* ── SECTION DIVIDER ── */
+        .section-divider {
+            border:none; border-top:1px solid var(--outline);
+            margin: 24px 0 20px;
+        }
+        .section-label {
+            font-family:'Romul',serif; color:var(--gold); font-size:16px;
+            letter-spacing:2px; margin-bottom:16px;
+            display:flex; align-items:center; gap:12px;
+        }
+        .section-label span { font-family:'SpecialElite',serif; font-size:11px; color:var(--text2); letter-spacing:1px; }
+
+        /* ── FORM ── */
+        .form-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px 20px; margin-bottom:20px; }
+        .form-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px 20px; margin-bottom:20px; }
+        .form-full { grid-column:1/-1; }
+
+        .field { display:flex; flex-direction:column; gap:5px; }
+        .field-label {
+            font-family:'SpecialElite',serif; font-size:10px;
+            letter-spacing:1.5px; text-transform:uppercase; color:var(--text2);
+        }
+        .field-input, .field-textarea, .field-select {
+            background:var(--navy2); border:1px solid var(--outline);
+            color:var(--text); font-family:'SpecialElite',serif; font-size:14px;
+            padding:8px 10px; outline:none; width:100%;
+            transition:border-color .2s;
+        }
+        .field-input:focus, .field-textarea:focus { border-color:var(--gold); }
+        .field-input::placeholder, .field-textarea::placeholder { color:rgba(143,168,192,.35); }
+        .field-textarea { resize:vertical; min-height:70px; }
+        .field-input-num {
+            font-family:'BebasNeue',serif; font-size:28px; text-align:center;
+            padding:4px 8px; width:90px;
+        }
+
+        /* arrow toggle */
+        .arrow-row { display:flex; align-items:center; gap:10px; }
+        .arrow-toggle {
+            display:flex; gap:0;
+        }
+        .arrow-btn {
+            font-family:'BebasNeue',serif; font-size:20px;
+            padding:5px 14px; cursor:pointer; border:1px solid var(--outline);
+            background:transparent; color:var(--text2); transition:all .2s;
+        }
+        .arrow-btn.active-up { color:#5abf70; border-color:#2e7a40; background:rgba(46,122,64,.15); }
+        .arrow-btn.active-dn { color:#c07070; border-color:#7a2020; background:rgba(122,32,32,.15); }
+
+        /* ── LIST BUILDER ── */
+        .list-builder { display:flex; flex-direction:column; gap:4px; margin-bottom:6px; }
+        .list-row {
+            display:flex; align-items:center; gap:6px;
+        }
+        .list-row-bullet { color:var(--gold); font-size:11px; flex-shrink:0; }
+        .list-row-input {
+            flex:1; background:var(--navy2); border:1px solid var(--outline);
+            color:var(--text); font-family:'SpecialElite',serif; font-size:13px;
+            padding:6px 8px; outline:none; transition:border-color .2s;
+        }
+        .list-row-input:focus { border-color:var(--gold); }
+        .list-row-input::placeholder { color:rgba(143,168,192,.3); }
+        .list-row-del {
+            background:transparent; border:none; color:rgba(180,60,60,.5);
+            font-size:16px; cursor:pointer; padding:2px 5px; line-height:1;
+            transition:color .2s; flex-shrink:0;
+        }
+        .list-row-del:hover { color:#c04040; }
+        .list-add-btn {
+            font-family:'SpecialElite',serif; font-size:11px; letter-spacing:1px;
+            color:var(--text2); opacity:.5; cursor:pointer; padding:4px 0;
+            text-transform:uppercase; transition:opacity .2s; background:none; border:none;
+            text-align:left;
+        }
+        .list-add-btn:hover { opacity:.9; color:var(--gold); }
+
+        /* ── SECTION TOGGLE ── */
+        .section-toggle-row {
+            display:flex; align-items:center; gap:10px; margin-bottom:14px;
+        }
+        .toggle-chip {
+            font-family:'SpecialElite',serif; font-size:10px; letter-spacing:1px;
+            text-transform:uppercase; padding:3px 10px; cursor:pointer;
+            border:1px solid var(--outline); color:var(--text2);
+            background:transparent; transition:all .2s;
+        }
+        .toggle-chip.on { border-color:var(--gold); color:var(--gold); background:rgba(186,152,104,.08); }
+        .toggle-chip.off { opacity:.45; }
+
+        /* ── POLAROIDS ── */
+        .polaroids-wrap { display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; }
+        .pol-card {
+            background:#fff; padding:7px 7px 32px; position:relative;
+            width:130px; flex-shrink:0;
+            box-shadow:2px 3px 10px rgba(0,0,0,.2);
+        }
+        .pol-card:nth-child(3n+1) { transform:rotate(-1.4deg); }
+        .pol-card:nth-child(3n+2) { transform:rotate(1deg); }
+        .pol-card:nth-child(3n)   { transform:rotate(-.5deg); }
+        .pol-photo {
+            width:100%; aspect-ratio:1; background:#e8d9b5; overflow:hidden;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; position:relative;
+        }
+        .pol-photo img { width:100%; height:100%; object-fit:cover; display:none; }
+        .pol-card.has-photo .pol-photo img { display:block; }
+        .pol-photo-hint {
+            font-family:'SpecialElite',serif; font-size:9px; letter-spacing:1px;
+            color:#8fa0a8; text-align:center; text-transform:uppercase; line-height:1.5;
+            position:absolute;
+        }
+        .pol-card.has-photo .pol-photo-hint { display:none; }
+        .pol-caption { position:absolute; bottom:4px; left:0; right:0; text-align:center; padding:0 5px; }
+        .pol-name-input, .pol-date-input {
+            width:100%; background:transparent; border:none;
+            border-bottom:1px dashed rgba(21,45,74,.2); outline:none;
+            font-family:'SpecialElite',serif; text-align:center; display:block;
+            color:#2d3a46; padding:1px 2px;
+        }
+        .pol-name-input { font-size:11px; margin-bottom:2px; }
+        .pol-date-input { font-size:10px; color:#2a5280; }
+        .pol-name-input::placeholder, .pol-date-input::placeholder { opacity:.35; }
+        .pol-del-btn {
+            position:absolute; top:-7px; right:-7px; width:18px; height:18px;
+            background:#7a2020; color:#fff; border-radius:50%; font-size:11px;
+            line-height:18px; text-align:center; cursor:pointer; display:none; border:none;
+        }
+        .pol-card:hover .pol-del-btn { display:block; }
+        .pol-add-btn {
+            width:100px; height:147px; border:1.5px dashed var(--outline);
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; font-size:24px; color:var(--outline);
+            transition:all .2s; background:transparent; flex-shrink:0;
+        }
+        .pol-add-btn:hover { border-color:var(--gold); color:var(--gold); }
+
+        /* ── STATUS BAR ── */
+        .status-bar {
+            display:flex; align-items:center; gap:10px;
+            padding:8px 14px; background:rgba(35,56,90,.5);
+            border:1px solid var(--outline); margin-bottom:20px;
+            font-family:'SpecialElite',serif; font-size:11px; letter-spacing:1px;
+        }
+        .status-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+        .status-dot.new    { background:#8fa8c0; }
+        .status-dot.draft  { background:#BA9868; }
+        .status-dot.saved  { background:#5abf70; }
+        .status-text { color:var(--text2); flex:1; }
+        .status-date { color:var(--text2); opacity:.5; font-size:10px; }
+
+        /* ── IMPORT / EXPORT PANEL ── */
+        .data-panel {
+            background:rgba(35,56,90,.3); border:1px solid var(--outline);
+            padding:16px 18px; margin-bottom:24px;
+        }
+        .data-panel-title {
+            font-family:'Romul',serif; font-size:14px; letter-spacing:1.5px;
+            color:var(--text2); margin-bottom:12px;
+        }
+        .data-panel-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+        .data-note { font-family:'SpecialElite',serif; font-size:11px; color:var(--text2); opacity:.6; margin-top:8px; letter-spacing:.5px; }
+
+        /* ── EMPTY STATE ── */
+        .empty-form {
+            text-align:center; padding:40px 20px;
+            font-family:'SpecialElite',serif; color:var(--text2); font-size:13px; letter-spacing:1px;
+        }
+
+        /* ── FOOTER ── */
+        .site-footer {
+            background: transparent;
+            border-top: 1px solid #4a5566;
+            padding: 18px 24px 14px;
+        }
+        .site-footer-nav {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            gap: 6px 24px; margin-bottom: 12px;
+        }
+        .site-footer-nav a {
+            font-size: 13px; color: #fff; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 6px;
+            opacity: .85; transition: opacity .2s;
+        }
+        .site-footer-nav a i { color: #fff; font-size: 11px; }
+        .site-footer-nav a:hover { opacity: 1; }
+        .site-footer-bottom {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 6px; padding-top: 10px;
+        }
+        .site-footer-copy, .site-footer-credits { font-size: 11px; color: #BA9868; }
+
+        /* ── SCROLL BUTTONS ── */
+        .scroll-btns {
+            position:fixed; right:28px; bottom:36px;
+            flex-direction:column; gap:8px; z-index:400; display:none;
+        }
+        .scroll-btns.visible { display:flex; }
+        .scroll-btn {
+            width:44px; height:44px; border-radius:50%; background:#9a7e38;
+            border:none; cursor:pointer; display:flex; align-items:center;
+            justify-content:center; box-shadow:0 3px 12px rgba(0,0,0,.45);
+            transition:background .2s,transform .15s; color:#fff; font-size:15px;
+        }
+        .scroll-btn:hover { background:#BA9868; transform:scale(1.08); }
+
+        /* ── TOAST ── */
+        .toast {
+            position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
+            background:var(--navy2); color:var(--gold2);
+            font-family:'Romul',serif; font-size:13px; letter-spacing:2px;
+            padding:9px 24px; box-shadow:0 4px 20px rgba(0,0,0,.5);
+            z-index:999; pointer-events:none; opacity:0; transition:opacity .25s;
+            border:1px solid var(--outline);
+        }
+        .toast.show { opacity:1; }
+
+        @media(max-width:700px) {
+            .form-grid { grid-template-columns:1fr 1fr; }
+            .form-grid-2 { grid-template-columns:1fr; }
+            .content { padding:20px 18px 36px; }
+        }
+        @media(max-width:480px) {
+            .form-grid { grid-template-columns:1fr; }
+            .toolbar { gap:6px; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+</head>
+<body>
+<div class="container">
+  <div class="outer-border">
+
+    <!-- BANNER -->
+    <div class="banner-wrapper">
+      <div class="banner">
+        <img src="https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/head.jpg"
+             alt="" class="banner-bg" loading="eager">
+        <img src="https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/windows.png"
+             alt="" class="banner-overlay" loading="eager" aria-hidden="true">
+        <div class="banner-frame" aria-hidden="true"></div>
+        <h1 class="banner-title">БАШНЯ КОГТЕВРАН</h1>
+      </div>
+    </div>
+
+    <!-- BREADCRUMBS -->
+    <nav class="breadcrumb">
+      <a href="https://rave.dhog.org/index.php">
+        <i class="fas fa-home" style="color:var(--gold);font-size:11px"></i>
+      </a>
+      <span class="breadcrumb-sep">></span>
+      <a href="rc-archive.html"><span style="color:var(--text2)">Архив выпусков</span></a>
+      <span class="breadcrumb-sep">></span>
+      <span class="breadcrumb-cur">Редактор</span>
+    </nav>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="toolbar-title">Редактор выпусков</div>
+        <button class="btn btn-secondary" onclick="newIssue()">+ Новый выпуск</button>
+        <button class="btn btn-primary"   onclick="saveIssue()" id="btnSave">Сохранить</button>
+        <button class="btn btn-export"    onclick="exportSite()">Экспорт сайта</button>
+      </div>
+
+      <!-- DATA PANEL: import/export JSON -->
+      <div class="data-panel">
+        <div class="data-panel-title">Данные архива</div>
+        <div class="data-panel-row">
+          <button class="btn btn-secondary" onclick="exportJSON()">Скачать JSON</button>
+          <label class="btn btn-secondary" style="cursor:pointer">
+            Загрузить JSON <input type="file" accept=".json" style="display:none" onchange="importJSON(event)">
+          </label>
+          <button class="btn btn-danger" onclick="clearAll()">Очистить всё</button>
+        </div>
+        <div class="data-note">JSON — резервная копия всех выпусков. «Экспорт сайта» — скачивает готовый rc-archive-public.html для загрузки на GitHub.</div>
+      </div>
+
+      <!-- ISSUE CHIPS -->
+      <div id="issueChips" class="issues-grid"></div>
+
+      <hr class="section-divider">
+
+      <!-- EDITOR FORM -->
+      <div id="editorArea">
+        <div class="empty-form" id="emptyForm">Выберите выпуск выше или создайте новый</div>
+
+        <div id="formWrap" style="display:none">
+
+          <!-- STATUS -->
+          <div class="status-bar" id="statusBar">
+            <div class="status-dot new" id="statusDot"></div>
+            <div class="status-text" id="statusText">Новый выпуск</div>
+            <div class="status-date" id="statusDate"></div>
+          </div>
+
+          <!-- META -->
+          <div class="section-label">Метаданные</div>
+          <div class="form-grid">
+            <div class="field">
+              <label class="field-label">Сезон</label>
+              <input class="field-input" id="f-season" placeholder="Осень '25">
+            </div>
+            <div class="field">
+              <label class="field-label">Даты</label>
+              <input class="field-input" id="f-dates" placeholder="01.09 — 07.09">
+            </div>
+            <div class="field">
+              <label class="field-label">Номер выпуска</label>
+              <input class="field-input" id="f-issue-num" placeholder="№ 1">
+            </div>
+          </div>
+
+          <!-- STUDENTS -->
+          <div class="section-toggle-row">
+            <div class="section-label" style="margin-bottom:0">Новые ученики</div>
+            <button class="toggle-chip" id="tog-students" onclick="toggleSection('students')">Включён</button>
+          </div>
+          <div id="sec-students">
+            <div class="list-builder" id="list-students"></div>
+            <button class="list-add-btn" onclick="addListItem('students')">+ добавить ученика</button>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- EVENTS -->
+          <div class="section-label">События и анонсы</div>
+          <div class="list-builder" id="list-events"></div>
+          <button class="list-add-btn" onclick="addListItem('events')">+ добавить событие</button>
+
+          <hr class="section-divider">
+
+          <!-- RESULTS -->
+          <div class="section-label">Учебные результаты</div>
+          <div class="form-grid-2" style="align-items:end">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:12px;margin-bottom:0">
+                <div class="field">
+                  <label class="field-label">Баллов за неделю</label>
+                  <input class="field-input" id="f-points" placeholder="0" type="number" min="0">
+                </div>
+                <div class="field">
+                  <label class="field-label">Всего баллов</label>
+                  <input class="field-input" id="f-points-total" placeholder="0" type="number" min="0">
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">Комментарий</label>
+                <textarea class="field-textarea" id="f-points-note" placeholder="Примечание к результатам..." rows="2"></textarea>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+              <div class="field">
+                <label class="field-label">Место</label>
+                <input class="field-input field-input-num" id="f-position" placeholder="1" type="number" min="1" max="4">
+              </div>
+              <div class="field">
+                <label class="field-label">Динамика</label>
+                <div class="arrow-toggle">
+                  <button class="arrow-btn" id="arrow-up" onclick="setArrow(true)">
+                    <i class="fas fa-angle-double-up"></i>
+                  </button>
+                  <button class="arrow-btn" id="arrow-dn" onclick="setArrow(false)">
+                    <i class="fas fa-angle-double-down"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- NEWS -->
+          <div class="section-label">Внутренние новости</div>
+          <div class="list-builder" id="list-news"></div>
+          <button class="list-add-btn" onclick="addListItem('news')">+ добавить новость</button>
+
+          <hr class="section-divider">
+
+          <!-- BIRTHDAYS -->
+          <div class="section-toggle-row">
+            <div class="section-label" style="margin-bottom:0">Дни рождения</div>
+            <button class="toggle-chip" id="tog-bd" onclick="toggleSection('bd')">Включён</button>
+          </div>
+          <div id="sec-bd">
+            <div class="polaroids-wrap" id="pol-wrap">
+              <button class="pol-add-btn" onclick="addPolaroid()" title="Добавить">+</button>
+            </div>
+          </div>
+          <input type="file" accept="image/*" id="photo-input" style="display:none" onchange="handlePhoto(event)">
+
+          <hr class="section-divider">
+
+          <!-- QUILL -->
+          <div class="section-toggle-row">
+            <div class="section-label" style="margin-bottom:0">Перо Ровены</div>
+            <button class="toggle-chip" id="tog-quill" onclick="toggleSection('quill')">Включён</button>
+          </div>
+          <div id="sec-quill">
+            <div class="form-grid-2" style="margin-bottom:12px">
+              <div class="field">
+                <label class="field-label">Номер выпуска</label>
+                <input class="field-input" id="f-quill-num" placeholder="№ 5">
+              </div>
+              <div class="field">
+                <label class="field-label">Тема</label>
+                <input class="field-input" id="f-quill-theme" placeholder="О смелости и выборе">
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label">Текст</label>
+              <textarea class="field-textarea" id="f-quill-text" placeholder="Текст эссе или колонки..." rows="6"></textarea>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- ACTIONS -->
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn btn-primary"  onclick="saveIssue()">Сохранить выпуск</button>
+            <button class="btn btn-secondary" onclick="discardChanges()">Отменить изменения</button>
+            <button class="btn btn-danger"   onclick="deleteIssue()" style="margin-left:auto">Удалить выпуск</button>
+          </div>
+
+        </div><!-- /formWrap -->
+      </div><!-- /editorArea -->
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <nav class="site-footer-nav">
+        <a href="https://rave.dhog.org/index.php"><i class="fas fa-home"></i> Главная страница</a>
+        <a href="https://rave.dhog.org/help/faq"><i class="fas fa-question-circle"></i> Вопросы и ответы</a>
+        <a href="https://rave.dhog.org/memberlist.php"><i class="fas fa-users"></i> Обитатели</a>
+        <a href="https://rave.dhog.org/memberlist.php?mode=team"><i class="fas fa-shield-alt"></i> Администрация</a>
+        <a href="https://rave.dhog.org/memberlist.php?mode=contactadmin"><i class="fas fa-envelope"></i> Связаться с администрацией</a>
+      </nav>
+      <div class="site-footer-bottom">
+        <span class="site-footer-copy">Powered by phpBB® Forum Software © phpBB Limited</span>
+        <span class="site-footer-credits">Credits to Icon8</span>
+      </div>
+    </footer>
+
+  </div>
+</div>
+
+<!-- SCROLL BUTTONS -->
+<div class="scroll-btns" id="scrollBtns">
+  <button class="scroll-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+  <button class="scroll-btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="Вниз">
+    <i class="fas fa-chevron-down"></i>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+const STORAGE_KEY = 'rc_archive';
+let archive = [];          // all issues
+let currentIdx = null;     // index of issue being edited, null = new
+let arrowUp = true;
+let sections = { students: true, bd: true, quill: true };
+let bds = [];
+let lists = { students: [], events: [], news: [] };
+let photoTarget = null;
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  loadArchive();
+  renderChips();
+  setupScroll();
+
+  // Check if we arrived from archive with edit index
+  const editIdx = sessionStorage.getItem('rc_edit_idx');
+  if (editIdx !== null) {
+    sessionStorage.removeItem('rc_edit_idx');
+    openIssue(parseInt(editIdx));
+  }
+});
+
+function loadArchive() {
+  try { archive = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { archive = []; }
+}
+function saveArchive() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(archive));
+}
+
+// ═══════════════════════════════════════════════
+//  CHIPS
+// ═══════════════════════════════════════════════
+function renderChips() {
+  const wrap = document.getElementById('issueChips');
+  wrap.innerHTML = '';
+
+  archive.forEach((issue, idx) => {
+    const div = document.createElement('div');
+    div.className = 'issue-chip' + (idx === currentIdx ? ' active' : '');
+    div.innerHTML = `
+      <div class="chip-num">${esc(issue.issue_num || '—')}</div>
+      <div class="chip-dates">${esc(issue.dates || '—')}</div>
+      <div class="chip-season">${esc(issue.season || '')}</div>
+    `;
+    div.onclick = () => openIssue(idx);
+    wrap.appendChild(div);
+  });
+
+  // + new
+  const add = document.createElement('div');
+  add.className = 'chip-new';
+  add.innerHTML = '+';
+  add.title = 'Новый выпуск';
+  add.onclick = newIssue;
+  wrap.appendChild(add);
+}
+
+// ═══════════════════════════════════════════════
+//  OPEN / NEW / DISCARD
+// ═══════════════════════════════════════════════
+function openIssue(idx) {
+  currentIdx = idx;
+  loadIssueIntoForm(archive[idx]);
+  showForm();
+  renderChips();
+}
+
+function newIssue() {
+  currentIdx = null;
+  resetForm();
+  showForm();
+  renderChips();
+  updateStatus('new');
+}
+
+function discardChanges() {
+  if (currentIdx !== null) {
+    loadIssueIntoForm(archive[currentIdx]);
+    updateStatus('saved', archive[currentIdx].saved_at);
+  } else {
+    resetForm();
+    updateStatus('new');
+  }
+}
+
+function showForm() {
+  document.getElementById('emptyForm').style.display = 'none';
+  document.getElementById('formWrap').style.display = 'block';
+}
+
+// ═══════════════════════════════════════════════
+//  LOAD INTO FORM
+// ═══════════════════════════════════════════════
+function loadIssueIntoForm(issue) {
+  document.getElementById('f-season').value       = issue.season       || '';
+  document.getElementById('f-dates').value        = issue.dates        || '';
+  document.getElementById('f-issue-num').value    = issue.issue_num    || '';
+  document.getElementById('f-points').value       = issue.points       || '';
+  document.getElementById('f-points-total').value = issue.points_total || '';
+  document.getElementById('f-points-note').value  = issue.points_note  || '';
+  document.getElementById('f-position').value     = issue.position     || '';
+  document.getElementById('f-quill-num').value    = issue.quill_num    || '';
+  document.getElementById('f-quill-theme').value  = issue.quill_theme  || '';
+  document.getElementById('f-quill-text').value   = issue.quill_text   || '';
+
+  lists.students = [...(issue.students_list || [])];
+  lists.events   = [...(issue.events_list   || [])];
+  lists.news     = [...(issue.news_list     || [])];
+  renderList('students');
+  renderList('events');
+  renderList('news');
+
+  arrowUp = issue.arrow !== false;
+  applyArrow();
+
+  bds = JSON.parse(JSON.stringify(issue.bds || []));
+  renderPolaroids();
+
+  sections.students = issue.studentsVisible !== false;
+  sections.bd       = issue.bdVisible       !== false;
+  sections.quill    = issue.quillVisible    !== false;
+  applySections();
+
+  updateStatus('saved', issue.saved_at);
+}
+
+// ═══════════════════════════════════════════════
+//  RESET FORM
+// ═══════════════════════════════════════════════
+function resetForm() {
+  ['f-season','f-dates','f-issue-num','f-points','f-points-total',
+   'f-points-note','f-position','f-quill-num','f-quill-theme','f-quill-text']
+    .forEach(id => { document.getElementById(id).value = ''; });
+
+  lists = { students: [], events: [], news: [] };
+  ['students','events','news'].forEach(k => renderList(k));
+
+  bds = [];
+  renderPolaroids();
+
+  arrowUp = true;
+  applyArrow();
+
+  sections = { students: true, bd: true, quill: true };
+  applySections();
+}
+
+// ═══════════════════════════════════════════════
+//  COLLECT FROM FORM
+// ═══════════════════════════════════════════════
+function collectIssue() {
+  return {
+    season:          document.getElementById('f-season').value.trim(),
+    dates:           document.getElementById('f-dates').value.trim(),
+    issue_num:       document.getElementById('f-issue-num').value.trim(),
+    points:          document.getElementById('f-points').value.trim(),
+    points_total:    document.getElementById('f-points-total').value.trim(),
+    points_note:     document.getElementById('f-points-note').value.trim(),
+    position:        document.getElementById('f-position').value.trim(),
+    quill_num:       document.getElementById('f-quill-num').value.trim(),
+    quill_theme:     document.getElementById('f-quill-theme').value.trim(),
+    quill_text:      document.getElementById('f-quill-text').value.trim(),
+    students_list:   [...lists.students],
+    events_list:     [...lists.events],
+    news_list:       [...lists.news],
+    arrow:           arrowUp,
+    bds:             JSON.parse(JSON.stringify(bds)),
+    studentsVisible: sections.students,
+    bdVisible:       sections.bd,
+    quillVisible:    sections.quill,
+    saved_at:        new Date().toISOString(),
+  };
+}
+
+// ═══════════════════════════════════════════════
+//  SAVE
+// ═══════════════════════════════════════════════
+function saveIssue() {
+  const issue = collectIssue();
+  if (!issue.issue_num && !issue.dates) {
+    toast('Заполните хотя бы номер или даты выпуска');
+    return;
+  }
+  if (currentIdx !== null) {
+    archive[currentIdx] = issue;
+  } else {
+    archive.unshift(issue);
+    currentIdx = 0;
+  }
+  saveArchive();
+  renderChips();
+  updateStatus('saved', issue.saved_at);
+  toast('Выпуск сохранён');
+}
+
+// ═══════════════════════════════════════════════
+//  DELETE
+// ═══════════════════════════════════════════════
+function deleteIssue() {
+  if (currentIdx === null) return;
+  if (!confirm('Удалить этот выпуск? Отменить нельзя.')) return;
+  archive.splice(currentIdx, 1);
+  saveArchive();
+  currentIdx = null;
+  document.getElementById('formWrap').style.display = 'none';
+  document.getElementById('emptyForm').style.display = 'block';
+  renderChips();
+  toast('Выпуск удалён');
+}
+
+// ═══════════════════════════════════════════════
+//  EXPORT SITE
+// ═══════════════════════════════════════════════
+function exportSite() {
+  if (!archive.length) { toast('Нет выпусков для экспорта'); return; }
+
+  // Read the public archive template embedded below, substitute archive data
+  const jsonData = JSON.stringify(archive);
+  let html = PUBLIC_TEMPLATE;
+  html = html.replace(
+    "  archive = JSON.parse(localStorage.getItem('rc_archive') || '[]');",
+    "  archive = " + jsonData + ";"
+  );
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'rc-archive-public.html'; a.click();
+  URL.revokeObjectURL(url);
+  toast('Сайт экспортирован — загрузите файл на GitHub');
+}
+
+// ═══════════════════════════════════════════════
+//  JSON IMPORT / EXPORT
+// ═══════════════════════════════════════════════
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(archive, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'rc-archive.json'; a.click();
+  URL.revokeObjectURL(url);
+  toast('JSON скачан');
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('Не массив');
+      if (!confirm(`Загрузить ${data.length} выпусков? Текущие данные будут заменены.`)) return;
+      archive = data;
+      saveArchive();
+      currentIdx = null;
+      document.getElementById('formWrap').style.display = 'none';
+      document.getElementById('emptyForm').style.display = 'block';
+      renderChips();
+      toast(`Загружено выпусков: ${data.length}`);
+    } catch(err) {
+      alert('Ошибка чтения JSON: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function clearAll() {
+  if (!confirm('Удалить ВСЕ выпуски из редактора? Отменить нельзя.')) return;
+  archive = [];
+  saveArchive();
+  currentIdx = null;
+  document.getElementById('formWrap').style.display = 'none';
+  document.getElementById('emptyForm').style.display = 'block';
+  renderChips();
+  toast('Архив очищен');
+}
+
+// ═══════════════════════════════════════════════
+//  LISTS
+// ═══════════════════════════════════════════════
+function renderList(name) {
+  const wrap = document.getElementById('list-' + name);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  (lists[name] || []).forEach((val, i) => {
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    row.innerHTML = `
+      <span class="list-row-bullet">◆</span>
+      <input class="list-row-input" value="${esc(val)}" placeholder="..."
+        oninput="lists['${name}'][${i}]=this.value"
+        onblur="lists['${name}'][${i}]=this.value.trim()">
+      <button class="list-row-del" onclick="delListItem('${name}',${i})">×</button>`;
+    wrap.appendChild(row);
+  });
+}
+
+function addListItem(name) {
+  if (!lists[name]) lists[name] = [];
+  lists[name].push('');
+  renderList(name);
+  const inputs = document.querySelectorAll(`#list-${name} .list-row-input`);
+  if (inputs.length) inputs[inputs.length - 1].focus();
+}
+
+function delListItem(name, i) {
+  lists[name].splice(i, 1);
+  renderList(name);
+}
+
+// ═══════════════════════════════════════════════
+//  ARROW
+// ═══════════════════════════════════════════════
+function setArrow(up) { arrowUp = up; applyArrow(); }
+function applyArrow() {
+  document.getElementById('arrow-up').className = 'arrow-btn' + (arrowUp  ? ' active-up' : '');
+  document.getElementById('arrow-dn').className  = 'arrow-btn' + (!arrowUp ? ' active-dn' : '');
+}
+
+// ═══════════════════════════════════════════════
+//  SECTIONS
+// ═══════════════════════════════════════════════
+function toggleSection(name) {
+  sections[name] = !sections[name];
+  applySections();
+}
+function applySections() {
+  const map = { students: 'sec-students', bd: 'sec-bd', quill: 'sec-quill' };
+  const tog = { students: 'tog-students', bd: 'tog-bd', quill: 'tog-quill' };
+  for (const [name, secId] of Object.entries(map)) {
+    const sec = document.getElementById(secId);
+    const btn = document.getElementById(tog[name]);
+    const on  = sections[name];
+    if (sec) sec.style.opacity = on ? '1' : '0.35';
+    if (sec) sec.style.pointerEvents = on ? '' : 'none';
+    if (btn) { btn.textContent = on ? 'Включён' : 'Отключён'; btn.className = 'toggle-chip ' + (on ? 'on' : 'off'); }
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  POLAROIDS
+// ═══════════════════════════════════════════════
+function renderPolaroids() {
+  const wrap = document.getElementById('pol-wrap');
+  wrap.innerHTML = '';
+  bds.forEach((b, i) => {
+    const card = document.createElement('div');
+    card.className = 'pol-card' + (b.photo ? ' has-photo' : '');
+    card.innerHTML = `
+      <div class="pol-photo" onclick="triggerPhoto(${i})" title="Загрузить фото">
+        <img src="${b.photo || ''}" alt="">
+        <span class="pol-photo-hint">нажмите<br>для фото</span>
+      </div>
+      <div class="pol-caption">
+        <input class="pol-name-input" value="${esc(b.name)}" placeholder="Имя Фамилия"
+          oninput="bds[${i}].name=this.value" onblur="bds[${i}].name=this.value.trim()">
+        <input class="pol-date-input" value="${esc(b.date)}" placeholder="дд.мм"
+          oninput="bds[${i}].date=this.value" onblur="bds[${i}].date=this.value.trim()">
+      </div>
+      <button class="pol-del-btn" onclick="delPolaroid(${i})">×</button>`;
+    wrap.appendChild(card);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'pol-add-btn'; addBtn.textContent = '+'; addBtn.title = 'Добавить';
+  addBtn.onclick = addPolaroid;
+  wrap.appendChild(addBtn);
+}
+
+function addPolaroid() { bds.push({ name:'', date:'', photo:null }); renderPolaroids(); }
+function delPolaroid(i) { bds.splice(i, 1); renderPolaroids(); }
+function triggerPhoto(i) { photoTarget = i; document.getElementById('photo-input').click(); }
+function handlePhoto(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => { bds[photoTarget].photo = ev.target.result; renderPolaroids(); photoTarget = null; };
+  r.readAsDataURL(f);
+  e.target.value = '';
+}
+
+// ═══════════════════════════════════════════════
+//  STATUS BAR
+// ═══════════════════════════════════════════════
+function updateStatus(state, dateStr) {
+  const dot  = document.getElementById('statusDot');
+  const text = document.getElementById('statusText');
+  const date = document.getElementById('statusDate');
+  dot.className  = 'status-dot ' + state;
+  text.textContent = state === 'new' ? 'Новый выпуск' : state === 'draft' ? 'Черновик' : 'Сохранён';
+  date.textContent = dateStr ? new Date(dateStr).toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '';
+}
+
+// ═══════════════════════════════════════════════
+//  SCROLL BUTTONS
+// ═══════════════════════════════════════════════
+function setupScroll() {
+  const btns = document.getElementById('scrollBtns');
+  function check() { btns.classList.toggle('visible', document.documentElement.scrollHeight > window.innerHeight + 4); }
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check, { passive: true });
+  check();
+}
+
+// ═══════════════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════════════
+function esc(s) {
+  const d = document.createElement('div'); d.textContent = String(s||''); return d.innerHTML;
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ═══════════════════════════════════════════════
+//  PUBLIC TEMPLATE (embedded at build time)
+// ═══════════════════════════════════════════════
+// This variable is filled by the Python build step below.
+// In the browser it contains the full rc-archive-public.html source.
+const PUBLIC_TEMPLATE = "<!DOCTYPE html>\n<html lang=\"ru\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>\u0410\u0440\u0445\u0438\u0432 \u041a\u043e\u0433\u0442\u0435\u0432\u0440\u0430\u043d\u0430<\\/title>\n    <link rel=\"preconnect\" href=\"https://cdnjs.cloudflare.com\" crossorigin>\n    <style>\n        :root {\n            --gold:   #BA9868;\n            --gold2:  #EBCEA7;\n            --navy:   #15273F;\n            --navy2:  #23385A;\n            --navy3:  #1a2d4a;\n            --text:   #CCCCCC;\n            --text2:  #8fa8c0;\n            --border: #404A5B;\n            --outline:#2E3952;\n            --speed:  0.2s;\n        }\n\n        @font-face {\n            font-family: 'Romul';\n            src: url('https://drive.dhog.org/rave/fonts/Romul.woff2') format('woff2'),\n                 url('https://drive.dhog.org/rave/fonts/Romul.woff') format('woff');\n            font-display: swap;\n        }\n        @font-face {\n            font-family: 'BebasNeue';\n            src: url('https://raven-hd.github.io/feather/font/BebasNeue-Bold.otf') format('opentype');\n        }\n        @font-face {\n            font-family: 'SpecialElite';\n            src: url('https://raven-hd.github.io/feather/font/specialelite-cyrillic.ttf') format('truetype');\n        }\n\n        *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }\n\n        body {\n            background-image: url('https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/background.jpg');\n            background-repeat: repeat;\n            background-position: top left;\n            background-attachment: fixed;\n            font-family: \"Open Sans\",\"Segoe UI\",Tahoma,sans-serif;\n            font-size: 14px;\n            padding: 20px;\n            min-height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: flex-start;\n            color: var(--text);\n        }\n\n        .container {\n            width: 100%;\n            max-width: 1066px;\n            min-width: 320px;\n            box-shadow: 0 0 30px rgba(0,0,0,0.7);\n        }\n\n        .outer-border {\n            background: var(--navy);\n            padding: 14px;\n            border: 40px solid transparent;\n            border-image: url('https://drive.dhog.org/rave/images/border.svg') 40 40 40 40 / 40px 40px 40px 40px stretch;\n        }\n\n        /* \u2500\u2500 BANNER \u2500\u2500 */\n        .banner-wrapper {\n            display: flex;\n            justify-content: center;\n            margin-bottom: 20px;\n        }\n        .banner {\n            width: 100%;\n            max-width: 1010px;\n            height: auto;\n            aspect-ratio: 1010 / 315;\n            position: relative;\n            overflow: hidden;\n        }\n        .banner-bg {\n            width: 100%;\n            height: 100%;\n            object-fit: cover;\n            object-position: center;\n        }\n        .banner-overlay {\n            position: absolute;\n            top:0; left:0;\n            width:100%; height:100%;\n            object-fit: cover;\n            object-position: center;\n            z-index: 2;\n        }\n        .banner-frame {\n            position: absolute;\n            top:0; left:0;\n            width:100%; height:100%;\n            border: 30px solid transparent;\n            border-image: url('https://drive.dhog.org/rave/images/inner-border.svg') 30 30 30 30 / 30px 30px 30px 30px stretch;\n            box-sizing: border-box;\n            z-index: 3;\n            pointer-events: none;\n        }\n        .banner-title {\n            position: absolute;\n            bottom: 30px;\n            left: 50%;\n            transform: translateX(-50%);\n            z-index: 4;\n            font-family: 'Romul', serif;\n            font-size: clamp(18px, 3.5vw, 26px);\n            color: var(--gold);\n            text-shadow:\n                -2px -2px 0 var(--outline),\n                 2px -2px 0 var(--outline),\n                -2px  2px 0 var(--outline),\n                 2px  2px 0 var(--outline);\n            letter-spacing: 2px;\n            white-space: nowrap;\n        }\n\n        /* \u2500\u2500 BREADCRUMBS \u2500\u2500 */\n        .breadcrumb {\n            background: var(--navy);\n            padding: 8px 20px;\n            margin-bottom: 5px;\n            display: flex;\n            align-items: center;\n            gap: 8px;\n            font-size: 12px;\n            color: var(--text);\n        }\n        .breadcrumb a {\n            text-decoration: none;\n            transition: opacity var(--speed);\n        }\n        .breadcrumb a:hover { opacity: 0.8; }\n        .breadcrumb-sep { color: var(--text); }\n        .breadcrumb-cur { color: var(--gold); }\n\n        /* \u2500\u2500 CONTENT \u2500\u2500 */\n        .content {\n            background: var(--navy);\n            padding: 30px 40px 50px;\n            min-height: 300px;\n        }\n\n        .page-title {\n            font-family: 'Romul', serif;\n            color: var(--gold);\n            font-weight: normal;\n            text-align: center;\n            font-size: clamp(22px, 4vw, 140%);\n            letter-spacing: 3px;\n            margin-bottom: 8px;\n        }\n        .page-sub {\n            font-family: 'SpecialElite', serif;\n            color: var(--text2);\n            text-align: center;\n            font-size: 12px;\n            letter-spacing: 1.5px;\n            margin-bottom: 32px;\n        }\n\n        /* \u2500\u2500 EDITOR LINK (top-right) \u2500\u2500 */\n        /* \u2500\u2500 SEMESTER BLOCK \u2500\u2500 */\n        .semester-block {\n            margin-bottom: 36px;\n        }\n        .semester-header {\n            display: flex;\n            align-items: center;\n            gap: 12px;\n            cursor: pointer;\n            padding: 8px 0;\n            border-bottom: 1px solid var(--outline);\n            margin-bottom: 20px;\n            user-select: none;\n            transition: opacity var(--speed);\n        }\n        .semester-header:hover { opacity: 0.85; }\n        .semester-name {\n            font-family: 'Romul', serif;\n            font-size: 15px;\n            letter-spacing: 2px;\n            color: var(--gold);\n            flex: 1;\n        }\n        .semester-count {\n            font-family: 'SpecialElite', serif;\n            font-size: 11px;\n            color: var(--text2);\n            letter-spacing: 1px;\n        }\n        .semester-caret {\n            color: var(--text2);\n            font-size: 11px;\n            transition: transform 0.25s;\n            flex-shrink: 0;\n        }\n        .semester-block.collapsed .semester-caret { transform: rotate(-90deg); }\n        .semester-chips {\n            display: flex;\n            flex-wrap: wrap;\n            gap: 10px;\n        }\n        .semester-block.collapsed .semester-chips { display: none; }\n\n        /* \u2500\u2500 CHIP \u2500\u2500 */\n        .chip {\n            width: 130px;\n            background: var(--navy2);\n            border: 1px solid var(--outline);\n            padding: 11px 13px 12px;\n            cursor: pointer;\n            transition: border-color var(--speed), background var(--speed);\n            position: relative;\n            overflow: hidden;\n        }\n        .chip::after {\n            content: '';\n            position: absolute;\n            top: 0; left: 0; right: 0;\n            height: 2px;\n            background: var(--gold);\n            transform: scaleX(0);\n            transform-origin: left;\n            transition: transform var(--speed);\n        }\n        .chip:hover { border-color: var(--gold); background: rgba(35,56,90,0.9); }\n        .chip:hover::after { transform: scaleX(1); }\n\n        .chip-issue {\n            font-family: 'BebasNeue', serif;\n            font-size: 19px;\n            letter-spacing: 1.5px;\n            color: var(--gold);\n            line-height: 1;\n            margin-bottom: 4px;\n        }\n        .chip-dates {\n            font-family: 'SpecialElite', serif;\n            font-size: 10px;\n            color: var(--text2);\n            letter-spacing: 0.5px;\n            margin-bottom: 2px;\n            white-space: nowrap;\n            overflow: hidden;\n            text-overflow: ellipsis;\n        }\n        .chip-season {\n            font-size: 11px;\n            color: var(--text2);\n            opacity: 0.6;\n            margin-bottom: 8px;\n            white-space: nowrap;\n            overflow: hidden;\n            text-overflow: ellipsis;\n        }\n        .chip-pts {\n            font-family: 'BebasNeue', serif;\n            font-size: 15px;\n            letter-spacing: 1px;\n            color: var(--gold2);\n            display: flex;\n            align-items: baseline;\n            gap: 3px;\n        }\n        .chip-pts-label {\n            font-family: 'SpecialElite', serif;\n            font-size: 9px;\n            color: var(--text2);\n            letter-spacing: 0.5px;\n        }\n\n        /* \u2500\u2500 EMPTY STATE \u2500\u2500 */\n        .empty-state {\n            text-align: center;\n            padding: 60px 0 40px;\n            display: none;\n        }\n        .empty-state.show { display: block; }\n        .empty-title {\n            font-family: 'Romul', serif;\n            font-size: 20px;\n            letter-spacing: 2px;\n            color: var(--outline);\n            margin-bottom: 10px;\n        }\n        .empty-sub {\n            font-family: 'SpecialElite', serif;\n            font-size: 12px;\n            color: var(--outline);\n            letter-spacing: 1px;\n        }\n\n        /* \u2500\u2500 MODAL OVERLAY \u2500\u2500 */\n        .modal-overlay {\n            position: fixed;\n            inset: 0;\n            background: rgba(0,0,0,0.82);\n            z-index: 500;\n            display: none;\n            align-items: flex-start;\n            justify-content: center;\n            padding: 40px 16px 40px;\n            overflow-y: auto;\n        }\n        .modal-overlay.open { display: flex; }\n\n        .modal-box {\n            background: var(--navy);\n            border: 1px solid var(--outline);\n            width: 100%;\n            max-width: 760px;\n            margin: auto;\n            position: relative;\n            box-shadow: 0 8px 40px rgba(0,0,0,0.7);\n        }\n\n        /* modal inner border SVG frame (decorative) */\n        .modal-frame {\n            position: absolute;\n            inset: 0;\n            border: 20px solid transparent;\n            border-image: url('https://drive.dhog.org/rave/images/inner-border.svg') 20 20 20 20 / 20px 20px 20px 20px stretch;\n            pointer-events: none;\n            z-index: 2;\n        }\n        .modal-inner { position: relative; z-index: 3; }\n\n        /* modal header */\n        .modal-hdr {\n            background: var(--navy2);\n            border-bottom: 1px solid var(--outline);\n            padding: 14px 20px;\n            display: flex;\n            align-items: center;\n            gap: 14px;\n            flex-wrap: wrap;\n        }\n        .modal-logo {\n            height: 32px;\n            flex-shrink: 0;\n            filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));\n        }\n        .modal-logo img { height: 100%; display: block; }\n        .modal-meta {\n            flex: 1;\n            display: flex;\n            gap: 16px;\n            flex-wrap: wrap;\n            align-items: center;\n        }\n        .modal-meta-item {\n            font-family: 'SpecialElite', serif;\n            font-size: 11px;\n            color: var(--text2);\n            letter-spacing: 0.5px;\n        }\n        .modal-meta-item strong {\n            color: var(--gold2);\n            font-weight: normal;\n        }\n        .modal-actions {\n            display: flex;\n            gap: 8px;\n            align-items: center;\n            flex-shrink: 0;\n        }\n        .btn-modal-action {\n            font-family: 'SpecialElite', serif;\n            font-size: 11px;\n            letter-spacing: 0.5px;\n            background: transparent;\n            border: 1px solid var(--outline);\n            color: var(--text2);\n            padding: 4px 12px;\n            cursor: pointer;\n            transition: all var(--speed);\n        }\n        .btn-modal-action:hover { color: var(--gold); border-color: var(--gold); }\n        .btn-modal-action.danger:hover { color: #c04040; border-color: rgba(150,40,40,0.6); }\n        .btn-modal-close {\n            background: transparent;\n            border: none;\n            color: var(--text2);\n            font-size: 18px;\n            cursor: pointer;\n            padding: 2px 4px;\n            line-height: 1;\n            transition: color var(--speed);\n        }\n        .btn-modal-close:hover { color: var(--gold2); }\n\n        /* modal nav */\n        .modal-nav {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 16px;\n            padding: 9px 20px;\n            border-top: 1px solid var(--outline);\n            background: rgba(21,39,63,0.6);\n        }\n        .nav-btn {\n            background: transparent;\n            border: 1px solid var(--outline);\n            color: var(--text2);\n            font-size: 15px;\n            padding: 3px 12px;\n            cursor: pointer;\n            transition: all var(--speed);\n            line-height: 1.4;\n        }\n        .nav-btn:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }\n        .nav-btn:disabled { opacity: 0.2; cursor: default; }\n        .nav-counter {\n            font-family: 'SpecialElite', serif;\n            font-size: 11px;\n            color: var(--text2);\n            min-width: 54px;\n            text-align: center;\n            letter-spacing: 1px;\n        }\n\n        /* modal body */\n        .modal-body { padding: 24px 28px 28px; }\n\n        /* \u2500\u2500 ISSUE VIEW \u2500\u2500 */\n\n        /* Page layout inside modal: mimics rc-editor page style */\n        .issue-page {\n            background: #f2e8d0;\n            color: #1a1a26;\n            font-family: 'Cormorant Garamond','Georgia',serif;\n            position: relative;\n            box-shadow: 0 2px 18px rgba(0,0,0,0.4);\n        }\n        .issue-page::after {\n            content:'';\n            position:absolute;inset:0;pointer-events:none;\n            background-image:linear-gradient(rgba(21,45,74,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(21,45,74,.025) 1px,transparent 1px);\n            background-size:26px 26px;\n        }\n        .issue-inner { position: relative; z-index: 1; }\n\n        /* issue header */\n        .issue-hdr {\n            position: relative;\n            overflow: hidden;\n            border-bottom: 2px solid #9a7e38;\n            background: url('https://raven-hd.github.io/feather/f_bg.jpg') center/cover no-repeat;\n        }\n        .issue-hdr::before {\n            content:'';position:absolute;inset:0;pointer-events:none;\n            background:linear-gradient(135deg,rgba(12,20,33,.75) 0%,rgba(12,20,33,.58) 100%);\n        }\n        .issue-hdr-logo {\n            padding: 12px 0 0 20px;\n            position: relative;\n        }\n        .issue-hdr-logo img { width: 500px; max-width: 100%; height: auto; display: block; }\n        .issue-hdr-meta {\n            display: flex;\n            gap: 0;\n            padding: 8px 20px 12px;\n            position: relative;\n            border-top: 1px solid rgba(184,205,216,.15);\n            margin-top: 8px;\n        }\n        .issue-hdr-item {\n            display: flex;\n            flex-direction: column;\n            padding-right: 16px;\n            margin-right: 16px;\n            border-right: 1px solid rgba(184,205,216,.18);\n        }\n        .issue-hdr-item:last-child { border-right: none; }\n        .issue-hdr-label {\n            font-family: 'JetBrains Mono','Courier New',monospace;\n            font-size: 8px;\n            letter-spacing: 2px;\n            color: #8fa8c0;\n            opacity: 0.55;\n            text-transform: uppercase;\n            margin-bottom: 1px;\n        }\n        .issue-hdr-val {\n            font-family: 'SpecialElite', serif;\n            font-size: 14px;\n            letter-spacing: 0.5px;\n            color: #b8cdd8;\n        }\n\n        /* issue layout */\n        .issue-row1 {\n            display: grid;\n            border-bottom: 1px solid rgba(21,45,74,0.2);\n            align-items: stretch;\n        }\n        .issue-cols2 {\n            display: grid;\n            grid-template-columns: 1fr 1fr;\n            border-bottom: 1px solid rgba(21,45,74,0.2);\n        }\n        .issue-cols2 > * { border-right: 1px solid rgba(21,45,74,0.2); }\n        .issue-cols2 > *:last-child { border-right: none; }\n        .issue-fullrow {\n            border-bottom: 1px solid rgba(21,45,74,0.2);\n        }\n\n        .issue-sec {\n            padding: 12px 16px;\n        }\n        .issue-sec-head {\n            margin-bottom: 10px;\n            padding-bottom: 6px;\n            border-bottom: 1px solid rgba(21,45,74,0.2);\n        }\n        .issue-sec-title {\n            font-family: 'BebasNeue', serif;\n            font-size: 18px;\n            letter-spacing: 2px;\n            color: #152d4a;\n            line-height: 1;\n        }\n        .issue-sec-title-sm { font-size: 15px; }\n\n        /* list items */\n        .issue-list { display: flex; flex-direction: column; gap: 3px; }\n        .issue-list-item {\n            display: flex;\n            align-items: flex-start;\n            gap: 6px;\n            font-family: 'SpecialElite', serif;\n            font-size: 13px;\n            line-height: 1.6;\n            color: #2d3a46;\n            padding: 2px 0;\n            border-bottom: 1px dashed rgba(21,45,74,0.08);\n        }\n        .issue-list-item:last-child { border-bottom: none; }\n        .issue-bullet { color: #9a7e38; flex-shrink: 0; font-size: 10px; margin-top: 4px; }\n\n        /* scores */\n        .issue-score-wrap { display: flex; gap: 0; }\n        .issue-score-left {\n            flex: 1;\n            display: flex;\n            flex-direction: column;\n            gap: 6px;\n            padding-right: 12px;\n            border-right: 1px solid rgba(21,45,74,0.2);\n        }\n        .issue-score-lbl {\n            font-family: 'JetBrains Mono','Courier New',monospace;\n            font-size: 8px;\n            letter-spacing: 2px;\n            color: #4a5566;\n            text-transform: uppercase;\n            margin-bottom: 1px;\n        }\n        .issue-score-row { display: flex; align-items: baseline; gap: 5px; }\n        .issue-score-big {\n            font-family: 'BebasNeue', serif;\n            font-size: 34px;\n            color: #152d4a;\n            line-height: 1;\n        }\n        .issue-score-unit {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 9px;\n            color: #8fa8c0;\n            letter-spacing: 1px;\n        }\n        .issue-score-divider {\n            height: 1px;\n            background: linear-gradient(90deg, rgba(21,45,74,0.2), transparent);\n            margin: 2px 0;\n        }\n        .issue-score-note {\n            font-family: 'SpecialElite', serif;\n            font-size: 12px;\n            color: #4a5566;\n            line-height: 1.5;\n            margin-top: 4px;\n            white-space: pre-wrap;\n        }\n        .issue-score-right {\n            width: 90px;\n            flex-shrink: 0;\n            background: #152d4a;\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            justify-content: center;\n            padding: 6px 8px;\n            gap: 2px;\n            position: relative;\n        }\n        .issue-score-right::before {\n            content:'';position:absolute;inset:0;pointer-events:none;\n            background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),\n              linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);\n            background-size:10px 10px;\n        }\n        .issue-trophy { font-size: 22px; color: #c4a44a; opacity: 0.85; position: relative; }\n        .issue-pos {\n            font-family: 'BebasNeue', serif;\n            font-size: 36px;\n            color: #efe8d5;\n            line-height: 1.05;\n            position: relative;\n        }\n        .issue-pos-lbl {\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 7px;\n            letter-spacing: 2px;\n            color: #8fa8c0;\n            opacity: 0.5;\n            text-transform: uppercase;\n            position: relative;\n        }\n        .issue-arrow { font-size: 15px; position: relative; color: #BA9868; }\n\n        /* birthdays polaroids */\n        .issue-bd-wrap { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; justify-content: center; }\n        .issue-pol {\n            background: #fff;\n            padding: 8px 8px 36px;\n            box-shadow: 2px 3px 12px rgba(0,0,0,.18);\n            width: 150px;\n            position: relative;\n            flex-shrink: 0;\n            transition: transform .2s, box-shadow .2s;\n        }\n        .issue-pol:nth-child(3n+1) { transform: rotate(-1.4deg); }\n        .issue-pol:nth-child(3n+2) { transform: rotate(1deg); }\n        .issue-pol:nth-child(3n)   { transform: rotate(-.5deg); }\n        .issue-pol:hover { transform: rotate(0) scale(1.04) !important; box-shadow: 4px 6px 18px rgba(0,0,0,.26); z-index: 5; }\n        .issue-pol-photo {\n            width: 100%;\n            aspect-ratio: 1;\n            overflow: hidden;\n            background: #e8d9b5;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-size: 24px;\n        }\n        .issue-pol-photo img { width: 100%; height: 100%; object-fit: cover; }\n        .issue-pol-caption {\n            position: absolute;\n            bottom: 5px;\n            left: 0; right: 0;\n            text-align: center;\n            padding: 0 6px;\n        }\n        .issue-pol-name {\n            font-family: 'SpecialElite', serif;\n            font-size: 12px;\n            color: #2d3a46;\n            line-height: 1.25;\n            display: block;\n        }\n        .issue-pol-date {\n            font-family: 'SpecialElite', serif;\n            font-size: 11px;\n            color: #2a5280;\n            display: block;\n        }\n\n        /* quill */\n        .issue-quill-meta {\n            display: flex;\n            gap: 14px;\n            margin-bottom: 7px;\n            font-family: 'JetBrains Mono', monospace;\n            font-size: 9px;\n            color: #4a5566;\n            letter-spacing: 1px;\n        }\n        .issue-quill-text {\n            border-left: 2.5px solid #152d4a;\n            padding: 7px 11px;\n            font-family: 'SpecialElite', serif;\n            font-size: 13px;\n            line-height: 1.7;\n            color: #2d3a46;\n            background: rgba(21,45,74,0.03);\n            white-space: pre-wrap;\n        }\n\n        /* issue footer */\n        .issue-ftr {\n            background: url('https://raven-hd.github.io/feather/f_bg.jpg') center 60%/cover no-repeat;\n            position: relative;\n            overflow: hidden;\n            height: 44px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 0 20px;\n        }\n        .issue-ftr::before {\n            content:'';position:absolute;inset:0;\n            background:linear-gradient(135deg,rgba(12,20,33,.7) 0%,rgba(12,20,33,.52) 100%);\n        }\n        .issue-ftr-text {\n            font-family: 'SpecialElite', serif;\n            font-size: 11px;\n            letter-spacing: 0.5px;\n            color: #b8cdd8;\n            opacity: 0.8;\n            position: relative;\n        }\n\n        /* \u2500\u2500 CONFIRM DIALOG \u2500\u2500 */\n        .confirm-overlay {\n            position: fixed;\n            inset: 0;\n            background: rgba(0,0,0,0.75);\n            z-index: 600;\n            display: none;\n            align-items: center;\n            justify-content: center;\n        }\n        .confirm-overlay.open { display: flex; }\n        .confirm-box {\n            background: var(--navy);\n            border: 1px solid rgba(150,40,40,0.5);\n            padding: 28px 32px;\n            max-width: 360px;\n            text-align: center;\n        }\n        .confirm-title {\n            font-family: 'Romul', serif;\n            color: var(--gold);\n            font-size: 17px;\n            letter-spacing: 2px;\n            margin-bottom: 10px;\n        }\n        .confirm-text {\n            color: var(--text2);\n            font-size: 13px;\n            margin-bottom: 22px;\n        }\n        .confirm-btns { display: flex; gap: 12px; justify-content: center; }\n        .confirm-btn {\n            font-family: 'SpecialElite', serif;\n            font-size: 12px;\n            letter-spacing: 0.5px;\n            border: 1px solid;\n            padding: 7px 20px;\n            cursor: pointer;\n            background: transparent;\n            transition: all var(--speed);\n        }\n        .confirm-btn-yes { border-color: rgba(150,40,40,0.6); color: #c04040; }\n        .confirm-btn-yes:hover { background: rgba(150,40,40,0.15); }\n        .confirm-btn-no { border-color: var(--outline); color: var(--text2); }\n        .confirm-btn-no:hover { border-color: var(--text2); color: var(--text); }\n\n        /* \u2500\u2500 RESPONSIVE \u2500\u2500 */\n        @media (max-width: 1100px) {\n            body { padding: 15px; }\n            .outer-border { padding: 12px; border-width: 35px; }\n            .content { padding: 25px 30px 40px; }\n        }\n        @media (max-width: 700px) {\n            .issue-cols2 { grid-template-columns: 1fr; }\n            .issue-cols2 > * { border-right: none; border-bottom: 1px solid rgba(21,45,74,0.2); }\n            .modal-body { padding: 14px; }\n        }\n        @media (max-width: 500px) {\n            .content { padding: 18px 16px 30px; }\n            .chip { width: calc(50% - 5px); }\n        }\n\n        /* \u2500\u2500 SITE FOOTER \u2500\u2500 */\n        .site-footer {\n            background: transparent;\n            border-top: 1px solid #4a5566;\n            padding: 18px 24px 14px;\n        }\n        .site-footer-nav {\n            display: flex;\n            flex-wrap: wrap;\n            justify-content: center;\n            gap: 6px 24px;\n            margin-bottom: 12px;\n        }\n        .site-footer-nav a {\n            font-size: 13px;\n            color: #fff;\n            text-decoration: none;\n            display: inline-flex;\n            align-items: center;\n            gap: 6px;\n            opacity: 0.85;\n            transition: opacity 0.2s;\n        }\n        .site-footer-nav a i { color: #fff; font-size: 11px; }\n        .site-footer-nav a:hover { opacity: 1; }\n        .site-footer-bottom {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            flex-wrap: wrap;\n            gap: 6px;\n            padding-top: 10px;\n        }\n        .site-footer-copy,\n        .site-footer-credits {\n            font-size: 11px;\n            color: #BA9868;\n        }\n\n        /* \u2500\u2500 SCROLL BUTTONS \u2500\u2500 */\n        .scroll-btns {\n            position: fixed;\n            right: 28px;\n            bottom: 36px;\n            flex-direction: column;\n            gap: 8px;\n            z-index: 400;\n            display: none;\n        }\n        .scroll-btns.visible { display: flex; }\n        .scroll-btn {\n            width: 44px;\n            height: 44px;\n            border-radius: 50%;\n            background: #9a7e38;\n            border: none;\n            cursor: pointer;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            box-shadow: 0 3px 12px rgba(0,0,0,0.45);\n            transition: background 0.2s, transform 0.15s;\n            color: #fff;\n            font-size: 15px;\n        }\n        .scroll-btn:hover { background: #BA9868; transform: scale(1.08); }\n        .scroll-btn:active { transform: scale(0.96); }\n    <\\/style>\n    <link href=\"https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap\" rel=\"stylesheet\">\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\" media=\"print\" onload=\"this.media='all'\">\n<\\/head>\n<body>\n<div class=\"container\">\n  <div class=\"outer-border\">\n\n    <!-- BANNER -->\n    <div class=\"banner-wrapper\">\n      <div class=\"banner\">\n        <img src=\"https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/head.jpg\"\n             alt=\"\u0410\u0440\u0445\u0438\u0432 \u041a\u043e\u0433\u0442\u0435\u0432\u0440\u0430\u043d\u0430\" class=\"banner-bg\" width=\"1010\" height=\"315\" loading=\"eager\">\n        <img src=\"https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/windows.png\"\n             alt=\"\" class=\"banner-overlay\" width=\"1010\" height=\"315\" loading=\"eager\" aria-hidden=\"true\">\n        <div class=\"banner-frame\" aria-hidden=\"true\"><\\/div>\n        <h1 class=\"banner-title\">\u0411\u0410\u0428\u041d\u042f \u041a\u041e\u0413\u0422\u0415\u0412\u0420\u0410\u041d<\\/h1>\n      <\\/div>\n    <\\/div>\n\n    <!-- BREADCRUMBS -->\n    <nav class=\"breadcrumb\">\n      <a href=\"https://rave.dhog.org/index.php\">\n        <i class=\"fab fa-fort-awesome\" style=\"color:var(--gold);font-size:11px\"><\\/i>\n      <\\/a>\n      <span class=\"breadcrumb-sep\">><\\/span>\n      <a href=\"https://rave.dhog.org/viewforum.php?f=1\">\n        <span class=\"breadcrumb-cur\">\u0411\u0430\u0448\u043d\u044f \u041a\u043e\u0433\u0442\u0435\u0432\u0440\u0430\u043d<\\/span>\n      <\\/a>\n      <span class=\"breadcrumb-sep\">><\\/span>\n      <span class=\"breadcrumb-cur\">\u0415\u0436\u0435\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0430\u0440\u0445\u0438\u0432<\\/span>\n    <\\/nav>\n\n    <!-- CONTENT -->\n    <main class=\"content\">\n      <h2 class=\"page-title\">\u0410\u0440\u0445\u0438\u0432 \u0432\u044b\u043f\u0443\u0441\u043a\u043e\u0432<\\/h2>\n      <p class=\"page-sub\">\u0415\u0436\u0435\u043d\u0435\u0434\u0435\u043b\u044c\u043d\u044b\u0439 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0439 \u0431\u044e\u043b\u043b\u0435\u0442\u0435\u043d\u044c \u0444\u0430\u043a\u0443\u043b\u044c\u0442\u0435\u0442\u0430 \u041a\u043e\u0433\u0442\u0435\u0432\u0440\u0430\u043d<\\/p>\n\n      <!-- EMPTY STATE -->\n      <div class=\"empty-state\" id=\"emptyState\">\n        <div class=\"empty-title\">\u0410\u0440\u0445\u0438\u0432 \u043f\u0443\u0441\u0442<\\/div>\n        <div class=\"empty-sub\">\u041e\u043f\u0443\u0431\u043b\u0438\u043a\u0443\u0439\u0442\u0435 \u043f\u0435\u0440\u0432\u044b\u0439 \u0432\u044b\u043f\u0443\u0441\u043a \u0432 \u0440\u0435\u0434\u0430\u043a\u0442\u043e\u0440\u0435<\\/div>\n      <\\/div>\n\n      <!-- ARCHIVE CONTENT -->\n      <div id=\"archiveContent\"><\\/div>\n    <\\/main>\n\n\n    <!-- SITE FOOTER -->\n    <footer class=\"site-footer\">\n      <nav class=\"site-footer-nav\">\n        <a href=\"https://rave.dhog.org/index.php\">\n          <i class=\"fas fa-home\"><\\/i> \u0413\u043b\u0430\u0432\u043d\u0430\u044f \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430\n        <\\/a>\n        <a href=\"https://rave.dhog.org/help/faq\">\n          <i class=\"fas fa-question-circle\"><\\/i> \u0412\u043e\u043f\u0440\u043e\u0441\u044b \u0438 \u043e\u0442\u0432\u0435\u0442\u044b\n        <\\/a>\n        <a href=\"https://rave.dhog.org/memberlist.php\">\n          <i class=\"fas fa-users\"><\\/i> \u041e\u0431\u0438\u0442\u0430\u0442\u0435\u043b\u0438\n        <\\/a>\n        <a href=\"https://rave.dhog.org/memberlist.php?mode=team\">\n          <i class=\"fas fa-shield-alt\"><\\/i> \u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044f\n        <\\/a>\n        <a href=\"https://rave.dhog.org/memberlist.php?mode=contactadmin\">\n          <i class=\"fas fa-envelope\"><\\/i> \u0421\u0432\u044f\u0437\u0430\u0442\u044c\u0441\u044f \u0441 \u0430\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0435\u0439\n        <\\/a>\n      <\\/nav>\n      <div class=\"site-footer-bottom\">\n        <span class=\"site-footer-copy\">Powered by phpBB\u00ae Forum Software \u00a9 phpBB Limited<\\/span>\n        <span class=\"site-footer-credits\">Credits to Icon8<\\/span>\n      <\\/div>\n    <\\/footer>\n\n  <\\/div>\n<\\/div>\n\n<!-- ISSUE MODAL -->\n<div class=\"modal-overlay\" id=\"modalOverlay\" onclick=\"handleOverlayClick(event)\">\n  <div class=\"modal-box\" id=\"modalBox\">\n    <div class=\"modal-frame\" aria-hidden=\"true\"><\\/div>\n    <div class=\"modal-inner\">\n      <div class=\"modal-hdr\">\n        <div class=\"modal-meta\" id=\"modalMeta\"><\\/div>\n        <div class=\"modal-actions\" id=\"modalActions\">\n          <button class=\"btn-modal-close\" onclick=\"closeModal()\">\u2715<\\/button>\n        <\\/div>\n      <\\/div>\n      <div class=\"modal-body\">\n        <div id=\"issueView\"><\\/div>\n      <\\/div>\n      <div class=\"modal-nav\">\n        <button class=\"nav-btn\" id=\"navPrev\" onclick=\"navigateModal(-1)\">\u2190<\\/button>\n        <span class=\"nav-counter\" id=\"navCounter\"><\\/span>\n        <button class=\"nav-btn\" id=\"navNext\" onclick=\"navigateModal(1)\">\u2192<\\/button>\n      <\\/div>\n    <\\/div>\n  <\\/div>\n<\\/div>\n\n<script>\n// \u2500\u2500 STATE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nlet archive = [];\nlet currentIdx = null; // index into archive[] currently open in modal\n\n// \u2500\u2500 INIT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\ndocument.addEventListener('DOMContentLoaded', () => {\n  archive = JSON.parse(localStorage.getItem('rc_archive') || '[]');\n  renderArchive();\n  document.addEventListener('keydown', onKey);\n});\n\n// \u2500\u2500 SEMESTER HELPERS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nfunction getSemesterKey(issue) {\n  const s = (issue.season || '').trim();\n  if (s) return s;\n  if (issue.published_at) {\n    const d = new Date(issue.published_at);\n    const m = d.getMonth(); // 0-11\n    const y = d.getFullYear();\n    if (m >= 8 && m <= 11) return `\u041e\u0441\u0435\u043d\u044c ${y}`;\n    if (m === 0 || m === 1) return `\u0417\u0438\u043c\u0430 ${y}`;\n    if (m >= 2 && m <= 4) return `\u0412\u0435\u0441\u043d\u0430 ${y}`;\n    return `\u041b\u0435\u0442\u043e ${y}`;\n  }\n  return '\u0411\u0435\u0437 \u0441\u0435\u0437\u043e\u043d\u0430';\n}\n\n// \u2500\u2500 RENDER ARCHIVE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nfunction renderArchive() {\n  const content = document.getElementById('archiveContent');\n  const empty   = document.getElementById('emptyState');\n  content.innerHTML = '';\n\n  if (!archive.length) {\n    empty.classList.add('show');\n    return;\n  }\n  empty.classList.remove('show');\n\n  // Group by semester key \u2014 preserve insertion order (most recent first = archive[0])\n  const groups = new Map();\n  archive.forEach((issue, idx) => {\n    const key = getSemesterKey(issue);\n    if (!groups.has(key)) groups.set(key, []);\n    groups.get(key).push({ issue, idx });\n  });\n\n  // Render: first group open, rest collapsed\n  let first = true;\n  for (const [sem, items] of groups) {\n    const block = document.createElement('div');\n    block.className = 'semester-block' + (first ? '' : ' collapsed');\n    block.dataset.sem = sem;\n\n    const header = document.createElement('div');\n    header.className = 'semester-header';\n    header.innerHTML = `\n      <span class=\"semester-name\">${esc(sem)}<\\/span>\n      <span class=\"semester-count\">${items.length} ${items.length === 1 ? '\u0432\u044b\u043f\u0443\u0441\u043a' : '\u0432\u044b\u043f\u0443\u0441\u043a(\u0430/\u043e\u0432)'}<\\/span>\n      <span class=\"semester-caret\">\u25bc<\\/span>\n    `;\n    header.addEventListener('click', () => block.classList.toggle('collapsed'));\n\n    const chips = document.createElement('div');\n    chips.className = 'semester-chips';\n    items.forEach(({ issue, idx }) => chips.appendChild(buildChip(issue, idx)));\n\n    block.appendChild(header);\n    block.appendChild(chips);\n    content.appendChild(block);\n    first = false;\n  }\n}\n\nfunction buildChip(issue, idx) {\n  const div = document.createElement('div');\n  div.className = 'chip';\n  div.innerHTML = `\n    <div class=\"chip-issue\">${esc(issue.issue_num || '\u2014')}<\\/div>\n    <div class=\"chip-dates\">${esc(issue.dates || '\u2014')}<\\/div>\n    <div class=\"chip-season\">${esc(issue.season || '')}<\\/div>\n    <div class=\"chip-pts\">\n      ${issue.points\n        ? `<span>${esc(issue.points)}<\\/span><span class=\"chip-pts-label\"> \u0431\u0430\u043b.<\\/span>`\n        : '<span class=\"chip-pts-label\">\u2014<\\/span>'}\n    <\\/div>\n  `;\n  div.addEventListener('click', () => openModal(idx));\n  return div;\n}\n\n// \u2500\u2500 MODAL \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nfunction openModal(idx) {\n  currentIdx = idx;\n  renderModal(idx);\n  document.getElementById('modalOverlay').classList.add('open');\n  document.body.style.overflow = 'hidden';\n}\n\nfunction closeModal() {\n  document.getElementById('modalOverlay').classList.remove('open');\n  document.body.style.overflow = '';\n  currentIdx = null;\n}\n\nfunction handleOverlayClick(e) {\n  if (e.target === document.getElementById('modalOverlay')) closeModal();\n}\n\nfunction navigateModal(dir) {\n  if (currentIdx === null) return;\n  const next = currentIdx + dir;\n  if (next >= 0 && next < archive.length) {\n    currentIdx = next;\n    renderModal(next);\n  }\n}\n\nfunction onKey(e) {\n  if (!document.getElementById('modalOverlay').classList.contains('open')) return;\n  if (e.key === 'Escape') closeModal();\n  if (e.key === 'ArrowLeft')  navigateModal(-1);\n  if (e.key === 'ArrowRight') navigateModal(1);\n}\n\nfunction renderModal(idx) {\n  const issue = archive[idx];\n  if (!issue) return;\n\n  document.getElementById('navPrev').disabled = idx <= 0;\n  document.getElementById('navNext').disabled = idx >= archive.length - 1;\n  document.getElementById('navCounter').textContent = `${idx + 1} / ${archive.length}`;\n\n  document.getElementById('modalMeta').innerHTML = `\n    <span class=\"modal-meta-item\">\u0421\u0435\u0437\u043e\u043d: <strong>${esc(issue.season || '\u2014')}<\\/strong><\\/span>\n    <span class=\"modal-meta-item\">\u0414\u0430\u0442\u044b: <strong>${esc(issue.dates || '\u2014')}<\\/strong><\\/span>\n    <span class=\"modal-meta-item\">\u0412\u044b\u043f\u0443\u0441\u043a: <strong>${esc(issue.issue_num || '\u2014')}<\\/strong><\\/span>\n  `;\n\n  document.getElementById('issueView').innerHTML = buildIssueHTML(issue);\n}\n\n// \u2500\u2500 BUILD ISSUE HTML \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nfunction buildIssueHTML(issue) {\n  // Determine layout of row1\n  const showStudents = issue.studentsVisible !== false && issue.students_list && issue.students_list.length;\n  const showEvents   = issue.eventsVisible   !== false && issue.events_list   && issue.events_list.length;\n  const showResults  = issue.resultsVisible  !== false && (issue.points || issue.points_total || issue.position);\n  const showNews     = issue.news_list && issue.news_list.length;\n  const showBd       = issue.bdVisible !== false && issue.bds && issue.bds.length;\n  const showQuill    = issue.quillVisible !== false && (issue.quill_text || issue.quill_theme);\n\n  let html = `<div class=\"issue-page\"><div class=\"issue-inner\">`;\n\n  // \u2500\u2500 HEADER\n  html += `\n    <div class=\"issue-hdr\">\n      <div class=\"issue-hdr-logo\">\n        <img src=\"https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/feather/logotip.png\" alt=\"\u041a\u043e\u0433\u0442\u0435\u0432\u0440\u0430\u043d\"\n             onerror=\"this.style.display='none'\">\n      <\\/div>\n      <div class=\"issue-hdr-meta\">\n        <div class=\"issue-hdr-item\">\n          <div class=\"issue-hdr-label\">\u0421\u0435\u0437\u043e\u043d<\\/div>\n          <div class=\"issue-hdr-val\">${esc(issue.season || '\u2014')}<\\/div>\n        <\\/div>\n        <div class=\"issue-hdr-item\">\n          <div class=\"issue-hdr-label\">\u0414\u0430\u0442\u044b<\\/div>\n          <div class=\"issue-hdr-val\">${esc(issue.dates || '\u2014')}<\\/div>\n        <\\/div>\n        <div class=\"issue-hdr-item\">\n          <div class=\"issue-hdr-label\">\u0412\u044b\u043f\u0443\u0441\u043a<\\/div>\n          <div class=\"issue-hdr-val\">${esc(issue.issue_num || '\u2014')}<\\/div>\n        <\\/div>\n      <\\/div>\n    <\\/div>`;\n\n  // \u2500\u2500 ROW 1: Students + Events\n  if (showStudents || showEvents) {\n    const cols = showStudents ? '190px 1fr' : '1fr';\n    html += `<div class=\"issue-row1\" style=\"display:grid;grid-template-columns:${cols}\">`;\n    if (showStudents) {\n      html += `<div class=\"issue-sec\" style=\"border-right:1px solid rgba(21,45,74,0.2)\">\n        <div class=\"issue-sec-head\"><div class=\"issue-sec-title issue-sec-title-sm\">\u041d\u043e\u0432\u044b\u0435 \u0443\u0447\u0435\u043d\u0438\u043a\u0438<\\/div><\\/div>\n        <div class=\"issue-list\">${listItems(issue.students_list)}<\\/div>\n      <\\/div>`;\n    }\n    if (showEvents) {\n      html += `<div class=\"issue-sec\">\n        <div class=\"issue-sec-head\"><div class=\"issue-sec-title\">\u0421\u043e\u0431\u044b\u0442\u0438\u044f \u0438 \u0430\u043d\u043e\u043d\u0441\u044b<\\/div><\\/div>\n        <div class=\"issue-list\">${listItems(issue.events_list)}<\\/div>\n      <\\/div>`;\n    }\n    html += `<\\/div>`;\n  }\n\n  // \u2500\u2500 ROW 2: Results + (News + Quill)\n  if (showResults || showNews || showQuill) {\n    html += `<div class=\"issue-cols2\">`;\n\n    // Left: results\n    if (showResults) {\n      const arrowClass = issue.arrow !== false ? 'up' : 'dn';\n      const arrowChar  = issue.arrow !== false ? '<i class=\"fas fa-angle-double-up\"><\\/i>' : '<i class=\"fas fa-angle-double-down\"><\\/i>';\n      html += `<div class=\"issue-sec\">\n        <div class=\"issue-sec-head\"><div class=\"issue-sec-title\">\u0423\u0447\u0435\u0431\u043d\u044b\u0435 \u0440\u0435\u0437\u0443\u043b\u044c\u0442\u0430\u0442\u044b<\\/div><\\/div>\n        <div class=\"issue-score-wrap\">\n          <div class=\"issue-score-left\">\n            ${issue.points ? `\n              <div>\n                <div class=\"issue-score-lbl\">\u0417\u0430 \u043d\u0435\u0434\u0435\u043b\u044e<\\/div>\n                <div class=\"issue-score-row\">\n                  <span class=\"issue-score-big\">${esc(issue.points)}<\\/span>\n                  <span class=\"issue-score-unit\">\u0431\u0430\u043b\u043b\u043e\u0432<\\/span>\n                <\\/div>\n              <\\/div>` : ''}\n            ${issue.points_total ? `\n              <div class=\"issue-score-divider\"><\\/div>\n              <div>\n                <div class=\"issue-score-lbl\">\u0412\u0441\u0435\u0433\u043e<\\/div>\n                <div class=\"issue-score-row\">\n                  <span class=\"issue-score-big\">${esc(issue.points_total)}<\\/span>\n                  <span class=\"issue-score-unit\">\u0431\u0430\u043b\u043b\u043e\u0432<\\/span>\n                <\\/div>\n              <\\/div>` : ''}\n            ${issue.points_note ? `<div class=\"issue-score-note\">${esc(issue.points_note)}<\\/div>` : ''}\n          <\\/div>\n          ${issue.position ? `\n          <div class=\"issue-score-right\">\n            <span class=\"issue-arrow ${arrowClass}\">${arrowChar}<\\/span>\n            <div class=\"issue-trophy\"><i class=\"fas fa-trophy\"><\\/i><\\/div>\n            <div class=\"issue-pos\">${esc(issue.position)}<\\/div>\n            <div class=\"issue-pos-lbl\">\u043c\u0435\u0441\u0442\u043e<\\/div>\n          <\\/div>` : ''}\n        <\\/div>\n      <\\/div>`;\n    } else {\n      html += `<div><\\/div>`; // placeholder to maintain grid\n    }\n\n    // Right: news + quill\n    html += `<div class=\"issue-sec\" style=\"display:flex;flex-direction:column\">`;\n    if (showNews) {\n      html += `\n        <div class=\"issue-sec-head\"><div class=\"issue-sec-title\">\u0412\u043d\u0443\u0442\u0440\u0435\u043d\u043d\u0438\u0435 \u043d\u043e\u0432\u043e\u0441\u0442\u0438<\\/div><\\/div>\n        <div class=\"issue-list\">${listItems(issue.news_list)}<\\/div>`;\n    }\n    if (showQuill) {\n      html += `\n        <div style=\"margin-top:${showNews ? '14px' : '0'};padding-top:${showNews ? '12px' : '0'};${showNews ? 'border-top:1px solid rgba(21,45,74,0.2)' : ''}\">\n          <div class=\"issue-sec-head\" style=\"border-bottom:none;margin-bottom:6px;padding-bottom:0\">\n            <div class=\"issue-sec-title\">\u041f\u0435\u0440\u043e \u0420\u043e\u0432\u0435\u043d\u044b<\\/div>\n          <\\/div>\n          <div class=\"issue-quill-meta\">\n            ${issue.quill_num ? `<span>\u0412\u044b\u043f. ${esc(issue.quill_num)}<\\/span>` : ''}\n            ${issue.quill_theme ? `<span>\u0422\u0435\u043c\u0430: ${esc(issue.quill_theme)}<\\/span>` : ''}\n          <\\/div>\n          ${issue.quill_text ? `<div class=\"issue-quill-text\">${esc(issue.quill_text)}<\\/div>` : ''}\n        <\\/div>`;\n    }\n    html += `<\\/div>`;\n    html += `<\\/div>`; // .issue-cols2\n  }\n\n  // \u2500\u2500 ROW 3: Birthdays\n  if (showBd) {\n    html += `<div class=\"issue-fullrow\">\n      <div class=\"issue-sec\">\n        <div class=\"issue-sec-head\"><div class=\"issue-sec-title\">\u0414\u043d\u0438 \u0440\u043e\u0436\u0434\u0435\u043d\u0438\u044f \u043d\u0435\u0434\u0435\u043b\u0438<\\/div><\\/div>\n        <div class=\"issue-bd-wrap\">\n          ${issue.bds.map(b => `\n            <div class=\"issue-pol\">\n              <div class=\"issue-pol-photo\">\n                ${b.photo\n                  ? `<img src=\"${b.photo}\" alt=\"${esc(b.name)}\">`\n                  : '\ud83e\ude84'}\n              <\\/div>\n              <div class=\"issue-pol-caption\">\n                <span class=\"issue-pol-name\">${esc(b.name)}<\\/span>\n                <span class=\"issue-pol-date\">${esc(b.date)}<\\/span>\n              <\\/div>\n            <\\/div>`).join('')}\n        <\\/div>\n      <\\/div>\n    <\\/div>`;\n  }\n\n  // \u2500\u2500 FOOTER\n  html += `\n    <div class=\"issue-ftr\">\n      <span class=\"issue-ftr-text\">\u0425\u043e\u0433\u0432\u0430\u0440\u0442\u0441 \u0414\u0430\u043c\u0431\u043b\u0434\u043e\u0440\u0430. \u041a\u043e\u0433\u0442\u0435\u0432\u0440\u0430\u043d<\\/span>\n    <\\/div>`;\n\n  html += `<\\/div><\\/div>`; // .issue-inner .issue-page\n  return html;\n}\n\nfunction listItems(arr) {\n  if (!arr || !arr.length) return '';\n  return arr.map(s =>\n    `<div class=\"issue-list-item\"><span class=\"issue-bullet\">\u25c6<\\/span><span>${esc(s)}<\\/span><\\/div>`\n  ).join('');\n}\n\n// \u2500\u2500 EDIT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nfunction editCurrentIssue() {\n  if (currentIdx === null) return;\n  sessionStorage.setItem('rc_edit_idx', String(currentIdx));\n  window.location.href = 'rc-editor.html';\n}\n\n// \u2500\u2500 DELETE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n\n// \u2500\u2500 UTILS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\nfunction esc(s) {\n  const d = document.createElement('div');\n  d.textContent = String(s || '');\n  return d.innerHTML;\n}\n<\\/script>\n\n<!-- SCROLL BUTTONS -->\n<div class=\"scroll-btns\">\n  <button class=\"scroll-btn\" onclick=\"window.scrollTo({top:0,behavior:'smooth'})\" title=\"\u041d\u0430\u0432\u0435\u0440\u0445\">\n    <i class=\"fas fa-chevron-up\"><\\/i>\n  <\\/button>\n  <button class=\"scroll-btn\" onclick=\"window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})\" title=\"\u0412\u043d\u0438\u0437\">\n    <i class=\"fas fa-chevron-down\"><\\/i>\n  <\\/button>\n<\\/div>\n<script>\n(function() {\n  var btns = document.querySelector('.scroll-btns');\n  function check() {\n    var hasScroll = document.documentElement.scrollHeight > window.innerHeight + 4;\n    btns.classList.toggle('visible', hasScroll);\n  }\n  window.addEventListener('scroll', check, { passive: true });\n  window.addEventListener('resize', check, { passive: true });\n  check();\n})();\n<\\/script>\n<\\/body>\n<\\/html>\n";
+</script>
+</body>
+</html>
