@@ -276,6 +276,133 @@
             letter-spacing: 0.5px;
         }
 
+        /* ── OWL POST ROUTE ── */
+        .route-wrap {
+            position: relative;
+            padding: 10px 4px 4px;
+        }
+        .route-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .route-path {
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-dasharray: 5 7;
+            opacity: 0.45;
+        }
+        .route-owl {
+            position: relative;
+            z-index: 2;
+            width: 96px;
+            height: auto;
+            flex-shrink: 0;
+            align-self: flex-end;
+            margin-left: 18px;
+            filter: drop-shadow(0 3px 10px rgba(0,0,0,.55));
+            pointer-events: none;
+        }
+        .route-row {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 24px;
+            z-index: 2;
+        }
+
+        .letter-stop {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            width: 92px;
+            flex-shrink: 0;
+        }
+        .letter-img-wrap {
+            position: relative;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--speed);
+        }
+        .letter-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,.45));
+            transition: filter var(--speed), transform var(--speed);
+        }
+        .letter-stop:hover .letter-img-wrap { transform: scale(1.1); }
+        .letter-stop:hover .letter-img {
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,.45)) drop-shadow(0 0 10px rgba(186,152,104,.55));
+        }
+
+        /* хаотичный "полёт" конвертов — лёгкий разный наклон у каждого */
+        .letter-stop:nth-child(5n+1) .letter-img { transform: rotate(-9deg); }
+        .letter-stop:nth-child(5n+2) .letter-img { transform: rotate(6deg); }
+        .letter-stop:nth-child(5n+3) .letter-img { transform: rotate(-4deg); }
+        .letter-stop:nth-child(5n+4) .letter-img { transform: rotate(10deg); }
+        .letter-stop:nth-child(5n+5) .letter-img { transform: rotate(-7deg); }
+        .letter-stop:hover .letter-img { transform: rotate(0deg) scale(1.03); }
+
+        .letter-medal {
+            position: absolute;
+            top: -8px;
+            left: -10px;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 6px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #1c3050, #0e1a2c);
+            border: 1.5px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'BebasNeue', serif;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            color: var(--gold2);
+            box-shadow: 0 2px 6px rgba(0,0,0,.5);
+            z-index: 3;
+        }
+
+        .letter-caption {
+            margin-top: 8px;
+            text-align: center;
+        }
+        .letter-dates {
+            font-family: 'SpecialElite', serif;
+            font-size: 10px;
+            color: var(--text2);
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+        }
+        /* latest issue — atmospheric highlight (только свечение, размер как у всех) */
+        .letter-stop.is-latest .letter-img-wrap {
+            animation: owl-glow 3.2s ease-in-out infinite;
+        }
+        @keyframes owl-glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(186,152,104,.35)); }
+            50%      { filter: drop-shadow(0 0 18px rgba(186,152,104,.6)); }
+        }
+        .letter-stop.is-latest .letter-img {
+            filter: drop-shadow(0 3px 10px rgba(0,0,0,.5)) drop-shadow(0 0 12px rgba(186,152,104,.5));
+        }
+
+        @media (max-width: 600px) {
+            .route-row { padding-left: 0; gap: 22px; }
+            .route-owl { display: none; }
+        }
+
         /* ── EMPTY STATE ── */
         .empty-state {
             text-align: center;
@@ -1032,32 +1159,137 @@ function renderArchive() {
     `;
     header.addEventListener('click', () => block.classList.toggle('collapsed'));
 
-    const chips = document.createElement('div');
-    chips.className = 'semester-chips';
-    items.forEach(({ issue, idx }) => chips.appendChild(buildChip(issue, idx)));
-
+    const route = buildOwlRoute(items);
     block.appendChild(header);
-    block.appendChild(chips);
+    block.appendChild(route);
     content.appendChild(block);
     first = false;
   }
 }
 
-function buildChip(issue, idx) {
-  const div = document.createElement('div');
-  div.className = 'chip';
-  div.innerHTML = `
-    <div class="chip-issue">${esc(issue.issue_num || '—')}</div>
-    <div class="chip-dates">${esc(issue.dates || '—')}</div>
-    <div class="chip-season">${esc(issue.season || '')}</div>
-    <div class="chip-pts">
-      ${issue.points
-        ? `<span>${esc(issue.points)}</span><span class="chip-pts-label"> бал.</span>`
-        : '<span class="chip-pts-label">—</span>'}
-    </div>
-  `;
-  div.addEventListener('click', () => openModal(idx));
-  return div;
+/**
+ * Строит маршрут совиной почты для группы выпусков одного семестра.
+ * items: [{ issue, idx }], idx — индекс в глобальном archive[] (для openModal).
+ * Первый элемент items — самый свежий выпуск семестра (см. порядок archive[]).
+ */
+function buildOwlRoute(items) {
+  const wrap = document.createElement('div');
+  wrap.className = 'route-wrap';
+
+  // SVG-линия маршрута — рисуется через path с лёгкими волнами и одной петлёй
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  svg.setAttribute('class', 'route-svg');
+  svg.setAttribute('preserveAspectRatio', 'none');
+
+  const path = document.createElementNS(svgNS, 'path');
+  path.setAttribute('class', 'route-path');
+  svg.appendChild(path);
+  wrap.appendChild(svg);
+
+  // items[0] — самый свежий выпуск семестра (см. порядок archive[]).
+  // Для отображения разворачиваем порядок: слева направо — от старого к новому,
+  // сова летит последней, забирая свежий выпуск.
+  const latestIdx = items.length ? items[0].idx : null;
+  const displayItems = items.slice().reverse();
+
+  // Ряд писем
+  const row = document.createElement('div');
+  row.className = 'route-row';
+
+  displayItems.forEach(({ issue, idx }) => {
+    const stop = document.createElement('div');
+    stop.className = 'letter-stop' + (idx === latestIdx ? ' is-latest' : '');
+
+    stop.innerHTML = `
+      <div class="letter-img-wrap">
+        <span class="letter-medal">${esc(issue.issue_num || '—')}</span>
+        <img class="letter-img" alt="Выпуск ${esc(issue.issue_num || '')}"
+             src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/feather/letter.png">
+      </div>
+      <div class="letter-caption">
+        <div class="letter-dates">${esc(issue.dates || '—')}</div>
+      </div>
+    `;
+    stop.addEventListener('click', () => openModal(idx));
+    row.appendChild(stop);
+  });
+
+  // Сова — в конце маршрута (после всех писем)
+  const owl = document.createElement('img');
+  owl.src = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/feather/owl.png';
+  owl.alt = '';
+  owl.className = 'route-owl';
+  row.appendChild(owl);
+
+  wrap.appendChild(row);
+
+  // Отрисовать path после вставки в DOM, когда известны реальные позиции писем
+  requestAnimationFrame(() => drawRoutePath(wrap, svg, path, owl, row));
+  window.addEventListener('resize', () => drawRoutePath(wrap, svg, path, owl, row));
+
+  return wrap;
+}
+
+/** Склонение слова "новость" */
+function newsWord(n) {
+  const mod10 = n % 10, mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return 'новость';
+  if ([2,3,4].includes(mod10) && ![12,13,14].includes(mod100)) return 'новости';
+  return 'новостей';
+}
+
+/**
+ * Строит плавный SVG-путь, соединяющий точки маршрута: от совы через
+ * все письма, с лёгкими волнами и одной небольшой петлёй у первой точки.
+ */
+function drawRoutePath(wrap, svg, path, owl, row) {
+  const wrapRect = wrap.getBoundingClientRect();
+  if (!wrapRect.width) return;
+
+  svg.setAttribute('width', wrapRect.width);
+  svg.setAttribute('height', wrapRect.height);
+  svg.setAttribute('viewBox', `0 0 ${wrapRect.width} ${wrapRect.height}`);
+
+  const points = [];
+  row.querySelectorAll('.letter-img-wrap').forEach(el => {
+    const r = el.getBoundingClientRect();
+    points.push({
+      x: r.left - wrapRect.left + r.width / 2,
+      y: r.top  - wrapRect.top  + r.height * 0.42
+    });
+  });
+
+  const owlRect = owl.getBoundingClientRect();
+  points.push({
+    x: owlRect.left - wrapRect.left + owlRect.width * 0.3,
+    y: owlRect.top  - wrapRect.top  + owlRect.height * 0.55
+  });
+
+  if (points.length < 2) { path.setAttribute('d', ''); return; }
+
+  // Строим плавную кривую через письма с небольшими волнами по Y,
+  // с маленькой декоративной петлёй перед совой в конце маршрута.
+  let d = `M ${points[0].x} ${points[0].y} `;
+
+  for (let i = 1; i < points.length - 1; i++) {
+    const prev = points[i - 1];
+    const cur  = points[i];
+    const midX = (prev.x + cur.x) / 2;
+    const wave = (i % 2 === 0 ? -1 : 1) * 14;
+    const cpY  = (prev.y + cur.y) / 2 + wave;
+    d += `Q ${midX} ${cpY}, ${cur.x} ${cur.y} `;
+  }
+
+  // маленькая декоративная петля перед совой
+  const pPrev = points[points.length - 2];
+  const pOwl  = points[points.length - 1];
+  const loopMidX = pOwl.x - (pOwl.x - pPrev.x) * 0.18;
+  const loopMidY = pOwl.y - 16;
+  d += `Q ${loopMidX} ${loopMidY - 10}, ${loopMidX - 14} ${loopMidY} `;
+  d += `Q ${loopMidX + 6} ${loopMidY + 14}, ${pOwl.x} ${pOwl.y} `;
+
+  path.setAttribute('d', d.trim());
 }
 
 // ── MODAL ─────────────────────────────────────────
