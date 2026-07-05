@@ -106,12 +106,15 @@
 
         /* ── TOOLBAR ROW ── */
         .toolbar {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 28px; flex-wrap: wrap;
+            display: flex; flex-direction: column; gap: 10px;
+            margin-bottom: 28px;
         }
         .toolbar-title {
             font-family: 'Romul', serif; color: var(--gold);
-            font-size: 20px; letter-spacing: 2px; flex: 1; min-width: 160px;
+            font-size: 20px; letter-spacing: 2px;
+        }
+        .toolbar-actions {
+            display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
         }
         .btn {
             font-family: 'Romul', serif; font-size: 13px; letter-spacing: 1.5px;
@@ -122,39 +125,68 @@
         .btn-primary:hover { background: var(--gold); color: var(--navy); }
         .btn-secondary { border-color: var(--outline); color: var(--text2); }
         .btn-secondary:hover { border-color: var(--text2); color: var(--text); }
-        .btn-danger { border-color: rgba(180,60,60,.5); color: #c06060; }
-        .btn-danger:hover { background: rgba(180,60,60,.15); }
-        .btn-export { border-color: #4a8a5a; color: #7abf8a; }
-        .btn-export:hover { background: rgba(74,138,90,.15); }
+        .btn-danger { border-color: var(--outline); color: var(--text2); }
+        .btn-danger:hover { border-color: var(--text2); color: var(--text); }
+        .btn-export { border-color: var(--gold); color: var(--gold); }
+        .btn-export:hover { background: rgba(186,152,104,.12); }
 
         /* ── ISSUE LIST ── */
-        .issues-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 10px; margin-bottom: 32px;
+        .semester-block-ed { margin-bottom: 24px; }
+        .semester-hdr-ed {
+            display: flex; align-items: center; gap: 10px;
+            cursor: pointer; padding: 6px 0;
+            border-bottom: 1px solid var(--outline);
+            margin-bottom: 12px; user-select: none;
         }
+        .semester-hdr-ed:hover { opacity: .85; }
+        .semester-name-ed {
+            font-family: 'Romul', serif; font-size: 14px;
+            letter-spacing: 2px; color: var(--gold); flex: 1;
+        }
+        .semester-count-ed {
+            font-family: 'SpecialElite', serif; font-size: 10px;
+            color: var(--text2); letter-spacing: 1px;
+        }
+        .semester-caret-ed {
+            color: var(--text2); font-size: 10px; transition: transform .2s;
+        }
+        .semester-block-ed.collapsed .semester-caret-ed { transform: rotate(-90deg); }
+        .semester-chips-ed { display: flex; flex-wrap: wrap; gap: 8px; }
+        .semester-block-ed.collapsed .semester-chips-ed { display: none; }
+
         .issue-chip {
             background: var(--navy2); border: 1px solid var(--outline);
-            padding: 11px 13px 12px; cursor: pointer;
+            padding: 10px 12px; cursor: pointer;
             transition: border-color .2s, background .2s;
             position: relative; overflow: hidden;
+            min-width: 110px;
         }
-        .issue-chip::after {
-            content:''; position:absolute; top:0; left:0; right:0; height:2px;
-            background:var(--gold); transform:scaleX(0); transform-origin:left; transition:transform .2s;
+        .issue-chip::before {
+            content:''; position:absolute; left:0; top:0; bottom:0; width:2px;
+            background:var(--gold); transform:scaleY(0); transform-origin:bottom; transition:transform .2s;
         }
         .issue-chip:hover { border-color:var(--gold); background:rgba(35,56,90,.9); }
-        .issue-chip:hover::after { transform:scaleX(1); }
+        .issue-chip:hover::before { transform:scaleY(1); }
         .issue-chip.active { border-color:var(--gold); background:rgba(35,56,90,.9); }
-        .issue-chip.active::after { transform:scaleX(1); }
-        .chip-num { font-family:'BebasNeue',serif; font-size:19px; letter-spacing:1.5px; color:var(--gold); line-height:1; margin-bottom:3px; }
-        .chip-dates { font-family:'SpecialElite',serif; font-size:10px; color:var(--text2); margin-bottom:2px; }
-        .chip-season { font-size:11px; color:var(--text2); opacity:.6; }
+        .issue-chip.active::before { transform:scaleY(1); }
+        .chip-num {
+            font-family:'BebasNeue',serif; font-size:22px; letter-spacing:1.5px;
+            color:var(--gold); line-height:1; margin-bottom:4px;
+        }
+        .chip-dates {
+            font-family:'SpecialElite',serif; font-size:10px;
+            color:var(--text2); letter-spacing:.3px;
+        }
+        .chip-edited {
+            font-family:'JetBrains Mono',monospace; font-size:8px;
+            color:var(--text2); opacity:.4; margin-top:5px; letter-spacing:.5px;
+        }
         .chip-new {
             background:transparent; border:1px dashed var(--outline); color:var(--text2);
             display:flex; align-items:center; justify-content:center;
-            font-family:'Romul',serif; font-size:22px; padding:20px;
-            cursor:pointer; transition:all .2s; min-height:80px;
+            font-family:'Romul',serif; font-size:24px;
+            cursor:pointer; transition:all .2s;
+            min-width:110px; min-height:72px;
         }
         .chip-new:hover { border-color:var(--gold); color:var(--gold); }
 
@@ -308,17 +340,7 @@
         .status-text { color:var(--text2); flex:1; }
         .status-date { color:var(--text2); opacity:.5; font-size:10px; }
 
-        /* ── IMPORT / EXPORT PANEL ── */
-        .data-panel {
-            background:rgba(35,56,90,.3); border:1px solid var(--outline);
-            padding:16px 18px; margin-bottom:24px;
-        }
-        .data-panel-title {
-            font-family:'Romul',serif; font-size:14px; letter-spacing:1.5px;
-            color:var(--text2); margin-bottom:12px;
-        }
-        .data-panel-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-        .data-note { font-family:'SpecialElite',serif; font-size:11px; color:var(--text2); opacity:.6; margin-top:8px; letter-spacing:.5px; }
+
 
         /* ── EMPTY STATE ── */
         .empty-form {
@@ -420,26 +442,19 @@
       <!-- TOOLBAR -->
       <div class="toolbar">
         <div class="toolbar-title">Редактор выпусков</div>
-        <button class="btn btn-secondary" onclick="newIssue()">+ Новый выпуск</button>
-        <button class="btn btn-primary"   onclick="saveIssue()" id="btnSave">Сохранить</button>
-        <button class="btn btn-export"    onclick="exportSite()">Экспорт archive.json</button>
+        <div class="toolbar-actions">
+          <button class="btn btn-export" onclick="exportSite()">Экспорт archive.json</button>
+          <label class="btn btn-secondary" style="cursor:pointer" title="Загрузить резервную копию JSON">
+            Загрузить JSON<input type="file" accept=".json" style="display:none" onchange="importJSON(event)">
+          </label>
+          <button class="btn btn-danger" onclick="clearAll()" title="Удалить все выпуски из редактора">Очистить</button>
+        </div>
       </div>
 
-      <!-- DATA PANEL: import/export JSON -->
-      <div class="data-panel">
-        <div class="data-panel-title">Данные архива</div>
-        <div class="data-panel-row">
-          <button class="btn btn-secondary" onclick="exportJSON()">Скачать JSON</button>
-          <label class="btn btn-secondary" style="cursor:pointer">
-            Загрузить JSON <input type="file" accept=".json" style="display:none" onchange="importJSON(event)">
-          </label>
-          <button class="btn btn-danger" onclick="clearAll()">Очистить всё</button>
-        </div>
-        <div class="data-note">«Экспорт archive.json» — скачивает файл данных для загрузки на GitHub рядом с rc-archive-public.html. «Скачать JSON» — резервная копия.</div>
-      </div>
+
 
       <!-- ISSUE CHIPS -->
-      <div id="issueChips" class="issues-grid"></div>
+      <div id="issueChips"></div>
 
       <hr class="section-divider">
 
