@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
     <title>Архив Когтеврана</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <style>
         :root {
@@ -411,7 +411,11 @@
             filter: drop-shadow(0 3px 10px rgba(0,0,0,.5)) drop-shadow(0 0 12px rgba(186,152,104,.5));
         }
 
-        /* "большой новостной" выпуск — свиток со ссылкой на форум */
+        /* "большой новостной" выпуск — свиток со ссылкой на форум (крупнее конверта) */
+        .letter-stop.is-scroll .letter-img-wrap {
+            width: 78px;
+            height: 78px;
+        }
         .letter-stop.is-scroll .letter-img {
             filter: drop-shadow(0 3px 10px rgba(0,0,0,.5)) drop-shadow(0 0 8px rgba(186,152,104,.4));
         }
@@ -422,6 +426,7 @@
             .route-owl { width: 64px; }
             .letter-stop { width: 74px; }
             .letter-img-wrap { width: 46px; height: 46px; }
+            .letter-stop.is-scroll .letter-img-wrap { width: 62px; height: 62px; }
             .letter-medal { min-width: 22px; height: 22px; font-size: 11px; top: -6px; left: -8px; }
         }
 
@@ -842,13 +847,12 @@
         .issue-bd-wrap-sm {
             justify-content: center;
             align-items: flex-start;
-            gap: 0;
+            gap: 3px;
             row-gap: 10px;
         }
         .issue-pol-sm {
             width: 72px;
             padding: 5px 5px 20px;
-            margin: 0 3px;
         }
         .issue-pol-sm .issue-pol-name { font-size: 10px; line-height: 1.15; }
         .issue-pol-sm .issue-pol-photo { font-size: 18px; }
@@ -1056,7 +1060,7 @@
         <i class="fab fa-fort-awesome" style="color:var(--gold);font-size:11px"></i>
       </a>
       <span class="breadcrumb-sep">></span>
-      <a href="https://rave.dhog.org/viewforum.php?f=1">
+      <a href="https://rave.dhog.org/viewforum.php?f=20">
         <span class="breadcrumb-cur">Башня Когтевран</span>
       </a>
       <span class="breadcrumb-sep">></span>
@@ -1347,6 +1351,16 @@ function buildOwlRoute(items) {
   }
 
   requestAnimationFrame(layout);
+
+  // Кастомные шрифты (BebasNeue/SpecialElite) грузятся асинхронно и могут
+  // сдвинуть разметку уже ПОСЛЕ первого расчёта пути — из-за этого при самой
+  // первой загрузке сайта (без кеша шрифтов) линия у совы могла "уехать" вниз.
+  // Пересчитываем раскладку ещё раз, когда шрифты точно готовы.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(layout);
+  }
+  window.addEventListener('load', layout);
+
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
