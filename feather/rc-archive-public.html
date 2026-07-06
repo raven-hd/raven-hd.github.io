@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Еженедельный архив</title>
+    <title>Архив Когтеврана</title>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <style>
         :root {
@@ -303,18 +303,30 @@
             height: auto;
             flex-shrink: 0;
             align-self: flex-end;
-            margin-left: 18px;
             filter: drop-shadow(0 3px 10px rgba(0,0,0,.55));
             pointer-events: none;
+            transition: transform var(--speed);
+        }
+        /* сова развернулась — летит в обратную сторону */
+        .route-owl.flip { transform: scaleX(-1); }
+
+        /* контейнер рядов — сова "змейкой" спускается ниже с каждым разворотом */
+        .route-rows {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 58px;
+            z-index: 2;
         }
         .route-row {
             position: relative;
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             align-items: flex-end;
             gap: 24px;
-            z-index: 2;
         }
+        /* нечётные ряды — маршрут летит в обратную сторону (справа налево) */
+        .route-row.reverse { flex-direction: row-reverse; }
 
         .letter-stop {
             position: relative;
@@ -399,8 +411,12 @@
         }
 
         @media (max-width: 600px) {
-            .route-row { padding-left: 0; gap: 22px; }
-            .route-owl { display: none; }
+            .route-rows { gap: 40px; }
+            .route-row { gap: 16px; }
+            .route-owl { width: 64px; }
+            .letter-stop { width: 74px; }
+            .letter-img-wrap { width: 46px; height: 46px; }
+            .letter-medal { min-width: 22px; height: 22px; font-size: 11px; top: -6px; left: -8px; }
         }
 
         /* ── EMPTY STATE ── */
@@ -673,6 +689,20 @@
         .issue-list-item:last-child { border-bottom: none; }
         .issue-bullet { color: #9a7e38; flex-shrink: 0; font-size: 10px; margin-top: 4px; }
 
+        /* ссылки внутри текста выпуска — без подчёркивания и без цвета, просто жирным */
+        .issue-link {
+            color: inherit;
+            text-decoration: none;
+            font-weight: 700;
+            transition: opacity var(--speed);
+        }
+        .issue-link:visited { color: inherit; }
+        .issue-link:hover, .issue-link:focus {
+            color: inherit;
+            text-decoration: none;
+            opacity: 0.7;
+        }
+
         /* scores */
         .issue-score-wrap { display: flex; gap: 0; }
         .issue-score-left {
@@ -800,6 +830,22 @@
             color: #2a5280;
             display: block;
         }
+
+        /* новые ученики — те же полароиды, но поменьше, без даты, отцентрованы
+           и слегка "внахлёст" — при 3-4 учениках сами лягут в 2 колонки */
+        .issue-bd-wrap-sm {
+            justify-content: center;
+            align-items: flex-start;
+            gap: 0;
+            row-gap: 10px;
+        }
+        .issue-pol-sm {
+            width: 72px;
+            padding: 5px 5px 20px;
+            margin: 0 -1px;
+        }
+        .issue-pol-sm .issue-pol-name { font-size: 10px; line-height: 1.15; }
+        .issue-pol-sm .issue-pol-photo { font-size: 18px; }
 
         /* quill */
         .issue-quill-meta {
@@ -1010,7 +1056,7 @@
 
     <!-- CONTENT -->
     <main class="content">
-      <h2 class="page-title">Еженедельный архив</h2>
+      <h2 class="page-title">Архив выпусков</h2>
       <p class="page-sub">Еженедельный информационный бюллетень факультета Когтевран</p>
 
       <!-- EMPTY STATE -->
@@ -1171,12 +1217,17 @@ function renderArchive() {
  * Строит маршрут совиной почты для группы выпусков одного семестра.
  * items: [{ issue, idx }], idx — индекс в глобальном archive[] (для openModal).
  * Первый элемент items — самый свежий выпуск семестра (см. порядок archive[]).
+ *
+ * Письма выстраиваются "змейкой": ряд идёт слева направо, у правого края
+ * сова разворачивается (отражается по горизонтали), маршрут спускается
+ * ниже и продолжается уже справа налево, таща за собой новые письма —
+ * и так далее, пока не закончатся выпуски семестра.
  */
 function buildOwlRoute(items) {
   const wrap = document.createElement('div');
   wrap.className = 'route-wrap';
 
-  // SVG-линия маршрута — рисуется через path с лёгкими волнами и одной петлёй
+  // SVG-линия маршрута — рисуется через path с плавными волнами и изгибами на разворотах
   const svgNS = 'http://www.w3.org/2000/svg';
   const svg = document.createElementNS(svgNS, 'svg');
   svg.setAttribute('class', 'route-svg');
@@ -1187,20 +1238,20 @@ function buildOwlRoute(items) {
   svg.appendChild(path);
   wrap.appendChild(svg);
 
-  // items[0] — самый свежий выпуск семестра (см. порядок archive[]).
-  // Для отображения разворачиваем порядок: слева направо — от старого к новому,
+  // items[0] — самый свежий выпуск семестра.
+  // Для отображения разворачиваем порядок: от старого к новому,
   // сова летит последней, забирая свежий выпуск.
   const latestIdx = items.length ? items[0].idx : null;
   const displayItems = items.slice().reverse();
 
-  // Ряд писем
-  const row = document.createElement('div');
-  row.className = 'route-row';
+  const rowsWrap = document.createElement('div');
+  rowsWrap.className = 'route-rows';
+  wrap.appendChild(rowsWrap);
 
-  displayItems.forEach(({ issue, idx }) => {
+  // Создаём элементы писем один раз — раскладку по рядам будем пересчитывать при ресайзе
+  const stopEls = displayItems.map(({ issue, idx }) => {
     const stop = document.createElement('div');
     stop.className = 'letter-stop' + (idx === latestIdx ? ' is-latest' : '');
-
     stop.innerHTML = `
       <div class="letter-img-wrap">
         <span class="letter-medal">${esc(issue.issue_num || '—')}</span>
@@ -1212,21 +1263,67 @@ function buildOwlRoute(items) {
       </div>
     `;
     stop.addEventListener('click', () => openModal(idx));
-    row.appendChild(stop);
+    return stop;
   });
 
-  // Сова — в конце маршрута (после всех писем)
   const owl = document.createElement('img');
   owl.src = 'https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/feather/owl.png';
   owl.alt = '';
   owl.className = 'route-owl';
-  row.appendChild(owl);
 
-  wrap.appendChild(row);
+  function layout() {
+    rowsWrap.innerHTML = '';
 
-  // Отрисовать path после вставки в DOM, когда известны реальные позиции писем
-  requestAnimationFrame(() => drawRoutePath(wrap, svg, path, owl, row));
-  window.addEventListener('resize', () => drawRoutePath(wrap, svg, path, owl, row));
+    const isMobile = window.matchMedia('(max-width: 600px)').matches;
+    const STOP_W = isMobile ? 74 : 92;
+    const GAP    = isMobile ? 16 : 24;
+    const OWL_W  = isMobile ? 64 : 96;
+
+    const containerW = wrap.clientWidth || (window.innerWidth - 160);
+
+    // Разбиваем письма на ряды по ширине контейнера ("змейка")
+    const rows = [];
+    let current = [], curW = 0;
+    stopEls.forEach(el => {
+      const addW = current.length ? STOP_W + GAP : STOP_W;
+      if (current.length && curW + addW > containerW) {
+        rows.push(current);
+        current = [];
+        curW = 0;
+      }
+      current.push(el);
+      curW += current.length === 1 ? STOP_W : STOP_W + GAP;
+    });
+    if (current.length) rows.push(current);
+    if (!rows.length) rows.push([]);
+
+    // Сова — в конце последнего ряда; если не помещается, переносится на новый ряд
+    const lastRow = rows[rows.length - 1];
+    const lastRowW = lastRow.length ? (lastRow.length - 1) * (STOP_W + GAP) + STOP_W : 0;
+    if (lastRow.length && lastRowW + GAP + OWL_W > containerW) {
+      rows.push([]);
+    }
+    rows[rows.length - 1].push(owl);
+
+    rows.forEach((rowItems, i) => {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'route-row' + (i % 2 === 1 ? ' reverse' : '');
+      rowItems.forEach(el => rowEl.appendChild(el));
+      rowsWrap.appendChild(rowEl);
+    });
+
+    // сова смотрит в сторону полёта: развернута на "обратных" рядах
+    owl.classList.toggle('flip', rows.length % 2 === 0);
+
+    drawRoutePath(wrap, svg, path, owl, rowsWrap);
+  }
+
+  requestAnimationFrame(layout);
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layout, 150);
+  });
 
   return wrap;
 }
@@ -1240,10 +1337,11 @@ function newsWord(n) {
 }
 
 /**
- * Строит плавный SVG-путь, соединяющий точки маршрута: от совы через
- * все письма, с лёгкими волнами и одной небольшой петлёй у первой точки.
+ * Строит плавный SVG-путь маршрута совы по всем рядам "змейки":
+ * внутри ряда — лёгкие волны, а на разворотах между рядами — плавный
+ * изгиб вниз, без резких изломов и без петель.
  */
-function drawRoutePath(wrap, svg, path, owl, row) {
+function drawRoutePath(wrap, svg, path, owl, rowsWrap) {
   const wrapRect = wrap.getBoundingClientRect();
   if (!wrapRect.width) return;
 
@@ -1251,43 +1349,52 @@ function drawRoutePath(wrap, svg, path, owl, row) {
   svg.setAttribute('height', wrapRect.height);
   svg.setAttribute('viewBox', `0 0 ${wrapRect.width} ${wrapRect.height}`);
 
+  // Собираем точки по рядам; у каждой точки запоминаем индекс её ряда,
+  // чтобы понимать, где маршрут переходит на новый ряд (разворот).
   const points = [];
-  row.querySelectorAll('.letter-img-wrap').forEach(el => {
-    const r = el.getBoundingClientRect();
-    points.push({
-      x: r.left - wrapRect.left + r.width / 2,
-      y: r.top  - wrapRect.top  + r.height * 0.42
+  const rowEls = rowsWrap.querySelectorAll('.route-row');
+
+  rowEls.forEach((rowEl, rowIdx) => {
+    rowEl.querySelectorAll('.letter-img-wrap').forEach(el => {
+      const r = el.getBoundingClientRect();
+      points.push({
+        x: r.left - wrapRect.left + r.width / 2,
+        y: r.top  - wrapRect.top  + r.height * 0.42,
+        rowIdx
+      });
     });
   });
 
   const owlRect = owl.getBoundingClientRect();
+  const owlFlipped = owl.classList.contains('flip');
   points.push({
-    x: owlRect.left - wrapRect.left + owlRect.width * 0.3,
-    y: owlRect.top  - wrapRect.top  + owlRect.height * 0.55
+    x: owlRect.left - wrapRect.left + owlRect.width * (owlFlipped ? 0.58 : 0.42),
+    y: owlRect.top  - wrapRect.top  + owlRect.height * 0.55,
+    rowIdx: rowEls.length - 1 // сова — в последнем ряду
   });
 
   if (points.length < 2) { path.setAttribute('d', ''); return; }
 
-  // Строим плавную кривую через письма с небольшими волнами по Y,
-  // с маленькой декоративной петлёй перед совой в конце маршрута.
   let d = `M ${points[0].x} ${points[0].y} `;
 
-  for (let i = 1; i < points.length - 1; i++) {
+  for (let i = 1; i < points.length; i++) {
     const prev = points[i - 1];
     const cur  = points[i];
-    const midX = (prev.x + cur.x) / 2;
-    const wave = (i % 2 === 0 ? -1 : 1) * 14;
-    const cpY  = (prev.y + cur.y) / 2 + wave;
-    d += `Q ${midX} ${cpY}, ${cur.x} ${cur.y} `;
-  }
+    // разворот — либо смена ряда, либо последний сегмент (всегда ведёт к сове)
+    const isTurn = cur.rowIdx !== prev.rowIdx || i === points.length - 1;
 
-  // маленькая декоративная петля перед совой
-  const pPrev = points[points.length - 2];
-  const pOwl  = points[points.length - 1];
-  const loopMidX = pOwl.x - (pOwl.x - pPrev.x) * 0.18;
-  const loopMidY = pOwl.y - 16;
-  d += `Q ${loopMidX} ${loopMidY - 10}, ${loopMidX - 14} ${loopMidY} `;
-  d += `Q ${loopMidX + 6} ${loopMidY + 14}, ${pOwl.x} ${pOwl.y} `;
+    if (isTurn) {
+      // Разворот между рядами — просто плавный изгиб вниз, без петель
+      const midX = (prev.x + cur.x) / 2;
+      d += `Q ${midX} ${prev.y}, ${cur.x} ${cur.y} `;
+    } else {
+      // Внутри ряда — лёгкая плавная волна, без изломов
+      const midX = (prev.x + cur.x) / 2;
+      const wave = (i % 2 === 0 ? -1 : 1) * 14;
+      const cpY  = (prev.y + cur.y) / 2 + wave;
+      d += `Q ${midX} ${cpY}, ${cur.x} ${cur.y} `;
+    }
+  }
 
   path.setAttribute('d', d.trim());
 }
@@ -1385,7 +1492,7 @@ function buildIssueHTML(issue) {
     if (showStudents) {
       html += `<div class="issue-sec" style="border-right:1px solid rgba(21,45,74,0.2)">
         <div class="issue-sec-head"><div class="issue-sec-title issue-sec-title-sm">Новые ученики</div></div>
-        <div class="issue-list">${listItems(issue.students_list)}</div>
+        <div class="issue-bd-wrap issue-bd-wrap-sm">${studentPolaroids(issue.students_list)}</div>
       </div>`;
     }
     if (showEvents) {
@@ -1426,7 +1533,7 @@ function buildIssueHTML(issue) {
                   <span class="issue-score-unit">баллов</span>
                 </div>
               </div>` : ''}
-            ${issue.points_note ? `<div class="issue-score-note">${esc(issue.points_note)}</div>` : ''}
+            ${issue.points_note ? `<div class="issue-score-note">${escLinks(issue.points_note)}</div>` : ''}
           </div>
           ${issue.position ? `
           <div class="issue-score-right">
@@ -1458,7 +1565,7 @@ function buildIssueHTML(issue) {
             ${issue.quill_num ? `<span>Вып. ${esc(issue.quill_num)}</span>` : ''}
             ${issue.quill_theme ? `<span>Тема: ${esc(issue.quill_theme)}</span>` : ''}
           </div>
-          ${issue.quill_text ? `<div class="issue-quill-text">${esc(issue.quill_text)}</div>` : ''}
+          ${issue.quill_text ? `<div class="issue-quill-text">${escLinks(issue.quill_text)}</div>` : ''}
         </div>`;
     }
     html += `</div>`;
@@ -1501,8 +1608,45 @@ function buildIssueHTML(issue) {
 function listItems(arr) {
   if (!arr || !arr.length) return '';
   return arr.map(s =>
-    `<div class="issue-list-item"><span class="issue-bullet">◆</span><span>${esc(s)}</span></div>`
+    `<div class="issue-list-item"><span class="issue-bullet">◆</span><span>${escLinks(s)}</span></div>`
   ).join('');
+}
+
+/**
+ * Рендерит полароиды новых учеников (компактный вариант полароидов дней рождения).
+ * Поддерживает и старый формат данных (students_list — массив строк с именами),
+ * и новый (массив объектов { name, photo }) — для обратной совместимости
+ * со старыми выпусками, сохранёнными до появления фото.
+ */
+function studentPolaroids(arr) {
+  if (!arr || !arr.length) return '';
+  return arr.map(s => {
+    const st = (typeof s === 'string') ? { name: s, photo: null } : (s || {});
+    return `
+      <div class="issue-pol issue-pol-sm">
+        <div class="issue-pol-photo">
+          ${st.photo ? `<img src="${st.photo}" alt="${esc(st.name || '')}">` : '🪄'}
+        </div>
+        <div class="issue-pol-caption">
+          <span class="issue-pol-name">${escLinks(st.name || '')}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+/**
+ * Экранирует текст (как esc), но дополнительно превращает синтаксис
+ * [текст ссылки](https://...) в кликабельную ссылку без подчёркивания
+ * и без изменения цвета — просто жирным шрифтом (см. класс .issue-link).
+ * Экранирование выполняется ДО разбора ссылок, поэтому в href не может
+ * попасть произвольный HTML/атрибуты — только текст самой ссылки.
+ */
+function escLinks(s) {
+  const escaped = esc(s);
+  return escaped.replace(
+    /\[([^\[\]]+)\]\((https?:\/\/[^\s()]+)\)/g,
+    (m, text, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer" class="issue-link">${text}</a>`
+  );
 }
 
 // ── EDIT ──────────────────────────────────────────
