@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    		<link rel="icon" href="./favicon.svg" type="image/svg+xml">
-    <title>Новостной архив Когтеврана</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <title>Архив Когтеврана</title>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <style>
         :root {
@@ -832,6 +832,8 @@
             display: block;
         }
 
+        /* новые ученики — те же полароиды, но поменьше, без даты, отцентрованы
+           и слегка "внахлёст" — при 3-4 учениках сами лягут в 2 колонки */
         .issue-bd-wrap-sm {
             justify-content: center;
             align-items: flex-start;
@@ -841,7 +843,7 @@
         .issue-pol-sm {
             width: 72px;
             padding: 5px 5px 20px;
-            margin: 0 1px;
+            margin: 0 -1px;
         }
         .issue-pol-sm .issue-pol-name { font-size: 10px; line-height: 1.15; }
         .issue-pol-sm .issue-pol-photo { font-size: 18px; }
@@ -944,6 +946,9 @@
             .content { padding: 25px 30px 40px; }
         }
         @media (max-width: 700px) {
+            .issue-row1 { grid-template-columns: 1fr !important; }
+            .issue-row1 > .issue-sec { border-right: none !important; border-bottom: 1px solid rgba(21,45,74,0.2); }
+            .issue-row1 > .issue-sec:last-child { border-bottom: none; }
             .issue-cols2 { grid-template-columns: 1fr; }
             .issue-cols2 > * { border-right: none; border-bottom: 1px solid rgba(21,45,74,0.2); }
             .modal-body { padding: 14px; }
@@ -1050,12 +1055,12 @@
         <span class="breadcrumb-cur">Башня Когтевран</span>
       </a>
       <span class="breadcrumb-sep">></span>
-      <span class="breadcrumb-cur">Новостной архив</span>
+      <span class="breadcrumb-cur">Еженедельный архив</span>
     </nav>
 
     <!-- CONTENT -->
     <main class="content">
-      <h2 class="page-title">Новостной архив</h2>
+      <h2 class="page-title">Архив выпусков</h2>
       <p class="page-sub">Еженедельный информационный бюллетень факультета Когтевран</p>
 
       <!-- EMPTY STATE -->
@@ -1072,7 +1077,7 @@
     <!-- SITE FOOTER -->
     <footer class="site-footer">
       <nav class="site-footer-nav">
-        <a href="https://rave.dhog.org/index.php">
+         <a href="https://rave.dhog.org/index.php">
           <i class="fab fa-fort-awesome"></i> Главная страница
         </a>
         <a href="https://rave.dhog.org/help/faq">
@@ -1496,7 +1501,7 @@ function buildIssueHTML(issue) {
     }
     if (showEvents) {
       html += `<div class="issue-sec">
-        <div class="issue-sec-head"><div class="issue-sec-title">Школьные события и анонсы</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">События и анонсы</div></div>
         <div class="issue-list">${listItems(issue.events_list)}</div>
       </div>`;
     }
@@ -1512,7 +1517,7 @@ function buildIssueHTML(issue) {
       const arrowClass = issue.arrow !== false ? 'up' : 'dn';
       const arrowChar  = issue.arrow !== false ? '<i class="fas fa-angle-double-up"></i>' : '<i class="fas fa-angle-double-down"></i>';
       html += `<div class="issue-sec">
-        <div class="issue-sec-head"><div class="issue-sec-title">Соревнование факультетов</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">Учебные результаты</div></div>
         <div class="issue-score-wrap">
           <div class="issue-score-left">
             ${issue.points ? `
@@ -1551,7 +1556,7 @@ function buildIssueHTML(issue) {
     html += `<div class="issue-sec" style="display:flex;flex-direction:column">`;
     if (showNews) {
       html += `
-        <div class="issue-sec-head"><div class="issue-sec-title">Внутрифакультетские новости</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">Внутренние новости</div></div>
         <div class="issue-list">${listItems(issue.news_list)}</div>`;
     }
     if (showQuill) {
@@ -1575,13 +1580,13 @@ function buildIssueHTML(issue) {
   if (showBd) {
     html += `<div class="issue-fullrow">
       <div class="issue-sec">
-        <div class="issue-sec-head"><div class="issue-sec-title">Happee Birthdae</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">Дни рождения недели</div></div>
         <div class="issue-bd-wrap">
           ${issue.bds.map(b => `
             <div class="issue-pol">
               <div class="issue-pol-photo">
                 ${b.photo
-                  ? `<img src="${b.photo}" alt="${esc(b.name)}">`
+                  ? `<img src="${resolvePhotoSrc(b.photo)}" alt="${esc(b.name)}">`
                   : '🪄'}
               </div>
               <div class="issue-pol-caption">
@@ -1624,7 +1629,7 @@ function studentPolaroids(arr) {
     return `
       <div class="issue-pol issue-pol-sm">
         <div class="issue-pol-photo">
-          ${st.photo ? `<img src="${st.photo}" alt="${esc(st.name || '')}">` : '🪄'}
+          ${st.photo ? `<img src="${resolvePhotoSrc(st.photo)}" alt="${esc(st.name || '')}">` : '🪄'}
         </div>
         <div class="issue-pol-caption">
           <span class="issue-pol-name">${escLinks(st.name || '')}</span>
@@ -1663,6 +1668,19 @@ function esc(s) {
   const d = document.createElement('div');
   d.textContent = String(s || '');
   return d.innerHTML;
+}
+
+/**
+ * Превращает значение поля "фото" в реальный src для <img>:
+ * - если это уже полная ссылка (http://, https://) или data:-URL — используем как есть;
+ * - иначе считаем, что это просто имя файла, и ищем его в папке img/ рядом с сайтом.
+ * Так можно просто писать "vasya.jpg", положив сам файл в img/vasya.jpg.
+ */
+function resolvePhotoSrc(v) {
+  if (!v) return '';
+  const s = String(v).trim();
+  if (/^(https?:)?\/\//i.test(s) || s.startsWith('data:') || s.startsWith('/')) return s;
+  return 'img/' + s;
 }
 </script>
 
