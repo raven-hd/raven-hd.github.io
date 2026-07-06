@@ -1495,13 +1495,13 @@ function buildIssueHTML(issue) {
     html += `<div class="issue-row1" style="display:grid;grid-template-columns:${cols}">`;
     if (showStudents) {
       html += `<div class="issue-sec" style="border-right:1px solid rgba(21,45,74,0.2)">
-        <div class="issue-sec-head"><div class="issue-sec-title issue-sec-title-sm">Новые ученики</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title issue-sec-title-sm">Новые птицы</div></div>
         <div class="issue-bd-wrap issue-bd-wrap-sm">${studentPolaroids(issue.students_list)}</div>
       </div>`;
     }
     if (showEvents) {
       html += `<div class="issue-sec">
-        <div class="issue-sec-head"><div class="issue-sec-title">События и анонсы</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">Школьные события и анонсы</div></div>
         <div class="issue-list">${listItems(issue.events_list)}</div>
       </div>`;
     }
@@ -1556,7 +1556,7 @@ function buildIssueHTML(issue) {
     html += `<div class="issue-sec" style="display:flex;flex-direction:column">`;
     if (showNews) {
       html += `
-        <div class="issue-sec-head"><div class="issue-sec-title">Внутренние новости</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">Внутрифакультетские новости</div></div>
         <div class="issue-list">${listItems(issue.news_list)}</div>`;
     }
     if (showQuill) {
@@ -1580,7 +1580,7 @@ function buildIssueHTML(issue) {
   if (showBd) {
     html += `<div class="issue-fullrow">
       <div class="issue-sec">
-        <div class="issue-sec-head"><div class="issue-sec-title">Дни рождения недели</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">Happee birthdae</div></div>
         <div class="issue-bd-wrap">
           ${issue.bds.map(b => `
             <div class="issue-pol">
