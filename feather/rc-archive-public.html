@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-    <title>Новостной архив</title>
+    <title>Архив Когтеврана</title>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <style>
         :root {
@@ -409,6 +408,11 @@
         }
         .letter-stop.is-latest .letter-img {
             filter: drop-shadow(0 3px 10px rgba(0,0,0,.5)) drop-shadow(0 0 12px rgba(186,152,104,.5));
+        }
+
+        /* "большой новостной" выпуск — свиток со ссылкой на форум */
+        .letter-stop.is-scroll .letter-img {
+            filter: drop-shadow(0 3px 10px rgba(0,0,0,.5)) drop-shadow(0 0 8px rgba(186,152,104,.4));
         }
 
         @media (max-width: 600px) {
@@ -843,7 +847,7 @@
         .issue-pol-sm {
             width: 72px;
             padding: 5px 5px 20px;
-            margin: 0 2px;
+            margin: 0 -1px;
         }
         .issue-pol-sm .issue-pol-name { font-size: 10px; line-height: 1.15; }
         .issue-pol-sm .issue-pol-photo { font-size: 18px; }
@@ -967,7 +971,7 @@
         .site-footer-nav {
             display: flex;
             flex-wrap: wrap;
-            justify-content: left;
+            justify-content: flex-start;
             gap: 6px 24px;
             margin-bottom: 12px;
         }
@@ -1051,7 +1055,7 @@
         <i class="fab fa-fort-awesome" style="color:var(--gold);font-size:11px"></i>
       </a>
       <span class="breadcrumb-sep">></span>
-      <a href="https://rave.dhog.org/viewforum.php?f=20">
+      <a href="https://rave.dhog.org/viewforum.php?f=1">
         <span class="breadcrumb-cur">Башня Когтевран</span>
       </a>
       <span class="breadcrumb-sep">></span>
@@ -1077,8 +1081,11 @@
     <!-- SITE FOOTER -->
     <footer class="site-footer">
       <nav class="site-footer-nav">
-         <a href="https://rave.dhog.org/index.php">
+        <a href="https://rave.dhog.org/index.php">
           <i class="fab fa-fort-awesome"></i> Главная страница
+        </a>
+        <a href="https://rave.dhog.org/viewforum.php?f=20">
+          <i class="fas fa-landmark"></i> Башня Когтевран
         </a>
         <a href="https://rave.dhog.org/help/faq">
           <i class="fas fa-question-circle"></i> Вопросы и ответы
@@ -1254,19 +1261,38 @@ function buildOwlRoute(items) {
 
   // Создаём элементы писем один раз — раскладку по рядам будем пересчитывать при ресайзе
   const stopEls = displayItems.map(({ issue, idx }) => {
+    const isScroll = issue.type === 'scroll';
     const stop = document.createElement('div');
-    stop.className = 'letter-stop' + (idx === latestIdx ? ' is-latest' : '');
-    stop.innerHTML = `
-      <div class="letter-img-wrap">
-        <span class="letter-medal">${esc(issue.issue_num || '—')}</span>
-        <img class="letter-img" alt="Выпуск ${esc(issue.issue_num || '')}"
-             src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/feather/letter.png">
-      </div>
-      <div class="letter-caption">
-        <div class="letter-dates">${esc(issue.dates || '—')}</div>
-      </div>
-    `;
-    stop.addEventListener('click', () => openModal(idx));
+    stop.className = 'letter-stop' + (idx === latestIdx ? ' is-latest' : '') + (isScroll ? ' is-scroll' : '');
+
+    if (isScroll) {
+      // "Большой новостной" выпуск — свиток вместо конверта, без номера,
+      // клик ведёт по внешней ссылке (например, на страницу форума)
+      stop.innerHTML = `
+        <div class="letter-img-wrap">
+          <img class="letter-img" alt="${esc(issue.dates || 'Новостной свиток')}"
+               src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/feather/new.png">
+        </div>
+        <div class="letter-caption">
+          <div class="letter-dates">${esc(issue.dates || '—')}</div>
+        </div>
+      `;
+      stop.addEventListener('click', () => {
+        if (issue.scroll_url) window.open(issue.scroll_url, '_blank', 'noopener');
+      });
+    } else {
+      stop.innerHTML = `
+        <div class="letter-img-wrap">
+          <span class="letter-medal">${esc(issue.issue_num || '—')}</span>
+          <img class="letter-img" alt="Выпуск ${esc(issue.issue_num || '')}"
+               src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/feather/letter.png">
+        </div>
+        <div class="letter-caption">
+          <div class="letter-dates">${esc(issue.dates || '—')}</div>
+        </div>
+      `;
+      stop.addEventListener('click', () => openModal(idx));
+    }
     return stop;
   });
 
@@ -1423,11 +1449,31 @@ function handleOverlayClick(e) {
 
 function navigateModal(dir) {
   if (currentIdx === null) return;
-  const next = currentIdx + dir;
-  if (next >= 0 && next < archive.length) {
-    currentIdx = next;
-    renderModal(next);
+  const { chain, pos } = getBulletinChain(currentIdx);
+  const newPos = pos + dir;
+  if (newPos >= 0 && newPos < chain.length) {
+    currentIdx = chain[newPos].idx;
+    renderModal(currentIdx);
   }
+}
+
+/**
+ * Возвращает хронологическую (от старого к новому) цепочку обычных бюллетеней
+ * того же семестра, что и выпуск idx — то есть в том же порядке, в котором
+ * письма расположены в маршруте совы. "Большие новостные" свитки в счёт
+ * навигации по бюллетеням не входят.
+ */
+function getBulletinChain(idx) {
+  const issue = archive[idx];
+  const key = getSemesterKey(issue);
+  const sameSemester = [];
+  archive.forEach((iss, i) => {
+    if (iss.type !== 'scroll' && getSemesterKey(iss) === key) sameSemester.push({ issue: iss, idx: i });
+  });
+  // archive[0] — самый свежий, поэтому переворачиваем: от старого к новому
+  const chain = sameSemester.slice().reverse();
+  const pos = chain.findIndex(it => it.idx === idx);
+  return { chain, pos };
 }
 
 function onKey(e) {
@@ -1441,9 +1487,10 @@ function renderModal(idx) {
   const issue = archive[idx];
   if (!issue) return;
 
-  document.getElementById('navPrev').disabled = idx <= 0;
-  document.getElementById('navNext').disabled = idx >= archive.length - 1;
-  document.getElementById('navCounter').textContent = `${idx + 1} / ${archive.length}`;
+  const { chain, pos } = getBulletinChain(idx);
+  document.getElementById('navPrev').disabled = pos <= 0;
+  document.getElementById('navNext').disabled = pos >= chain.length - 1;
+  document.getElementById('navCounter').textContent = pos >= 0 ? `${pos + 1} / ${chain.length}` : '';
 
   document.getElementById('modalMeta').innerHTML = `
     <span class="modal-meta-item">Сезон: <strong>${esc(issue.season || '—')}</strong></span>
@@ -1495,13 +1542,13 @@ function buildIssueHTML(issue) {
     html += `<div class="issue-row1" style="display:grid;grid-template-columns:${cols}">`;
     if (showStudents) {
       html += `<div class="issue-sec" style="border-right:1px solid rgba(21,45,74,0.2)">
-        <div class="issue-sec-head"><div class="issue-sec-title issue-sec-title-sm">Новые птицы</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title issue-sec-title-sm">Новые ученики</div></div>
         <div class="issue-bd-wrap issue-bd-wrap-sm">${studentPolaroids(issue.students_list)}</div>
       </div>`;
     }
     if (showEvents) {
       html += `<div class="issue-sec">
-        <div class="issue-sec-head"><div class="issue-sec-title">Школьные события и анонсы</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">События и анонсы</div></div>
         <div class="issue-list">${listItems(issue.events_list)}</div>
       </div>`;
     }
@@ -1556,7 +1603,7 @@ function buildIssueHTML(issue) {
     html += `<div class="issue-sec" style="display:flex;flex-direction:column">`;
     if (showNews) {
       html += `
-        <div class="issue-sec-head"><div class="issue-sec-title">Внутрифакультетские новости</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">Внутренние новости</div></div>
         <div class="issue-list">${listItems(issue.news_list)}</div>`;
     }
     if (showQuill) {
@@ -1580,7 +1627,7 @@ function buildIssueHTML(issue) {
   if (showBd) {
     html += `<div class="issue-fullrow">
       <div class="issue-sec">
-        <div class="issue-sec-head"><div class="issue-sec-title">Happee birthdae</div></div>
+        <div class="issue-sec-head"><div class="issue-sec-title">Дни рождения недели</div></div>
         <div class="issue-bd-wrap">
           ${issue.bds.map(b => `
             <div class="issue-pol">
