@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exported": "2026-07-06T12:20:50.501Z",
+  "exported": "2026-07-06T14:44:54.781Z",
   "archive": [
     {
       "season": "Лето 2026",
@@ -16,13 +16,13 @@
       "students_list": [],
       "events_list": [
         "Новая лекция И.Н.П.У.Т. - [История аппарации](https://dhog.org/cabinets/input/lessons/750)",
-        "Оракул: Интервью с профессором Крином об итогах фестиваля UMM’26",
-        "Оракул: Детективно-мафиозный Оракул",
-        "Открытие нового кабинета - Таро",
-        "ММХД 2026: опубликовано задание III тура"
+        "Оракул: [Интервью с профессором Крином об итогах фестиваля UMM’26](https://oraclehd.wordpress.com/2026/07/04/umm26/)",
+        "Оракул: [Детективно-мафиозный Оракул](https://oraclehd.wordpress.com/2026/07/04/detective/)",
+        "Открытие нового кабинета - [Таро](https://dhog.org/cabinets/tarot2026) - стажер Вивьен Джонс",
+        "ММХД 2026: опубликовано [задание III тура](https://dhog.org/viewtopic.php?t=6163)"
       ],
       "news_list": [
-        "СЕКРЕТЫ МАФИИ: 3 июля 19:30, DJ ЖУЖУ на волнах Raven.FM"
+        "[СЕКРЕТЫ МАФИИ](https://rave.dhog.org/viewtopic.php?p=39991#p39991): 3 июля 19:30, DJ ЖУЖУ на волнах Raven.FM"
       ],
       "arrow": true,
       "bds": [
@@ -35,7 +35,7 @@
       "studentsVisible": false,
       "bdVisible": true,
       "quillVisible": false,
-      "saved_at": "2026-07-06T12:20:40.062Z"
+      "saved_at": "2026-07-06T14:44:43.573Z"
     },
     {
       "season": "Лето 2026",
