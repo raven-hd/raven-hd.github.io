@@ -282,7 +282,7 @@
         /* ── POLAROIDS ── */
         .polaroids-wrap { display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; }
         .pol-card {
-            background:#fff; padding:7px 7px 32px; position:relative;
+            background:#fff; padding:7px 7px 46px; position:relative;
             width:130px; flex-shrink:0;
             box-shadow:2px 3px 10px rgba(0,0,0,.2);
         }
@@ -292,7 +292,7 @@
         .pol-photo {
             width:100%; aspect-ratio:1; background:#e8d9b5; overflow:hidden;
             display:flex; align-items:center; justify-content:center;
-            cursor:pointer; position:relative;
+            position:relative; font-size:22px;
         }
         .pol-photo img { width:100%; height:100%; object-fit:cover; display:none; }
         .pol-card.has-photo .pol-photo img { display:block; }
@@ -303,15 +303,16 @@
         }
         .pol-card.has-photo .pol-photo-hint { display:none; }
         .pol-caption { position:absolute; bottom:4px; left:0; right:0; text-align:center; padding:0 5px; }
-        .pol-name-input, .pol-date-input {
+        .pol-name-input, .pol-date-input, .pol-photo-input {
             width:100%; background:transparent; border:none;
             border-bottom:1px dashed rgba(21,45,74,.2); outline:none;
             font-family:'SpecialElite',serif; text-align:center; display:block;
             color:#2d3a46; padding:1px 2px;
         }
         .pol-name-input { font-size:11px; margin-bottom:2px; }
-        .pol-date-input { font-size:10px; color:#2a5280; }
-        .pol-name-input::placeholder, .pol-date-input::placeholder { opacity:.35; }
+        .pol-date-input { font-size:10px; color:#2a5280; margin-bottom:2px; }
+        .pol-photo-input { font-size:9px; color:#6a5a3a; }
+        .pol-name-input::placeholder, .pol-date-input::placeholder, .pol-photo-input::placeholder { opacity:.35; }
         .pol-del-btn {
             position:absolute; top:-7px; right:-7px; width:18px; height:18px;
             background:#7a2020; color:#fff; border-radius:50%; font-size:11px;
@@ -327,7 +328,7 @@
         .pol-add-btn:hover { border-color:var(--gold); color:var(--gold); }
 
         /* компактный вариант полароида — для новых учеников (без даты, поменьше) */
-        .pol-card-sm { width:100px; padding:6px 6px 26px; }
+        .pol-card-sm { width:100px; padding:6px 6px 36px; }
         .pol-card-sm .pol-name-input { font-size:10px; }
         .pol-add-btn-sm { width:84px; height:120px; font-size:20px; }
 
@@ -570,7 +571,6 @@
               <button class="pol-add-btn" onclick="addPolaroid()" title="Добавить">+</button>
             </div>
           </div>
-          <input type="file" accept="image/*" id="photo-input" style="display:none" onchange="handlePhoto(event)">
 
           <hr class="section-divider">
 
@@ -1031,7 +1031,16 @@ function applySections() {
 
 // ═══════════════════════════════════════════════
 //  POLAROIDS (дни рождения + новые ученики)
+//  Фото задаётся именем файла из папки img/ рядом с сайтом
+//  (например "vasya.jpg" → img/vasya.jpg), либо полной ссылкой.
 // ═══════════════════════════════════════════════
+function resolvePhotoSrc(v) {
+  if (!v) return '';
+  const s = String(v).trim();
+  if (/^(https?:)?\/\//i.test(s) || s.startsWith('data:') || s.startsWith('/')) return s;
+  return 'img/' + s;
+}
+
 function renderPolaroids() {
   const wrap = document.getElementById('pol-wrap');
   wrap.innerHTML = '';
@@ -1039,15 +1048,17 @@ function renderPolaroids() {
     const card = document.createElement('div');
     card.className = 'pol-card' + (b.photo ? ' has-photo' : '');
     card.innerHTML = `
-      <div class="pol-photo" onclick="triggerPhoto('bd', ${i})" title="Загрузить фото">
-        <img src="${b.photo || ''}" alt="">
-        <span class="pol-photo-hint">нажмите<br>для фото</span>
+      <div class="pol-photo">
+        <img src="${esc(resolvePhotoSrc(b.photo))}" alt="">
+        <span class="pol-photo-hint">нет<br>фото</span>
       </div>
       <div class="pol-caption">
         <input class="pol-name-input" value="${esc(b.name)}" placeholder="Имя Фамилия"
           oninput="bds[${i}].name=this.value" onblur="bds[${i}].name=this.value.trim()">
         <input class="pol-date-input" value="${esc(b.date)}" placeholder="дд.мм"
           oninput="bds[${i}].date=this.value" onblur="bds[${i}].date=this.value.trim()">
+        <input class="pol-photo-input" value="${esc(b.photo)}" placeholder="имя_файла.jpg"
+          onchange="bds[${i}].photo=this.value.trim(); renderPolaroids();">
       </div>
       <button class="pol-del-btn" onclick="delPolaroid(${i})">×</button>`;
     wrap.appendChild(card);
@@ -1058,7 +1069,7 @@ function renderPolaroids() {
   wrap.appendChild(addBtn);
 }
 
-function addPolaroid() { bds.push({ name:'', date:'', photo:null }); renderPolaroids(); }
+function addPolaroid() { bds.push({ name:'', date:'', photo:'' }); renderPolaroids(); }
 function delPolaroid(i) { bds.splice(i, 1); renderPolaroids(); }
 
 // Новые ученики — та же идея, но компактнее и без даты
@@ -1069,13 +1080,15 @@ function renderStudents() {
     const card = document.createElement('div');
     card.className = 'pol-card pol-card-sm' + (s.photo ? ' has-photo' : '');
     card.innerHTML = `
-      <div class="pol-photo" onclick="triggerPhoto('student', ${i})" title="Загрузить фото">
-        <img src="${s.photo || ''}" alt="">
-        <span class="pol-photo-hint">нажмите<br>для фото</span>
+      <div class="pol-photo">
+        <img src="${esc(resolvePhotoSrc(s.photo))}" alt="">
+        <span class="pol-photo-hint">нет<br>фото</span>
       </div>
       <div class="pol-caption">
         <input class="pol-name-input" value="${esc(s.name)}" placeholder="Имя Фамилия"
           oninput="students[${i}].name=this.value" onblur="students[${i}].name=this.value.trim()">
+        <input class="pol-photo-input" value="${esc(s.photo)}" placeholder="имя_файла.jpg"
+          onchange="students[${i}].photo=this.value.trim(); renderStudents();">
       </div>
       <button class="pol-del-btn" onclick="delStudent(${i})">×</button>`;
     wrap.appendChild(card);
@@ -1086,27 +1099,8 @@ function renderStudents() {
   wrap.appendChild(addBtn);
 }
 
-function addStudent() { students.push({ name:'', photo:null }); renderStudents(); }
+function addStudent() { students.push({ name:'', photo:'' }); renderStudents(); }
 function delStudent(i) { students.splice(i, 1); renderStudents(); }
-
-// Общая загрузка фото — работает и для bds, и для students
-function triggerPhoto(kind, i) { photoTarget = { kind, index: i }; document.getElementById('photo-input').click(); }
-function handlePhoto(e) {
-  const f = e.target.files[0]; if (!f || !photoTarget) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    if (photoTarget.kind === 'student') {
-      students[photoTarget.index].photo = ev.target.result;
-      renderStudents();
-    } else {
-      bds[photoTarget.index].photo = ev.target.result;
-      renderPolaroids();
-    }
-    photoTarget = null;
-  };
-  r.readAsDataURL(f);
-  e.target.value = '';
-}
 
 // ═══════════════════════════════════════════════
 //  STATUS BAR
