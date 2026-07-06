@@ -279,6 +279,31 @@
         .toggle-chip.on { border-color:var(--gold); color:var(--gold); background:rgba(186,152,104,.08); }
         .toggle-chip.off { opacity:.45; }
 
+        /* ── TYPE TOGGLE ── */
+        .type-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .type-btn {
+            font-family: 'SpecialElite', serif;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            padding: 8px 14px;
+            cursor: pointer;
+            border: 1px solid var(--outline);
+            color: var(--text2);
+            background: transparent;
+            transition: all .2s;
+        }
+        .type-btn:hover { border-color: var(--gold); color: var(--gold); }
+        .type-btn.active {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(186,152,104,.1);
+        }
+
         /* ── POLAROIDS ── */
         .polaroids-wrap { display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; }
         .pol-card {
@@ -361,7 +386,7 @@
             padding: 18px 24px 14px;
         }
         .site-footer-nav {
-            display: flex; flex-wrap: wrap; justify-content: center;
+            display: flex; flex-wrap: wrap; justify-content: flex-start;
             gap: 6px 24px; margin-bottom: 12px;
         }
         .site-footer-nav a {
@@ -437,7 +462,7 @@
         <i class="fas fa-home" style="color:var(--gold);font-size:11px"></i>
       </a>
       <span class="breadcrumb-sep">></span>
-      <a href="rc-archive.html"><span style="color:var(--text2)">Архив выпусков</span></a>
+      <a href="rc-archive.html"><span style="color:var(--text2)">Новостной архив</span></a>
       <span class="breadcrumb-sep">></span>
       <span class="breadcrumb-cur">Редактор</span>
     </nav>
@@ -477,6 +502,13 @@
             <div class="status-date" id="statusDate"></div>
           </div>
 
+          <!-- TYPE -->
+          <div class="section-label">Тип рассылки</div>
+          <div class="type-toggle" id="type-toggle">
+            <button class="type-btn active" id="type-btn-weekly" onclick="setIssueType('weekly')">Еженедельный бюллетень</button>
+            <button class="type-btn" id="type-btn-scroll" onclick="setIssueType('scroll')">Большой новостной (свиток)</button>
+          </div>
+
           <!-- META -->
           <div class="section-label">Метаданные</div>
           <div class="form-grid">
@@ -485,14 +517,23 @@
               <input class="field-input" id="f-season" placeholder="Осень '25">
             </div>
             <div class="field">
-              <label class="field-label">Даты</label>
+              <label class="field-label" id="f-dates-label">Даты</label>
               <input class="field-input" id="f-dates" placeholder="01.09 — 07.09">
             </div>
-            <div class="field">
+            <div class="field" id="field-issue-num">
               <label class="field-label">Номер выпуска</label>
               <input class="field-input" id="f-issue-num" placeholder="№ 1">
             </div>
           </div>
+
+          <div class="field" id="field-scroll-url" style="display:none">
+            <label class="field-label">Ссылка на страницу форума</label>
+            <input class="field-input" id="f-scroll-url" placeholder="https://rave.dhog.org/viewtopic.php?...">
+          </div>
+
+          <hr class="section-divider" id="weekly-sections-divider">
+
+          <div id="weekly-sections">
 
           <!-- STUDENTS -->
           <div class="section-toggle-row">
@@ -596,6 +637,8 @@
             </div>
           </div>
 
+          </div><!-- /weekly-sections -->
+
           <hr class="section-divider">
 
           <!-- ACTIONS -->
@@ -613,10 +656,11 @@
     <!-- FOOTER -->
     <footer class="site-footer">
       <nav class="site-footer-nav">
-        <a href="https://rave.dhog.org/index.php"><i class="fas fa-home"></i> Главная страница</a>
+        <a href="https://rave.dhog.org/index.php"><i class="fab fa-fort-awesome"></i> Главная страница</a>
+        <a href="https://rave.dhog.org/viewforum.php?f=20"><i class="fas fa-landmark"></i> Башня Когтевран</a>
         <a href="https://rave.dhog.org/help/faq"><i class="fas fa-question-circle"></i> Вопросы и ответы</a>
-        <a href="https://rave.dhog.org/memberlist.php"><i class="fas fa-users"></i> Обитатели</a>
-        <a href="https://rave.dhog.org/memberlist.php?mode=team"><i class="fas fa-shield-alt"></i> Администрация</a>
+        <a href="https://rave.dhog.org/memberlist.php"><i class="fas fa-hat-wizard"></i> Обитатели</a>
+        <a href="https://rave.dhog.org/memberlist.php?mode=team"><i class="fas fa-magic"></i> Администрация</a>
         <a href="https://rave.dhog.org/memberlist.php?mode=contactadmin"><i class="fas fa-envelope"></i> Связаться с администрацией</a>
       </nav>
       <div class="site-footer-bottom">
@@ -649,6 +693,7 @@ let archive = [];          // all issues
 let currentIdx = null;     // index of issue being edited, null = new
 let arrowUp = true;
 let sections = { students: true, bd: true, quill: true };
+let issueType = 'weekly'; // 'weekly' | 'scroll'
 let bds = [];
 let students = [];
 let lists = { events: [], news: [] };
@@ -687,9 +732,10 @@ function renderChips() {
 
   archive.forEach((issue, idx) => {
     const div = document.createElement('div');
-    div.className = 'issue-chip' + (idx === currentIdx ? ' active' : '');
+    const isScroll = issue.type === 'scroll';
+    div.className = 'issue-chip' + (idx === currentIdx ? ' active' : '') + (isScroll ? ' is-scroll' : '');
     div.innerHTML = `
-      <div class="chip-num">${esc(issue.issue_num || '—')}</div>
+      <div class="chip-num">${isScroll ? '📜' : esc(issue.issue_num || '—')}</div>
       <div class="chip-dates">${esc(issue.dates || '—')}</div>
       <div class="chip-season">${esc(issue.season || '')}</div>
     `;
@@ -743,6 +789,9 @@ function showForm() {
 //  LOAD INTO FORM
 // ═══════════════════════════════════════════════
 function loadIssueIntoForm(issue) {
+  setIssueType(issue.type === 'scroll' ? 'scroll' : 'weekly');
+  document.getElementById('f-scroll-url').value = issue.scroll_url || '';
+
   document.getElementById('f-season').value       = issue.season       || '';
   document.getElementById('f-dates').value        = issue.dates        || '';
   document.getElementById('f-issue-num').value    = issue.issue_num    || '';
@@ -783,6 +832,9 @@ function loadIssueIntoForm(issue) {
 //  RESET FORM
 // ═══════════════════════════════════════════════
 function resetForm() {
+  setIssueType('weekly');
+  document.getElementById('f-scroll-url').value = '';
+
   ['f-season','f-dates','f-issue-num','f-points','f-points-total',
    'f-points-note','f-position','f-quill-num','f-quill-theme','f-quill-text']
     .forEach(id => { document.getElementById(id).value = ''; });
@@ -807,9 +859,22 @@ function resetForm() {
 //  COLLECT FROM FORM
 // ═══════════════════════════════════════════════
 function collectIssue() {
-  return {
+  const base = {
+    type:            issueType,
     season:          document.getElementById('f-season').value.trim(),
     dates:           document.getElementById('f-dates').value.trim(),
+    saved_at:        new Date().toISOString(),
+  };
+
+  if (issueType === 'scroll') {
+    return {
+      ...base,
+      scroll_url: document.getElementById('f-scroll-url').value.trim(),
+    };
+  }
+
+  return {
+    ...base,
     issue_num:       document.getElementById('f-issue-num').value.trim(),
     points:          document.getElementById('f-points').value.trim(),
     points_total:    document.getElementById('f-points-total').value.trim(),
@@ -826,7 +891,6 @@ function collectIssue() {
     studentsVisible: sections.students,
     bdVisible:       sections.bd,
     quillVisible:    sections.quill,
-    saved_at:        new Date().toISOString(),
   };
 }
 
@@ -835,7 +899,16 @@ function collectIssue() {
 // ═══════════════════════════════════════════════
 function saveIssue() {
   const issue = collectIssue();
-  if (!issue.issue_num && !issue.dates) {
+  if (issue.type === 'scroll') {
+    if (!issue.dates) {
+      toast('Укажите период (например, «Летний семестр»)');
+      return;
+    }
+    if (!issue.scroll_url) {
+      toast('Укажите ссылку на страницу форума');
+      return;
+    }
+  } else if (!issue.issue_num && !issue.dates) {
     toast('Заполните хотя бы номер или даты выпуска');
     return;
   }
@@ -1027,6 +1100,23 @@ function applySections() {
     if (sec) sec.style.pointerEvents = on ? '' : 'none';
     if (btn) { btn.textContent = on ? 'Включён' : 'Отключён'; btn.className = 'toggle-chip ' + (on ? 'on' : 'off'); }
   }
+}
+
+// ═══════════════════════════════════════════════
+//  ISSUE TYPE (обычный еженедельный бюллетень / большой новостной свиток)
+// ═══════════════════════════════════════════════
+function setIssueType(t) {
+  issueType = t;
+  document.getElementById('type-btn-weekly').classList.toggle('active', t === 'weekly');
+  document.getElementById('type-btn-scroll').classList.toggle('active', t === 'scroll');
+
+  const isScroll = t === 'scroll';
+  document.getElementById('weekly-sections').style.display = isScroll ? 'none' : '';
+  document.getElementById('weekly-sections-divider').style.display = isScroll ? 'none' : '';
+  document.getElementById('field-issue-num').style.display = isScroll ? 'none' : '';
+  document.getElementById('field-scroll-url').style.display = isScroll ? '' : 'none';
+  document.getElementById('f-dates-label').textContent = isScroll ? 'Период' : 'Даты';
+  document.getElementById('f-dates').placeholder = isScroll ? 'например: Летний семестр' : '01.09 — 07.09';
 }
 
 // ═══════════════════════════════════════════════
