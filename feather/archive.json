@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "exported": "2026-07-06T14:44:54.781Z",
+  "exported": "2026-07-06T17:08:53.420Z",
   "archive": [
     {
       "season": "Лето 2026",
@@ -75,8 +75,14 @@
       "quill_theme": "",
       "quill_text": "",
       "students_list": [
-        "Сорен Вейл",
-        "Бетти Хант"
+        {
+          "name": "Сорен Вейл",
+          "photo": "soren.jpg"
+        },
+        {
+          "name": "Бетти Хант",
+          "photo": "betty.jpg"
+        }
       ],
       "events_list": [
         "Старт конкурса ММХД'26 - опубликованы задания I тура",
@@ -92,7 +98,7 @@
       "studentsVisible": true,
       "bdVisible": false,
       "quillVisible": false,
-      "saved_at": "2026-06-29T12:17:49.862Z"
+      "saved_at": "2026-07-06T17:08:49.871Z"
     },
     {
       "season": "Лето 2026",
