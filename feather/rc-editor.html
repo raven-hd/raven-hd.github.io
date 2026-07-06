@@ -326,6 +326,11 @@
         }
         .pol-add-btn:hover { border-color:var(--gold); color:var(--gold); }
 
+        /* компактный вариант полароида — для новых учеников (без даты, поменьше) */
+        .pol-card-sm { width:100px; padding:6px 6px 26px; }
+        .pol-card-sm .pol-name-input { font-size:10px; }
+        .pol-add-btn-sm { width:84px; height:120px; font-size:20px; }
+
         /* ── STATUS BAR ── */
         .status-bar {
             display:flex; align-items:center; gap:10px;
@@ -494,8 +499,9 @@
             <button class="toggle-chip" id="tog-students" onclick="toggleSection('students')">Включён</button>
           </div>
           <div id="sec-students">
-            <div class="list-builder" id="list-students"></div>
-            <button class="list-add-btn" onclick="addListItem('students')">+ добавить ученика</button>
+            <div class="polaroids-wrap" id="students-wrap">
+              <button class="pol-add-btn pol-add-btn-sm" onclick="addStudent()" title="Добавить">+</button>
+            </div>
           </div>
 
           <hr class="section-divider">
@@ -644,8 +650,9 @@ let currentIdx = null;     // index of issue being edited, null = new
 let arrowUp = true;
 let sections = { students: true, bd: true, quill: true };
 let bds = [];
-let lists = { students: [], events: [], news: [] };
-let photoTarget = null;
+let students = [];
+let lists = { events: [], news: [] };
+let photoTarget = null; // { kind: 'bd'|'student', index }
 
 // ═══════════════════════════════════════════════
 //  INIT
@@ -747,12 +754,16 @@ function loadIssueIntoForm(issue) {
   document.getElementById('f-quill-theme').value  = issue.quill_theme  || '';
   document.getElementById('f-quill-text').value   = issue.quill_text   || '';
 
-  lists.students = [...(issue.students_list || [])];
   lists.events   = [...(issue.events_list   || [])];
   lists.news     = [...(issue.news_list     || [])];
-  renderList('students');
   renderList('events');
   renderList('news');
+
+  // students_list: поддержка старого формата (массив строк) и нового ({name, photo})
+  students = (issue.students_list || []).map(s =>
+    (typeof s === 'string') ? { name: s, photo: null } : { name: s.name || '', photo: s.photo || null }
+  );
+  renderStudents();
 
   arrowUp = issue.arrow !== false;
   applyArrow();
@@ -776,8 +787,11 @@ function resetForm() {
    'f-points-note','f-position','f-quill-num','f-quill-theme','f-quill-text']
     .forEach(id => { document.getElementById(id).value = ''; });
 
-  lists = { students: [], events: [], news: [] };
-  ['students','events','news'].forEach(k => renderList(k));
+  lists = { events: [], news: [] };
+  ['events','news'].forEach(k => renderList(k));
+
+  students = [];
+  renderStudents();
 
   bds = [];
   renderPolaroids();
@@ -804,7 +818,7 @@ function collectIssue() {
     quill_num:       document.getElementById('f-quill-num').value.trim(),
     quill_theme:     document.getElementById('f-quill-theme').value.trim(),
     quill_text:      document.getElementById('f-quill-text').value.trim(),
-    students_list:   [...lists.students],
+    students_list:   JSON.parse(JSON.stringify(students)),
     events_list:     [...lists.events],
     news_list:       [...lists.news],
     arrow:           arrowUp,
@@ -1016,7 +1030,7 @@ function applySections() {
 }
 
 // ═══════════════════════════════════════════════
-//  POLAROIDS
+//  POLAROIDS (дни рождения + новые ученики)
 // ═══════════════════════════════════════════════
 function renderPolaroids() {
   const wrap = document.getElementById('pol-wrap');
@@ -1025,7 +1039,7 @@ function renderPolaroids() {
     const card = document.createElement('div');
     card.className = 'pol-card' + (b.photo ? ' has-photo' : '');
     card.innerHTML = `
-      <div class="pol-photo" onclick="triggerPhoto(${i})" title="Загрузить фото">
+      <div class="pol-photo" onclick="triggerPhoto('bd', ${i})" title="Загрузить фото">
         <img src="${b.photo || ''}" alt="">
         <span class="pol-photo-hint">нажмите<br>для фото</span>
       </div>
@@ -1046,11 +1060,50 @@ function renderPolaroids() {
 
 function addPolaroid() { bds.push({ name:'', date:'', photo:null }); renderPolaroids(); }
 function delPolaroid(i) { bds.splice(i, 1); renderPolaroids(); }
-function triggerPhoto(i) { photoTarget = i; document.getElementById('photo-input').click(); }
+
+// Новые ученики — та же идея, но компактнее и без даты
+function renderStudents() {
+  const wrap = document.getElementById('students-wrap');
+  wrap.innerHTML = '';
+  students.forEach((s, i) => {
+    const card = document.createElement('div');
+    card.className = 'pol-card pol-card-sm' + (s.photo ? ' has-photo' : '');
+    card.innerHTML = `
+      <div class="pol-photo" onclick="triggerPhoto('student', ${i})" title="Загрузить фото">
+        <img src="${s.photo || ''}" alt="">
+        <span class="pol-photo-hint">нажмите<br>для фото</span>
+      </div>
+      <div class="pol-caption">
+        <input class="pol-name-input" value="${esc(s.name)}" placeholder="Имя Фамилия"
+          oninput="students[${i}].name=this.value" onblur="students[${i}].name=this.value.trim()">
+      </div>
+      <button class="pol-del-btn" onclick="delStudent(${i})">×</button>`;
+    wrap.appendChild(card);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'pol-add-btn pol-add-btn-sm'; addBtn.textContent = '+'; addBtn.title = 'Добавить';
+  addBtn.onclick = addStudent;
+  wrap.appendChild(addBtn);
+}
+
+function addStudent() { students.push({ name:'', photo:null }); renderStudents(); }
+function delStudent(i) { students.splice(i, 1); renderStudents(); }
+
+// Общая загрузка фото — работает и для bds, и для students
+function triggerPhoto(kind, i) { photoTarget = { kind, index: i }; document.getElementById('photo-input').click(); }
 function handlePhoto(e) {
-  const f = e.target.files[0]; if (!f) return;
+  const f = e.target.files[0]; if (!f || !photoTarget) return;
   const r = new FileReader();
-  r.onload = ev => { bds[photoTarget].photo = ev.target.result; renderPolaroids(); photoTarget = null; };
+  r.onload = ev => {
+    if (photoTarget.kind === 'student') {
+      students[photoTarget.index].photo = ev.target.result;
+      renderStudents();
+    } else {
+      bds[photoTarget.index].photo = ev.target.result;
+      renderPolaroids();
+    }
+    photoTarget = null;
+  };
   r.readAsDataURL(f);
   e.target.value = '';
 }
