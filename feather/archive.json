@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "exported": "2026-07-06T23:14:35.715Z",
+  "exported": "2026-07-13T14:07:22.890Z",
   "archive": [
     {
       "type": "weekly",
       "season": "Лето 2026",
       "dates": "06.07 - 12.07",
-      "saved_at": "2026-07-06T23:13:48.217Z",
+      "saved_at": "2026-07-13T14:07:15.607Z",
       "issue_num": "5",
       "points": "0",
       "points_total": "625",
@@ -18,18 +18,24 @@
       "students_list": [],
       "events_list": [
         "ММХД 2026: 6 июля, 16:00 Беата ЛаВей VS Катарина Селвинн",
-        "[ЛеГеНдАрНаЯ вИкТоРиНа: 2 тур](https://dhog.org/viewtopic.php?p=179160#p179160) - прием ответов до 12/07"
+        "[ЛеГеНдАрНаЯ вИкТоРиНа: 2 тур](https://dhog.org/viewtopic.php?p=179160#p179160) - прием ответов до 12/07",
+        "ММХД 2026: опубликованы работы III тура",
+        "ММХД 2026: 9 июля, 22:00 Нимерия Блэкхорн VS Элайза Блекфорд",
+        "ММХД 2026:  1- июля, 15:00 Мисс Удача VS Селена Хэдгехог"
       ],
-      "news_list": [],
+      "news_list": [
+        "Party time: 8.07 19:30 plus vibe open party",
+        "Ночная смена в Хогвартсе [ММХД’26]"
+      ],
       "arrow": true,
       "bds": [
         {
-          "name": "Grace Diamond-de-Kur",
+          "name": "Грейс ДдК",
           "date": "09.07",
           "photo": "grace.jpg"
         },
         {
-          "name": "Julietta Helwell-de-Kur",
+          "name": "Джульетта ХдК",
           "date": "09.07",
           "photo": "juju.jpg"
         }
