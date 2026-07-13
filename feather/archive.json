@@ -38,7 +38,13 @@
           "name": "Джульетта ХдК",
           "date": "09.07",
           "photo": "juju.jpg"
+        },
+        {
+          "name": "Мерида Морграфт",
+          "date": "11.07",
+          "photo": "merida.jpg"
         }
+        
       ],
       "studentsVisible": false,
       "bdVisible": true,
