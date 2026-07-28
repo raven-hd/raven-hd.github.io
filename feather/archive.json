@@ -1,21 +1,74 @@
 {
   "version": 2,
-  "exported": "2026-07-20T20:36:35.283Z",
+  "exported": "2026-07-28T21:26:00.638Z",
   "archive": [
     {
       "type": "weekly",
       "season": "Лето 2026",
-      "dates": "20.07 - 26.07",
-      "saved_at": "2026-07-20T20:36:31.852Z",
-      "issue_num": "7",
-      "points": "",
-      "points_total": "752",
-      "points_note": "",
+      "dates": "27.07 - 02.08",
+      "saved_at": "2026-07-28T21:25:46.250Z",
+      "issue_num": "8",
+      "points": "1339",
+      "points_total": "0",
+      "points_note": "Лидер факультета по баллам: Нимерия Блэкхорн [491 балл]",
       "position": "2",
       "quill_num": "",
       "quill_theme": "",
       "quill_text": "",
       "students_list": [],
+      "events_list": [
+        "IV ТУРНИРА ЗЕЛЬЕВАРОВ: начался второй тур",
+        "КАЛЕНДАРЬ РПГ-ЗАДАНИЙ - ЛАММАС 2026",
+        "Открытие [кабинета Магической криминалистики](https://dhog.org/cabinets/crime) - стажер Marin Seafour"
+      ],
+      "news_list": [
+        "АЧИВКИ! Запуск [системы вознаграждения](https://rave.dhog.org/viewforum.php?f=119) на факультете",
+        "Марафон: Лето! Фанфики! Рок-н-ролл!",
+        "Fashion time: [летний мерч](https://rave.dhog.org/viewtopic.php?p=40075#p40075) в Башне Воздуха"
+      ],
+      "arrow": true,
+      "bds": [
+        {
+          "name": "Мишель Бланк",
+          "date": "27/07",
+          "photo": "blanc.png"
+        }
+      ],
+      "studentsVisible": false,
+      "bdVisible": true,
+      "quillVisible": false
+    },
+    {
+      "type": "weekly",
+      "season": "Лето 2026",
+      "dates": "20.07 - 26.07",
+      "saved_at": "2026-07-28T21:25:17.841Z",
+      "issue_num": "7",
+      "points": "583",
+      "points_total": "1339",
+      "points_note": "",
+      "position": "2",
+      "quill_num": "",
+      "quill_theme": "",
+      "quill_text": "",
+      "students_list": [
+        {
+          "name": "Эшлин Уокер",
+          "photo": "ravgirl.jpg"
+        },
+        {
+          "name": "Амелия Нокс",
+          "photo": "ravgirl.jpg"
+        },
+        {
+          "name": "Заря Эвергрин",
+          "photo": "zara.jpg"
+        },
+        {
+          "name": "Mundus Patens",
+          "photo": "mundus.jpg"
+        }
+      ],
       "events_list": [
         "26/07: Церемони Распределения - общая гостиная, 19:30",
         "26/07: День мракоборца"
