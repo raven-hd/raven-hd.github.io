@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "exported": "2026-07-28T21:26:00.638Z",
+  "exported": "2026-07-28T21:34:14.994Z",
   "archive": [
     {
       "type": "weekly",
       "season": "Лето 2026",
       "dates": "27.07 - 02.08",
-      "saved_at": "2026-07-28T21:25:46.250Z",
+      "saved_at": "2026-07-28T21:33:43.814Z",
       "issue_num": "8",
-      "points": "1339",
-      "points_total": "0",
+      "points": "0",
+      "points_total": "1339",
       "points_note": "Лидер факультета по баллам: Нимерия Блэкхорн [491 балл]",
       "position": "2",
       "quill_num": "",
@@ -26,7 +26,7 @@
         "Марафон: Лето! Фанфики! Рок-н-ролл!",
         "Fashion time: [летний мерч](https://rave.dhog.org/viewtopic.php?p=40075#p40075) в Башне Воздуха"
       ],
-      "arrow": true,
+      "arrow": false,
       "bds": [
         {
           "name": "Мишель Бланк",
@@ -42,7 +42,7 @@
       "type": "weekly",
       "season": "Лето 2026",
       "dates": "20.07 - 26.07",
-      "saved_at": "2026-07-28T21:25:17.841Z",
+      "saved_at": "2026-07-28T21:33:56.895Z",
       "issue_num": "7",
       "points": "583",
       "points_total": "1339",
@@ -74,7 +74,7 @@
         "26/07: День мракоборца"
       ],
       "news_list": [],
-      "arrow": true,
+      "arrow": false,
       "bds": [
         {
           "name": "Шелия МакБрайд",
