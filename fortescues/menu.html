@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fortescue's Ice-Cream Parlour — Меню</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   :root {
     --pastel-pink: #f2a9bd;
     --pastel-pink-text: #e07b96;
+    --pastel-pink-border: #ee8fa7;
     --pastel-pink-light: #fbf0f3;
     --pastel-blue: #c4e0f4;
     --pastel-blue-dark: #2d5a7b;
@@ -67,7 +70,6 @@
     object-fit: contain;
   }
 
-  /* Бейдж с количеством */
   .cart-badge {
     position: absolute;
     top: -4px;
@@ -90,107 +92,38 @@
   }
 
   .page-wrapper {
-    max-width: 880px;
+    max-width: 960px;
     margin: 0 auto;
     position: relative;
   }
 
-  /* 1. ГОЛУБАЯ ПОДЛОЖКА */
   .blue-backing-panel {
     background: var(--pastel-blue);
-    padding: 24px;
+    padding: 34px; 
     border-radius: 0px;
     box-shadow: 0 12px 32px rgba(45, 90, 123, 0.18);
     position: relative;
+    overflow: hidden;
   }
 
-  /* 2. КРЕМОВАЯ БУМАГА */
+  /* Бежевая карточка с точной обрезкой по контуру розовой рамки */
   .main-card {
     background: var(--bg-cream);
-    padding: 48px 52px 42px 52px;
+    padding: 56px 52px 42px 52px;
     position: relative;
     z-index: 1;
+    clip-path: url(#card-clip);
+    -webkit-clip-path: url(#card-clip);
   }
 
-  /* 3. ДЕКОРАТИВНАЯ РАМКА */
+  /* Декоративная непрерывная рамка */
   .decorative-frame-layer {
     position: absolute;
-    inset: 14px;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .frame-outer {
-    position: absolute;
     inset: 0;
-  }
-  .frame-outer .border-line {
-    position: absolute;
-    background: var(--pastel-pink);
-  }
-  .frame-outer .border-line.top { top: 0; left: 24px; right: 24px; height: 3.5px; }
-  .frame-outer .border-line.bottom { bottom: 0; left: 24px; right: 24px; height: 3.5px; }
-  .frame-outer .border-line.left { left: 0; top: 24px; bottom: 24px; width: 3.5px; }
-  .frame-outer .border-line.right { right: 0; top: 24px; bottom: 24px; width: 3.5px; }
-
-  .frame-outer .corner {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-  }
-  .frame-outer .corner.top-left {
-    top: 0; left: 0;
-    background: radial-gradient(circle at 0 0, transparent 20.5px, var(--pastel-pink) 20.5px, var(--pastel-pink) 24px, transparent 24px);
-  }
-  .frame-outer .corner.top-right {
-    top: 0; right: 0;
-    background: radial-gradient(circle at 100% 0, transparent 20.5px, var(--pastel-pink) 20.5px, var(--pastel-pink) 24px, transparent 24px);
-  }
-  .frame-outer .corner.bottom-right {
-    bottom: 0; right: 0;
-    background: radial-gradient(circle at 100% 100%, transparent 20.5px, var(--pastel-pink) 20.5px, var(--pastel-pink) 24px, transparent 24px);
-  }
-  .frame-outer .corner.bottom-left {
-    bottom: 0; left: 0;
-    background: radial-gradient(circle at 0 100%, transparent 20.5px, var(--pastel-pink) 20.5px, var(--pastel-pink) 24px, transparent 24px);
+    pointer-events: none;
+    z-index: 10;
   }
 
-  .frame-inner {
-    position: absolute;
-    inset: 7px;
-  }
-  .frame-inner .border-line {
-    position: absolute;
-    background: var(--pastel-pink);
-  }
-  .frame-inner .border-line.top { top: 0; left: 18px; right: 18px; height: 1.5px; }
-  .frame-inner .border-line.bottom { bottom: 0; left: 18px; right: 18px; height: 1.5px; }
-  .frame-inner .border-line.left { left: 0; top: 18px; bottom: 18px; width: 1.5px; }
-  .frame-inner .border-line.right { right: 0; top: 18px; bottom: 18px; width: 1.5px; }
-
-  .frame-inner .corner {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-  }
-  .frame-inner .corner.top-left {
-    top: 0; left: 0;
-    background: radial-gradient(circle at 0 0, transparent 16.5px, var(--pastel-pink) 16.5px, var(--pastel-pink) 18px, transparent 18px);
-  }
-  .frame-inner .corner.top-right {
-    top: 0; right: 0;
-    background: radial-gradient(circle at 100% 0, transparent 16.5px, var(--pastel-pink) 16.5px, var(--pastel-pink) 18px, transparent 18px);
-  }
-  .frame-inner .corner.bottom-right {
-    bottom: 0; right: 0;
-    background: radial-gradient(circle at 100% 100%, transparent 16.5px, var(--pastel-pink) 16.5px, var(--pastel-pink) 18px, transparent 18px);
-  }
-  .frame-inner .corner.bottom-left {
-    bottom: 0; left: 0;
-    background: radial-gradient(circle at 0 100%, transparent 16.5px, var(--pastel-pink) 16.5px, var(--pastel-pink) 18px, transparent 18px);
-  }
-
-  /* 4. КОНТЕНТ СТРАНИЦЫ */
   .page-content {
     position: relative;
     z-index: 3;
@@ -342,9 +275,6 @@
     .main-card {
       padding: 30px 20px;
     }
-    .decorative-frame-layer {
-      inset: 8px;
-    }
     .classic-menu-grid,
     .description-menu-grid {
       grid-template-columns: 1fr;
@@ -388,35 +318,41 @@
     flex-shrink: 0;
   }
 
+  /* Новый дизайн кнопок управления количеством (+ / число / -) */
   .qty-control {
     display: inline-flex;
     align-items: center;
-    background: var(--white);
-    border: 1px solid var(--pastel-pink);
-    border-radius: 0px;
-    padding: 1px 4px;
+    gap: 6px;
     flex-shrink: 0;
   }
 
   .btn-qty {
-    background: none;
+    background: var(--pastel-pink);
     border: none;
-    color: var(--pastel-blue-dark);
-    font-size: 11px;
-    width: 16px;
-    height: 16px;
+    border-radius: 50%;
+    color: var(--white);
+    font-size: 12px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+
+  .btn-qty:hover {
+    background: var(--pastel-pink-text);
+    transform: scale(1.08);
   }
 
   .qty-num {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
-    width: 16px;
+    color: var(--pastel-blue-dark);
+    min-width: 16px;
     text-align: center;
   }
 
@@ -448,63 +384,262 @@
     cursor: not-allowed;
   }
 
-  /* СТИЛИ ДЛЯ КАРТОЧЕК ФРИКШЕЙКОВ */
-  .freakshake-card {
-    background: var(--white);
-    border: 1px solid var(--pastel-pink);
-    padding: 20px;
-    margin-bottom: 20px;
+  .freakshake-display-container {
     position: relative;
-    box-shadow: 0 4px 15px rgba(242, 169, 189, 0.15);
+    padding: 10px 0 20px 0;
+    overflow: hidden;
   }
 
-  .freakshake-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 12px;
-    border-bottom: 1px dashed var(--pastel-blue-border);
-    padding-bottom: 10px;
+  @keyframes slideInFade {
+    0% { opacity: 0; transform: translateX(20px); }
+    100% { opacity: 1; transform: translateX(0); }
   }
 
-  .freakshake-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--pastel-pink-text);
-    letter-spacing: 1px;
+  .fs-slide-item {
+    display: none;
+  }
+  .fs-slide-item.active {
+    display: block;
+    animation: slideInFade 0.4s ease forwards;
   }
 
-  .freakshake-sections {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    font-size: 13.5px;
+  .fs-header-centered {
+    text-align: center;
+    margin-bottom: 25px;
   }
 
-  @media (max-width: 600px) {
-    .freakshake-sections {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-  }
-
-  .fs-block-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 14px;
-    font-weight: 700;
+  .fs-title-main {
+    font-family: 'Shantell Sans', cursive;
+    font-optical-sizing: auto;
+    font-variation-settings: "BNCE" 0, "INFM" 0, "SPAC" 0;
+    font-size: 42px;
+    font-weight: 350;
     color: var(--pastel-blue-dark);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    line-height: 1.1;
     margin-bottom: 4px;
   }
 
-  .fs-block-content {
-    color: #55626a;
-    line-height: 1.4;
+  .fs-title-sub {
+    font-family: 'Shantell Sans', cursive;
+    font-optical-sizing: auto;
+    font-variation-settings: "BNCE" 0, "INFM" 0, "SPAC" 0;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--pastel-blue-dark);
+    letter-spacing: 0.5px;
   }
 
-  /* МОДАЛЬНОЕ ОКНО ЧЕКА */
+  .fs-stage-layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    min-height: 480px;
+    padding: 0 60px;
+  }
+
+  .fs-nav-arrow {
+    background: var(--white);
+    border: 1.5px solid var(--pastel-blue-border);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    color: var(--pastel-blue-dark);
+    font-size: 11px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .fs-nav-arrow:hover {
+    border-color: var(--pastel-pink);
+    background: var(--pastel-blue);
+    color: var(--pastel-blue-dark);
+    transform: translateY(-50%) scale(1.06);
+  }
+
+  .fs-nav-prev { left: 0px; }
+  .fs-nav-next { right: 0px; }
+
+  .fs-center-artwork {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 10px;
+  }
+
+  .fs-center-artwork img {
+    max-height: 440px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 10px 20px rgba(45, 90, 123, 0.12));
+  }
+
+  .fs-side-note {
+    width: 250px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--text-dark);
+    position: relative;
+  }
+
+  .fs-side-note.left-note {
+    text-align: right;
+    padding-right: 15px;
+  }
+
+  .fs-side-note.right-note {
+    text-align: left;
+    padding-left: 15px;
+  }
+
+  .fs-note-title {
+    font-family: 'Shantell Sans', cursive;
+    font-optical-sizing: auto;
+    font-variation-settings: "BNCE" 0, "INFM" 0, "SPAC" 0;
+    font-size: 23px;
+    font-weight: 300;
+    color: var(--pastel-pink-text);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .fs-side-note.left-note .fs-note-title { justify-content: flex-end; }
+  .fs-side-note.right-note .fs-note-title { justify-content: flex-start; }
+
+  .fs-title-accent {
+    flex-shrink: 0;
+    height: 20px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.95;
+  }
+
+  .fs-note-body {
+    color: #55626a;
+  }
+
+  .fs-decor-brace {
+    position: absolute;
+    left: -25px;
+    top: 46px;
+    bottom: 6px;
+    width: 30px;
+    height: auto;
+    object-fit: fill;
+    object-position: center;
+    opacity: 0.95;
+  }
+
+  .fs-note-divider {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+  }
+  .fs-side-note.left-note .fs-note-divider { justify-content: flex-end; }
+  .fs-side-note.right-note .fs-note-divider { justify-content: flex-start; }
+  .fs-note-divider img {
+    display: block;
+    height: 16px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .fs-connectors-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .fs-bottom-controls-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 15px;
+    padding-right: 20px;
+  }
+
+  .fs-price-qty-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    padding: 6px 14px;
+  }
+
+  .fs-price-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    color: var(--pastel-blue-dark);
+    font-size: 18px;
+  }
+
+  .fs-slider-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+  }
+
+  .fs-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--pastel-blue-border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .fs-dot.active {
+    background: var(--pastel-pink-text);
+    transform: scale(1.2);
+  }
+
+  @media (max-width: 768px) {
+    .fs-stage-layout {
+      flex-direction: column;
+      padding: 0 10px;
+      min-height: auto;
+    }
+    .fs-side-note {
+      width: 100%;
+      text-align: center !important;
+      padding: 10px 0 !important;
+    }
+    .fs-connectors-svg {
+      display: none;
+    }
+    .fs-nav-arrow {
+      top: auto;
+      bottom: -10px;
+      transform: none;
+    }
+    .fs-nav-prev { left: 30%; }
+    .fs-nav-next { right: 30%; }
+    .fs-bottom-controls-row {
+      justify-content: center;
+      padding-right: 0;
+      margin-top: 35px;
+    }
+  }
+
   .modal-overlay {
     display: none;
     position: fixed;
@@ -728,28 +863,19 @@
     
     <div class="main-card">
       
+      <!-- ДЕКОРАТИВНАЯ ДВОЙНАЯ РАМКА И КЛИПИРОВАНИЕ КАРТОЧКИ -->
       <div class="decorative-frame-layer">
-        <div class="frame-outer">
-          <div class="border-line top"></div>
-          <div class="border-line right"></div>
-          <div class="border-line bottom"></div>
-          <div class="border-line left"></div>
-          <div class="corner top-left"></div>
-          <div class="corner top-right"></div>
-          <div class="corner bottom-right"></div>
-          <div class="corner bottom-left"></div>
-        </div>
-
-        <div class="frame-inner">
-          <div class="border-line top"></div>
-          <div class="border-line right"></div>
-          <div class="border-line bottom"></div>
-          <div class="border-line left"></div>
-          <div class="corner top-left"></div>
-          <div class="corner top-right"></div>
-          <div class="corner bottom-right"></div>
-          <div class="corner bottom-left"></div>
-        </div>
+        <svg id="card-frame-svg" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible;">
+          <defs>
+            <clipPath id="card-clip" clipPathUnits="userSpaceOnUse">
+              <path id="card-clip-path-el" d="" />
+            </clipPath>
+          </defs>
+          <!-- Внешняя розовая рамка -->
+          <path id="frame-path-outer" fill="none" stroke="var(--pastel-pink-border)" stroke-width="7" stroke-linejoin="miter" />
+          <!-- Внутренняя тонкая розовая рамка -->
+          <path id="frame-path-inner" fill="none" stroke="var(--pastel-pink-border)" stroke-width="1.5" stroke-linejoin="miter" />
+        </svg>
       </div>
 
       <div class="page-content">
@@ -815,17 +941,15 @@
 
           <div class="header-divider" style="margin-top: 35px;"></div>
           <div class="main-title" style="margin-top: 35px;">Десерты</div>
-          <div style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 13.5px; font-style: italic; color: #55626a; margin-top: -10px; margin-bottom: 20px;">
-            (подаются с шариком мороженого на выбор базово — ванильный)
-          </div>
           <div class="classic-menu-grid" id="grid-desserts"></div>
         </div>
 
         <!-- СТРАНИЦА 3 -->
         <div class="menu-page" id="page-3">
-          <div class="author-icecream-box" style="margin-top: 10px;">
-            <div class="author-box-title">Фрикшейки</div>
-            <div id="container-freakshakes"></div>
+          <div class="main-title">Фрикшейки</div>
+          
+          <div class="freakshake-display-container">
+            <div id="freakshakes-slider-container"></div>
           </div>
 
           <div class="header-divider" style="margin-top: 35px;"></div>
@@ -927,45 +1051,80 @@
     rolled: {
       price: 7,
       items: [
-        { name: "1. Strawberry Dream", desc: "Клубника • сливочная основа • белый шоколад" },
-        { name: "2. Choco Brownie", desc: "Шоколад • брауни • шоколадная крошка" },
-        { name: "3. Pistachio Cream", desc: "Фисташковая паста • сливки • дроблёные фисташки" },
-        { name: "4. Cookie Monster", desc: "Oreo • ваниль • шоколадный соус" },
-        { name: "5. Banana Split Roll", desc: "Банан • шоколад • карамель" },
-        { name: "6. Blue Magic", desc: "Blue Latte • белый шоколад • маршмеллоу" },
-        { name: "7. Raspberry Cheesecake", desc: "Чизкейк • малина • печенье" },
-        { name: "8. Coffee Caramel", desc: "Эспрессо • карамель • миндаль" },
-        { name: "9. Apple Pie", desc: "Яблоко • корица • карамель • вафельная крошка" }
+        { name: "Strawberry Dream", desc: "Клубника • сливочная основа • белый шоколад" },
+        { name: "Choco Brownie", desc: "Шоколад • брауни • шоколадная крошка" },
+        { name: "Pistachio Cream", desc: "Фисташковая паста • сливки • дроблёные фисташки" },
+        { name: "Cookie Monster", desc: "Oreo • ваниль • шоколадный соус" },
+        { name: "Banana Split Roll", desc: "Банан • шоколад • карамель" },
+        { name: "Blue Magic", desc: "Blue Latte • белый шоколад • маршмеллоу" },
+        { name: "Raspberry Cheesecake", desc: "Чизкейк • малина • печенье" },
+        { name: "Coffee Caramel", desc: "Эспрессо • карамель • миндаль" },
+        { name: "Apple Pie", desc: "Яблоко • корица • карамель • вафельная крошка" }
       ]
     },
     author: {
       price: 6,
       items: [
-        { name: "1. Полярная сова", desc: "Ванильное мороженое, голубика, белый шоколад, серебряные бусины, сахарная снежинка" },
-        { name: "2. Запретный лес", desc: "Фисташковое мороженое, лесной орех, карамель, съедобные цветы" },
-        { name: "3. Хогвартские теплицы", desc: "Страчателла, малиновый соус, мята" },
-        { name: "4. Полуночная библиотека", desc: "Шоколадное мороженое, брауни, шоколадный соус, леденцовая крошка" }
+        { name: "Полярная сова", desc: "Ванильное мороженое, голубика, белый шоколад, серебряные бусины, сахарная снежинка" },
+        { name: "Запретный лес", desc: "Фисташковое мороженое, лесной орех, карамель, съедобные цветы" },
+        { name: "Хогвартские теплицы", desc: "Страчателла, малиновый соус, мята" },
+        { name: "Полуночная библиотека", desc: "Шоколадное мороженое, брауни, шоколадный соус, леденцовая крошка" }
       ]
     },
     desserts: {
       price: 6,
       items: [
-        { name: "Яблочный пирог", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
-        { name: "Пирог шоколад-банан", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
-        { name: "Шоколадный фондан", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
-        { name: "Классический брауни", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
-        { name: "Cinnamon Roll", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
-        { name: "Sticky Toffee Pudding", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" }
+        "Яблочный пирог",
+        "Пирог шоколад-банан",
+        "Шоколадный фондан",
+        "Классический брауни",
+        "Cinnamon Roll",
+        "Sticky Toffee Pudding"
       ]
     },
     freakshakes: {
       price: 9,
       items: [
-        { name: "Экспеллиармус (вишня)", base: "Молочный коктейль с ванильным мороженым; вишнёвое пюре.", decor: "Шапка из кремчиз; кислая коктейльная вишня; мини-брауни; шоколадная вафельная трубочка; шоколадный и вишнёвый соусы; шоколадная стружка." },
-        { name: "Авифорс (тропикана)", base: "Ванильное мороженое; манговый сорбет; кокосовое молоко; пюре манго и маракуйи.", decor: "Взбитые сливки; свежий ананас; кокосовая стружка; мини-безе; карамельная вафельная трубочка; соус манго." },
-        { name: "Акцио (Ореховый)", base: "Мороженое «Фундук»; фисташковое мороженое; ореховая паста (лесной орех); молоко.", decor: "Взбитые сливки; карамелизированный фундук; фисташки; миндальные лепестки; карамельный соус; шоколадный соус; вафельная трубочка; крошка из печенья." },
-        { name: "Баубилиус (Кофе)", base: "Кофейное мороженое; двойной эспрессо; молоко; шоколадный сироп.", decor: "Кофейные взбитые сливки; шоколадные кофейные зёрна; мини-донат с шоколадной глазурью; шоколадная вафельная трубочка; шоколадная крошка; карамельный соус; печенье." },
-        { name: "Бомбарда (Кокакола)", base: "Айс-флоат: Coca-Cola, два больших шарика ванильного мороженого.", decor: "Шапка взбитых сливок; карамельный попкорн; леденцовая крошка; мармеладные бутылочки колы; шоколадная вафельная трубочка; карамельный соус по стенкам бокала." }
+        { 
+          name: "Экспеллиармус", 
+          subtitle: "(Вишня)",
+          baseTitle: "Основа:",
+          base: "Молочный коктейль с ванильным мороженым; вишнёвое пюре.", 
+          decorTitle: "Украшение:",
+          decor: "Шапка из кремчиз; кислая коктейльная вишня; мини-брауни; шоколадная вафельная трубочка; шоколадный и вишнёвый соусы; шоколадная стружка." 
+        },
+        { 
+          name: "Авифорс", 
+          subtitle: "(Тропикана)",
+          baseTitle: "Основа:",
+          base: "Ванильное мороженое; манговый сорбет; кокосовое молоко; пюре манго и маракуйи.", 
+          decorTitle: "Украшение:",
+          decor: "Взбитые сливки; свежий ананас; кокосовая стружка; мини-безе; карамельная вафельная трубочка; соус манго." 
+        },
+        { 
+          name: "Акцио", 
+          subtitle: "(Ореховый)",
+          baseTitle: "Основа:",
+          base: "Мороженое «Фундук»; фисташковое мороженое; ореховая паста (лесной орех); молоко.", 
+          decorTitle: "Украшение:",
+          decor: "Взбитые сливки; карамелизированный фундук; фисташки; миндальные лепестки; карамельный соус; шоколадный соус; вафельная трубочка; крошка из печенья." 
+        },
+        { 
+          name: "Баубилиус", 
+          subtitle: "(Кофе)",
+          baseTitle: "Основа:",
+          base: "Кофейное мороженое; двойной эспрессо; молоко; шоколадный сироп.", 
+          decorTitle: "Украшение:",
+          decor: "Кофейные взбитые сливки; шоколадные кофейные зёрна; мини-донат с шоколадной глазурью; шоколадная вафельная трубочка; шоколадная крошка; карамельный соус; печенье." 
+        },
+        { 
+          name: "Бомбарда", 
+          subtitle: "(Кока-кола)",
+          baseTitle: "Основа:",
+          base: "Айс-флоат: Coca-Cola, два больших шарика ванильного мороженого.", 
+          decorTitle: "Украшение:",
+          decor: "Шапка взбитых сливок, карамельный попкорн, леденцовая крошка, мармеладные бутылочки колы, шоколадная вафельная трубочка, карамельный соус по стенкам бокала." 
+        }
       ]
     },
     hotdrinks: {
@@ -989,9 +1148,12 @@
     const cat = data[categoryKey];
     
     cat.items.forEach((item, index) => {
-      const id = `${categoryKey}_${index}`;
-      const itemName = typeof item === 'object' ? item.name : item;
-      store[id] = { name: itemName, price: cat.price, qty: 0, category: categoryKey };
+      const displayName = categoryKey === 'freakshakes' ? `Фрикшейк ${item.name}` : (typeof item === 'object' ? item.name : item);
+      const id = categoryKey === 'freakshakes' 
+        ? `freakshake_${item.name.toLowerCase().replace(/[^a-zа-яё0-9]/g, '_')}`
+        : `${categoryKey}_${index}`;
+
+      store[id] = { name: displayName, price: cat.price, qty: 0, category: categoryKey };
 
       const div = document.createElement('div');
       
@@ -1003,7 +1165,7 @@
             <span class="leader-dots"></span>
             <span class="item-price">${cat.price} G</span>
             <div class="qty-control">
-              <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+              <button class="btn-qty" onclick="changeQty('${id}', -1)">−</button>
               <span class="qty-num" id="qty-${id}">0</span>
               <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
             </div>
@@ -1017,7 +1179,7 @@
           <span class="leader-dots"></span>
           <span class="item-price">${cat.price} G</span>
           <div class="qty-control">
-            <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+            <button class="btn-qty" onclick="changeQty('${id}', -1)">−</button>
             <span class="qty-num" id="qty-${id}">0</span>
             <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
           </div>
@@ -1027,45 +1189,100 @@
     });
   }
 
-  function renderFreakshakes() {
-    const container = document.getElementById('container-freakshakes');
+  let currentFreakshakeIndex = 4;
+
+  function renderFreakshakesSlider() {
+    const container = document.getElementById('freakshakes-slider-container');
     if (!container) return;
-    const cat = data.freakshakes;
+    container.innerHTML = '';
 
-    cat.items.forEach((item, index) => {
-      const id = `freakshakes_${index}`;
-      store[id] = { name: item.name, price: cat.price, qty: 0, category: 'freakshakes' };
+    data.freakshakes.items.forEach((item, index) => {
+      const id = `freakshake_${item.name.toLowerCase().replace(/[^a-zа-яё0-9]/g, '_')}`;
+      const existingQty = store[id] ? store[id].qty : 0;
+      
+      store[id] = { name: `Фрикшейк ${item.name}`, price: data.freakshakes.price, qty: existingQty, category: 'freakshakes' };
 
-      const div = document.createElement('div');
-      div.className = 'freakshake-card';
-      div.innerHTML = `
-        <div class="freakshake-top">
-          <span class="freakshake-name">${item.name}</span>
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <span class="item-price">${cat.price} G</span>
+      const slideDiv = document.createElement('div');
+      slideDiv.className = `fs-slide-item ${index === currentFreakshakeIndex ? 'active' : ''}`;
+      slideDiv.id = `fs-slide-${index}`;
+
+      slideDiv.innerHTML = `
+        <div class="fs-header-centered">
+          <div class="fs-title-main">${item.name}</div>
+          <div class="fs-title-sub">${item.subtitle}</div>
+        </div>
+
+        <div class="fs-stage-layout">
+          <button class="fs-nav-arrow fs-nav-prev" onclick="changeFreakshakeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+          
+          <div class="fs-side-note left-note">
+            <img class="fs-decor-brace" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/ref3.png" alt="">
+            <div class="fs-note-title">
+              <img class="fs-title-accent" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/ref1.png" alt="">
+              ${item.decorTitle}
+            </div>
+            <div class="fs-note-body">${item.decor}</div>
+            <div class="fs-note-divider">
+              <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/ref2.png" alt="">
+            </div>
+          </div>
+
+          <div class="fs-center-artwork">
+            <svg class="fs-connectors-svg" viewBox="0 0 400 440" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 15 122 Q 55 150 90 118 Q 115 95 138 86" stroke="#8ab7da" stroke-width="1.4" stroke-dasharray="2.5 4" stroke-linecap="round" />
+              <circle cx="15" cy="122" r="2.3" fill="#2d5a7b" />
+              <path d="M 385 298 Q 335 328 298 293 Q 276 265 258 258" stroke="#8ab7da" stroke-width="1.4" stroke-dasharray="2.5 4" stroke-linecap="round" />
+              <circle cx="385" cy="298" r="2.3" fill="#2d5a7b" />
+            </svg>
+            <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/freak.png" alt="${item.name}">
+          </div>
+
+          <div class="fs-side-note right-note">
+            <div class="fs-note-title">
+              <span>${item.baseTitle}</span>
+              <img class="fs-title-accent" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/ref4.png" alt="">
+            </div>
+            <div class="fs-note-body">${item.base}</div>
+            <div class="fs-note-divider">
+              <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/ref2.png" alt="">
+            </div>
+          </div>
+
+          <button class="fs-nav-arrow fs-nav-next" onclick="changeFreakshakeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <div class="fs-bottom-controls-row">
+          <div class="fs-price-qty-box">
+            <span class="fs-price-tag">${data.freakshakes.price} G</span>
             <div class="qty-control">
-              <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
-              <span class="qty-num" id="qty-${id}">0</span>
+              <button class="btn-qty" onclick="changeQty('${id}', -1)">−</button>
+              <span class="qty-num" id="qty-${id}">${existingQty}</span>
               <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
             </div>
           </div>
         </div>
-        <div class="freakshake-sections">
-          <div>
-            <div class="fs-block-title">Основа:</div>
-            <div class="fs-block-content">${item.base}</div>
-          </div>
-          <div>
-            <div class="fs-block-title">Украшение:</div>
-            <div class="fs-block-content">${item.decor}</div>
-          </div>
+
+        <div class="fs-slider-dots">
+          ${data.freakshakes.items.map((_, i) => `<div class="fs-dot ${i === index ? 'active' : ''}" onclick="setFreakshakeSlide(${i})"></div>`).join('')}
         </div>
       `;
-      container.appendChild(div);
+
+      container.appendChild(slideDiv);
     });
   }
 
-  // Рендер страниц
+  function changeFreakshakeSlide(delta) {
+    let newIndex = currentFreakshakeIndex + delta;
+    if (newIndex < 0) newIndex = data.freakshakes.items.length - 1;
+    if (newIndex >= data.freakshakes.items.length) newIndex = 0;
+    setFreakshakeSlide(newIndex);
+  }
+
+  function setFreakshakeSlide(index) {
+    currentFreakshakeIndex = index;
+    renderFreakshakesSlider();
+  }
+
   renderGrid('grid-classic', 'classic');
   renderGrid('grid-berry', 'berry');
   renderGrid('grid-nonclassic', 'nonclassic');
@@ -1081,7 +1298,7 @@
   renderGrid('grid-author', 'author');
   renderGrid('grid-desserts', 'desserts');
 
-  renderFreakshakes();
+  renderFreakshakesSlider();
   renderGrid('grid-hotdrinks', 'hotdrinks');
   renderGrid('grid-classicdrinks', 'classicdrinks');
 
@@ -1096,6 +1313,8 @@
     document.getElementById('btn-next').disabled = (currentPage === 3);
     document.getElementById('page-indicator').textContent = `Стр. ${currentPage} из 3`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    setTimeout(updateFrame, 10);
   }
 
   function changePage(delta) {
@@ -1173,7 +1392,7 @@
                 </div>
                 <div class="receipt-controls">
                   <div class="qty-control">
-                    <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+                    <button class="btn-qty" onclick="changeQty('${id}', -1)">−</button>
                     <span class="qty-num">${qty}</span>
                     <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
                   </div>
@@ -1190,7 +1409,7 @@
                 </div>
                 <div class="receipt-controls">
                   <div class="qty-control">
-                    <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+                    <button class="btn-qty" onclick="changeQty('${id}', -1)">−</button>
                     <span class="qty-num">${qty}</span>
                     <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
                   </div>
@@ -1208,7 +1427,7 @@
               </div>
               <div class="receipt-controls">
                 <div class="qty-control">
-                  <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+                  <button class="btn-qty" onclick="changeQty('${id}', -1)">−</button>
                   <span class="qty-num">${qty}</span>
                   <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
                 </div>
@@ -1295,6 +1514,99 @@
 
     const paymentUrl = `${BASE_PAY_URL}&to=${SELLER}&amount=${encodeURIComponent(totalPrice)}&comment=${encodeURIComponent(comment)}`;
     window.open(paymentUrl, '_top');
+  }
+
+  const fsDisplay = document.querySelector('.freakshake-display-container');
+  if (fsDisplay) {
+    let touchstartX = 0;
+    let touchendX = 0;
+    
+    fsDisplay.addEventListener('touchstart', e => {
+      touchstartX = e.changedTouches[0].screenX;
+    }, {passive: true});
+
+    fsDisplay.addEventListener('touchend', e => {
+      touchendX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, {passive: true});
+
+    function handleSwipe() {
+      if (touchendX < touchstartX - 40) {
+        changeFreakshakeSlide(1);
+      }
+      if (touchendX > touchstartX + 40) {
+        changeFreakshakeSlide(-1);
+      }
+    }
+  }
+
+  function updateFrame() {
+    const card = document.querySelector('.main-card');
+    if (!card) return;
+    const W = card.offsetWidth;
+    const H = card.offsetHeight;
+    if (W <= 0 || H <= 0) return;
+
+    const R = 36;
+    const dInner = 6;
+
+    const outerPath = `
+      M ${R.toFixed(2)},0
+      L ${(W - R).toFixed(2)},0
+      A ${R},${R} 0 0,0 ${W},${R.toFixed(2)}
+      L ${W},${(H - R).toFixed(2)}
+      A ${R},${R} 0 0,0 ${(W - R).toFixed(2)},${H}
+      L ${R.toFixed(2)},${H}
+      A ${R},${R} 0 0,0 0,${(H - R).toFixed(2)}
+      L 0,${R.toFixed(2)}
+      A ${R},${R} 0 0,0 ${R.toFixed(2)},0
+      Z
+    `.replace(/\s+/g, ' ').trim();
+
+    const Rin = R + dInner;
+    const Kin = Math.sqrt(Rin * Rin - dInner * dInner);
+
+    const innerPath = `
+      M ${Kin.toFixed(2)},${dInner}
+      L ${(W - Kin).toFixed(2)},${dInner}
+      A ${Rin},${Rin} 0 0,0 ${(W - dInner).toFixed(2)},${Kin.toFixed(2)}
+      L ${(W - dInner).toFixed(2)},${(H - Kin).toFixed(2)}
+      A ${Rin},${Rin} 0 0,0 ${(W - Kin).toFixed(2)},${(H - dInner).toFixed(2)}
+      L ${Kin.toFixed(2)},${(H - dInner).toFixed(2)}
+      A ${Rin},${Rin} 0 0,0 ${dInner},${(H - Kin).toFixed(2)}
+      L ${dInner},${Kin.toFixed(2)}
+      A ${Rin},${Rin} 0 0,0 ${Kin.toFixed(2)},${dInner}
+      Z
+    `.replace(/\s+/g, ' ').trim();
+
+    const outerEl = document.getElementById('frame-path-outer');
+    const innerEl = document.getElementById('frame-path-inner');
+    const clipEl = document.getElementById('card-clip-path-el');
+    const svgEl = document.getElementById('card-frame-svg');
+
+    if (outerEl) outerEl.setAttribute('d', outerPath);
+    if (innerEl) innerEl.setAttribute('d', innerPath);
+    if (clipEl) clipEl.setAttribute('d', outerPath);
+    
+    card.style.clipPath = `path('${outerPath}')`;
+    card.style.webkitClipPath = `path('${outerPath}')`;
+
+    if (svgEl) {
+      svgEl.setAttribute('width', W);
+      svgEl.setAttribute('height', H);
+      svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    }
+  }
+
+  window.addEventListener('resize', updateFrame);
+  window.addEventListener('load', updateFrame);
+  setTimeout(updateFrame, 50);
+
+  if (window.ResizeObserver) {
+    const cardEl = document.querySelector('.main-card');
+    if (cardEl) {
+      new ResizeObserver(() => updateFrame()).observe(cardEl);
+    }
   }
 </script>
 
