@@ -8,6 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+<!-- Подключение шрифта Great Vibes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   :root {
@@ -21,6 +26,12 @@
     --text-dark: #2b363c;
     --bg-cream: #fdfbf7;
     --white: #ffffff;
+  }
+
+  .great-vibes-regular {
+    font-family: "Great Vibes", cursive;
+    font-weight: 400;
+    font-style: normal;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -402,24 +413,22 @@
     margin-bottom: 25px;
   }
 
+  /* Название фрикшейка (Great Vibes) */
   .fs-title-main {
-    font-family: 'Shantell Sans', cursive;
-    font-optical-sizing: auto;
-    font-variation-settings: "BNCE" 0, "INFM" 0, "SPAC" 0;
-    font-size: 42px;
-    font-weight: 350;
+    font-family: "Great Vibes", cursive;
+    font-size: 58px;
+    font-weight: 400;
     color: var(--pastel-blue-dark);
-    line-height: 1.1;
-    margin-bottom: 4px;
+    line-height: 1;
+    margin-bottom: 2px;
   }
 
+  /* Вкус фрикшейка (Great Vibes) */
   .fs-title-sub {
-    font-family: 'Shantell Sans', cursive;
-    font-optical-sizing: auto;
-    font-variation-settings: "BNCE" 0, "INFM" 0, "SPAC" 0;
-    font-size: 19px;
-    font-weight: 500;
-    color: var(--pastel-blue-dark);
+    font-family: "Great Vibes", cursive;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--pastel-pink-text);
     letter-spacing: 0.5px;
   }
 
@@ -481,9 +490,9 @@
 
   .fs-side-note {
     width: 250px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    line-height: 1.45;
+    font-family: 'Playfair Display', serif; /* Обычный шрифт для боковых блоков */
+    font-size: 14px;
+    line-height: 1.4;
     color: var(--text-dark);
     position: relative;
   }
@@ -498,14 +507,15 @@
     padding-left: 15px;
   }
 
+  /* Заголовки основы и украшения (Обычный шрифт, стиль Playfair Display / Cormorant) */
   .fs-note-title {
-    font-family: 'Shantell Sans', cursive;
-    font-optical-sizing: auto;
-    font-variation-settings: "BNCE" 0, "INFM" 0, "SPAC" 0;
-    font-size: 23px;
-    font-weight: 300;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     color: var(--pastel-pink-text);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -523,7 +533,11 @@
   }
 
   .fs-note-body {
-    color: #55626a;
+    color: #4a5860;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14.5px;
+    font-style: italic;
+    line-height: 1.4;
   }
 
   .fs-decor-brace {
@@ -1142,7 +1156,6 @@
     const cat = data[categoryKey];
     
     cat.items.forEach((item, index) => {
-      // Префикс имени для фрикшейков, чтобы в чеке отображалось "Фрикшейк Название"
       const displayName = categoryKey === 'freakshakes' ? `Фрикшейк ${item.name}` : (typeof item === 'object' ? item.name : item);
       const id = categoryKey === 'freakshakes' 
         ? `freakshake_${item.name.toLowerCase().replace(/[^a-zа-яё0-9]/g, '_')}`
@@ -1195,7 +1208,6 @@
       const id = `freakshake_${item.name.toLowerCase().replace(/[^a-zа-яё0-9]/g, '_')}`;
       const existingQty = store[id] ? store[id].qty : 0;
       
-      // Гарантируем правильное имя в store с префиксом "Фрикшейк"
       store[id] = { name: `Фрикшейк ${item.name}`, price: data.freakshakes.price, qty: existingQty, category: 'freakshakes' };
 
       const slideDiv = document.createElement('div');
@@ -1543,10 +1555,9 @@
     const H = card.offsetHeight;
     if (W <= 0 || H <= 0) return;
 
-    const R = 36; // Радиус вогнутых уголков
-    const dInner = 6; // Отступ внутренней тонкой рамки
+    const R = 36;
+    const dInner = 6;
 
-    // 1. Внешний векторный контур (вогнутые углы внутрь карточки)
     const outerPath = `
       M ${R.toFixed(2)},0
       L ${(W - R).toFixed(2)},0
@@ -1560,7 +1571,6 @@
       Z
     `.replace(/\s+/g, ' ').trim();
 
-    // 2. Внутренний параллельный векторный контур
     const Rin = R + dInner;
     const Kin = Math.sqrt(Rin * Rin - dInner * dInner);
 
@@ -1586,7 +1596,6 @@
     if (innerEl) innerEl.setAttribute('d', innerPath);
     if (clipEl) clipEl.setAttribute('d', outerPath);
     
-    // Прямое назначение clip-path для максимальной совместимости во всех браузерах
     card.style.clipPath = `path('${outerPath}')`;
     card.style.webkitClipPath = `path('${outerPath}')`;
 
