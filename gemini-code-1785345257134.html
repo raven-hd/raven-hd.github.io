@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fortescue's Ice-Cream Parlour — Меню</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --pastel-pink: #f2a9bd;
+    --pastel-pink-text: #e07b96;
+    --pastel-pink-light: #fbf0f3;
+    --pastel-blue: #c4e0f4;
+    --pastel-blue-dark: #2d5a7b;
+    --pastel-blue-border: #8ab7da;
+    --text-dark: #2b363c;
+    --bg-cream: #fdfbf7;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--pastel-pink-light);
+    background-image: repeating-linear-gradient(
+      90deg,
+      rgba(242, 169, 189, 0.15),
+      rgba(242, 169, 189, 0.15) 24px,
+      rgba(180, 211, 234, 0.15) 24px,
+      rgba(180, 211, 234, 0.15) 48px
+    );
+    color: var(--text-dark);
+    font-family: 'Playfair Display', serif;
+    min-height: 100vh;
+    padding: 40px 15px 60px 15px;
+  }
+
+  /* Плавающая иконка креманки (корзина) */
+  .cart-bowl-btn {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 150;
+    cursor: pointer;
+    background: var(--white);
+    border: 2px solid var(--pastel-pink);
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(45, 90, 123, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .cart-bowl-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 8px 24px rgba(45, 90, 123, 0.3);
+  }
+
+  .cart-bowl-btn img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+  }
+
+  /* Бейдж с количеством */
+  .cart-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--pastel-pink);
+    color: var(--pastel-blue-dark);
+    font-family: Arial, sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid var(--pastel-blue-border);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .page-wrapper {
+    max-width: 880px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* 1. ГОЛУБАЯ ПОДЛОЖКА */
+  .blue-backing-panel {
+    background: var(--pastel-blue);
+    padding: 24px;
+    border-radius: 0px;
+    box-shadow: 0 12px 32px rgba(45, 90, 123, 0.18);
+    position: relative;
+  }
+
+  /* 2. КРЕМОВАЯ БУМАГА */
+  .main-card {
+    background: var(--bg-cream);
+    padding: 48px 52px 42px 52px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 3. ДЕКОРАТИВНАЯ РАМКА */
+  .decorative-frame-layer {
+    position: absolute;
+    inset: 14px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .frame-outer {
+    position: absolute;
+    inset: 0;
+  }
+  .frame-outer .border-line {
+    position: absolute;
+    background: var(--pastel-pink);
+  }
+  .frame-outer .border-line.top { top: 0; left: 24px; right: 24px; height: 3.5px; }
+  .frame-outer .border-line.bottom { bottom: 0; left: 24px; right: 24px; height: 3.5px; }
+  .frame-outer .border-line.left { left: 0; top: 24px; bottom: 24px; width: 3.5px; }
+  .frame-outer .border-line.right { right: 0; top: 24px; bottom: 24px; width: 3.5px; }
+
+  .frame-outer .corner {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+  }
+  .frame-outer .corner.top-left {
+    top: 0; left: 0;
+    background: radial-gradient(circle at 0 0, transparent 20.5px, var(--pastel-pink) 20.5px, var(--pastel-pink) 24px, transparent 24px);
+  }
+  .frame-outer .corner.top-right {
+    top: 0; right: 0;
+    background: radial-gradient(circle at 100% 0, transparent 20.5px, var(--pastel-pink) 20.5px, var(--pastel-pink) 24px, transparent 24px);
+  }
+  .frame-outer .corner.bottom-right {
+    bottom: 0; right: 0;
+    background: radial-gradient(circle at 100% 100%, transparent 20.5px, var(--pastel-pink) 20.5px, var(--pastel-pink) 24px, transparent 24px);
+  }
+  .frame-outer .corner.bottom-left {
+    bottom: 0; left: 0;
+    background: radial-gradient(circle at 0 100%, transparent 20.5px, var(--pastel-pink) 20.5px, var(--pastel-pink) 24px, transparent 24px);
+  }
+
+  .frame-inner {
+    position: absolute;
+    inset: 7px;
+  }
+  .frame-inner .border-line {
+    position: absolute;
+    background: var(--pastel-pink);
+  }
+  .frame-inner .border-line.top { top: 0; left: 18px; right: 18px; height: 1.5px; }
+  .frame-inner .border-line.bottom { bottom: 0; left: 18px; right: 18px; height: 1.5px; }
+  .frame-inner .border-line.left { left: 0; top: 18px; bottom: 18px; width: 1.5px; }
+  .frame-inner .border-line.right { right: 0; top: 18px; bottom: 18px; width: 1.5px; }
+
+  .frame-inner .corner {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+  }
+  .frame-inner .corner.top-left {
+    top: 0; left: 0;
+    background: radial-gradient(circle at 0 0, transparent 16.5px, var(--pastel-pink) 16.5px, var(--pastel-pink) 18px, transparent 18px);
+  }
+  .frame-inner .corner.top-right {
+    top: 0; right: 0;
+    background: radial-gradient(circle at 100% 0, transparent 16.5px, var(--pastel-pink) 16.5px, var(--pastel-pink) 18px, transparent 18px);
+  }
+  .frame-inner .corner.bottom-right {
+    bottom: 0; right: 0;
+    background: radial-gradient(circle at 100% 100%, transparent 16.5px, var(--pastel-pink) 16.5px, var(--pastel-pink) 18px, transparent 18px);
+  }
+  .frame-inner .corner.bottom-left {
+    bottom: 0; left: 0;
+    background: radial-gradient(circle at 0 100%, transparent 16.5px, var(--pastel-pink) 16.5px, var(--pastel-pink) 18px, transparent 18px);
+  }
+
+  /* 4. КОНТЕНТ СТРАНИЦЫ */
+  .page-content {
+    position: relative;
+    z-index: 3;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 35px;
+  }
+
+  .logo-container {
+    max-width: 420px;
+    margin: 0 auto 12px auto;
+    width: 100%;
+  }
+
+  .logo-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .header-divider {
+    width: 140px;
+    height: 1px;
+    background: var(--pastel-blue-border);
+    margin: 25px auto 35px auto;
+    position: relative;
+  }
+  
+  .header-divider::after {
+    content: '❖';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-cream);
+    padding: 0 8px;
+    font-size: 10px;
+    color: var(--pastel-pink);
+  }
+
+  .menu-page {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .menu-page.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .main-title {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--pastel-pink-text);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: var(--pastel-blue-dark);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .classic-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 40px;
+    align-items: start;
+  }
+
+  .description-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 40px;
+    align-items: start;
+  }
+
+  .menu-item-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-size: 14.5px;
+    line-height: 1.4;
+  }
+
+  .menu-item-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .menu-item-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13.5px;
+    color: #55626a;
+    font-style: italic;
+    line-height: 1.35;
+    margin-bottom: 6px;
+  }
+
+  .author-icecream-box {
+    border: 1.5px dashed var(--pastel-pink);
+    background: var(--pastel-pink-light);
+    padding: 24px 24px 16px 24px;
+    margin: 30px 0;
+    position: relative;
+  }
+
+  .author-box-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--pastel-pink-text);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 25px;
+  }
+
+  @media (max-width: 680px) {
+    .cart-bowl-btn {
+      top: 15px;
+      right: 15px;
+      width: 55px;
+      height: 55px;
+    }
+    .cart-bowl-btn img {
+      width: 35px;
+      height: 35px;
+    }
+    .blue-backing-panel {
+      padding: 14px;
+    }
+    .main-card {
+      padding: 30px 20px;
+    }
+    .decorative-frame-layer {
+      inset: 8px;
+    }
+    .classic-menu-grid,
+    .description-menu-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+
+  .menu-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-size: 14.5px;
+    line-height: 1.4;
+    width: 100%;
+  }
+
+  .item-title {
+    font-weight: 500;
+    color: var(--text-dark);
+    white-space: normal;
+    word-break: break-word;
+    flex-shrink: 1;
+  }
+
+  .leader-dots {
+    flex: 1;
+    border-bottom: 1px dotted #b0c9dd;
+    margin: 0 8px;
+    align-self: flex-end;
+    margin-bottom: 4px;
+    min-width: 12px;
+  }
+
+  .item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    color: var(--pastel-blue-dark);
+    font-size: 16px;
+    margin-right: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .qty-control {
+    display: inline-flex;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--pastel-pink);
+    border-radius: 0px;
+    padding: 1px 4px;
+    flex-shrink: 0;
+  }
+
+  .btn-qty {
+    background: none;
+    border: none;
+    color: var(--pastel-blue-dark);
+    font-size: 11px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+  .qty-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 700;
+    width: 16px;
+    text-align: center;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 45px;
+    padding-top: 20px;
+    border-top: 1px solid var(--pastel-pink-light);
+  }
+
+  .p-btn {
+    background: var(--white);
+    border: 1px solid var(--pastel-blue-border);
+    color: var(--pastel-blue-dark);
+    padding: 7px 18px;
+    border-radius: 0px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .p-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* СТИЛИ ДЛЯ КАРТОЧЕК ФРИКШЕЙКОВ */
+  .freakshake-card {
+    background: var(--white);
+    border: 1px solid var(--pastel-pink);
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(242, 169, 189, 0.15);
+  }
+
+  .freakshake-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+    border-bottom: 1px dashed var(--pastel-blue-border);
+    padding-bottom: 10px;
+  }
+
+  .freakshake-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--pastel-pink-text);
+    letter-spacing: 1px;
+  }
+
+  .freakshake-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    font-size: 13.5px;
+  }
+
+  @media (max-width: 600px) {
+    .freakshake-sections {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+
+  .fs-block-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--pastel-blue-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .fs-block-content {
+    color: #55626a;
+    line-height: 1.4;
+  }
+
+  /* МОДАЛЬНОЕ ОКНО ЧЕКА */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(45, 90, 123, 0.45);
+    backdrop-filter: blur(3px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+
+  .receipt-card {
+    background-color: #fbf5f7;
+    background-image: none;
+    border: 2px solid var(--pastel-pink);
+    width: 100%;
+    max-width: 460px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 32px 28px;
+    position: relative;
+    box-shadow: 0 16px 40px rgba(45, 90, 123, 0.25);
+  }
+
+  .receipt-header {
+    text-align: center;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px dashed var(--pastel-pink);
+  }
+
+  .receipt-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--pastel-pink-text);
+    font-weight: 700;
+  }
+
+  .receipt-subtitle {
+    font-size: 13px;
+    color: var(--pastel-blue-dark);
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14.5px;
+    gap: 10px;
+  }
+
+  .receipt-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .receipt-item-name {
+    font-weight: 500;
+    color: var(--text-dark);
+  }
+
+  .receipt-item-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--pastel-blue-dark);
+  }
+
+  .promo-container {
+    margin: 15px 0;
+    display: flex;
+    gap: 8px;
+  }
+
+  .promo-input {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--pastel-blue-border);
+    padding: 7px 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    text-transform: uppercase;
+  }
+
+  .promo-input:focus {
+    outline: none;
+    border-color: var(--pastel-pink);
+  }
+
+  .promo-btn {
+    background: var(--pastel-blue-dark);
+    color: var(--white);
+    border: none;
+    padding: 7px 14px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .promo-msg {
+    font-size: 12px;
+    font-family: 'Cormorant Garamond', serif;
+    margin-top: -8px;
+    margin-bottom: 12px;
+    min-height: 16px;
+  }
+
+  .tips-row {
+    background: var(--pastel-pink-light);
+    border: 1px dashed var(--pastel-pink);
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+
+  .tips-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--pastel-blue-dark);
+    font-weight: 600;
+  }
+
+  .tips-input {
+    width: 75px;
+    background: var(--white);
+    border: 1px solid var(--pastel-pink);
+    padding: 4px 6px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: right;
+    color: var(--pastel-blue-dark);
+  }
+
+  .tips-input:focus {
+    outline: none;
+    border-color: var(--pastel-blue-dark);
+  }
+
+  .receipt-total {
+    border-top: 2px solid var(--pastel-pink);
+    padding-top: 14px;
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: 19px;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--pastel-blue-dark);
+  }
+
+  .pay-btn {
+    background: var(--pastel-pink);
+    color: var(--white);
+    border: none;
+    width: 100%;
+    padding: 13px;
+    margin-top: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    cursor: pointer;
+    font-size: 16px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .pay-btn:hover {
+    background: var(--pastel-pink-text);
+  }
+
+  .modal-close-btn {
+    background: transparent;
+    color: var(--pastel-blue-dark);
+    border: 1px solid var(--pastel-blue-border);
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    cursor: pointer;
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close-btn:hover {
+    background: var(--pastel-pink-light);
+    border-color: var(--pastel-pink);
+  }
+</style>
+</head>
+<body>
+
+<div class="cart-bowl-btn" onclick="openReceipt()" title="Просмотр заказа">
+  <img src="https://raw.githubusercontent.com/blake-el/hogsmeade/refs/heads/main/fortescues/cremanka.png" alt="Корзина">
+  <div class="cart-badge" id="cart-badge" style="display: none;">0</div>
+</div>
+
+<div class="page-wrapper">
+  
+  <div class="blue-backing-panel">
+    
+    <div class="main-card">
+      
+      <div class="decorative-frame-layer">
+        <div class="frame-outer">
+          <div class="border-line top"></div>
+          <div class="border-line right"></div>
+          <div class="border-line bottom"></div>
+          <div class="border-line left"></div>
+          <div class="corner top-left"></div>
+          <div class="corner top-right"></div>
+          <div class="corner bottom-right"></div>
+          <div class="corner bottom-left"></div>
+        </div>
+
+        <div class="frame-inner">
+          <div class="border-line top"></div>
+          <div class="border-line right"></div>
+          <div class="border-line bottom"></div>
+          <div class="border-line left"></div>
+          <div class="corner top-left"></div>
+          <div class="corner top-right"></div>
+          <div class="corner bottom-right"></div>
+          <div class="corner bottom-left"></div>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <header>
+          <div class="logo-container">
+            <img src="https://raw.githubusercontent.com/blake-el/hogsmeade/refs/heads/main/fortescues/fortescue.png" alt="Fortescue's Ice-Cream Parlour Logo">
+          </div>
+          <div class="header-divider"></div>
+        </header>
+
+        <!-- СТРАНИЦА 1 -->
+        <div class="menu-page active" id="page-1">
+          <div class="main-title">Вкусы Мороженого</div>
+
+          <div class="section-subtitle" style="margin-top: 35px;">Классические вкусы</div>
+          <div class="classic-menu-grid" id="grid-classic"></div>
+
+          <div class="section-subtitle" style="margin-top: 35px;">Ягодные и фруктовые</div>
+          <div class="classic-menu-grid" id="grid-berry"></div>
+
+          <div class="author-icecream-box" style="margin-top: 35px;">
+            <div class="author-box-title">Авторская коллекция</div>
+            <div class="classic-menu-grid" id="grid-nonclassic"></div>
+          </div>
+
+          <div class="section-subtitle" style="margin-top: 35px;">Щербеты и сорбеты</div>
+          <div class="classic-menu-grid" id="grid-sorbet"></div>
+
+          <div class="header-divider" style="margin-top: 50px;"></div>
+
+          <div class="main-title">Добавки и Топпинги</div>
+
+          <div class="section-subtitle" style="margin-top: 35px;">Десертные соусы</div>
+          <div class="classic-menu-grid" id="grid-sauces"></div>
+
+          <div class="section-subtitle" style="margin-top: 35px;">Орехи</div>
+          <div class="classic-menu-grid" id="grid-nuts"></div>
+
+          <div class="section-subtitle" style="margin-top: 35px;">Хрустящие добавки</div>
+          <div class="classic-menu-grid" id="grid-crunch"></div>
+
+          <div class="section-subtitle" style="margin-top: 35px;">Свежие фрукты и ягоды</div>
+          <div class="classic-menu-grid" id="grid-fruits"></div>
+
+          <div class="section-subtitle" style="margin-top: 35px;">Украшения</div>
+          <div class="classic-menu-grid" id="grid-decor"></div>
+        </div>
+
+        <!-- СТРАНИЦА 2 -->
+        <div class="menu-page" id="page-2">
+          <div class="main-title">Гонконгские вафли</div>
+          <div class="description-menu-grid" id="grid-waffles"></div>
+
+          <div class="header-divider" style="margin-top: 35px;"></div>
+          <div class="main-title" style="margin-top: 35px;">Rolled Ice Cream</div>
+          <div class="description-menu-grid" id="grid-rolled"></div>
+
+          <div class="header-divider" style="margin-top: 35px;"></div>
+          <div class="author-icecream-box" style="margin-top: 35px;">
+            <div class="author-box-title">Авторское мороженое</div>
+            <div class="description-menu-grid" id="grid-author"></div>
+          </div>
+
+          <div class="header-divider" style="margin-top: 35px;"></div>
+          <div class="main-title" style="margin-top: 35px;">Десерты</div>
+          <div style="text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 13.5px; font-style: italic; color: #55626a; margin-top: -10px; margin-bottom: 20px;">
+            (подаются с шариком мороженого на выбор базово — ванильный)
+          </div>
+          <div class="classic-menu-grid" id="grid-desserts"></div>
+        </div>
+
+        <!-- СТРАНИЦА 3 -->
+        <div class="menu-page" id="page-3">
+          <div class="author-icecream-box" style="margin-top: 10px;">
+            <div class="author-box-title">Фрикшейки</div>
+            <div id="container-freakshakes"></div>
+          </div>
+
+          <div class="header-divider" style="margin-top: 35px;"></div>
+          <div class="main-title" style="margin-top: 35px;">Горячие напитки</div>
+          <div class="description-menu-grid" id="grid-hotdrinks"></div>
+
+          <div class="header-divider" style="margin-top: 35px;"></div>
+          <div class="main-title" style="margin-top: 35px;">Классическое меню</div>
+          <div class="classic-menu-grid" id="grid-classicdrinks"></div>
+        </div>
+
+        <div class="pagination">
+          <button class="p-btn" id="btn-prev" onclick="changePage(-1)" disabled>← Назад</button>
+          <span style="font-size:15px; font-family:'Cormorant Garamond', serif; font-weight:600; letter-spacing: 1px;" id="page-indicator">Стр. 1 из 3</span>
+          <button class="p-btn" id="btn-next" onclick="changePage(1)">Вперед →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="receipt-card">
+    <div class="receipt-header">
+      <div class="receipt-title">Fortescue's</div>
+      <div class="receipt-subtitle">Детали вашего заказа</div>
+    </div>
+
+    <div id="receipt-items"></div>
+
+    <div id="promo-section" style="display: none;">
+      <div class="promo-container">
+        <input type="text" id="promo-input" class="promo-input" placeholder="Введите промокод">
+        <button class="promo-btn" onclick="applyPromo()">OK</button>
+      </div>
+      <div class="promo-msg" id="promo-msg"></div>
+    </div>
+
+    <div class="tips-row" id="tips-section" style="display: none;">
+      <span class="tips-label">Оставить чаевые:</span>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <input type="number" id="tips-input" class="tips-input" min="0" value="0" oninput="renderReceipt()">
+        <span style="font-family:'Cormorant Garamond', serif; font-size:14px; font-weight:700; color:var(--pastel-blue-dark);">G</span>
+      </div>
+    </div>
+
+    <div class="receipt-row receipt-total">
+      <span>ИТОГО:</span>
+      <span id="receipt-total-sum">0 G</span>
+    </div>
+
+    <button class="pay-btn" id="btn-pay" onclick="processPayment()" style="display: none;">
+      <span>Оплатить счет <i class="fa-solid fa-coins"></i> <b id="pay-btn-sum">0</b></span>
+    </button>
+    <button class="modal-close-btn" onclick="closeReceipt()">Закрыть</button>
+  </div>
+</div>
+
+<script>
+  const defaultPrice = 5;
+  const SELLER = '695';
+  const BASE_PAY_URL = 'https://hogsmeade.dhog.org/ucp.php?i=-hogsmeade-bank-ucp-main_module&mode=personal_transactions';
+
+  let appliedPromoCode = null;
+  const store = {};
+
+  const data = {
+    classic: { price: defaultPrice, items: ["Ваниль", "Шоколад", "Страчателла", "Солёная карамель", "Фисташка", "Лесной орех", "Крем-брюле", "Тирамису", "Кофе", "Печенье & Cream", "Чизкейк Нью-Йорк", "Кокос", "Изюм и ром", "Bubble Gum"] },
+    berry: { price: defaultPrice, items: ["Клубника", "Малина", "Черника", "Манго", "Маракуйя", "Лайм-мята", "Персик"] },
+    nonclassic: { price: defaultPrice, items: [
+      "Earl Grey с бергамотом", "Лаванда и мёд", "Матча", "Белый шоколад и малина", 
+      "Банан-карамель", "Клён и пекан", "Попкорн", "Имбирный пряник", 
+      "Мята с тёмным шоколадом", "Клён и бекон", "Тыква с корицей", "Свёкла и малина", 
+      "Имбирь", "Чили-шоколад", "Корица", "Анис", "Лакрица", 
+      "Бузина и зелёное яблоко", "Бальзамический уксус с клубникой"
+    ] },
+    sorbet: { price: defaultPrice, items: ["Лимон", "Апельсин", "Смородина", "Вишня", "Ананас", "Киви", "Зелёное яблоко"] },
+    sauces: { price: defaultPrice, items: ["Шоколадный", "Белый шоколад", "Солёная карамель", "Клубничный", "Малиновый", "Карамель", "Мята"] },
+    nuts: { price: defaultPrice, items: ["Миндаль", "Фисташка", "Фундук", "Грецкий орех"] },
+    crunch: { price: defaultPrice, items: ["Орео", "Вафельная крошка", "Шоколадная крошка", "Безе", "Карамелизированный бекон", "Леденцовая крошка"] },
+    fruits: { price: defaultPrice, items: ["Клубника", "Банан", "Голубика", "Малина", "Манго", "Киви"] },
+    decor: { price: defaultPrice, items: ["Взбитые сливки", "Вишенка", "Цветная посыпка", "Серебряные бусины", "Сахарные звёздочки", "Съедобные цветы", "Мята", "Маршмеллоу"] },
+    
+    waffles: {
+      price: 8,
+      items: [
+        { name: "Фортескью классик", desc: "Ванильное мороженое, клубника, банан, взбитые сливки, шоколадный соус, вафельная крошка." },
+        { name: "Флориш и Блоттс", desc: "Мороженое Earl Grey, мороженое «Грецкий орех», грецкий орех, карамельный соус, кусочки песочного печенья." },
+        { name: "Квиддичный триумф", desc: "Манговый сорбет, вишнёвый сорбет, свежий ананас, голубика, шоколадный соус, карамелизированный бекон." },
+        { name: "Розмариновый уют", desc: "Мороженое крем брюле, кофейное мороженое, карамелизированная груша, карамельный соус, дроблёный миндаль, веточка розмарина." },
+        { name: "Туманный альбион", desc: "Мороженое Earl Grey, мороженое тирамису, лимонный крем (lemon curd), голубика, белый шоколад, серебристая посыпка." },
+        { name: "Сладкое королевство", desc: "Мороженое Bubble Gum, маршмеллоу, радужная посыпка, леденцовая крошка, клубничный соус, сахарные звёздочки, мини-безе." },
+        { name: "Бомбарда", desc: "Лаймовый сорбет, манговый сорбет, киви, клубника, соус мята." },
+        { name: "Sole", desc: "Солёная карамель, мороженое лесной орех, вафельная крошка, карамельный соус, лёгкая щепотка морской соли." },
+        { name: "Мадам Паддифут", desc: "Клубничное мороженое, белый шоколад соус, свежая малина, лепестки роз (съедобные), взбитые сливки, сахарное сердечко." }
+      ]
+    },
+    rolled: {
+      price: 7,
+      items: [
+        { name: "1. Strawberry Dream", desc: "Клубника • сливочная основа • белый шоколад" },
+        { name: "2. Choco Brownie", desc: "Шоколад • брауни • шоколадная крошка" },
+        { name: "3. Pistachio Cream", desc: "Фисташковая паста • сливки • дроблёные фисташки" },
+        { name: "4. Cookie Monster", desc: "Oreo • ваниль • шоколадный соус" },
+        { name: "5. Banana Split Roll", desc: "Банан • шоколад • карамель" },
+        { name: "6. Blue Magic", desc: "Blue Latte • белый шоколад • маршмеллоу" },
+        { name: "7. Raspberry Cheesecake", desc: "Чизкейк • малина • печенье" },
+        { name: "8. Coffee Caramel", desc: "Эспрессо • карамель • миндаль" },
+        { name: "9. Apple Pie", desc: "Яблоко • корица • карамель • вафельная крошка" }
+      ]
+    },
+    author: {
+      price: 6,
+      items: [
+        { name: "1. Полярная сова", desc: "Ванильное мороженое, голубика, белый шоколад, серебряные бусины, сахарная снежинка" },
+        { name: "2. Запретный лес", desc: "Фисташковое мороженое, лесной орех, карамель, съедобные цветы" },
+        { name: "3. Хогвартские теплицы", desc: "Страчателла, малиновый соус, мята" },
+        { name: "4. Полуночная библиотека", desc: "Шоколадное мороженое, брауни, шоколадный соус, леденцовая крошка" }
+      ]
+    },
+    desserts: {
+      price: 6,
+      items: [
+        { name: "Яблочный пирог", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
+        { name: "Пирог шоколад-банан", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
+        { name: "Шоколадный фондан", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
+        { name: "Классический брауни", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
+        { name: "Cinnamon Roll", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" },
+        { name: "Sticky Toffee Pudding", desc: "Подается с шариком мороженого на выбор (базово — ванильный)" }
+      ]
+    },
+    freakshakes: {
+      price: 9,
+      items: [
+        { name: "Экспеллиармус (вишня)", base: "Молочный коктейль с ванильным мороженым; вишнёвое пюре.", decor: "Шапка из кремчиз; кислая коктейльная вишня; мини-брауни; шоколадная вафельная трубочка; шоколадный и вишнёвый соусы; шоколадная стружка." },
+        { name: "Авифорс (тропикана)", base: "Ванильное мороженое; манговый сорбет; кокосовое молоко; пюре манго и маракуйи.", decor: "Взбитые сливки; свежий ананас; кокосовая стружка; мини-безе; карамельная вафельная трубочка; соус манго." },
+        { name: "Акцио (Ореховый)", base: "Мороженое «Фундук»; фисташковое мороженое; ореховая паста (лесной орех); молоко.", decor: "Взбитые сливки; карамелизированный фундук; фисташки; миндальные лепестки; карамельный соус; шоколадный соус; вафельная трубочка; крошка из печенья." },
+        { name: "Баубилиус (Кофе)", base: "Кофейное мороженое; двойной эспрессо; молоко; шоколадный сироп.", decor: "Кофейные взбитые сливки; шоколадные кофейные зёрна; мини-донат с шоколадной глазурью; шоколадная вафельная трубочка; шоколадная крошка; карамельный соус; печенье." },
+        { name: "Бомбарда (Кокакола)", base: "Айс-флоат: Coca-Cola, два больших шарика ванильного мороженого.", decor: "Шапка взбитых сливок; карамельный попкорн; леденцовая крошка; мармеладные бутылочки колы; шоколадная вафельная трубочка; карамельный соус по стенкам бокала." }
+      ]
+    },
+    hotdrinks: {
+      price: 6,
+      items: [
+        { name: "Affogato Classico", desc: "Эспрессо + шарик ванильного мороженого." },
+        { name: "Caramel Affogato", desc: "Эспрессо + солёная карамель + ванильное мороженое." },
+        { name: "Classic Chocolate", desc: "Густой горячий шоколад + ванильное мороженое." },
+        { name: "White Chocolate", desc: "Белый горячий шоколад + малиновое мороженое." },
+        { name: "Mint Chocolate", desc: "Горячий шоколад + мятное мороженое." },
+        { name: "Apple Pie Float", desc: "Горячий яблочный напиток с корицей + ванильное мороженое." },
+        { name: "Berry Delight", desc: "Горячий ягодный морс + пломбир." }
+      ]
+    },
+    classicdrinks: { price: defaultPrice, items: ["Эспрессо", "Латте", "Капучино", "Американо", "Чай (в ассортименте)", "Сок (в ассортименте)"] }
+  };
+
+  function renderGrid(containerId, categoryKey) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const cat = data[categoryKey];
+    
+    cat.items.forEach((item, index) => {
+      const id = `${categoryKey}_${index}`;
+      const itemName = typeof item === 'object' ? item.name : item;
+      store[id] = { name: itemName, price: cat.price, qty: 0, category: categoryKey };
+
+      const div = document.createElement('div');
+      
+      if (typeof item === 'object') {
+        div.className = 'menu-item-card';
+        div.innerHTML = `
+          <div class="menu-item-header">
+            <span class="item-title">${item.name}</span>
+            <span class="leader-dots"></span>
+            <span class="item-price">${cat.price} G</span>
+            <div class="qty-control">
+              <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+              <span class="qty-num" id="qty-${id}">0</span>
+              <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
+            </div>
+          </div>
+          <div class="menu-item-desc">${item.desc}</div>
+        `;
+      } else {
+        div.className = 'menu-row';
+        div.innerHTML = `
+          <span class="item-title">${item}</span>
+          <span class="leader-dots"></span>
+          <span class="item-price">${cat.price} G</span>
+          <div class="qty-control">
+            <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+            <span class="qty-num" id="qty-${id}">0</span>
+            <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
+          </div>
+        `;
+      }
+      container.appendChild(div);
+    });
+  }
+
+  function renderFreakshakes() {
+    const container = document.getElementById('container-freakshakes');
+    if (!container) return;
+    const cat = data.freakshakes;
+
+    cat.items.forEach((item, index) => {
+      const id = `freakshakes_${index}`;
+      store[id] = { name: item.name, price: cat.price, qty: 0, category: 'freakshakes' };
+
+      const div = document.createElement('div');
+      div.className = 'freakshake-card';
+      div.innerHTML = `
+        <div class="freakshake-top">
+          <span class="freakshake-name">${item.name}</span>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="item-price">${cat.price} G</span>
+            <div class="qty-control">
+              <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+              <span class="qty-num" id="qty-${id}">0</span>
+              <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="freakshake-sections">
+          <div>
+            <div class="fs-block-title">Основа:</div>
+            <div class="fs-block-content">${item.base}</div>
+          </div>
+          <div>
+            <div class="fs-block-title">Украшение:</div>
+            <div class="fs-block-content">${item.decor}</div>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // Рендер страниц
+  renderGrid('grid-classic', 'classic');
+  renderGrid('grid-berry', 'berry');
+  renderGrid('grid-nonclassic', 'nonclassic');
+  renderGrid('grid-sorbet', 'sorbet');
+  renderGrid('grid-sauces', 'sauces');
+  renderGrid('grid-nuts', 'nuts');
+  renderGrid('grid-crunch', 'crunch');
+  renderGrid('grid-fruits', 'fruits');
+  renderGrid('grid-decor', 'decor');
+
+  renderGrid('grid-waffles', 'waffles');
+  renderGrid('grid-rolled', 'rolled');
+  renderGrid('grid-author', 'author');
+  renderGrid('grid-desserts', 'desserts');
+
+  renderFreakshakes();
+  renderGrid('grid-hotdrinks', 'hotdrinks');
+  renderGrid('grid-classicdrinks', 'classicdrinks');
+
+  let currentPage = 1;
+
+  function setPage(pageNum) {
+    currentPage = pageNum;
+    document.querySelectorAll('.menu-page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page-${pageNum}`).classList.add('active');
+
+    document.getElementById('btn-prev').disabled = (currentPage === 1);
+    document.getElementById('btn-next').disabled = (currentPage === 3);
+    document.getElementById('page-indicator').textContent = `Стр. ${currentPage} из 3`;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function changePage(delta) {
+    let target = currentPage + delta;
+    if (target >= 1 && target <= 3) {
+      setPage(target);
+    }
+  }
+
+  function changeQty(id, delta) {
+    store[id].qty = Math.max(0, store[id].qty + delta);
+    const mainEl = document.getElementById(`qty-${id}`);
+    if (mainEl) mainEl.textContent = store[id].qty;
+    updateBadge();
+
+    if (document.getElementById('modal').classList.contains('active')) {
+      renderReceipt();
+    }
+  }
+
+  function updateBadge() {
+    let totalCount = 0;
+    for (let id in store) {
+      totalCount += store[id].qty;
+    }
+    const badge = document.getElementById('cart-badge');
+    if (totalCount > 0) {
+      badge.textContent = totalCount;
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  function applyPromo() {
+    const inputVal = document.getElementById('promo-input').value.trim().toUpperCase();
+    const msgEl = document.getElementById('promo-msg');
+
+    if (inputVal === 'БЛЕЙК100500') {
+      appliedPromoCode = 'БЛЕЙК100500';
+      msgEl.style.color = '#2d5a7b';
+      msgEl.textContent = 'Промокод успешно применен!';
+      renderReceipt();
+    } else {
+      appliedPromoCode = null;
+      msgEl.style.color = '#e07b96';
+      msgEl.textContent = 'Неверный промокод';
+      renderReceipt();
+    }
+  }
+
+  function renderReceipt() {
+    const receiptContainer = document.getElementById('receipt-items');
+    receiptContainer.innerHTML = '';
+    let subtotalPrice = 0;
+    let hasItems = false;
+    let freeItemApplied = false;
+
+    for (let id in store) {
+      if (store[id].qty > 0) {
+        hasItems = true;
+        let itemPrice = store[id].price;
+        let qty = store[id].qty;
+        let lineTotal = 0;
+
+        if (appliedPromoCode && !freeItemApplied) {
+          freeItemApplied = true;
+          if (qty > 1) {
+            lineTotal = (qty - 1) * itemPrice;
+            receiptContainer.innerHTML += `
+              <div class="receipt-row">
+                <div class="receipt-item-info">
+                  <span class="receipt-item-name">${store[id].name}</span>
+                  <span class="receipt-item-sub">${itemPrice} G x ${qty - 1} = ${lineTotal} G (+ 1 бесплатно по промокоду)</span>
+                </div>
+                <div class="receipt-controls">
+                  <div class="qty-control">
+                    <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+                    <span class="qty-num">${qty}</span>
+                    <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            lineTotal = 0;
+            receiptContainer.innerHTML += `
+              <div class="receipt-row">
+                <div class="receipt-item-info">
+                  <span class="receipt-item-name">${store[id].name}</span>
+                  <span class="receipt-item-sub" style="color:var(--pastel-pink-text);">Бесплатно (по промокоду)</span>
+                </div>
+                <div class="receipt-controls">
+                  <div class="qty-control">
+                    <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+                    <span class="qty-num">${qty}</span>
+                    <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          lineTotal = qty * itemPrice;
+          receiptContainer.innerHTML += `
+            <div class="receipt-row">
+              <div class="receipt-item-info">
+                <span class="receipt-item-name">${store[id].name}</span>
+                <span class="receipt-item-sub">${itemPrice} G x ${qty} = ${lineTotal} G</span>
+              </div>
+              <div class="receipt-controls">
+                <div class="qty-control">
+                  <button class="btn-qty" onclick="changeQty('${id}', -1)">-</button>
+                  <span class="qty-num">${qty}</span>
+                  <button class="btn-qty" onclick="changeQty('${id}', 1)">+</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        subtotalPrice += lineTotal;
+      }
+    }
+
+    const promoSection = document.getElementById('promo-section');
+    const tipsSection = document.getElementById('tips-section');
+    const payBtn = document.getElementById('btn-pay');
+
+    if (!hasItems) {
+      receiptContainer.innerHTML = '<div style="text-align:center; color:#888; margin: 25px 0; font-family:\'Cormorant Garamond\', serif; font-size: 16px;">Корзина пуста</div>';
+      promoSection.style.display = 'none';
+      tipsSection.style.display = 'none';
+      payBtn.style.display = 'none';
+      appliedPromoCode = null;
+      document.getElementById('promo-input').value = '';
+      document.getElementById('promo-msg').textContent = '';
+    } else {
+      promoSection.style.display = 'block';
+      tipsSection.style.display = 'flex';
+      payBtn.style.display = 'block';
+    }
+
+    let tipsVal = parseInt(document.getElementById('tips-input').value) || 0;
+    if (tipsVal < 0) tipsVal = 0;
+
+    let totalPrice = subtotalPrice + tipsVal;
+
+    document.getElementById('receipt-total-sum').textContent = `${totalPrice} G`;
+    document.getElementById('pay-btn-sum').textContent = totalPrice;
+  }
+
+  function openReceipt() {
+    renderReceipt();
+    document.getElementById('modal').classList.add('active');
+  }
+
+  function closeReceipt() {
+    document.getElementById('modal').classList.remove('active');
+  }
+
+  function processPayment() {
+    const items = [];
+    let subtotalPrice = 0;
+    let freeItemApplied = false;
+
+    for (let id in store) {
+      if (store[id].qty > 0) {
+        const q = store[id].qty;
+        const name = store[id].name;
+        const price = store[id].price;
+
+        if (appliedPromoCode && !freeItemApplied) {
+          freeItemApplied = true;
+          if (q > 1) {
+            items.push(`${name} x${q - 1} (+ ${name} x 1 по промокоду)`);
+            subtotalPrice += (q - 1) * price;
+          } else {
+            items.push(`${name} (по промокоду)`);
+          }
+        } else {
+          items.push(q > 1 ? `${name} x${q}` : name);
+          subtotalPrice += q * price;
+        }
+      }
+    }
+
+    if (items.length === 0) return;
+
+    let tipsVal = parseInt(document.getElementById('tips-input').value) || 0;
+    if (tipsVal < 0) tipsVal = 0;
+    if (tipsVal > 0) {
+      items.push(`Чаевые: ${tipsVal}G`);
+    }
+
+    let totalPrice = subtotalPrice + tipsVal;
+    const comment = items.join(', ');
+
+    const paymentUrl = `${BASE_PAY_URL}&to=${SELLER}&amount=${encodeURIComponent(totalPrice)}&comment=${encodeURIComponent(comment)}`;
+    window.open(paymentUrl, '_top');
+  }
+</script>
+
+</body>
+</html>
