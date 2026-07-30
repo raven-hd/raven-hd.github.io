@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fortescue's Ice-Cream Parlour — Меню</title>
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -429,7 +430,6 @@
     margin-bottom: 4px;
   }
 
-  /* Вкус фрикшейка теперь оформлен шрифтом Great Vibes */
   .fs-title-sub {
     font-family: "Great Vibes", cursive;
     font-size: 30px;
@@ -1096,6 +1096,7 @@
         { 
           name: "Экспеллиармус", 
           subtitle: "(вишня)",
+          image: "https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/freak1.png",
           baseTitle: "Основа",
           base: "Молочный коктейль с ванильным мороженым; вишнёвое пюре.", 
           decorTitle: "Украшение",
@@ -1104,6 +1105,7 @@
         { 
           name: "Авифорс", 
           subtitle: "(тропикана)",
+          image: "https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/freak2.png",
           baseTitle: "Основа",
           base: "Ванильное мороженое; манговый сорбет; кокосовое молоко; пюре манго и маракуйи.", 
           decorTitle: "Украшение",
@@ -1112,6 +1114,7 @@
         { 
           name: "Акцио", 
           subtitle: "(ореховый)",
+          image: "https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/freak4.png",
           baseTitle: "Основа",
           base: "Мороженое «Фундук»; фисташковое мороженое; ореховая паста (лесной орех); молоко.", 
           decorTitle: "Украшение",
@@ -1120,6 +1123,7 @@
         { 
           name: "Баубилиус", 
           subtitle: "(кофе)",
+          image: "https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/freak3.png",
           baseTitle: "Основа",
           base: "Кофейное мороженое; двойной эспрессо; молоко; шоколадный сироп.", 
           decorTitle: "Украшение",
@@ -1128,6 +1132,7 @@
         { 
           name: "Бомбарда", 
           subtitle: "(кока-кола)",
+          image: "https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/freak5.png",
           baseTitle: "Основа",
           base: "Айс-флоат: Coca-Cola, два больших шарика ванильного мороженого.", 
           decorTitle: "Украшение",
@@ -1217,7 +1222,7 @@
       slideDiv.innerHTML = `
         <div class="fs-header-centered">
           <div class="fs-title-main great-vibes-regular">${item.name}</div>
-          <div class="fs-title-sub">${item.subtitle}</div>
+          <div class="fs-title-sub great-vibes-regular">${item.subtitle}</div>
         </div>
 
         <div class="fs-stage-layout">
@@ -1242,7 +1247,7 @@
               <path d="M 385 298 Q 335 328 298 293 Q 276 265 258 258" stroke="#8ab7da" stroke-width="1.4" stroke-dasharray="2.5 4" stroke-linecap="round" />
               <circle cx="385" cy="298" r="2.3" fill="#2d5a7b" />
             </svg>
-            <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/fortescues/freak1.png" alt="${item.name}">
+            <img src="${item.image}" alt="${item.name}">
           </div>
 
           <div class="fs-side-note right-note">
@@ -1366,6 +1371,11 @@
       msgEl.style.color = '#2d5a7b';
       msgEl.textContent = 'Промокод успешно применен!';
       renderReceipt();
+    } else if (inputVal === 'LUMOS') {
+      appliedPromoCode = 'LUMOS';
+      msgEl.style.color = '#2d5a7b';
+      msgEl.textContent = 'Праздничный промокод активирован!';
+      renderReceipt();
     } else {
       appliedPromoCode = null;
       msgEl.style.color = '#e07b96';
@@ -1388,7 +1398,7 @@
         let qty = store[id].qty;
         let lineTotal = 0;
 
-        if (appliedPromoCode && !freeItemApplied) {
+        if (appliedPromoCode === 'БЛЕЙК100500' && !freeItemApplied) {
           freeItemApplied = true;
           if (qty > 1) {
             lineTotal = (qty - 1) * itemPrice;
@@ -1447,6 +1457,22 @@
       }
     }
 
+    // Добавление именинного товара «Торт в рожке» при вводе промокода LUMOS
+    if (appliedPromoCode === 'LUMOS') {
+      hasItems = true;
+      receiptContainer.innerHTML += `
+        <div class="receipt-row">
+          <div class="receipt-item-info">
+            <span class="receipt-item-name">Торт в рожке</span>
+            <span class="receipt-item-sub" style="color:var(--pastel-pink-text);">Именинный подарок (0 G)</span>
+          </div>
+          <div class="receipt-controls">
+            <span style="font-family:'Cormorant Garamond', serif; font-size:15px; font-weight:700; color:var(--pastel-blue-dark);">1 шт</span>
+          </div>
+        </div>
+      `;
+    }
+
     const promoSection = document.getElementById('promo-section');
     const tipsSection = document.getElementById('tips-section');
     const payBtn = document.getElementById('btn-pay');
@@ -1494,7 +1520,7 @@
         const name = store[id].name;
         const price = store[id].price;
 
-        if (appliedPromoCode && !freeItemApplied) {
+        if (appliedPromoCode === 'БЛЕЙК100500' && !freeItemApplied) {
           freeItemApplied = true;
           if (q > 1) {
             items.push(`${name} x${q - 1} (+ ${name} x 1 по промокоду)`);
@@ -1507,6 +1533,10 @@
           subtotalPrice += q * price;
         }
       }
+    }
+
+    if (appliedPromoCode === 'LUMOS') {
+      items.push('Торт в рожке (именинный подарок) x1');
     }
 
     if (items.length === 0) return;
@@ -1600,6 +1630,7 @@
     card.style.webkitClipPath = `path('${outerPath}')`;
 
     if (svgEl) {
+      svgel = svgEl;
       svgEl.setAttribute('width', W);
       svgEl.setAttribute('height', H);
       svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
