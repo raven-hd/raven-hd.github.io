@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бланк заказа букета — Rich Peach</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'SpecialEliteCyrillic';
+            src: url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/main/gift/huff/2026/specialelite-cyrillic.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'MVBolic';
+            src: url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/richpeach/MVBOLICY.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --bg-color: #F1E6D0;
+            --text-print: #3F3027;
+            --line-color: #5A4633;
+            --ink-color: #162436;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #35291F;
+            color: var(--text-print);
+            font-family: 'Cormorant Garamond', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .sheet {
+            position: relative;
+            width: 100%;
+            max-width: 820px;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(90, 70, 51, 0.04) 1px, transparent 1px),
+                radial-gradient(circle at 70% 80%, rgba(50, 35, 20, 0.03) 1px, transparent 1px),
+                radial-gradient(circle at 40% 50%, rgba(120, 95, 70, 0.025) 2px, transparent 2px),
+                radial-gradient(circle at 90% 15%, rgba(60, 40, 20, 0.04) 1px, transparent 1px),
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25) 0%, transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(170, 145, 120, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 15% 85%, rgba(150, 125, 95, 0.15) 0%, transparent 45%),
+                repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(90, 70, 51, 0.008) 4px, rgba(90, 70, 51, 0.008) 8px),
+                radial-gradient(ellipse at center, rgba(241, 230, 208, 0) 50%, rgba(185, 160, 130, 0.35) 100%);
+            padding: 65px 48px 55px 52px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55), inset 0 0 90px rgba(110, 85, 60, 0.2);
+            border: 1.2px solid rgba(90, 70, 51, 0.75);
+            border-top-width: 0.9px;
+            border-right-width: 1.4px;
+        }
+
+        .sheet::before {
+            content: '';
+            position: absolute;
+            top: 10px; left: 14px; right: 11px; bottom: 15px;
+            border: 2px solid var(--line-color);
+            border-image: linear-gradient(to right, rgba(90,70,51,0.65), rgba(90,70,51,0.85) 50%, rgba(90,70,51,0.55)) 1;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .sheet::after {
+            content: '';
+            position: absolute;
+            top: 13px; left: 11px; right: 14px; bottom: 12px;
+            border: 1px solid var(--line-color);
+            border-image: linear-gradient(to bottom, rgba(90,70,51,0.3), rgba(90,70,51,0.45) 70%, rgba(90,70,51,0.25)) 1;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-left: 4px; 
+        }
+
+        .logo-img {
+            max-width: 388px;
+            height: auto;
+            margin-bottom: 8px;
+            filter: contrast(1.155) saturate(1.1) drop-shadow(0.5px 0.5px 0.6px rgba(63, 48, 39, 0.4));
+            mix-blend-mode: multiply;
+            opacity: 0.96;
+        }
+
+        .subtitle-shop {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.2em;
+            color: var(--line-color);
+            margin-bottom: 18px;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            width: 146px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(90,70,51,0.2), rgba(90,70,51,0.6) 50%, rgba(90,70,51,0.25));
+            margin: 0 auto 18px auto;
+            opacity: 0.55;
+        }
+
+        h1 {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 1.4rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(63, 48, 39, 0.82);
+            margin-bottom: 8px;
+            filter: drop-shadow(0.4px 0.4px 0.3px rgba(63, 48, 39, 0.2));
+        }
+
+        h1 span.faded {
+            opacity: 0.72;
+        }
+        h1 span.bold {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .order-headers {
+            display: grid;
+            grid-template-columns: 28px 1fr 1fr 65px 24px;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-left: 2px;
+        }
+
+        .global-field-label {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.73rem;
+            text-transform: uppercase;
+            color: var(--text-print);
+            letter-spacing: 0.05em;
+            opacity: 0.75;
+            filter: drop-shadow(0.4px 0.4px 0.3px rgba(63, 48, 39, 0.25));
+        }
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            margin-bottom: 20px;
+        }
+
+        .add-flower-container {
+            text-align: right;
+            margin-bottom: 25px;
+            padding-right: 5px;
+        }
+
+        .add-flower-link {
+            font-family: 'MVBolic', cursive;
+            font-size: 1.0rem;
+            color: rgba(63, 48, 39, 0.85);
+            text-decoration: none;
+            border-bottom: 0.8px dashed rgba(63, 48, 39, 0.4);
+            cursor: pointer;
+            transition: color 0.2s ease, opacity 0.2s ease;
+            opacity: 0.9;
+            text-shadow: 0 0 0.3px rgba(63, 48, 39, 0.4);
+        }
+
+        .add-flower-link:hover {
+            color: rgba(63, 48, 39, 1);
+            opacity: 1;
+        }
+
+        .certificate-section {
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            border: 0.8px dashed rgba(90, 70, 51, 0.45);
+            background: rgba(90, 70, 51, 0.02);
+        }
+
+        .certificate-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .certificate-label {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            color: var(--text-print);
+            letter-spacing: 0.05em;
+            opacity: 0.85;
+            white-space: nowrap;
+            filter: drop-shadow(0.4px 0.4px 0.3px rgba(63, 48, 39, 0.25));
+        }
+
+        .certificate-input {
+            font-family: 'MVBolic', cursive;
+            font-size: 1.0rem;
+            color: var(--ink-color);
+            background: transparent;
+            border: none;
+            border-bottom: 0.5px solid rgba(90, 70, 51, 0.75);
+            border-image: linear-gradient(90deg, rgba(90,70,51,0.25), rgba(90,70,51,0.9) 20%, rgba(90,70,51,0.9) 80%, rgba(90,70,51,0.25)) 1;
+            padding: 1px 4px;
+            flex-grow: 1;
+            min-width: 80px;
+            outline: none;
+            border-radius: 0;
+            text-shadow: 0 0 0.5px rgba(22, 36, 54, 0.4);
+            transform: rotate(-0.5deg);
+        }
+
+        .certificate-btn {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.73rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-print);
+            background: transparent;
+            border: 1px solid var(--line-color);
+            padding: 3px 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .certificate-btn:hover {
+            background-color: rgba(90, 70, 51, 0.08);
+        }
+
+        .certificate-msg {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.73rem;
+            letter-spacing: 0.03em;
+            margin-top: 4px;
+            min-height: 16px;
+            color: var(--text-print);
+            opacity: 0.85;
+        }
+
+        .order-row {
+            display: grid;
+            grid-template-columns: 28px 1fr 1fr 65px 24px;
+            gap: 15px;
+            align-items: end;
+            position: relative;
+            padding-bottom: 0;
+            opacity: 0;
+            transform: translateY(3px);
+            animation: inkFadeIn 0.25s ease forwards;
+        }
+
+        @keyframes inkFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .row-number {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.78rem;
+            color: rgba(90, 70, 51, 0.65);
+            text-align: left;
+            padding-bottom: 4px;
+            letter-spacing: 0.03em;
+            padding-left: 2px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .handwritten-input, .handwritten-select {
+            font-family: 'MVBolic', cursive;
+            font-size: 1.05rem;
+            color: var(--ink-color);
+            background: transparent;
+            border: none;
+            border-bottom: 0.5px solid rgba(90, 70, 51, 0.75);
+            border-image: linear-gradient(90deg, rgba(90,70,51,0.25), rgba(90,70,51,0.9) 15%, rgba(90,70,51,0.9) 85%, rgba(90,70,51,0.25)) 1;
+            padding: 2px 4px;
+            width: 100%;
+            outline: none;
+            border-radius: 0;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            text-shadow: 0 0 0.5px rgba(22, 36, 54, 0.4);
+            transform: rotate(-0.5deg);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: clip;
+        }
+
+        .handwritten-select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'><polygon points='0,0 8,0 4,5' fill='%235A4633' opacity='0.75'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 4px center;
+            padding-right: 16px;
+            text-overflow: clip;
+        }
+
+        .handwritten-select option {
+            background-color: var(--bg-color);
+            color: var(--text-print);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+        }
+
+        .handwritten-input::-webkit-inner-spin-button,
+        .handwritten-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .handwritten-input[type=number] {
+            -moz-appearance: textfield;
+            text-align: center;
+        }
+
+        .remove-row {
+            font-family: 'MVBolic', cursive;
+            font-size: 1.35rem;
+            font-weight: bold;
+            color: rgba(63, 48, 39, 0.85);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding-bottom: 4px;
+            text-align: center;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+            text-shadow: 0 0 0.3px rgba(63, 48, 39, 0.4);
+        }
+
+        .remove-row:hover {
+            opacity: 1;
+            color: rgba(63, 48, 39, 1);
+        }
+
+        .wishes-section {
+            margin-bottom: 20px;
+        }
+
+        .wishes-label {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-print);
+            margin-bottom: 8px;
+            display: block;
+            letter-spacing: 0.05em;
+            opacity: 0.85;
+            filter: drop-shadow(0.4px 0.4px 0.3px rgba(63, 48, 39, 0.25));
+        }
+
+        .wishes-textarea {
+            font-family: 'MVBolic', cursive;
+            font-size: 1.1rem;
+            color: var(--ink-color);
+            background: transparent;
+            border: none;
+            border-bottom: 0.5px solid rgba(90, 70, 51, 0.75);
+            border-image: linear-gradient(90deg, rgba(90,70,51,0.3), rgba(90,70,51,0.85) 20%, rgba(90,70,51,0.85) 80%, rgba(90,70,51,0.3)) 1;
+            width: 100%;
+            resize: none;
+            overflow: hidden;
+            min-height: 40px;
+            outline: none;
+            line-height: 1.8;
+            text-shadow: 0 0 0.5px rgba(22, 36, 54, 0.4);
+        }
+
+        .summary-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 30px;
+            padding-right: 5px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .summary-label {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.73rem;
+            text-transform: uppercase;
+            color: var(--text-print);
+            letter-spacing: 0.05em;
+            opacity: 0.75;
+            filter: drop-shadow(0.4px 0.4px 0.3px rgba(63, 48, 39, 0.25));
+        }
+
+        .summary-value {
+            font-family: 'MVBolic', cursive;
+            font-size: 1.05rem;
+            color: var(--ink-color);
+            text-shadow: 0 0 0.5px rgba(22, 36, 54, 0.4);
+            border-bottom: 0.5px solid rgba(90, 70, 51, 0.75);
+            border-image: linear-gradient(90deg, rgba(90,70,51,0.25), rgba(90,70,51,0.9) 15%, rgba(90,70,51,0.9) 85%, rgba(90,70,51,0.25)) 1;
+            padding: 2px 4px;
+            min-width: 90px;
+            text-align: right;
+            transform: rotate(-0.5deg);
+        }
+
+        .currency {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.73rem;
+            letter-spacing: 0.05em;
+            color: var(--text-print);
+            opacity: 0.85;
+        }
+
+        .submit-container {
+            text-align: center;
+        }
+
+        .submit-button {
+            font-family: 'SpecialEliteCyrillic', monospace;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-print);
+            background: transparent;
+            border: 1px solid var(--line-color);
+            padding: 11px 22px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 280px;
+            transition: background-color 0.25s ease, color 0.25s ease, filter 0.25s ease;
+            filter: drop-shadow(0.5px 0.5px 0.4px rgba(63, 48, 39, 0.3));
+        }
+
+        .submit-button:hover {
+            background-color: rgba(90, 70, 51, 0.08);
+            color: #2b211a;
+            filter: contrast(1.1) drop-shadow(0.5px 0.5px 0.6px rgba(63, 48, 39, 0.45));
+        }
+
+        @media (max-width: 650px) {
+            .sheet {
+                padding: 30px 18px;
+            }
+            .order-row {
+                grid-template-columns: 24px 1fr;
+                grid-template-rows: auto auto auto;
+                row-gap: 8px;
+                padding-bottom: 12px;
+                border-bottom: 0.5px dashed rgba(90, 70, 51, 0.25);
+            }
+            .order-headers {
+                display: none;
+            }
+            .row-number {
+                grid-row: span 3;
+                align-self: center;
+            }
+            .remove-row {
+                grid-column: span 2;
+                text-align: right;
+                padding-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sheet">
+        <header>
+            <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/richpeach/img/log_blank.png" alt="Rich Peach" class="logo-img">
+            <div class="subtitle-shop">Цветочная лавка</div>
+            <div class="divider"></div>
+            <h1>Бл<span class="faded">а</span>н<span class="bold">к</span> зак<span class="faded">а</span>за букет<span class="bold">а</span></h1>
+        </header>
+
+        <form id="bouquet-form">
+            <div class="order-headers">
+                <div></div>
+                <div class="global-field-label">Вид цветка</div>
+                <div class="global-field-label">Оттенок</div>
+                <div class="global-field-label">Кол-во</div>
+                <div></div>
+            </div>
+
+            <div class="order-list" id="order-list">
+                <!-- Динамические строки заказа -->
+            </div>
+
+            <div class="add-flower-container">
+                <span class="add-flower-link" id="add-flower-btn">+ добавить цветок</span>
+            </div>
+
+            <div class="wishes-section">
+                <label class="wishes-label" for="wishes">Особые пожелания к букету:</label>
+                <textarea id="wishes" class="wishes-textarea" rows="1" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+            </div>
+
+            <div class="certificate-section">
+                <div class="certificate-row">
+                    <span class="certificate-label">Сертификат Rich Peach</span>
+                    <input type="text" id="certificate-input" class="certificate-input">
+                    <button type="button" id="check-certificate-btn" class="certificate-btn">проверить</button>
+                </div>
+                <div id="certificate-msg" class="certificate-msg"></div>
+            </div>
+
+            <div class="summary-section">
+                <div class="summary-row">
+                    <span class="summary-label">Стоимость цветов:</span>
+                    <span class="summary-value" id="flowers-sum-display">0 <span class="currency">G</span></span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Сборка букета:</span>
+                    <span class="summary-value" id="assembly-sum-display">0 <span class="currency">G</span></span>
+                </div>
+                <div class="summary-row" id="discount-row" style="display: none;">
+                    <span class="summary-label">Скидка:</span>
+                    <span class="summary-value" id="discount-sum-display">0 <span class="currency">G</span></span>
+                </div>
+                <div class="summary-row" id="total-row" style="display: none;">
+                    <span class="summary-label">Итого к оплате:</span>
+                    <span class="summary-value" id="total-sum-display">0 <span class="currency">G</span></span>
+                </div>
+            </div>
+
+            <div class="submit-container">
+                <button type="submit" class="submit-button">Передать заказ</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const SELLER = '217';
+        const BASE_PAY_URL = 'https://hogsmeade.dhog.org/ucp.php?i=-hogsmeade-bank-ucp-main_module&mode=personal_transactions';
+
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2P5LgHMLSsK92dat7BaZbr4T16Ydvf0Oblw8a_7S_z_jYQfyL7oHJdXUBOTiLzwZWdQ/exec';
+
+        let appliedDiscount = 0;
+        let verifiedCertificateCode = '';
+
+        const fullPalette = [
+            "Белый", "Кремовый", "Пудровый", "Терракотовый", 
+            "Горчичный", "Винный", "Пыльная роза", "Лавандовый", "Серо-голубой"
+        ];
+
+        const flowersDatabase = [
+            { name: "Роза(классическая)", shades: fullPalette, price: 4 },
+            { name: "Роза(кустовая)", shades: fullPalette, price: 4 },
+            { name: "Роза(пионовидная)", shades: fullPalette, price: 5 },
+            { name: "Хризантема(одноголовая)", shades: fullPalette, price: 3 },
+            { name: "Хризантема(кустовая)", shades: fullPalette, price: 3 },
+            { name: "Гвоздика(одноголовая)", shades: fullPalette, price: 3 },
+            { name: "Гвоздика(кустовая)", shades: fullPalette, price: 3 },
+            { name: "Тюльпан", shades: fullPalette, price: 3 },
+            { name: "Альстромерия", shades: fullPalette, price: 3 },
+            { name: "Эустома", shades: fullPalette, price: 4 },
+            { name: "Фрезия", shades: fullPalette, price: 3 },
+            { name: "Гербера", shades: ["Белый", "Кремовый", "Пудровый", "Терракотовый", "Горчичный", "Винный", "Пыльная роза"], price: 3 },
+            { name: "Пион", shades: ["Белый", "Кремовый", "Пудровый", "Терракотовый", "Горчичный", "Винный", "Пыльная роза"], price: 5 },
+            { name: "Ранункулюс", shades: ["Белый", "Кремовый", "Пудровый", "Терракотовый", "Горчичный", "Винный", "Пыльная роза"], price: 5 },
+            { name: "Лилия(азиатская)", shades: ["Белый", "Кремовый", "Пудровый", "Терракотовый", "Горчичный", "Пыльная роза"], price: 5 },
+            { name: "Лилия(восточная)", shades: ["Белый", "Кремовый", "Пудровый", "Пыльная роза", "Винный"], price: 5 },
+            { name: "Гортензия", shades: ["Белый", "Кремовый", "Пудровый", "Пыльная роза", "Лавандовый", "Серо-голубой"], price: 6 },
+            { name: "Орхидея", shades: ["Белый", "Пыльная роза", "Лавандовый", "Горчичный", "Серо-голубой"], price: 6 },
+            { name: "Калла", shades: ["Белый", "Кремовый", "Пыльная роза", "Винный", "Горчичный"], price: 5 },
+            { name: "Ромашка(садовая)", shades: ["Белый", "Кремовый", "Пудровый"], price: 2 },
+            { name: "Гипсофила", shades: ["Белый", "Кремовый", "Пудровый", "Лавандовый"], price: 2 },
+
+            { name: "Эвкалипт", shades: ["натуральная зелень"], price: 1 },
+            { name: "Рускус", shades: ["натуральная зелень"], price: 1 },
+            { name: "Питтоспорум", shades: ["натуральная зелень"], price: 1 },
+
+            { name: "Подсолнух (сезонный)", shades: ["Горчичный", "Терракотовый"], price: 6 },
+            { name: "Гладиолус (сезонный)", shades: fullPalette, price: 3 },
+            { name: "Дельфиниум (сезонный)", shades: ["Белый", "Кремовый", "Пудровый", "Лавандовый", "Серо-голубой"], price: 4 },
+            { name: "Мак (сезонный)", shades: ["Белый", "Кремовый", "Пудровый", "Терракотовый", "Винный", "Пыльная роза"], price: 3 },
+            { name: "Лаванда (сезонная)", shades: ["Белый", "Лавандовый"], price: 2 },
+            { name: "Васильки (полевой микс) (сезонный)", shades: ["Белый", "Пыльная роза", "Лавандовый", "Серо-голубой"], price: 2 },
+            { name: "Космея (сезонная)", shades: ["Белый", "Пудровый", "Пыльная роза", "Винный", "Горчичный", "Терракотовый"], price: 2 }
+        ];
+
+        const orderList = document.getElementById('order-list');
+        const addFlowerBtn = document.getElementById('add-flower-btn');
+        const flowersSumDisplay = document.getElementById('flowers-sum-display');
+        const assemblySumDisplay = document.getElementById('assembly-sum-display');
+        const discountRow = document.getElementById('discount-row');
+        const discountSumDisplay = document.getElementById('discount-sum-display');
+        const totalRow = document.getElementById('total-row');
+        const totalSumDisplay = document.getElementById('total-sum-display');
+        
+        const arabicNumerals = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"];
+
+        function updateRowNumbers() {
+            const rows = orderList.querySelectorAll('.order-row');
+            rows.forEach((row, index) => {
+                const numEl = row.querySelector('.row-number');
+                if (numEl) {
+                    numEl.textContent = arabicNumerals[index] ? arabicNumerals[index] + '.' : (index + 1) + '.';
+                }
+            });
+            calculateTotals();
+        }
+
+        function calculateAssemblyFee(flowerStemsCount) {
+            if (flowerStemsCount <= 1) {
+                return 0; 
+            } else if (flowerStemsCount <= 7) {
+                return 4; 
+            } else if (flowerStemsCount <= 15) {
+                return 7; 
+            } else if (flowerStemsCount <= 25) {
+                return 10; 
+            } else {
+                return 14; 
+            }
+        }
+
+        function calculateTotals() {
+            let flowersSubtotal = 0;
+            let totalFlowerStemsCount = 0; 
+            const greenItems = ["Эвкалипт", "Рускус", "Питтоспорум"];
+            const rows = orderList.querySelectorAll('.order-row');
+            
+            rows.forEach(row => {
+                const flowerSelect = row.querySelector('.handwritten-select');
+                const qtyInput = row.querySelector('input[type="number"]');
+                
+                if (flowerSelect && flowerSelect.value && qtyInput) {
+                    const found = flowersDatabase.find(f => f.name === flowerSelect.value);
+                    if (found) {
+                        const qty = parseInt(qtyInput.value) || 0;
+                        if (qty > 0) {
+                            flowersSubtotal += found.price * qty;
+                            
+                            if (!greenItems.includes(found.name)) {
+                                totalFlowerStemsCount += qty;
+                            }
+                        }
+                    }
+                }
+            });
+
+            const assemblyFee = calculateAssemblyFee(totalFlowerStemsCount);
+            let rawTotal = flowersSubtotal + assemblyFee;
+            
+            let finalTotal = rawTotal;
+            if (appliedDiscount > 0) {
+                finalTotal = Math.max(0, rawTotal - appliedDiscount);
+                discountRow.style.display = 'flex';
+                totalRow.style.display = 'flex';
+                discountSumDisplay.innerHTML = `${appliedDiscount} <span class="currency">G</span>`;
+                totalSumDisplay.innerHTML = `${finalTotal} <span class="currency">G</span>`;
+            } else {
+                discountRow.style.display = 'none';
+                totalRow.style.display = 'none';
+            }
+
+            flowersSumDisplay.innerHTML = `${flowersSubtotal} <span class="currency">G</span>`;
+            assemblySumDisplay.innerHTML = `${assemblyFee} <span class="currency">G</span>`;
+
+            return { flowersSubtotal, assemblyFee, finalTotal };
+        }
+
+        function createFlowerRow() {
+            const row = document.createElement('div');
+            row.className = 'order-row';
+
+            const numDiv = document.createElement('div');
+            numDiv.className = 'row-number';
+            row.appendChild(numDiv);
+
+            const flowerGroup = document.createElement('div');
+            flowerGroup.className = 'field-group';
+            
+            const flowerSelect = document.createElement('select');
+            flowerSelect.className = 'handwritten-select';
+            
+            const defaultFlowerOption = document.createElement('option');
+            defaultFlowerOption.value = '';
+            defaultFlowerOption.textContent = '— выберите —';
+            defaultFlowerOption.disabled = true;
+            defaultFlowerOption.selected = true;
+            flowerSelect.appendChild(defaultFlowerOption);
+
+            flowersDatabase.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item.name;
+                opt.textContent = item.name;
+                flowerSelect.appendChild(opt);
+            });
+
+            flowerGroup.appendChild(flowerSelect);
+            row.appendChild(flowerGroup);
+
+            const shadeGroup = document.createElement('div');
+            shadeGroup.className = 'field-group';
+            
+            const shadeSelect = document.createElement('select');
+            shadeSelect.className = 'handwritten-select';
+            
+            const defaultShadeOption = document.createElement('option');
+            defaultShadeOption.value = '';
+            defaultShadeOption.textContent = '— сначала вид —';
+            defaultShadeOption.disabled = true;
+            defaultShadeOption.selected = true;
+            shadeSelect.appendChild(defaultShadeOption);
+            shadeSelect.disabled = true;
+
+            shadeGroup.appendChild(shadeSelect);
+            row.appendChild(shadeGroup);
+
+            const qtyGroup = document.createElement('div');
+            qtyGroup.className = 'field-group';
+            
+            const qtyInput = document.createElement('input');
+            qtyInput.type = 'number';
+            qtyInput.min = '1';
+            qtyInput.value = '1';
+            qtyInput.className = 'handwritten-input';
+
+            qtyGroup.appendChild(qtyInput);
+            row.appendChild(qtyGroup);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'remove-row';
+            removeBtn.textContent = '×';
+            removeBtn.title = 'Удалить позицию';
+            
+            removeBtn.addEventListener('click', () => {
+                row.style.transition = 'opacity 0.2s ease';
+                row.style.opacity = '0';
+                setTimeout(() => {
+                    row.remove();
+                    updateRowNumbers();
+                }, 200);
+            });
+            row.appendChild(removeBtn);
+
+            flowerSelect.addEventListener('change', () => {
+                const selectedName = flowerSelect.value;
+                const found = flowersDatabase.find(f => f.name === selectedName);
+                
+                shadeSelect.innerHTML = '';
+                shadeSelect.disabled = false;
+
+                if (found) {
+                    found.shades.forEach(shade => {
+                        const opt = document.createElement('option');
+                        opt.value = shade;
+                        opt.textContent = shade;
+                        shadeSelect.appendChild(opt);
+                    });
+                }
+                calculateTotals();
+            });
+
+            shadeSelect.addEventListener('change', calculateTotals);
+            qtyInput.addEventListener('input', calculateTotals);
+
+            orderList.appendChild(row);
+            updateRowNumbers();
+        }
+
+        function resetForm() {
+            orderList.innerHTML = '';
+            document.getElementById('wishes').value = '';
+            document.getElementById('wishes').style.height = '';
+            document.getElementById('certificate-input').value = '';
+            document.getElementById('certificate-msg').textContent = '';
+            appliedDiscount = 0;
+            verifiedCertificateCode = '';
+            createFlowerRow();
+        }
+
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                resetForm();
+            }
+        });
+
+        createFlowerRow();
+
+        addFlowerBtn.addEventListener('click', () => {
+            createFlowerRow();
+        });
+
+        document.getElementById('check-certificate-btn').addEventListener('click', () => {
+            const codeInput = document.getElementById('certificate-input');
+            const msgEl = document.getElementById('certificate-msg');
+            const code = codeInput.value.trim();
+
+            if (!code) {
+                msgEl.textContent = 'Введите номер.';
+                return;
+            }
+
+            msgEl.textContent = 'Проверка...';
+
+            fetch(`${APPS_SCRIPT_URL}?code=${encodeURIComponent(code)}`)
+                .then(response => response.json())
+				.then(data => {
+					if (data.valid) {
+						appliedDiscount = data.discount;
+						verifiedCertificateCode = code;
+
+						msgEl.textContent = `Скидка ${appliedDiscount}G применена.`;
+
+						calculateTotals();
+					} else {
+						appliedDiscount = 0;
+						verifiedCertificateCode = '';
+
+						msgEl.textContent = `${data.message || 'Сертификат недействителен.'}`;
+
+						calculateTotals();
+					}
+				})
+                .catch(error => {
+                    msgEl.textContent = 'Ошибка проверки.';
+                });
+        });
+
+        document.getElementById('bouquet-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const items = [];
+            const rows = orderList.querySelectorAll('.order-row');
+            
+            rows.forEach((row) => {
+                const flowerSelect = row.querySelector('.handwritten-select');
+                const shadeSelects = row.querySelectorAll('.handwritten-select');
+                const shadeSelect = shadeSelects[1];
+                const qtyInput = row.querySelector('input[type="number"]');
+
+                if (flowerSelect && flowerSelect.value) {
+                    const flowerName = flowerSelect.value;
+                    const shade = shadeSelect ? shadeSelect.value : '';
+                    const qty = qtyInput ? qtyInput.value : '1';
+                    
+                    let itemDesc = `${flowerName}`;
+                    if (shade && shade !== '— сначала вид —') {
+                        itemDesc += ` (${shade})`;
+                    }
+                    itemDesc += ` x${qty}`;
+                    items.push(itemDesc);
+                }
+            });
+
+            if (items.length === 0) {
+                alert('Пожалуйста, добавьте хотя бы один цветок в букет.');
+                return;
+            }
+
+            const { flowersSubtotal, assemblyFee, finalTotal } = calculateTotals();
+
+            if (assemblyFee > 0) {
+                items.push(`Сборка букета: ${assemblyFee}G`);
+            }
+
+            if (appliedDiscount > 0 && verifiedCertificateCode) {
+                items.push(`Сертификат (${verifiedCertificateCode}): -${appliedDiscount}G`);
+            }
+
+            const wishes = document.getElementById('wishes').value.trim();
+            if (wishes) {
+                items.push(`Пожелания: ${wishes}`);
+            }
+
+            const comment = items.join(', ');
+
+            const paymentUrl = `${BASE_PAY_URL}&to=${SELLER}&amount=${encodeURIComponent(finalTotal)}&comment=${encodeURIComponent(comment)}`;
+            
+            resetForm();
+
+            window.open(paymentUrl, '_top');
+        });
+    </script>
+</body>
+</html>
