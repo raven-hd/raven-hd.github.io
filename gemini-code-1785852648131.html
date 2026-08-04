@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная — Башня Когтеврана</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <style>
+        :root {
+            --gold:   #BA9868;
+            --gold2:  #EBCEA7;
+            --navy:   #15273F;
+            --navy2:  #23385A;
+            --navy3:  #1a2d4a;
+            --text:   #CCCCCC;
+            --text2:  #8fa8c0;
+            --border: #404A5B;
+            --outline:#2E3952;
+            --speed:  0.2s;
+        }
+
+        @font-face {
+            font-family: 'Romul';
+            src: url('https://drive.dhog.org/rave/fonts/Romul.woff2') format('woff2'),
+                 url('https://drive.dhog.org/rave/fonts/Romul.woff') format('woff');
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'BebasNeue';
+            src: url('https://raven-hd.github.io/feather/font/BebasNeue-Bold.otf') format('opentype');
+        }
+        @font-face {
+            font-family: 'SpecialElite';
+            src: url('https://raven-hd.github.io/feather/font/specialelite-cyrillic.ttf') format('truetype');
+        }
+
+        *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
+
+        body {
+            background-image: url('https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/background.jpg');
+            background-repeat: repeat;
+            background-position: top left;
+            background-attachment: fixed;
+            font-family: "Open Sans","Segoe UI",Tahoma,sans-serif;
+            font-size: 14px;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            color: var(--text);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1066px;
+            min-width: 320px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
+        }
+
+        .outer-border {
+            background: var(--navy);
+            padding: 14px;
+            border: 40px solid transparent;
+            border-image: url('https://drive.dhog.org/rave/images/border.svg') 40 40 40 40 / 40px 40px 40px 40px stretch;
+        }
+
+        /* ── BANNER ── */
+        .banner-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .banner {
+            width: 100%;
+            max-width: 1010px;
+            height: auto;
+            aspect-ratio: 1010 / 315;
+            position: relative;
+            overflow: hidden;
+        }
+        .banner-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        .banner-overlay {
+            position: absolute;
+            top:0; left:0;
+            width:100%; height:100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 2;
+        }
+        .banner-frame {
+            position: absolute;
+            top:0; left:0;
+            width:100%; height:100%;
+            border: 30px solid transparent;
+            border-image: url('https://drive.dhog.org/rave/images/inner-border.svg') 30 30 30 30 / 30px 30px 30px 30px stretch;
+            box-sizing: border-box;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .banner-title {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            font-family: 'Romul', serif;
+            font-size: clamp(18px, 3.5vw, 26px);
+            color: var(--gold);
+            text-shadow:
+                -2px -2px 0 var(--outline),
+                 2px -2px 0 var(--outline),
+                -2px  2px 0 var(--outline),
+                 2px  2px 0 var(--outline);
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        /* ── BREADCRUMBS ── */
+        .breadcrumb {
+            background: var(--navy);
+            padding: 8px 20px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text);
+        }
+        .breadcrumb a {
+            text-decoration: none;
+            transition: opacity var(--speed);
+        }
+        .breadcrumb a:hover { opacity: 0.8; }
+        .breadcrumb-sep { color: var(--text); }
+        .breadcrumb-cur { color: var(--gold); }
+
+        /* ── CONTENT ── */
+        .content {
+            background: var(--navy);
+            padding: 30px 40px 50px;
+            min-height: 300px;
+        }
+
+        .page-title {
+            font-family: 'Romul', serif;
+            color: var(--gold);
+            font-weight: normal;
+            text-align: center;
+            font-size: clamp(22px, 4vw, 140%);
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+        .page-sub {
+            font-family: 'SpecialElite', serif;
+            color: var(--text2);
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            margin-bottom: 32px;
+        }
+
+        /* ── ICONS DESKTOP (Phone style grid) ── */
+        .icons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 28px 20px;
+            justify-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .app-icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            group: true;
+            cursor: pointer;
+            transition: transform var(--speed);
+        }
+
+        .app-icon-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .app-icon-box {
+            width: 76px;
+            height: 76px;
+            background: var(--navy2);
+            border: 1px solid var(--outline);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            transition: border-color var(--speed), box-shadow var(--speed), background var(--speed);
+        }
+
+        .app-icon-item:hover .app-icon-box {
+            border-color: var(--gold);
+            background: rgba(35,56,90,0.95);
+            box-shadow: 0 6px 16px rgba(186,152,104,0.25);
+        }
+
+        .app-icon-box img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .app-icon-label {
+            margin-top: 8px;
+            font-family: 'SpecialElite', serif;
+            font-size: 11px;
+            color: var(--text);
+            text-align: center;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: color var(--speed);
+        }
+
+        .app-icon-item:hover .app-icon-label {
+            color: var(--gold2);
+        }
+
+        /* ── FOOTER ── */
+        .site-footer {
+            background: transparent;
+            border-top: 1px solid #4a5566;
+            padding: 18px 24px 14px;
+        }
+        .site-footer-nav {
+            display: flex; flex-wrap: wrap; justify-content: flex-start;
+            gap: 6px 24px; margin-bottom: 12px;
+        }
+        .site-footer-nav a {
+            font-size: 13px; color: #fff; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 6px;
+            opacity: .85; transition: opacity .2s;
+        }
+        .site-footer-nav a i { color: #fff; font-size: 11px; }
+        .site-footer-nav a:hover { opacity: 1; }
+        .site-footer-bottom {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 6px; padding-top: 10px;
+        }
+        .site-footer-copy, .site-footer-credits { font-size: 11px; color: #BA9868; }
+
+        /* ── SCROLL BUTTONS ── */
+        .scroll-btns {
+            position:fixed; right:28px; bottom:36px;
+            flex-direction:column; gap:8px; z-index:400; display:none;
+        }
+        .scroll-btns.visible { display:flex; }
+        .scroll-btn {
+            width:44px; height:44px; border-radius:50%; background:#9a7e38;
+            border:none; cursor:pointer; display:flex; align-items:center;
+            justify-content:center; box-shadow:0 3px 12px rgba(0,0,0,.45);
+            transition:background .2s,transform .15s; color:#fff; font-size:15px;
+        }
+        .scroll-btn:hover { background:#BA9868; transform:scale(1.08); }
+
+        @media(max-width:480px) {
+            .icons-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .content { padding: 20px 18px 36px; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+</head>
+<body>
+<div class="container">
+  <div class="outer-border">
+
+    <!-- BANNER -->
+    <div class="banner-wrapper">
+      <div class="banner">
+        <img src="https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/head.jpg"
+             alt="" class="banner-bg" loading="eager">
+        <img src="https://raw.githubusercontent.com/ravenclaw-tower/ravenclaw-tower.github.io/refs/heads/main/img/windows.png"
+             alt="" class="banner-overlay" loading="eager" aria-hidden="true">
+        <div class="banner-frame" aria-hidden="true"></div>
+        <h1 class="banner-title">БАШНЯ КОГТЕВРАН</h1>
+      </div>
+    </div>
+
+    <!-- BREADCRUMBS -->
+    <nav class="breadcrumb">
+      <a href="https://rave.dhog.org/index.php">
+        <i class="fas fa-home" style="color:var(--gold);font-size:11px"></i>
+      </a>
+      <span class="breadcrumb-sep">></span>
+      <span class="breadcrumb-cur">Главная</span>
+    </nav>
+
+    <!-- CONTENT -->
+    <main class="content">
+      <h2 class="page-title">Панель управления</h2>
+      <div class="page-sub">Выберите нужный раздел</div>
+
+      <!-- ICONS GRID -->
+      <div class="icons-grid">
+        <a href="https://raven-hd.github.io/feather/rc-archive-public.html" class="app-icon-item">
+          <div class="app-icon-box">
+            <i class="fas fa-book-open" style="font-size: 28px; color: var(--gold);"></i>
+          </div>
+          <span class="app-icon-label">Архив</span>
+        </a>
+
+        <a href="https://raven-hd.github.io/feather/rc-editor.html" class="app-icon-item">
+          <div class="app-icon-box">
+            <i class="fas fa-feather-alt" style="font-size: 28px; color: var(--gold);"></i>
+          </div>
+          <span class="app-icon-label">Редактор</span>
+        </a>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <nav class="site-footer-nav">
+        <a href="https://rave.dhog.org/index.php"><i class="fab fa-fort-awesome"></i> Главная страница</a>
+        <a href="https://rave.dhog.org/help/faq"><i class="fas fa-question-circle"></i> Вопросы и ответы</a>
+        <a href="https://rave.dhog.org/memberlist.php"><i class="fas fa-hat-wizard"></i> Обитатели</a>
+        <a href="https://rave.dhog.org/memberlist.php?mode=team"><i class="fas fa-magic"></i> Администрация</a>
+        <a href="https://rave.dhog.org/memberlist.php?mode=contactadmin"><i class="fas fa-envelope"></i> Связаться с администрацией</a>
+      </nav>
+      <div class="site-footer-bottom">
+        <span class="site-footer-copy">Powered by phpBB® Forum Software © phpBB Limited</span>
+        <span class="site-footer-credits">Credits to Icon8</span>
+      </div>
+    </footer>
+
+  </div>
+</div>
+
+<!-- SCROLL BUTTONS -->
+<div class="scroll-btns" id="scrollBtns">
+  <button class="scroll-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+  <button class="scroll-btn" onclick="window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})" title="Вниз">
+    <i class="fas fa-chevron-down"></i>
+  </button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btns = document.getElementById('scrollBtns');
+  function check() { btns.classList.toggle('visible', document.documentElement.scrollHeight > window.innerHeight + 4); }
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check, { passive: true });
+  check();
+});
+</script>
+</body>
+</html>
+```[cite: 1, 2]
