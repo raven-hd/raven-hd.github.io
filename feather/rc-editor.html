@@ -155,12 +155,16 @@
         .semester-chips-ed { display: flex; flex-wrap: wrap; gap: 8px; }
         .semester-block-ed.collapsed .semester-chips-ed { display: none; }
 
+        #issueChips {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            margin-bottom: 20px;
+        }
         .issue-chip {
             background: var(--navy2); border: 1px solid var(--outline);
-            padding: 10px 12px; cursor: pointer;
+            padding: 6px 10px; cursor: pointer;
             transition: border-color .2s, background .2s;
             position: relative; overflow: hidden;
-            min-width: 110px;
+            width: 92px; flex: 0 0 auto;
         }
         .issue-chip::before {
             content:''; position:absolute; left:0; top:0; bottom:0; width:2px;
@@ -170,13 +174,22 @@
         .issue-chip:hover::before { transform:scaleY(1); }
         .issue-chip.active { border-color:var(--gold); background:rgba(35,56,90,.9); }
         .issue-chip.active::before { transform:scaleY(1); }
+        .issue-chip.is-scroll .chip-num { font-size: 15px; }
         .chip-num {
-            font-family:'BebasNeue',serif; font-size:22px; letter-spacing:1.5px;
-            color:var(--gold); line-height:1; margin-bottom:4px;
+            font-family:'BebasNeue',serif; font-size:17px; letter-spacing:1px;
+            color:var(--gold); line-height:1; margin-bottom:2px;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
         }
         .chip-dates {
-            font-family:'SpecialElite',serif; font-size:10px;
-            color:var(--text2); letter-spacing:.3px;
+            font-family:'SpecialElite',serif; font-size:9px;
+            color:var(--text2); letter-spacing:.3px; line-height:1.3;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        }
+        .chip-season {
+            font-family:'SpecialElite',serif; font-size:8px;
+            color:var(--text2); opacity:.6; letter-spacing:.3px;
+            margin-top:2px; line-height:1.3;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
         }
         .chip-edited {
             font-family:'JetBrains Mono',monospace; font-size:8px;
@@ -185,9 +198,9 @@
         .chip-new {
             background:transparent; border:1px dashed var(--outline); color:var(--text2);
             display:flex; align-items:center; justify-content:center;
-            font-family:'Romul',serif; font-size:24px;
+            font-family:'Romul',serif; font-size:20px;
             cursor:pointer; transition:all .2s;
-            min-width:110px; min-height:72px;
+            width: 92px; min-height:56px; flex: 0 0 auto;
         }
         .chip-new:hover { border-color:var(--gold); color:var(--gold); }
 
@@ -912,7 +925,19 @@ function saveIssue() {
     toast('Заполните хотя бы номер или даты выпуска');
     return;
   }
-  if (currentIdx !== null) {
+  // Если мы редактировали существующий выпуск, но его тип (обычный/свиток)
+  // отличается от только что собранного — значит, это на самом деле НОВЫЙ
+  // выпуск (например: сохранили свиток, currentIdx остался на его месте,
+  // и без нажатия "+ Новый выпуск" начали заполнять обычный бюллетень).
+  // В этом случае нельзя перезаписывать archive[currentIdx] — так свиток
+  // будет молча стёрт и заменён обычной новостью. Вместо этого добавляем
+  // новую запись, сохраняя старую нетронутой.
+  const existing = currentIdx !== null ? archive[currentIdx] : null;
+  const sameType = existing && (existing.type === 'scroll') === (issue.type === 'scroll');
+
+  const becameNewIssue = existing && !sameType;
+
+  if (existing && sameType) {
     archive[currentIdx] = issue;
   } else {
     archive.unshift(issue);
@@ -921,7 +946,9 @@ function saveIssue() {
   saveArchive();
   renderChips();
   updateStatus('saved', issue.saved_at);
-  toast('Выпуск сохранён');
+  toast(becameNewIssue
+    ? 'Тип выпуска изменился — сохранено как новый выпуск, старый не тронут'
+    : 'Выпуск сохранён');
 }
 
 // ═══════════════════════════════════════════════
