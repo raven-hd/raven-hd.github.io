@@ -761,6 +761,43 @@
     min-height: 16px;
   }
 
+  .order-type-container {
+    background: var(--pastel-pink-light);
+    border: 1px dashed var(--pastel-pink);
+    padding: 12px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .order-type-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--pastel-blue-dark);
+    font-weight: 600;
+  }
+
+  .order-type-options {
+    display: flex;
+    gap: 15px;
+  }
+
+  .order-type-options label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    color: var(--text-dark);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .order-type-options input[type="radio"] {
+    accent-color: var(--pastel-pink-text);
+    cursor: pointer;
+  }
+
   .tips-row {
     background: var(--pastel-pink-light);
     border: 1px dashed var(--pastel-pink);
@@ -939,10 +976,6 @@
             <div class="author-box-title">Авторское мороженое</div>
             <div class="description-menu-grid" id="grid-author"></div>
           </div>
-
-          <div class="header-divider" style="margin-top: 35px;"></div>
-          <div class="main-title" style="margin-top: 35px;">Десерты</div>
-          <div class="classic-menu-grid" id="grid-desserts"></div>
         </div>
 
         <!-- СТРАНИЦА 3 -->
@@ -988,6 +1021,14 @@
         <button class="promo-btn" onclick="applyPromo()">OK</button>
       </div>
       <div class="promo-msg" id="promo-msg"></div>
+    </div>
+
+    <div class="order-type-container" id="order-type-section" style="display: none;">
+      <span class="order-type-label">Тип заказа:</span>
+      <div class="order-type-options">
+        <label><input type="radio" name="orderType" value="На месте" checked> На месте</label>
+        <label><input type="radio" name="orderType" value="С собой"> С собой</label>
+      </div>
     </div>
 
     <div class="tips-row" id="tips-section" style="display: none;">
@@ -1070,17 +1111,6 @@
         { name: "Запретный лес", desc: "Фисташковое мороженое, лесной орех, карамель, съедобные цветы" },
         { name: "Хогвартские теплицы", desc: "Страчателла, малиновый соус, мята" },
         { name: "Полуночная библиотека", desc: "Шоколадное мороженое, брауни, шоколадный соус, леденцовая крошка" }
-      ]
-    },
-    desserts: {
-      price: 15,
-      items: [
-        "Яблочный пирог",
-        "Пирог шоколад-банан",
-        "Шоколадный фондан",
-        "Классический брауни",
-        "Cinnamon Roll",
-        "Sticky Toffee Pudding"
       ]
     },
     freakshakes: {
@@ -1302,7 +1332,6 @@
   renderGrid('grid-waffles', 'waffles');
   renderGrid('grid-rolled', 'rolled');
   renderGrid('grid-author', 'author');
-  renderGrid('grid-desserts', 'desserts');
 
   renderFreakshakesSlider();
   renderGrid('grid-hotdrinks', 'hotdrinks');
@@ -1466,12 +1495,14 @@
     }
 
     const promoSection = document.getElementById('promo-section');
+    const orderTypeSection = document.getElementById('order-type-section');
     const tipsSection = document.getElementById('tips-section');
     const payBtn = document.getElementById('btn-pay');
 
     if (!hasItems) {
       receiptContainer.innerHTML = '<div style="text-align:center; color:#888; margin: 25px 0; font-family:\'Cormorant Garamond\', serif; font-size: 16px;">Корзина пуста</div>';
       promoSection.style.display = 'none';
+      orderTypeSection.style.display = 'none';
       tipsSection.style.display = 'none';
       payBtn.style.display = 'none';
       appliedPromoCode = null;
@@ -1479,6 +1510,7 @@
       document.getElementById('promo-msg').textContent = '';
     } else {
       promoSection.style.display = 'block';
+      orderTypeSection.style.display = 'flex';
       tipsSection.style.display = 'flex';
       payBtn.style.display = 'block';
     }
@@ -1505,6 +1537,11 @@
     const items = [];
     let subtotalPrice = 0;
     let freeItemApplied = false;
+
+    const selectedOrderType = document.querySelector('input[name="orderType"]:checked');
+    if (selectedOrderType) {
+      items.push(`Тип заказа: ${selectedOrderType.value}`);
+    }
 
     for (let id in store) {
       if (store[id].qty > 0) {
@@ -1622,7 +1659,6 @@
     card.style.webkitClipPath = `path('${outerPath}')`;
 
     if (svgEl) {
-      svgel = svgEl;
       svgEl.setAttribute('width', W);
       svgEl.setAttribute('height', H);
       svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
