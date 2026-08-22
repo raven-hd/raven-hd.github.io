@@ -1508,6 +1508,27 @@ body{
     outline-offset:4px;
 }
 
+
+/* FINAL FINAL — единый тёмный задник у обоих экранов */
+html,
+body{
+    background:#151b19 !important;
+}
+
+/* У первого экрана убираем светлую внешнюю подложку.
+   Сами лесной фон, бейдж и деревянная таблица не меняются. */
+#landing,
+.landing,
+.landing-page,
+.landing-frame{
+    background:transparent !important;
+}
+
+/* На случай, если светлый фон был задан внешней оболочке первого экрана */
+body:has(#landing:not(.hidden)){
+    background:#151b19 !important;
+}
+
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
