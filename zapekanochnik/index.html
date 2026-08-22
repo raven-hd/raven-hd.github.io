@@ -1665,11 +1665,11 @@ body:has(#landing:not(.hidden)){
     position:absolute !important;
     z-index:2 !important;
     top:50% !important;
-    left:18% !important;
+    left:24.8% !important;
     width:18% !important;
     transform:translateY(-52%) !important;
     text-align:center !important;
-    color:#B7B4AB !important;
+    color:#eee6d6 !important;
     font-family:"Segoe Print","Comic Sans MS",cursive !important;
     font-size:21px !important;
     font-weight:700 !important;
@@ -2059,19 +2059,24 @@ function spiceReaction(spice){
   return SPICE_REACTIONS[spice] || `${spice}? Любопытный выбор.`;
 }
 
-function showCookResult(dish){
+function showCookResult(dish,{completedAllRecipes=false}={}){
   const title=$('cookResultTitle'),visual=$('cookResultVisual'),note=$('cookResultNote');
   if(dish){
     title.textContent=dish;
     const url=dishImageUrl(dish);
     visual.innerHTML=`<img class="cook-result-image" src="${url}" alt="${escapeHtml(dish)}">`;
-    const recommended=RECOMMENDED[dish];
-    if(state.spice&&state.spice!==recommended){
-      note.textContent=spiceReaction(state.spice);
-    }else if(state.spice&&state.spice===recommended){
-      note.textContent='И специя на месте. Подозрительно профессионально.';
+
+    if(completedAllRecipes){
+      note.textContent='Поздравляем. Теперь вы знаете о запеканках больше, чем это вообще было необходимо.';
     }else{
-      note.textContent='Запеканка готова!';
+      const recommended=RECOMMENDED[dish];
+      if(state.spice&&state.spice!==recommended){
+        note.textContent=spiceReaction(state.spice);
+      }else if(state.spice&&state.spice===recommended){
+        note.textContent='И специя на месте. Подозрительно профессионально.';
+      }else{
+        note.textContent='Запеканка готова!';
+      }
     }
   }else{
     title.textContent='Жижа';
@@ -2103,6 +2108,10 @@ async function cook(){
   try{
     const dish=matches.length===1 ? matches[0] : null;
 
+    /* Запоминаем прогресс ДО этой готовки.
+       Поздравляем только при реальном переходе с 20 открытых рецептов на 21. */
+    const recipesBefore=state.found.size;
+
     await saveAttempt({
       success: !!dish,
       dish
@@ -2111,9 +2120,12 @@ async function cook(){
     /* Обновляем коллекцию сразу после успешной готовки */
     await loadPlayerStats();
 
+    const completedAllRecipes=
+      !!dish && recipesBefore===20 && state.found.size===21;
+
     /* НИКУДА НЕ ПЕРЕКЛЮЧАЕМ СТРАНИЦУ.
        Кухня остаётся видимой под модальным окном. */
-    showCookResult(dish);
+    showCookResult(dish,{completedAllRecipes});
 
   }catch(err){
     console.error(err);
