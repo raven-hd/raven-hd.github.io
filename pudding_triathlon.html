@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Запеканочное троеборье</title>
+<style>
+:root{
+  --bg:#2f362f;
+  --bg2:#3b433b;
+  --card:#efe6d7;
+  --paper:#f7f1e6;
+  --ink:#2e2924;
+  --muted:#7a7065;
+  --line:#cbb89b;
+  --blue:#7f9ea7;
+  --blue-deep:#6f8d95;
+  --rose:#b98692;
+  --rose-deep:#a7727f;
+  --shadow:0 18px 46px rgba(0,0,0,.24);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at top left, rgba(255,255,255,.05), transparent 30%),
+    linear-gradient(145deg,var(--bg2),var(--bg));
+  color:var(--ink);
+  font-family:Arial,sans-serif;
+}
+
+.card{
+  width:min(640px,100%);
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.topbar{
+  height:10px;
+  background:linear-gradient(90deg,var(--rose),var(--blue));
+}
+
+.inner{
+  padding:28px 30px 26px;
+}
+
+.header{
+  display:block;
+}
+
+.kicker{
+  margin:0 0 8px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--rose-deep);
+}
+
+h1{
+  margin:0;
+  font:700 clamp(34px,6vw,58px)/0.95 Georgia,"Times New Roman",serif;
+  text-transform:uppercase;
+  letter-spacing:-.03em;
+}
+
+.flag-badge{
+  width:74px;
+  height:74px;
+  padding:8px;
+  border-radius:16px;
+  background:rgba(255,255,255,.35);
+  border:1px solid rgba(122,112,101,.18);
+  display:grid;
+  place-items:center;
+  transform:rotate(3deg);
+}
+.flag-badge img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.16));
+}
+
+.controls{
+  margin-top:24px;
+}
+
+label{
+  display:block;
+  margin-bottom:8px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+input{
+  width:100%;
+  height:52px;
+  padding:0 16px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--paper);
+  color:var(--ink);
+  outline:none;
+  font:16px Arial,sans-serif;
+}
+input:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(127,158,167,.15);
+}
+
+.actions{
+  display:flex;
+  gap:12px;
+  margin-top:14px;
+}
+button{
+  height:46px;
+  padding:0 18px;
+  border-radius:14px;
+  border:1px solid transparent;
+  cursor:pointer;
+  font:800 14px Arial,sans-serif;
+  letter-spacing:.01em;
+  transition:.16s ease;
+}
+button:hover{transform:translateY(-1px)}
+button:active{transform:none}
+
+.generate{
+  flex:1 1 auto;
+  color:white;
+  background:linear-gradient(180deg,var(--rose),var(--rose-deep));
+}
+.copy{
+  flex:0 0 auto;
+  color:var(--blue-deep);
+  background:transparent;
+  border-color:rgba(111,141,149,.45);
+}
+
+.result{
+  display:none;
+  margin-top:18px;
+  padding:18px 18px 16px;
+  border-radius:18px;
+  border:1px solid #d7c8af;
+  background:rgba(255,255,255,.28);
+}
+.result.show{display:block}
+
+.route-title{
+  margin:0 0 14px;
+  font:700 20px/1.1 Georgia,"Times New Roman",serif;
+}
+
+.stage + .stage{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px dashed #d3c1a5;
+}
+
+.stage-title{
+  margin:0 0 8px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--rose-deep);
+}
+
+.result-list{
+  margin:0;
+  padding-left:18px;
+}
+.result-list li{
+  margin:4px 0;
+  font-size:13px;
+  line-height:1.45;
+}
+.result-list strong{
+  color:#435950;
+}
+
+.sample{
+  font-size:13px;
+  line-height:1.48;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:20px;
+  transform:translate(-50%,12px);
+  opacity:0;
+  pointer-events:none;
+  padding:9px 12px;
+  border-radius:999px;
+  background:#1f2720;
+  color:#fff;
+  font-size:12px;
+  transition:.18s ease;
+}
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+@media(max-width:700px){
+  .inner{padding:22px 18px 18px}  .actions{
+    flex-direction:column;
+  }
+  .copy,.generate{
+    width:100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<main class="card">
+  <div class="topbar"></div>
+
+  <div class="inner">
+    <div class="header">
+      <div>
+        <p class="kicker">Большая спартакиада</p>
+        <h1>Запеканочное<br>троеборье</h1>
+      </div>
+    </div>
+
+    <div class="controls">
+      <label for="playerName">Имя участника</label>
+      <input id="playerName" type="text" maxlength="70" placeholder="Введите имя персонажа">
+
+      <div class="actions">
+        <button class="generate" id="generateBtn">Сгенерировать маршрутный лист</button>
+        <button class="copy" id="copyBtn">Скопировать результат</button>
+      </div>
+
+      <section class="result" id="result"></section>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast">Скопировано</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const THROW_TARGETS = [
+  ["Ближняя мишень",0],
+  ["Средняя мишень",1],
+  ["Дальняя мишень",2]
+];
+
+const THROW_OUTCOMES = [
+  {points:10,label:"Яблочко!",text:"Запеканка с громким чавком приземлилась почти в самом центре.",weight:[12,8,5]},
+  {points:8,label:"Внутренний сектор",text:"Очень приличный бросок: запеканка уверенно врезалась во внутреннее кольцо мишени.",weight:[18,15,10]},
+  {points:6,label:"Средний сектор",text:"Запеканка попала в мишень.",weight:[22,20,16]},
+  {points:4,label:"Внешний сектор",text:"Край мишени. Сделаем вид, что именно так и было задумано.",weight:[18,20,20]},
+  {points:2,label:"По самому краю",text:"Запеканка едва-едва задела край мишени.",weight:[12,14,16]},
+  {points:0,label:"Промах",text:"Запеканка пролетела мимо мишени.",weight:[10,13,18]},
+  {points:0,label:"Катастрофическая неудача",text:"Бросок был сильным. Запеканку придется искать за пределами спортивной площадки.",weight:[5,7,10]},
+  {points:3,label:"Рикошет",text:"Запеканка ударилась о стойку, изменила траекторию и все-таки зацепила внешний сектор. Это считается.",weight:[3,3,5]}
+];
+
+const OBSTACLES = [
+  ["Кегельный серпантин","пройти змейкой между кеглями."],
+  ["Низкая веревка","пригнуться, не слезая с хоббихорса."],
+  ["Барьер из бревен","перепрыгнуть препятствие, не выпуская запеканки из рук, разумеется."],
+  ["Коридор из лавок","протиснуться через узкий проход."],
+  ["Развешанное белье","проехать через веревки со стиранными простынями."],
+  ["Вылетевший бладжер","внезапно пересекает трассу. Откуда он тут?"],
+  ["Лежачий вожатый","аналог «лежачего полицейского»: лежит поперек маршрута."],
+  ["Заблудившиеся члены соседнего отряда","как будто гулять больше негде."],
+  ["Лужа жижи из пищеблока","объехать или перепрыгнуть."],
+  ["Песчаный участок","хоббихорс почему-то начинает «буксовать»."],
+  ["Три обруча","маршрут должен пройти через них."],
+  ["Строгая директриса","вышла прямо вам навстречу. Наверное, хочет отчитать за что-нибудь."],
+  ["Гусь","просто гусь."],
+  ["Очень недовольный гусь","считает запеканку своей и пытается ее отобрать."],
+  ["Шлагбаум из швабры","перегородил дорогу."],
+  ["Лес флажков","запутанный коридор с поворотами."],
+  ["Ведро неизвестного назначения","стоит посреди пути и трогать его нельзя."],
+  ["Куст ежевики","раскидистый и очень колючий, прямо посреди маршрута."],
+  ["Контрольный звонок","надо остановиться и позвонить в лагерный колокольчик."],
+  ["Зигзаг из ящиков","технический участок между пустыми ящиками."],
+  ["Слалом вокруг табуреток","собственно, табуреточный слалом."],
+  ["Зона строгого ограничения скорости","несколько метров надо пройти нарочито медленно."],
+  ["Зона, которую необходимо пройти рысью","несколько метров надо пройти рысью."],
+  ["Зона галопа","несколько метров надо пройти галопом."]
+];
+
+const CASSEROLES = [
+  "Плотный румяный образец с мягкой начинкой, большим количеством сыра и очень знакомым, но почему-то не сразу узнаваемым вкусом.",
+  "Светлая многослойная запеканка под золотистой корочкой. Нежная, сливочная и подозрительно нормальная на фоне остальных образцов.",
+  "Сладковатый светлый образец с неоднородной текстурой, мягкими кусочками внутри и отчетливым пряным ароматом.",
+  "Мягкая оранжево-кремовая масса с нежной текстурой. На вкус одновременно напоминает десерт и что-то, чем вас пытаются накормить ради вашего же блага.",
+  "Темный слоеный образец с сочной начинкой, выраженным овощным вкусом и румяной верхушкой.",
+  "Многослойный мягкий образец с несладкой начинкой и сливочным вкусом. В разрезе выглядит особенно подозрительно."
+];
+
+let current = null;
+
+function weightedOutcome(difficulty){
+  const total = THROW_OUTCOMES.reduce((s,o)=>s+o.weight[difficulty],0);
+  let r = Math.random()*total;
+  for(const o of THROW_OUTCOMES){
+    r -= o.weight[difficulty];
+    if(r <= 0) return o;
+  }
+  return THROW_OUTCOMES[THROW_OUTCOMES.length-1];
+}
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function safeName(name){
+  return (name || "Участник").replace(/[\[\]\r\n]/g,"").trim() || "Участник";
+}
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function generate(){
+  const name=safeName($("playerName").value);
+
+  const throws=THROW_TARGETS.map(([target,difficulty])=>{
+    const o=weightedOutcome(difficulty);
+    return {target,...o};
+  });
+
+  const obstacles=shuffle(OBSTACLES).slice(0,3);
+  const casserole=CASSEROLES[Math.floor(Math.random()*CASSEROLES.length)];
+
+  current={name,throws,obstacles,casserole};
+  render();
+}
+
+function render(){
+  if(!current) return;
+
+  $("result").innerHTML=`
+    <div class="route-title">${escapeHtml(current.name)}: маршрутный лист</div>
+
+    <div class="stage">
+      <div class="stage-title">1. Метание запеканок по мишеням</div>
+      <ul class="result-list">
+        ${current.throws.map(t=>`
+          <li><strong>${escapeHtml(t.target)}:</strong> ${escapeHtml(t.label)} — ${t.points} очк. ${escapeHtml(t.text)}</li>
+        `).join("")}
+      </ul>
+    </div>
+
+    <div class="stage">
+      <div class="stage-title">2. Быстрая доставка</div>
+      <ul class="result-list">
+        ${current.obstacles.map(o=>`
+          <li><strong>${escapeHtml(o[0])}</strong> — ${escapeHtml(o[1])}</li>
+        `).join("")}
+      </ul>
+    </div>
+
+    <div class="stage">
+      <div class="stage-title">3. Гастрономическая экспертиза</div>
+      <div class="sample">${escapeHtml(current.casserole)}</div>
+    </div>
+  `;
+
+  $("result").classList.add("show");
+}
+
+function bbcode(){
+  if(!current) return "";
+
+  return `[quote][cut=${current.name.toUpperCase()}: МАРШРУТНЫЙ ЛИСТ]
+1. МЕТАНИЕ ЗАПЕКАНОК ПО МИШЕНЯМ
+[list]${current.throws.map(t=>`[*]${t.target}: ${t.label} — ${t.points} очк. ${t.text}`).join("\n")}[/list]
+2. БЫСТРАЯ ДОСТАВКА
+[list]${current.obstacles.map(o=>`[*]${o[0]} — ${o[1]}`).join("\n")}[/list]
+3. ГАСТРОНОМИЧЕСКАЯ ЭКСПЕРТИЗА
+[list][*]${current.casserole}[/list][/cut][/quote]`;
+}
+
+async function copyResult(){
+  if(!current){
+    showToast("Сначала сгенерируйте лист");
+    return;
+  }
+
+  const text=bbcode();
+
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch{
+    const area=document.createElement("textarea");
+    area.value=text;
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+  }
+
+  showToast("Маршрутный лист скопирован");
+}
+
+function showToast(msg){
+  const t=$("toast");
+  t.textContent=msg;
+  t.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer=setTimeout(()=>t.classList.remove("show"),1400);
+}
+
+$("generateBtn").addEventListener("click",generate);
+$("copyBtn").addEventListener("click",copyResult);
+$("playerName").addEventListener("keydown",e=>{
+  if(e.key==="Enter") generate();
+});
+</script>
+</body>
+</html>
