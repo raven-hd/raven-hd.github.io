@@ -1627,6 +1627,77 @@ body:has(#landing:not(.hidden)){
     outline:none !important;
 }
 
+
+
+/* ==========================================================
+   FINAL — счётчик жижи под грифельной доской
+   1 неудачная попытка = 1 литр жижи.
+   На PNG уже есть вся подпись, поверх выводится только число.
+   ========================================================== */
+.desk-stack{
+    width:232px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    align-self:end !important;
+    position:relative !important;
+    z-index:5 !important;
+}
+.desk-stack .desk-stat{
+    width:100% !important;
+    flex:0 0 auto !important;
+}
+.sludge-stat{
+    position:relative !important;
+    width:106% !important;
+    margin-top:-7px !important;
+    transform:translateX(7px) rotate(-0.8deg) !important;
+    transform-origin:center top !important;
+    filter:drop-shadow(0 5px 6px #0007) !important;
+    flex:0 0 auto !important;
+}
+.sludge-stat img{
+    display:block !important;
+    width:100% !important;
+    height:auto !important;
+}
+.sludge-number{
+    position:absolute !important;
+    z-index:2 !important;
+    top:50% !important;
+    left:18% !important;
+    width:18% !important;
+    transform:translateY(-52%) !important;
+    text-align:center !important;
+    color:#eee6d6 !important;
+    font-family:"Segoe Print","Comic Sans MS",cursive !important;
+    font-size:21px !important;
+    font-weight:700 !important;
+    line-height:1 !important;
+    letter-spacing:-1px !important;
+    text-shadow:0 1px 1px #000a !important;
+    pointer-events:none !important;
+}
+
+@media (max-width:600px){
+    .desk-stack{
+        width:205px !important;
+        max-width:72vw !important;
+    }
+    .desk-stack .desk-stat{
+        width:100% !important;
+        max-width:none !important;
+    }
+    .sludge-stat{
+        width:106% !important;
+        margin-top:-6px !important;
+        transform:translateX(6px) rotate(-0.8deg) !important;
+    }
+    .sludge-number{
+        font-size:18px !important;
+    }
+}
+
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -1649,9 +1720,15 @@ body:has(#landing:not(.hidden)){
         <img class="asset-logo" src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/zapekanochnik/log_tazjin.png" alt="Тажин-запеканочник">
 
         <div class="landing-pair">
-          <div class="desk-stat" aria-label="Всего приготовлено запеканок">
-            <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/zapekanochnik/desk.png" alt="">
-            <div id="totalCasseroles" class="desk-number">0</div>
+          <div class="desk-stack">
+            <div class="desk-stat" aria-label="Всего приготовлено удачных запеканок">
+              <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/zapekanochnik/desk.png" alt="">
+              <div id="totalCasseroles" class="desk-number">0</div>
+            </div>
+            <div class="sludge-stat" aria-label="Общее количество литров жижи">
+              <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/zapekanochnik/jija.png" alt="">
+              <div id="totalSludge" class="sludge-number">0</div>
+            </div>
           </div>
 
           <form id="loginForm" class="duty-card">
@@ -1847,7 +1924,45 @@ async function loadPlayerStats(){
 
   renderMyDishes();
 }
-async function loadLeaderboard(){const body=$('leaderboardBody');body.innerHTML='<tr><td colspan="4">Загрузка…</td></tr>';const {data,error}=await sb.rpc('get_leaderboard');if(error){console.error(error);body.innerHTML='<tr><td colspan="4">Не удалось загрузить рейтинг.</td></tr>';$('totalCasseroles').textContent='—';return}const total=data.reduce((sum,p)=>sum+Number(p.casseroles||0),0);$('totalCasseroles').textContent=total;if(!data.length){body.innerHTML='<tr><td colspan="4">Пока никто ничего не приготовил.</td></tr>';return}body.innerHTML='';data.forEach(p=>{const tr=document.createElement('tr');[p.place,p.display_name,p.casseroles,p.unique_recipes].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.appendChild(td)});body.appendChild(tr)})}
+async function loadSludgeTotal(){
+  const el=$('totalSludge');
+  if(!el)return;
+  const {data,error}=await sb.rpc('get_sludge_total');
+  if(error){
+    console.error('get_sludge_total:',error);
+    el.textContent='—';
+    return;
+  }
+  el.textContent=Number(data||0);
+}
+async function loadLeaderboard(){
+  const body=$('leaderboardBody');
+  body.innerHTML='<tr><td colspan="4">Загрузка…</td></tr>';
+  loadSludgeTotal();
+  const {data,error}=await sb.rpc('get_leaderboard');
+  if(error){
+    console.error(error);
+    body.innerHTML='<tr><td colspan="4">Не удалось загрузить рейтинг.</td></tr>';
+    $('totalCasseroles').textContent='—';
+    return;
+  }
+  const total=data.reduce((sum,p)=>sum+Number(p.casseroles||0),0);
+  $('totalCasseroles').textContent=total;
+  if(!data.length){
+    body.innerHTML='<tr><td colspan="4">Пока никто ничего не приготовил.</td></tr>';
+    return;
+  }
+  body.innerHTML='';
+  data.forEach(p=>{
+    const tr=document.createElement('tr');
+    [p.place,p.display_name,p.casseroles,p.unique_recipes].forEach(v=>{
+      const td=document.createElement('td');
+      td.textContent=v;
+      tr.appendChild(td);
+    });
+    body.appendChild(tr);
+  });
+}
 function renderMyDishes(){
   const box=$('myDishes');
   box.innerHTML='';
