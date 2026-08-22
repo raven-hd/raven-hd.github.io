@@ -1529,6 +1529,104 @@ body:has(#landing:not(.hidden)){
     background:#151b19 !important;
 }
 
+
+/* ==========================================================
+   MOBILE FIX — первый экран
+   ========================================================== */
+@media (max-width: 600px){
+
+    .landing-frame{
+        width:100% !important;
+        max-width:100% !important;
+        overflow:hidden !important;
+    }
+
+    .camp-scene{
+        position:relative !important;
+        height:780px !important;
+        min-height:780px !important;
+        overflow:visible !important;
+        background-position:center top !important;
+    }
+
+    .asset-logo{
+        top:18px !important;
+        left:16px !important;
+        width:270px !important;
+        max-width:76% !important;
+    }
+
+    .landing-pair{
+        position:absolute !important;
+        left:50% !important;
+        right:auto !important;
+        top:255px !important;
+        bottom:auto !important;
+
+        width:min(320px, 90vw) !important;
+        padding:0 !important;
+        margin:0 !important;
+
+        display:flex !important;
+        flex-direction:column !important;
+        align-items:center !important;
+        justify-content:flex-start !important;
+        gap:24px !important;
+
+        transform:translateX(-50%) !important;
+    }
+
+    .desk-stat{
+        width:205px !important;
+        max-width:72vw !important;
+        flex:0 0 auto !important;
+    }
+
+    .duty-card{
+        width:min(292px, 86vw) !important;
+        max-width:292px !important;
+        height:182px !important;
+        min-height:182px !important;
+        flex:0 0 auto !important;
+        margin:0 !important;
+    }
+
+    .duty-patch{
+        width:min(238px, 72vw) !important;
+        max-width:calc(100% - 40px) !important;
+    }
+
+    .leader-zone{
+        position:relative !important;
+        z-index:1 !important;
+    }
+
+    .landing-frame .paper{
+        min-height:440px !important;
+    }
+}
+
+
+/* FINAL — выбранные ингредиенты больше не обводятся кружком.
+   Состояние выбора видно только в строке над тажином. */
+.ingredient-hotspot.on::before,
+.ingredient-hotspot.selected::before,
+.ingredient-hotspot[aria-pressed="true"]::before{
+    border-color:transparent !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    outline:none !important;
+}
+
+/* И при наведении никаких кругов — только подпись с названием. */
+.ingredient-hotspot:hover::before,
+.ingredient-hotspot:focus-visible::before{
+    border-color:transparent !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    outline:none !important;
+}
+
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -1922,7 +2020,77 @@ document.querySelectorAll('.ingredient-hotspot').forEach(b=>{
   });
 });
 
-$('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginError').textContent='';const displayName=$('playerName').value.trim();if(displayName.length<2){$('loginError').textContent='Введите имя участника.';return}$('loginBtn').disabled=true;try{if(!currentUser)currentUser=await ensureAnonSession();const {data:profile,error}=await sb.from('profiles').upsert({user_id:currentUser.id,display_name:displayName},{onConflict:'user_id'}).select('user_id,display_name').single();if(error)throw error;currentProfile=profile;$('forgetBtn').classList.remove('hidden');await showKitchen()}catch(err){console.error(err);$('loginError').textContent='Не удалось войти. Проверьте настройки Supabase.'}finally{$('loginBtn').disabled=false}})
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  $('loginError').textContent='';
+
+  const displayName=$('playerName').value.trim();
+
+  if(displayName.length<2){
+    $('loginError').textContent='Введите имя участника.';
+    return;
+  }
+
+  $('loginBtn').disabled=true;
+
+  try{
+    const normalizeName=s=>String(s||'')
+      .trim()
+      .replace(/\s+/g,' ')
+      .toLocaleLowerCase('ru-RU');
+
+    if(
+      currentProfile &&
+      normalizeName(currentProfile.display_name)!==normalizeName(displayName)
+    ){
+      await sb.auth.signOut();
+
+      currentUser=null;
+      currentProfile=null;
+
+      currentUser=await ensureAnonSession();
+      state.found=new Set();
+      state.foundDetails=new Map();
+      renderMyDishes();
+    }
+
+    if(!currentUser){
+      currentUser=await ensureAnonSession();
+    }
+
+    const {data:profile,error}=await sb
+      .from('profiles')
+      .upsert(
+        {
+          user_id:currentUser.id,
+          display_name:displayName
+        },
+        {onConflict:'user_id'}
+      )
+      .select('user_id,display_name')
+      .single();
+
+    if(error)throw error;
+
+    currentProfile=profile;
+    $('forgetBtn').classList.remove('hidden');
+
+    await showKitchen();
+
+  }catch(err){
+    console.error(err);
+
+    if(err?.code==='23505'){
+      $('loginError').textContent=
+        'Такое имя уже занято. Используйте своё имя или немного измените его.';
+    }else{
+      $('loginError').textContent=
+        'Не удалось войти. Проверьте настройки Supabase.';
+    }
+  }finally{
+    $('loginBtn').disabled=false;
+  }
+})
 $('forgetBtn').addEventListener('click',async()=>{if(!confirm('Сменить дежурного на этом устройстве? Статистика в базе не удалится.'))return;await sb.auth.signOut();location.reload()});
 $('cookBtn').addEventListener('click',cook);
 $('closeCookResultBtn').addEventListener('click',closeCookResult);
