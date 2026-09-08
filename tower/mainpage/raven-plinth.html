@@ -292,14 +292,14 @@
 
       if (people.length === 1) {
         copy.innerHTML =
-          `С ДНЕМ РОЖДЕНИЯ, <span class="birthday-name">${names}</span>!`;
+          `ПОЗДРАВЛЯЕМ: <span class="birthday-name">${names}</span>!`;
       } else {
         copy.innerHTML =
           `ПОЗДРАВЛЯЕМ: <span class="birthday-name">${names}</span>`;
       }
 
       copy.title = people.length === 1
-        ? `С днем рождения, ${names}!`
+        ? `Поздравляем: ${names}!`
         : `Поздравляем: ${names}`;
 
       cell.append(icon, copy);
