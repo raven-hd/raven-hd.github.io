@@ -151,39 +151,24 @@
     .birthday-copy {
       min-width: 0;
 
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
+      display: block;
 
-      text-align: left;
-    }
+      color: var(--gold);
 
-    .birthday-label {
-      color: var(--muted);
-
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 400;
-      line-height: 11px;
+      line-height: 1;
 
-      letter-spacing: .015em;
+      letter-spacing: .035em;
+      text-transform: uppercase;
       white-space: nowrap;
-    }
 
-    .birthday-names {
-      max-width: 100%;
-
-      color: var(--cream);
-
-      font-size: 11px;
-      font-weight: 400;
-      line-height: 13px;
-
-      letter-spacing: .018em;
-
-      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .birthday-name {
+      color: var(--cream);
     }
 
     @media (max-width: 850px) {
@@ -212,12 +197,8 @@
         gap: 5px;
       }
 
-      .birthday-label {
-        font-size: 8.5px;
-      }
-
-      .birthday-names {
-        font-size: 9.5px;
+      .birthday-copy {
+        font-size: 10px;
       }
     }
   </style>
@@ -307,20 +288,20 @@
       const copy = document.createElement("div");
       copy.className = "birthday-copy";
 
-      const label = document.createElement("div");
-      label.className = "birthday-label";
-      label.textContent = people.length === 1
-        ? "С ДНЕМ РОЖДЕНИЯ."
-        : "С ДНЕМ РОЖДЕНИЯ.";
+      const names = people.map(p => p.name).join(" · ");
 
-      const names = document.createElement("div");
-      names.className = "birthday-names";
+      if (people.length === 1) {
+        copy.innerHTML =
+          `С ДНЕМ РОЖДЕНИЯ, <span class="birthday-name">${names}</span>!`;
+      } else {
+        copy.innerHTML =
+          `ПОЗДРАВЛЯЕМ: <span class="birthday-name">${names}</span>`;
+      }
 
-      const joined = people.map(p => p.name).join(" · ");
-      names.textContent = joined + "!";
-      names.title = joined;
+      copy.title = people.length === 1
+        ? `С днем рождения, ${names}!`
+        : `Поздравляем: ${names}`;
 
-      copy.append(label, names);
       cell.append(icon, copy);
 
       return cell;
