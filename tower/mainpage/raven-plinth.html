@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ravenclaw plinth</title>
+
+  <style>
+    @font-face {
+      font-family: "Romul";
+      src: url("./romul.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --gold: #c99a5a;
+      --gold-soft: #b98748;
+      --cream: #e6cfaa;
+      --muted: rgba(221, 201, 170, .48);
+      --line: rgba(185, 135, 72, .70);
+      --h: 34px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: var(--h);
+      margin: 0;
+      padding: 0;
+
+      background: transparent;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Romul", Georgia, "Times New Roman", serif;
+    }
+
+    .plinth {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      width: 100%;
+      height: var(--h);
+
+      align-items: stretch;
+    }
+
+    .plinth.has-birthday {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .cell {
+      position: relative;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      min-width: 0;
+      height: var(--h);
+
+      padding: 0 12px;
+
+      color: var(--gold);
+
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .cell + .cell::before {
+      content: "";
+
+      position: absolute;
+
+      left: 0;
+      top: 50%;
+
+      width: 1px;
+      height: 17px;
+
+      transform: translateY(-50%);
+
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--line) 25%,
+        var(--line) 75%,
+        transparent
+      );
+    }
+
+    .nav {
+      gap: 8px;
+
+      color: var(--gold);
+
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1;
+
+      letter-spacing: .035em;
+      text-transform: uppercase;
+      white-space: nowrap;
+
+      transition: color .18s ease, opacity .18s ease;
+    }
+
+    .nav:hover {
+      color: #e1b979;
+    }
+
+    .nav-icon,
+    .gift-icon {
+      flex: 0 0 auto;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 18px;
+      height: 18px;
+
+      color: var(--gold-soft);
+      opacity: .78;
+    }
+
+    .nav-icon svg,
+    .gift-icon svg {
+      display: block;
+      width: 15px;
+      height: 15px;
+
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .birthday {
+      gap: 8px;
+    }
+
+    .birthday-copy {
+      min-width: 0;
+
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+
+      text-align: left;
+    }
+
+    .birthday-label {
+      color: var(--muted);
+
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 11px;
+
+      letter-spacing: .015em;
+      white-space: nowrap;
+    }
+
+    .birthday-names {
+      max-width: 100%;
+
+      color: var(--cream);
+
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 13px;
+
+      letter-spacing: .018em;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    @media (max-width: 850px) {
+      .cell {
+        padding-inline: 7px;
+      }
+
+      .nav {
+        gap: 5px;
+        font-size: 10px;
+      }
+
+      .nav-icon,
+      .gift-icon {
+        width: 15px;
+        height: 15px;
+      }
+
+      .nav-icon svg,
+      .gift-icon svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      .birthday {
+        gap: 5px;
+      }
+
+      .birthday-label {
+        font-size: 8.5px;
+      }
+
+      .birthday-names {
+        font-size: 9.5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="plinth" id="plinth"></div>
+
+  <script src="./raven-birthdays.js"></script>
+
+  <script>
+    /*
+      ЗАМЕНИ ЭТИ ДВЕ ССЫЛКИ НА РЕАЛЬНЫЕ:
+    */
+    const TOUR_URL = "ССЫЛКА_НА_ЭКСКУРСИЮ";
+    const PASS_URL = "ССЫЛКА_НА_ПРОПУСК";
+
+    const plinth = document.getElementById("plinth");
+
+    function moscowMonthDay() {
+      // Для теста можно открыть:
+      // raven-plinth.html?date=09-22
+      const params = new URLSearchParams(location.search);
+      const testDate = params.get("date");
+
+      if (/^\d{2}-\d{2}$/.test(testDate || "")) {
+        const [month, day] = testDate.split("-").map(Number);
+        return { month, day };
+      }
+
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/Moscow",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(new Date());
+
+      return {
+        month: Number(parts.find(p => p.type === "month").value),
+        day: Number(parts.find(p => p.type === "day").value)
+      };
+    }
+
+    function navCell(href, type, label) {
+      const a = document.createElement("a");
+      a.className = "cell nav";
+      a.href = href;
+      a.target = "_top";
+
+      const icon = document.createElement("span");
+      icon.className = "nav-icon";
+
+      if (type === "tour") {
+        icon.innerHTML = `
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5"></circle>
+            <path d="M14.8 9.2l-1.9 4-3.9 1.7 1.8-3.9 4-1.8z"></path>
+          </svg>`;
+      } else {
+        icon.innerHTML = `
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7.5h16v9H4z"></path>
+            <path d="M7 7.5v9"></path>
+            <path d="M17 7.5v9"></path>
+          </svg>`;
+      }
+
+      const text = document.createElement("span");
+      text.textContent = label;
+
+      a.append(icon, text);
+      return a;
+    }
+
+    function birthdayCell(people) {
+      const cell = document.createElement("div");
+      cell.className = "cell birthday";
+
+      const icon = document.createElement("span");
+      icon.className = "gift-icon";
+      icon.innerHTML = `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 10h16v10H4z"></path>
+          <path d="M3 7h18v3H3z"></path>
+          <path d="M12 7v13"></path>
+          <path d="M12 7c-3.5 0-5-1.1-5-2.5C7 3.4 7.9 3 8.8 3 10.5 3 12 5 12 7z"></path>
+          <path d="M12 7c3.5 0 5-1.1 5-2.5 0-1.1-.9-1.5-1.8-1.5C13.5 3 12 5 12 7z"></path>
+        </svg>`;
+
+      const copy = document.createElement("div");
+      copy.className = "birthday-copy";
+
+      const label = document.createElement("div");
+      label.className = "birthday-label";
+      label.textContent = people.length === 1
+        ? "сегодня поздравляем"
+        : "сегодня поздравляем";
+
+      const names = document.createElement("div");
+      names.className = "birthday-names";
+
+      const joined = people.map(p => p.name).join(" · ");
+      names.textContent = joined + "!";
+      names.title = joined;
+
+      copy.append(label, names);
+      cell.append(icon, copy);
+
+      return cell;
+    }
+
+    const today = moscowMonthDay();
+
+    const todayBirthdays = (window.RAVEN_BIRTHDAYS || []).filter(person =>
+      person.month === today.month &&
+      person.day === today.day
+    );
+
+    if (todayBirthdays.length) {
+      plinth.classList.add("has-birthday");
+      plinth.appendChild(birthdayCell(todayBirthdays));
+    }
+
+    plinth.appendChild(
+      navCell(TOUR_URL, "tour", "ЭКСКУРСИЯ ПО БАШНЕ"),
+      navCell(PASS_URL, "pass", "ВЫДАЧА ПРОПУСКА")
+    );
+  </script>
+</body>
+</html>
