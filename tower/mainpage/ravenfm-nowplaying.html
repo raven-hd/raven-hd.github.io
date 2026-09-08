@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RavenFM — сейчас играет</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    body {
+      overflow: hidden;
+      font-family: Georgia, "Times New Roman", serif;
+      text-align: right;
+    }
+
+    .now {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .label {
+      margin-bottom: 2px;
+      color: rgba(221, 201, 170, .42);
+      font-size: 11px;
+      line-height: 1.2;
+      letter-spacing: .015em;
+      text-transform: lowercase;
+    }
+
+    .track {
+      color: #e6cfaa;
+      font-size: 13px;
+      line-height: 1.2;
+      letter-spacing: .012em;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <div class="now">
+    <div class="label">сейчас играет</div>
+    <div class="track" id="track">Raven.FM в эфире</div>
+  </div>
+
+  <script>
+    const endpoint = "https://radio.dhog.org/api/nowplaying_static/raven.txt";
+    const track = document.getElementById("track");
+
+    async function updateTrack() {
+      try {
+        const response = await fetch(endpoint, { cache: "no-store" });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+
+        const text = (await response.text()).trim();
+        if (text) track.textContent = text;
+      } catch (error) {
+        track.textContent = "Raven.FM в эфире";
+      }
+    }
+
+    updateTrack();
+    setInterval(updateTrack, 30000);
+  </script>
+</body>
+</html>
