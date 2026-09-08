@@ -201,6 +201,192 @@
         font-size: 10px;
       }
     }
+
+    .nav-label-short {
+      display: none;
+    }
+
+    @media (max-width: 620px) {
+      :root {
+        --h: 38px;
+      }
+
+      .cell {
+        padding-inline: 4px;
+      }
+
+      .nav {
+        gap: 4px;
+
+        font-size: 9px;
+        letter-spacing: .02em;
+      }
+
+      .nav-label-full {
+        display: none;
+      }
+
+      .nav-label-short {
+        display: inline;
+      }
+
+      .birthday {
+        gap: 4px;
+      }
+
+      .birthday-copy {
+        font-size: 8.5px;
+        letter-spacing: .01em;
+      }
+
+      .nav-icon,
+      .gift-icon {
+        width: 13px;
+        height: 13px;
+      }
+
+      .nav-icon svg,
+      .gift-icon svg {
+        width: 11px;
+        height: 11px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .nav {
+        font-size: 8px;
+      }
+
+      .birthday-copy {
+        font-size: 7.6px;
+      }
+
+      .cell {
+        padding-inline: 2px;
+      }
+    }
+
+
+    /* MOBILE: birthday disappears, two navigation links become buttons */
+
+    @media (max-width: 700px) {
+      :root {
+        --h: 44px;
+      }
+
+      .plinth,
+      .plinth.has-birthday {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+
+        padding: 5px 8px;
+      }
+
+      .birthday {
+        display: none !important;
+      }
+
+      .cell + .cell::before {
+        display: none;
+      }
+
+      .nav {
+        position: relative;
+        isolation: isolate;
+
+        height: 34px;
+        min-width: 0;
+
+        margin: 0;
+        padding: 0 10px;
+
+        gap: 6px;
+
+        background: var(--gold-soft);
+
+        clip-path: polygon(
+          7px 0,
+          calc(100% - 7px) 0,
+          100% 50%,
+          calc(100% - 7px) 100%,
+          7px 100%,
+          0 50%
+        );
+
+        color: #edc98f;
+
+        font-size: 10px;
+        line-height: 1;
+        letter-spacing: .025em;
+
+        overflow: hidden;
+      }
+
+      .nav::after {
+        content: "";
+
+        position: absolute;
+        inset: 1px;
+
+        z-index: -1;
+
+        background: linear-gradient(
+          to bottom,
+          #0b1e33,
+          #071522
+        );
+
+        clip-path: polygon(
+          6px 0,
+          calc(100% - 6px) 0,
+          100% 50%,
+          calc(100% - 6px) 100%,
+          6px 100%,
+          0 50%
+        );
+      }
+
+      .nav:hover {
+        color: #f4d7a3;
+      }
+
+      .nav-icon {
+        width: 14px;
+        height: 14px;
+
+        color: #b98748;
+        opacity: .82;
+      }
+
+      .nav-icon svg {
+        width: 13px;
+        height: 13px;
+      }
+
+      .nav-label-full {
+        display: none;
+      }
+
+      .nav-label-short {
+        display: inline;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .plinth,
+      .plinth.has-birthday {
+        gap: 5px;
+        padding-inline: 5px;
+      }
+
+      .nav {
+        padding-inline: 6px;
+        gap: 4px;
+
+        font-size: 8.5px;
+      }
+    }
+
   </style>
 </head>
 
@@ -264,9 +450,15 @@
       }
 
       const text = document.createElement("span");
+      text.className = "nav-label nav-label-full";
       text.textContent = label;
 
-      a.append(icon, text);
+      const shortText = document.createElement("span");
+      shortText.className = "nav-label nav-label-short";
+      shortText.textContent =
+        type === "tour" ? "ЭКСКУРСИЯ" : "ПРОПУСК";
+
+      a.append(icon, text, shortText);
       return a;
     }
 
@@ -292,14 +484,14 @@
 
       if (people.length === 1) {
         copy.innerHTML =
-          `ПОЗДРАВЛЯЕМ: <span class="birthday-name">${names}</span>!`;
+          `ПОЗДРАВЛЯЕМ, <span class="birthday-name">${names}</span>!`;
       } else {
         copy.innerHTML =
           `ПОЗДРАВЛЯЕМ: <span class="birthday-name">${names}</span>`;
       }
 
       copy.title = people.length === 1
-        ? `Поздравляем: ${names}!`
+        ? `С днем рождения, ${names}!`
         : `Поздравляем: ${names}`;
 
       cell.append(icon, copy);
