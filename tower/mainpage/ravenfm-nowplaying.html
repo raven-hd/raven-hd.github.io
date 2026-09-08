@@ -4,18 +4,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RavenFM — сейчас играет</title>
+
   <style>
+    @font-face {
+      font-family: "Romul";
+      src: url("./romul.ttf") format("truetype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
     html,
     body {
       margin: 0;
       padding: 0;
+
+      width: 100%;
+      height: 14px;
 
       background: transparent;
       overflow: hidden;
     }
 
     body {
-      font-family: romul, Georgia, "Times New Roman", serif;
+      font-family: "Romul", Georgia, "Times New Roman", serif;
       text-align: right;
     }
 
@@ -23,15 +35,21 @@
       display: block;
 
       width: 100%;
-      height: 16px;
+      height: 14px;
+
+      margin: 0;
+      padding: 0;
 
       color: #c99a5a;
 
-      font-size: 12px;
+      font-family: "Romul", Georgia, "Times New Roman", serif;
+      font-size: 10.5px;
       font-weight: 400;
-      line-height: 16px;
+      line-height: 14px;
 
       letter-spacing: .02em;
+      text-align: right;
+      text-transform: none;
 
       white-space: nowrap;
       overflow: hidden;
@@ -39,6 +57,7 @@
     }
   </style>
 </head>
+
 <body>
   <span id="track">Raven.FM в эфире</span>
 
