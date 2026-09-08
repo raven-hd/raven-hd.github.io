@@ -226,7 +226,18 @@
 <body>
   <div class="plinth" id="plinth"></div>
 
-  <script src="./raven-birthdays.js?v=3"></script>
+  <script>
+  const birthdayScript = document.createElement("script");
+
+  birthdayScript.src =
+    "./raven-birthdays.js?v=" + Date.now();
+
+  birthdayScript.onload = () => {
+    renderPlinth();
+  };
+
+  document.head.appendChild(birthdayScript);
+</script>
 
   <script>
     /*
