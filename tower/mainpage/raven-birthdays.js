@@ -330,7 +330,7 @@ window.RAVEN_BIRTHDAYS = [
     "day": 5
   },
   {
-    "name": "Пухля",
+    "name": "Пухлая Пухля",
     "month": 9,
     "day": 8
   },
