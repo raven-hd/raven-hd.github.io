@@ -3,59 +3,48 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RavenFM — сейчас играет</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       background: transparent;
+      overflow: hidden;
     }
 
     body {
-      overflow: hidden;
-      font-family: "romul", Georgia, "Times New Roman", serif;
+      font-family: Georgia, "Times New Roman", serif;
+      color: #d7a85d;
+      line-height: 1.1;
     }
 
-    #track {
+    .track {
       display: block;
       width: 100%;
-
-      color: #c99a5a;
-
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 16px;
-      letter-spacing: .02em;
-
-      text-align: right;
-
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-size: 20px;
+      color: #d7a85d;
     }
   </style>
 </head>
 <body>
-  <span id="track">Raven.FM в эфире</span>
+  <div class="track" id="track">...</div>
 
   <script>
-    const endpoint = "https://radio.dhog.org/api/nowplaying_static/raven.txt";
-    const track = document.getElementById("track");
+    fetch('https://radio.dhog.org/api/nowplaying/raven', { cache: 'no-store' })
+      .then(r => r.json())
+      .then(data => {
+        const title =
+          data?.now_playing?.song?.title ||
+          data?.now_playing?.song?.text ||
+          '—';
 
-    async function updateTrack() {
-      try {
-        const response = await fetch(endpoint, { cache: "no-store" });
-        if (!response.ok) throw new Error("HTTP " + response.status);
-
-        const text = (await response.text()).trim();
-        track.textContent = text || "Raven.FM в эфире";
-      } catch (error) {
-        track.textContent = "Raven.FM в эфире";
-      }
-    }
-
-    updateTrack();
-    setInterval(updateTrack, 30000);
+        document.getElementById('track').textContent = title;
+      })
+      .catch(() => {
+        document.getElementById('track').textContent = '—';
+      });
   </script>
 </body>
 </html>
