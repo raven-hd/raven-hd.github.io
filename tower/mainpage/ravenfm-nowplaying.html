@@ -20,31 +20,27 @@
     .now {
       width: 100%;
       box-sizing: border-box;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      line-height: 1.2;
     }
 
     .label {
-      margin-bottom: 2px;
       color: rgba(221, 201, 170, .42);
       font-size: 11px;
-      line-height: 1.2;
       letter-spacing: .015em;
-      text-transform: lowercase;
     }
 
     .track {
       color: #e6cfaa;
-      font-size: 13px;
-      line-height: 1.2;
+      font-size: 12px;
       letter-spacing: .012em;
-      white-space: normal;
-      overflow-wrap: anywhere;
     }
   </style>
 </head>
 <body>
   <div class="now">
-    <div class="label">сейчас играет</div>
-    <div class="track" id="track">Raven.FM в эфире</div>
+    <span class="label">сейчас играет · </span><span class="track" id="track">Raven.FM в эфире</span>
   </div>
 
   <script>
@@ -57,7 +53,7 @@
         if (!response.ok) throw new Error("HTTP " + response.status);
 
         const text = (await response.text()).trim();
-        if (text) track.textContent = text;
+        track.textContent = text || "Raven.FM в эфире";
       } catch (error) {
         track.textContent = "Raven.FM в эфире";
       }
