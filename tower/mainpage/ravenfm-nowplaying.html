@@ -13,35 +13,30 @@
 
     body {
       overflow: hidden;
-      font-family: Georgia, "Times New Roman", serif;
-      text-align: right;
+      font-family: "romul", Georgia, "Times New Roman", serif;
     }
 
-    .now {
+    #track {
+      display: block;
       width: 100%;
-      box-sizing: border-box;
-      white-space: normal;
-      overflow-wrap: anywhere;
-      line-height: 1.2;
-    }
 
-    .label {
-      color: rgba(221, 201, 170, .42);
-      font-size: 11px;
-      letter-spacing: .015em;
-    }
+      color: #c99a5a;
 
-    .track {
-      color: #e6cfaa;
       font-size: 12px;
-      letter-spacing: .012em;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: .02em;
+
+      text-align: right;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   </style>
 </head>
 <body>
-  <div class="now">
-    <span class="label">сейчас играет · </span><span class="track" id="track">Raven.FM в эфире</span>
-  </div>
+  <span id="track">Raven.FM в эфире</span>
 
   <script>
     const endpoint = "https://radio.dhog.org/api/nowplaying_static/raven.txt";
