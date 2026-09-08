@@ -267,19 +267,19 @@
     }
 
 
-    /* MOBILE: birthday disappears, two navigation links become buttons */
+    /* MOBILE: birthday disappears, navigation stays on one line */
 
     @media (max-width: 767px) {
       :root {
-        --h: 44px;
+        --h: 40px;
       }
 
       .plinth,
       .plinth.has-birthday {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
 
-        padding: 5px 8px;
+        gap: 0;
+        padding: 0 6px;
       }
 
       .birthday {
@@ -287,33 +287,21 @@
       }
 
       .cell + .cell::before {
-        display: none;
+        display: block;
       }
 
       .nav {
-        position: relative;
-        isolation: isolate;
-
-        height: 34px;
-        min-width: 0;
+        height: var(--h);
 
         margin: 0;
-        padding: 0 10px;
+        padding: 0 8px;
 
-        gap: 6px;
+        gap: 5px;
 
-        background: var(--gold-soft);
+        background: transparent;
+        clip-path: none;
 
-        clip-path: polygon(
-          7px 0,
-          calc(100% - 7px) 0,
-          100% 50%,
-          calc(100% - 7px) 100%,
-          7px 100%,
-          0 50%
-        );
-
-        color: #edc98f;
+        color: var(--gold);
 
         font-size: 10px;
         line-height: 1;
@@ -323,39 +311,15 @@
       }
 
       .nav::after {
-        content: "";
-
-        position: absolute;
-        inset: 1px;
-
-        z-index: -1;
-
-        background: linear-gradient(
-          to bottom,
-          #0b1e33,
-          #071522
-        );
-
-        clip-path: polygon(
-          6px 0,
-          calc(100% - 6px) 0,
-          100% 50%,
-          calc(100% - 6px) 100%,
-          6px 100%,
-          0 50%
-        );
-      }
-
-      .nav:hover {
-        color: #f4d7a3;
+        content: none;
       }
 
       .nav-icon {
         width: 14px;
         height: 14px;
 
-        color: #b98748;
-        opacity: .82;
+        color: var(--gold-soft);
+        opacity: .78;
       }
 
       .nav-icon svg {
@@ -364,26 +328,28 @@
       }
 
       .nav-label-full {
+        display: inline;
+      }
+
+      .nav-label-short {
+        display: none;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .nav {
+        padding-inline: 4px;
+
+        font-size: 8.5px;
+        letter-spacing: .015em;
+      }
+
+      .nav-label-full {
         display: none;
       }
 
       .nav-label-short {
         display: inline;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .plinth,
-      .plinth.has-birthday {
-        gap: 5px;
-        padding-inline: 5px;
-      }
-
-      .nav {
-        padding-inline: 6px;
-        gap: 4px;
-
-        font-size: 8.5px;
       }
     }
 
