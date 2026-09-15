@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LaFayette сегодня · Когтевранский музей</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+@font-face {
+  font-family: 'ModernoTwo';
+  src: url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root{
+  --blue:#0E1C28;
+  --ink:#17354A;
+  --gold:#B69263;
+  --light:#F3EBDD;
+  --header-h:74px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--blue);
+  color:var(--light);
+  font-family:'Cormorant Garamond',serif;
+}
+
+a{color:inherit;text-decoration:none;}
+
+#museum{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:var(--blue);
+}
+
+.room-bg{
+  position:absolute;
+  inset:0;
+  background-image:url('img/ui/bg.png');
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+  transform:scale(1.01);
+}
+
+.room-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(7,14,21,.30) 0%,
+      rgba(7,14,21,.10) 32%,
+      rgba(7,14,21,.14) 62%,
+      rgba(7,14,21,.42) 100%),
+    linear-gradient(90deg,
+      rgba(7,14,21,.56) 0%,
+      rgba(7,14,21,.16) 18%,
+      rgba(7,14,21,0) 35%,
+      rgba(7,14,21,0) 65%,
+      rgba(7,14,21,.16) 82%,
+      rgba(7,14,21,.56) 100%);
+}
+
+.room-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 44% 30% at 50% 25%,
+      rgba(251,246,236,.34) 0%,
+      rgba(241,243,245,.20) 42%,
+      rgba(241,243,245,.06) 70%,
+      transparent 100%);
+  pointer-events:none;
+}
+
+/* header */
+
+.museum-header{
+  position:absolute;
+  top:0; left:0; right:0;
+  height:var(--header-h);
+  z-index:30;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 32px;
+  background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));
+  backdrop-filter:blur(5px);border-bottom:1px solid rgba(182,148,101,.24);
+}
+
+.header-logo{
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  width:210px;
+  flex-shrink:0;
+}
+
+.logo-img{
+  height:44px;
+  width:auto;
+  display:block;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.38));
+}
+
+.logo-text{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  height:44px;
+  font-family:'ModernoTwo','Cormorant Garamond',serif;
+  font-size:14px;
+  line-height:1.02;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#fff;
+}
+
+.museum-nav{
+  display:flex;
+  align-items:center;
+  gap:28px;
+}
+
+.museum-nav a{
+  position:relative;
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(244,238,229,.82);
+  transition:color .22s ease;
+}
+
+.museum-nav a::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  width:0;
+  height:1px;
+  background:var(--gold);
+  transition:.22s ease;
+}
+
+.museum-nav a:hover,
+.museum-nav a.active{ color:#fff1d8; }
+
+.museum-nav a:hover::after,
+.museum-nav a.active::after{
+  left:0;
+  width:100%;
+}
+
+/* main */
+
+.museum-main{
+  position:absolute;
+  top:var(--header-h);
+  left:50%;
+  transform:translateX(-50%);
+  bottom:0;
+  z-index:12;
+  width:min(1500px, calc(100% - 54px));
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) 104px;
+  gap:12px;
+  padding:24px 0 116px;
+}
+
+.hero{
+  position:relative;
+  text-align:center;
+  z-index:5;
+  margin-top:0;
+  padding:2px 0 2px;
+}
+
+/* один мягкий светлый участок фона под всей шапкой:
+   датой, главным заголовком и подписью */
+.hero::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(1120px,82vw);
+  height:210px;
+  transform:translate(-50%,-50%);
+  background:
+    radial-gradient(ellipse at center,
+      rgba(255,251,243,.82) 0%,
+      rgba(250,249,245,.58) 36%,
+      rgba(237,242,245,.28) 62%,
+      rgba(237,242,245,.08) 79%,
+      rgba(237,242,245,0) 100%);
+  filter:blur(13px);
+  pointer-events:none;
+  z-index:-1;
+}
+
+.hero-meta{
+  font-family:'Jura',sans-serif;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-shadow:0 1px 0 rgba(255,255,255,.20);
+  margin-bottom:-2px;
+}
+
+.hero-title-wrap{
+  position:relative;
+  display:inline-block;
+  margin-top:2px;
+  padding:4px 36px 4px;
+}
+
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(52px,4.2vw,76px);
+  font-weight:500;
+  line-height:.92;
+  letter-spacing:.02em;
+  color:var(--ink);
+  text-transform:uppercase;
+  white-space:nowrap;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.24),
+    0 3px 14px rgba(255,255,255,.12);
+}
+
+.hero-title .today{
+  font-weight:400;
+  letter-spacing:.01em;
+}
+
+.hero-divider{
+  width:min(420px,40vw);
+  margin:2px auto 4px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.hero-divider::before,
+.hero-divider::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right, transparent, rgba(177,141,91,.72), transparent);
+}
+
+.hero-divider i{
+  color:var(--gold);
+  font-style:normal;
+  font-size:9px;
+}
+
+.hero-subtitle{
+  font-family:'Jura',sans-serif;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-shadow:0 1px 0 rgba(255,255,255,.20);
+}
+
+/* cards */
+
+.players{
+  min-height:0;
+  width:min(1440px, 92%);
+  margin:-4px auto 0;
+  display:grid;
+  grid-template-columns:repeat(9, minmax(0,1fr));
+  gap:12px;
+  align-items:center;
+  justify-items:stretch;
+}
+
+.player-card{
+  position:relative;
+  overflow:hidden;
+  min-width:0;
+  cursor:pointer;
+  width:100%;
+  aspect-ratio:0.34 / 1;
+  background:#0E1C28;
+  clip-path:polygon(0 0,100% 0,100% 90.5%,50% 100%,0 90.5%);
+  box-shadow:0 10px 26px rgba(0,0,0,.22);
+  transition:transform .24s ease, box-shadow .24s ease;
+}
+
+/* рамка карточки: один SVG с правильным соотношением сторон.
+   наружная золотая и внутренняя тонкая серая линии всегда совпадают с формой. */
+.player-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:12;
+  pointer-events:none;
+  background:url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20340%201000%27%20preserveAspectRatio%3D%27none%27%3E%0A%20%20%3Cpolygon%20points%3D%272%2C2%20338%2C2%20338%2C904%20170%2C998%202%2C904%27%0A%20%20%20%20%20%20%20%20%20%20%20fill%3D%27none%27%20stroke%3D%27%23BC9865%27%20stroke-width%3D%271.3%27%0A%20%20%20%20%20%20%20%20%20%20%20vector-effect%3D%27non-scaling-stroke%27%20stroke-linejoin%3D%27miter%27/%3E%0A%20%20%3Cpolygon%20points%3D%2715%2C15%20325%2C15%20325%2C895%20170%2C984%2015%2C895%27%0A%20%20%20%20%20%20%20%20%20%20%20fill%3D%27none%27%20stroke%3D%27%238E979E%27%20stroke-width%3D%270.8%27%0A%20%20%20%20%20%20%20%20%20%20%20vector-effect%3D%27non-scaling-stroke%27%20stroke-linejoin%3D%27miter%27%20opacity%3D%27.48%27/%3E%0A%3C/svg%3E") center/100% 100% no-repeat;
+}
+
+.player-card::after{
+  content:none;
+}
+
+.player-card:hover,
+.player-card.active{
+  transform:translateY(-6px);
+  box-shadow:
+    0 18px 34px rgba(0,0,0,.30),
+    0 0 14px rgba(181,146,94,.08);
+}
+
+.player-card:hover::before,
+.player-card.active::before{
+  filter:brightness(1.08);
+}
+
+.player-photo{
+  position:absolute;
+  inset:3px;
+  background:#0E1C28;
+  clip-path:polygon(0 0,100% 0,100% 90.2%,50% 100%,0 90.2%);
+}
+
+.player-photo img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center 9%;
+  filter:saturate(.88) brightness(.95);
+  transition:transform .42s ease, filter .32s ease;
+}
+
+.player-card:hover .player-photo img,
+.player-card.active .player-photo img{
+  transform:scale(1.03);
+  filter:saturate(.98) brightness(1);
+}
+
+.player-photo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(14,28,40,0) 18%,
+      rgba(14,28,40,.05) 34%,
+      rgba(14,28,40,.20) 50%,
+      rgba(14,28,40,.58) 70%,
+      rgba(14,28,40,.90) 84%,
+      #0E1C28 95%,
+      #0E1C28 100%);
+}
+
+.player-data{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:10.8%;
+  z-index:10;
+  text-align:center;
+  text-shadow:0 2px 8px rgba(0,0,0,.72);
+}
+
+.player-number{
+  font-size:clamp(24px,1.7vw,32px);
+  font-weight:600;
+  line-height:1;
+  color:#E7D5B4;
+}
+
+.player-name{
+  margin:5px auto 0;
+  min-height:2.25em;
+  width:88%;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  flex-direction:column;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(10px,.72vw,14px);
+  font-weight:600;
+  line-height:1.08;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+  color:#F2E8D9;
+}
+
+.player-rank{
+  margin-top:7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-family:'Jura',sans-serif;
+  font-size:7px;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#E0C28F;
+}
+
+.player-rank span{
+  width:18px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(218,187,130,.95));
+}
+
+.player-rank span:last-child{
+  background:linear-gradient(90deg, rgba(218,187,130,.95), transparent);
+}
+
+.player-role{
+  margin-top:5px;
+  font-family:'Jura',sans-serif;
+  font-size:7px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#CFB38A;
+}
+
+.player-role::after{
+  content:"✦";
+  display:block;
+  margin-top:9px;
+  color:rgba(188,155,104,.78);
+  font-size:8px;
+}
+
+/* fixed info panel */
+
+.player-profile{
+  width:min(840px, 74%);
+  height:104px;
+  min-height:104px;
+  max-height:104px;
+  margin:0 auto;
+  align-self:end;
+  display:grid;
+  grid-template-columns:82px 1fr 110px;
+  gap:18px;
+  align-items:center;
+  padding:15px 22px;
+  background:rgba(14,28,40,.92);
+  border-top:1px solid rgba(184,149,99,.52);
+  border-bottom:1px solid rgba(184,149,99,.28);
+  box-shadow:0 12px 28px rgba(0,0,0,.18);
+  backdrop-filter:blur(8px);
+  transition:opacity .16s ease;
+}
+
+.player-profile.changing{
+  opacity:.18;
+}
+
+.profile-number{
+  text-align:center;
+  font-size:48px;
+  font-weight:600;
+  line-height:1;
+  color:#C5A572;
+  border-right:1px solid rgba(184,149,99,.24);
+}
+
+.profile-name{
+  font-size:23px;
+  font-weight:600;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  color:#F1E8DA;
+}
+
+.profile-position{
+  margin-top:2px;
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:#D0B187;
+}
+
+.profile-text{
+  margin-top:7px;
+  font-size:11px;
+  line-height:1.42;
+  color:rgba(239,232,220,.72);
+  max-height:32px;
+  overflow:hidden;
+}
+
+.profile-mark{
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  line-height:1.7;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  text-align:center;
+  color:rgba(196,166,120,.40);
+}
+
+/* clouds */
+
+.bottom-clouds{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:2px;
+  height:275px;
+  overflow:hidden;
+  z-index:8;
+  pointer-events:none;
+}
+
+.bottom-cloud{
+  --mx:0px;
+  --my:0px;
+  --flip:1;
+  position:absolute;
+  max-width:none;
+  transform:
+    translate3d(var(--mx), var(--my), 0)
+    scaleX(var(--flip));
+  will-change:transform;
+  transition:transform .15s ease-out;
+}
+
+.bottom-cloud.flip{--flip:-1;}
+
+.c1{width:520px;left:-170px;bottom:-42px;opacity:.82;}
+.c2{width:260px;left:12%;bottom:74px;opacity:.14;}
+.c3{width:410px;left:8%;bottom:-72px;opacity:.52;}
+.c4{width:220px;left:36%;bottom:98px;opacity:.10;}
+.c5{width:300px;left:42%;bottom:-86px;opacity:.22;}
+.c6{width:190px;left:54%;bottom:112px;opacity:.08;}
+.c7{width:410px;right:8%;bottom:-72px;opacity:.52;}
+.c8{width:250px;right:12%;bottom:78px;opacity:.15;}
+.c9{width:540px;right:-170px;bottom:-46px;opacity:.84;}
+.c10{width:210px;right:38%;bottom:104px;opacity:.08;}
+.c11{width:340px;left:50%;transform:translateX(-50%) translate3d(var(--mx), var(--my), 0) scaleX(var(--flip));bottom:-120px;opacity:.14;filter:blur(2px);}
+
+@media (max-width: 1360px){
+  .players{
+    width:min(1260px, 94%);
+    gap:10px;
+  }
+
+  .hero-title{
+    font-size:clamp(46px,4vw,68px);
+  }
+}
+
+@media (max-width: 1200px), (max-height: 860px){
+  :root{--header-h:66px;}
+
+  .museum-header{padding:0 28px;}
+  .logo-img{height:40px;}
+  .logo-text{height:40px;font-size:13px;}
+
+  .museum-main{
+    gap:8px;
+    padding:16px 0 96px;
+    grid-template-rows:auto minmax(0,1fr) 96px;
+  }
+
+  .hero-meta{font-size:10px;}
+  .hero-title-wrap{padding:6px 24px 8px;}
+  .hero-title{font-size:clamp(42px,3.8vw,62px);}
+  .hero-divider{margin:8px auto 7px;}
+  .hero-subtitle{font-size:10px;}
+
+  .players{
+    width:min(1140px, 95%);
+    gap:9px;
+  }
+
+  .player-number{font-size:28px;}
+  .player-name{font-size:12px;}
+  .player-role,.player-rank{font-size:7px;}
+
+  .player-profile{
+    width:min(780px, 72%);
+    height:96px;
+    min-height:96px;
+    max-height:96px;
+    padding:12px 20px;
+  }
+
+  .profile-number{font-size:43px;}
+  .profile-name{font-size:21px;}
+  .profile-text{font-size:10px;max-height:30px;}
+
+  .bottom-clouds{ height:245px; }
+}
+
+@media (max-width: 1040px), (max-height: 760px){
+  .museum-main{
+    padding-top:16px;
+    padding-bottom:82px;
+    grid-template-rows:auto minmax(0,1fr) 84px;
+  }
+
+  .hero{margin-top:0;}
+  .hero-meta{font-size:9px;}
+  .hero-title{font-size:clamp(36px,3.4vw,54px);}
+  .hero-subtitle{font-size:9px;}
+  .players{
+    width:min(1020px, 96%);
+    gap:8px;
+  }
+  .player-name{font-size:11px;}
+  .player-role,.player-rank{font-size:6px;}
+  .player-profile{
+    width:min(760px,72%);
+    height:84px;
+    min-height:84px;
+    max-height:84px;
+    padding:10px 18px;
+  }
+  .profile-number{font-size:38px;}
+  .profile-name{font-size:18px;}
+  .profile-text{font-size:9px;line-height:1.35;max-height:24px;}
+}
+</style>
+</head>
+<body>
+
+<div id="museum">
+  <div class="room-bg"></div>
+
+  <header class="museum-header">
+    <a href="#" class="header-logo">
+      <img class="logo-img" src="img/ui/mus_logo.png" alt="Логотип Когтевранского музея">
+      <div class="logo-text">КОГТЕВРАНСКИЙ<br>МУЗЕЙ</div>
+    </a>
+
+    <nav class="museum-nav">
+      <a href="index.html">главная</a>
+      <a href="team.html" class="active">эскадрилья</a>
+      <a href="captains.html">капитаны</a>
+      <a href="matches.html">матчи</a>
+      <a href="form.html">форма</a>
+      <a href="former.html">история</a>
+      <a href="quotes.html">цитатник</a>
+    </nav>
+  </header>
+
+  <main class="museum-main">
+
+    <section class="hero">
+      <div class="hero-meta">LAFAYETTE · 2011 — 2026</div>
+
+      <div class="hero-title-wrap">
+        <h1 class="hero-title">LAFAYETTE <span class="today">СЕГОДНЯ</span></h1>
+      </div>
+
+      <div class="hero-divider"><i>✦</i></div>
+      <div class="hero-subtitle">действующий состав сборной факультета Когтевран</div>
+    </section>
+
+    <section class="players">
+
+      <article class="player-card active"
+        data-number="02"
+        data-name="Лиария Спраут"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/02_liaria_sprout.jpg" alt="Лиария Спраут"></div>
+        <div class="player-data">
+          <div class="player-number">02</div>
+          <div class="player-name">Лиария<br>Спраут</div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+      <article class="player-card"
+        data-number="04"
+        data-name="Адрианна Сноу"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/04_adrianna_snow.jpg" alt="Адрианна Сноу"></div>
+        <div class="player-data">
+          <div class="player-number">04</div>
+          <div class="player-name">Адрианна<br>Сноу</div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+      <article class="player-card"
+        data-number="05"
+        data-name="Morgane Dave Black"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/05_morgane_dave_black.jpg" alt="Morgane Dave Black"></div>
+        <div class="player-data">
+          <div class="player-number">05</div>
+          <div class="player-name">Morgane Dave<br>Black</div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+      <article class="player-card captain"
+        data-number="06"
+        data-name="Эмберли Шрив-Стиверсон"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/06_amberly_shrive_stiverson.jpg" alt="Эмберли Шрив-Стиверсон"></div>
+        <div class="player-data">
+          <div class="player-number">06</div>
+          <div class="player-name">Эмберли<br>Шрив-Стиверсон</div>
+          <div class="player-rank"><span></span>капитан<span></span></div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+      <article class="player-card"
+        data-number="07"
+        data-name="Блейк Эллингтон"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/07_blake_ellington.jpg" alt="Блейк Эллингтон"></div>
+        <div class="player-data">
+          <div class="player-number">07</div>
+          <div class="player-name">Блейк<br>Эллингтон</div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+      <article class="player-card"
+        data-number="08"
+        data-name="Шелия МакБрайд"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/08_shelia_mcbride.jpg" alt="Шелия МакБрайд"></div>
+        <div class="player-data">
+          <div class="player-number">08</div>
+          <div class="player-name">Шелия<br>МакБрайд</div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+      <article class="player-card"
+        data-number="09"
+        data-name="Grace Diamond-de-Kur"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/09_grace_diamond_de_kur.jpg" alt="Grace Diamond-de-Kur"></div>
+        <div class="player-data">
+          <div class="player-number">09</div>
+          <div class="player-name">Grace<br>Diamond-de-Kur</div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+      <article class="player-card"
+        data-number="11"
+        data-name="Мерида Морграфт"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/11_merida_morgraft.jpg" alt="Мерида Морграфт"></div>
+        <div class="player-data">
+          <div class="player-number">11</div>
+          <div class="player-name">Мерида<br>Морграфт</div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+      <article class="player-card"
+        data-number="13"
+        data-name="Амилия Лиссаранд"
+        data-position=""
+        data-info="краткая информация об игроке появится здесь.">
+        <div class="player-photo"><img src="img/players/13_amilia_lissarand.jpg" alt="Амилия Лиссаранд"></div>
+        <div class="player-data">
+          <div class="player-number">13</div>
+          <div class="player-name">Амилия<br>Лиссаранд</div>
+          <div class="player-role"></div>
+        </div>
+      </article>
+
+    </section>
+
+    <section class="player-profile" id="playerProfile">
+      <div class="profile-number" id="profileNumber">02</div>
+      <div>
+        <div class="profile-name" id="profileName">Лиария Спраут</div>
+        <div class="profile-position" id="profilePosition"></div>
+        <div class="profile-text" id="profileText">краткая информация об игроке появится здесь.</div>
+      </div>
+      <div class="profile-mark">escadrille<br>lafayette</div>
+    </section>
+
+  </main>
+
+  <div class="bottom-clouds">
+    <img class="bottom-cloud c1" data-depth="8" src="img/ui/cl01.png" alt="">
+    <img class="bottom-cloud c2" data-depth="12" src="img/ui/cl03.png" alt="">
+    <img class="bottom-cloud c3 flip" data-depth="9" src="img/ui/cl02.png" alt="">
+    <img class="bottom-cloud c4" data-depth="16" src="img/ui/cl04.png" alt="">
+    <img class="bottom-cloud c5 flip" data-depth="6" src="img/ui/cl01.png" alt="">
+    <img class="bottom-cloud c6" data-depth="14" src="img/ui/cl02.png" alt="">
+    <img class="bottom-cloud c7 flip" data-depth="9" src="img/ui/cl03.png" alt="">
+    <img class="bottom-cloud c8" data-depth="16" src="img/ui/cl04.png" alt="">
+    <img class="bottom-cloud c9 flip" data-depth="8" src="img/ui/cl02.png" alt="">
+    <img class="bottom-cloud c10" data-depth="12" src="img/ui/cl01.png" alt="">
+    <img class="bottom-cloud c11" data-depth="4" src="img/ui/cl03.png" alt="">
+  </div>
+</div>
+
+<script>
+const cards = document.querySelectorAll(".player-card");
+const profile = document.getElementById("playerProfile");
+const profileNumber = document.getElementById("profileNumber");
+const profileName = document.getElementById("profileName");
+const profilePosition = document.getElementById("profilePosition");
+const profileText = document.getElementById("profileText");
+
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+    cards.forEach(item => item.classList.remove("active"));
+    card.classList.add("active");
+
+    profile.classList.add("changing");
+
+    setTimeout(() => {
+      profileNumber.textContent = card.dataset.number;
+      profileName.textContent = card.dataset.name;
+      profilePosition.textContent = card.dataset.position;
+      profileText.textContent = card.dataset.info;
+      profile.classList.remove("changing");
+    }, 120);
+  });
+});
+
+const clouds = document.querySelectorAll(".bottom-cloud");
+
+document.addEventListener("mousemove", e => {
+  const x = (e.clientX / window.innerWidth - .5) * 2;
+  const y = (e.clientY / window.innerHeight - .5) * 2;
+
+  clouds.forEach(cloud => {
+    const depth = Number(cloud.dataset.depth || 8);
+    cloud.style.setProperty("--mx", `${x * depth}px`);
+    cloud.style.setProperty("--my", `${y * depth * .22}px`);
+  });
+});
+</script>
+
+</body>
+</html>

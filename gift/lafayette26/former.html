@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квиддичисты бывшими не бывают · LaFayette</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+@font-face {
+  font-family:'ModernoTwo';
+  src:url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');
+  font-display:swap;
+}
+
+:root {
+  --blue:#0E1C28;
+  --ink:#17354A;
+  --gold:#B89463;
+  --paper:#F3EBDD;
+  --header-h:74px;
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,body {
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--blue);
+  color:var(--paper);
+  font-family:'Cormorant Garamond',serif;
+}
+
+button { font:inherit; }
+a { color:inherit; text-decoration:none; }
+
+#museum {
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:var(--blue);
+}
+
+.room-bg {
+  position:absolute;
+  inset:0;
+  background-image:url('img/ui/bg.png');
+  background-size:cover;
+  background-position:center center;
+  transform:scale(1.01);
+}
+
+.room-bg::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(7,14,21,.30),
+      rgba(7,14,21,.08) 34%,
+      rgba(7,14,21,.14) 65%,
+      rgba(7,14,21,.46)),
+    linear-gradient(90deg,
+      rgba(7,14,21,.56),
+      rgba(7,14,21,.12) 18%,
+      transparent 34%,
+      transparent 66%,
+      rgba(7,14,21,.12) 82%,
+      rgba(7,14,21,.56));
+}
+
+.room-bg::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 44% 29% at 50% 23%,
+      rgba(252,248,239,.42),
+      rgba(242,244,245,.15) 47%,
+      transparent 78%);
+}
+
+/* шапка — те же пропорции, что на странице капитанов */
+.museum-header {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:var(--header-h);
+  z-index:30;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 32px;
+  background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));
+  backdrop-filter:blur(5px);border-bottom:1px solid rgba(182,148,101,.24);
+}
+
+.header-logo {
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  width:210px;
+  flex-shrink:0;
+}
+
+.logo-img {
+  height:44px;
+  width:auto;
+  display:block;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.38));
+}
+
+.logo-text {
+  font-family:'ModernoTwo','Cormorant Garamond',serif;
+  font-size:14px;
+  line-height:1.02;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#fff;
+}
+
+.museum-nav {
+  display:flex;
+  gap:28px;
+  align-items:center;
+}
+
+.museum-nav a {
+  position:relative;
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;
+  font-weight:600;
+  line-height:1;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(244,238,229,.82);
+}
+
+.museum-nav a::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  width:0;
+  height:1px;
+  background:var(--gold);
+  transition:.2s ease;
+}
+
+.museum-nav a:hover,
+.museum-nav a.active {
+  color:#fff1d8;
+}
+
+.museum-nav a:hover::after,
+.museum-nav a.active::after {
+  left:0;
+  width:100%;
+}
+
+.former-main {
+  position:absolute;
+  top:var(--header-h);
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  z-index:12;
+  width:min(1280px,calc(100% - 40px));
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  gap:8px;
+  padding:24px 0 20px;
+}
+
+.hero {
+  position:relative;
+  z-index:4;
+  text-align:center;
+}
+
+.hero::before {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:51%;
+  width:min(900px,70vw);
+  height:165px;
+  transform:translate(-50%,-50%);
+  z-index:-1;
+  background:
+    radial-gradient(ellipse at center,
+      rgba(255,252,245,.48) 0%,
+      rgba(251,249,244,.26) 45%,
+      rgba(240,244,246,.08) 72%,
+      transparent 100%);
+  filter:blur(12px);
+}
+
+.hero-meta {
+  font-family:'Jura',sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+.hero h1 {
+  margin-top:3px;
+  font-size:clamp(38px,3.7vw,62px);
+  line-height:.86;
+  font-weight:500;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+.hero h1 span {
+  display:block;
+}
+
+.hero-rule {
+  width:min(420px,36vw);
+  margin:7px auto 4px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.hero-rule::before,
+.hero-rule::after {
+  content:"";
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(178,140,90,.72),transparent);
+}
+
+.hero-rule span {
+  color:var(--gold);
+  font-size:9px;
+}
+
+.hero-subtitle {
+  font-family:'Jura',sans-serif;
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#2B4356;
+}
+
+.center-wrap {
+  min-height:0;
+  width:min(980px,76%);
+  margin:24px auto 0;
+  display:grid;
+  grid-template-columns:minmax(470px,1.08fr) minmax(280px,.76fr);
+  gap:16px;
+  align-items:start;
+}
+
+.registry-card,
+.profile-card {
+  position:relative;
+  height:min(61vh,590px);
+  background:rgba(11,26,38,.48);
+  border:1px solid rgba(183,145,92,.42);
+  box-shadow:0 18px 44px rgba(0,0,0,.18);
+  backdrop-filter:blur(6px);
+}
+
+/* единый спокойный внутренний контур блока */
+.registry-card::before,
+.profile-card::before {
+  content:"";
+  position:absolute;
+  inset:7px;
+  z-index:5;
+  pointer-events:none;
+  border:1px solid rgba(160,169,176,.13);
+}
+
+.registry-card {
+  padding:12px;
+}
+
+.registry-list {
+  position:relative;
+  z-index:6;
+  height:100%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-auto-rows:minmax(0,1fr);
+  gap:6px 12px;
+  padding:2px;
+  overflow:auto;
+  align-content:start;
+}
+
+.registry-list::-webkit-scrollbar { width:5px; }
+.registry-list::-webkit-scrollbar-track { background:transparent; }
+.registry-list::-webkit-scrollbar-thumb {
+  background:rgba(184,148,99,.28);
+  border-radius:999px;
+}
+
+.registry-item {
+  position:relative;
+  width:100%;
+  min-width:0;
+  min-height:32px;
+  display:grid;
+  grid-template-columns:16px minmax(0,1fr) 12px;
+  align-items:center;
+  gap:8px;
+  padding:2px 10px;
+  border:1px solid rgba(189,165,126,.22);
+  background:
+    linear-gradient(90deg,
+      rgba(18,43,63,.32),
+      rgba(18,43,63,.15));
+  color:#F2E7D4;
+  cursor:pointer;
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    border-color .18s ease,
+    color .18s ease,
+    box-shadow .18s ease;
+}
+
+.registry-item:hover {
+  transform:translateX(2px);
+  background:
+    linear-gradient(90deg,
+      rgba(28,60,84,.42),
+      rgba(28,60,84,.19));
+  border-color:rgba(210,174,116,.32);
+  color:#FFF0D7;
+}
+
+.registry-item.active {
+  background:
+    linear-gradient(90deg,
+      rgba(39,73,96,.52),
+      rgba(25,51,70,.24));
+  border-color:rgba(214,180,119,.56);
+  color:#FFF0D7;
+  box-shadow:0 4px 12px rgba(0,0,0,.07);
+}
+
+.registry-mark {
+  color:#C49A5D;
+  font-size:9px;
+  text-align:center;
+}
+
+.registry-label {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:center;
+  font-size:clamp(11px,.84vw,14px);
+  font-weight:500;
+  letter-spacing:.008em;
+}
+
+.registry-arrow {
+  color:rgba(226,202,161,.68);
+  font-size:14px;
+  line-height:1;
+  text-align:right;
+}
+
+.profile-card {
+  width:100%;
+  max-width:360px;
+  justify-self:start;
+  padding:10px;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  gap:8px;
+}
+
+.profile-photo-wrap {
+  position:relative;
+  min-height:0;
+  overflow:hidden;
+  background:#0A1924;
+  border:1px solid rgba(181,145,92,.42);
+}
+
+/* внутренняя рамка портрета: близко к краю, без полосы поперек изображения */
+.profile-photo-wrap::before {
+  content:"";
+  position:absolute;
+  inset:4px;
+  z-index:4;
+  pointer-events:none;
+  border:1px solid rgba(160,168,174,.15);
+}
+
+.profile-photo {
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center 14%;
+  filter:saturate(.88) brightness(.97);
+  transition:opacity .18s ease,transform .32s ease;
+}
+
+.profile-card.changing .profile-photo {
+  opacity:.16;
+  transform:scale(1.015);
+}
+
+.profile-info {
+  position:relative;
+  z-index:6;
+  padding:10px 10px 9px;
+  text-align:center;
+  background:
+    linear-gradient(180deg,rgba(14,31,44,.98),rgba(10,24,35,.98));
+  border:1px solid rgba(178,140,90,.34);
+}
+
+.profile-name {
+  font-size:clamp(20px,1.45vw,27px);
+  line-height:1.02;
+  font-weight:600;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  color:#F2E7D3;
+}
+
+.profile-divider {
+  width:72%;
+  margin:5px auto;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.profile-divider::before,
+.profile-divider::after {
+  content:"";
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(185,147,92,.60),transparent);
+}
+
+.profile-divider span {
+  color:#B38E5C;
+  font-size:7px;
+}
+
+.profile-caption {
+  font-family:'Jura',sans-serif;
+  font-size:7px;
+  font-weight:600;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(214,192,157,.70);
+}
+
+.profile-quote {
+  margin-top:5px;
+  font-size:9px;
+  line-height:1.3;
+  color:rgba(237,228,213,.66);
+}
+
+.clouds {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-12px;
+  height:18%;
+  z-index:7;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.cloud {
+  position:absolute;
+  width:auto;
+  max-width:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.10));
+}
+
+.c1 { left:-8%; bottom:-14%; width:min(28vw,420px); opacity:.68; }
+.c2 { left:3%; bottom:-20%; width:min(22vw,330px); opacity:.36; }
+.c3 { left:24%; bottom:-28%; width:min(20vw,290px); opacity:.18; }
+.c4 { left:42%; bottom:-26%; width:min(18vw,260px); opacity:.14; }
+.c5 { right:34%; bottom:-28%; width:min(18vw,260px); opacity:.14; }
+.c6 { right:20%; bottom:-24%; width:min(20vw,300px); opacity:.22; }
+.c7 { right:6%; bottom:-18%; width:min(22vw,330px); opacity:.30; }
+.c8 { right:-8%; bottom:-13%; width:min(28vw,420px); opacity:.66; }
+.c9 { left:58%; bottom:-34%; width:min(14vw,200px); opacity:.10; }
+
+/* ровно тот же компактный режим шапки, что на странице капитанов */
+@media (max-height:860px) and (min-width:1000px) {
+  :root { --header-h:66px; }
+
+  .museum-header { padding:0 28px; }
+  .logo-img { height:40px; }
+  .logo-text { font-size:13px; }
+
+  .former-main {
+    padding:16px 0 15px;
+    gap:6px;
+  }
+
+  .hero h1 {
+    font-size:clamp(34px,3.3vw,54px);
+  }
+
+  .hero-meta,
+  .hero-subtitle {
+    font-size:8px;
+  }
+
+  .center-wrap {
+    width:min(930px,80%);
+    margin-top:16px;
+    gap:12px;
+    grid-template-columns:minmax(430px,1.04fr) minmax(260px,.72fr);
+  }
+
+  .registry-card,
+  .profile-card {
+    height:min(61vh,525px);
+  }
+
+  .registry-card { padding:10px; }
+  .registry-list { gap:5px 10px; }
+  .registry-item { min-height:28px; padding:1px 9px; }
+  .registry-label { font-size:11px; }
+
+  .profile-card {
+    max-width:325px;
+    padding:8px;
+  }
+
+  .profile-name { font-size:23px; }
+  .profile-quote { font-size:8px; }
+  .clouds { height:16%; }
+}
+
+@media (max-width:1100px) {
+  .museum-nav { gap:18px; }
+
+  .center-wrap {
+    width:min(900px,88%);
+    grid-template-columns:minmax(390px,1fr) minmax(250px,.70fr);
+  }
+}
+</style>
+</head>
+
+<body>
+<div id="museum">
+  <div class="room-bg"></div>
+
+  <header class="museum-header">
+    <a href="index.html" class="header-logo">
+      <img class="logo-img"
+           src="img/ui/mus_logo.png"
+           alt="">
+      <div class="logo-text">Когтевранский<br>музей</div>
+    </a>
+
+    <nav class="museum-nav">
+      <a href="index.html">главная</a>
+      <a href="team.html">эскадрилья</a>
+      <a href="captains.html">капитаны</a>
+      <a href="matches.html">матчи</a>
+      <a href="form.html">форма</a>
+      <a href="former.html" class="active">история</a>
+      <a href="quotes.html">цитатник</a>
+    </nav>
+  </header>
+
+  <main class="former-main">
+    <section class="hero">
+      <div class="hero-meta">LAFAYETTE · 2011 — 2026</div>
+      <h1>
+        <span>Квиддичисты</span>
+        <span>бывшими не бывают</span>
+      </h1>
+      <div class="hero-rule"><span>✦</span></div>
+      <div class="hero-subtitle">те, кто однажды поднялись в небо вместе с LaFayette</div>
+    </section>
+
+    <section class="center-wrap">
+      <div class="registry-card">
+        <div class="registry-list">
+
+          <button class="registry-item active" type="button"
+                  data-name="Эйш Николеску"
+                  data-photo="img/former/eish_nicolescu.jpg"
+                  aria-pressed="true">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Эйш Николеску</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Меган Фрост"
+                  data-photo="img/former/megan_frost.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Меган Фрост</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Адела Коларжова"
+                  data-photo="img/former/adela_kolarzhova.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Адела Коларжова</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Scarlett Walman"
+                  data-photo="img/former/scarlett_walman.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Scarlett Walman</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Коле Огмас"
+                  data-photo="img/former/kole_ogmas.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Коле Огмас</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Julexa Shell"
+                  data-photo="img/former/julexa_shell.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Julexa Shell</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Винсент Бернкастель"
+                  data-photo="img/former/vincent_bernkastel.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Винсент Бернкастель</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Крис Ривера"
+                  data-photo="img/former/chris_rivera.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Крис Ривера</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Мия Хейг"
+                  data-photo="img/former/mia_haig.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Мия Хейг</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Ханна Сонг"
+                  data-photo="img/former/hanna_song.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Ханна Сонг</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Мизуки Хироми"
+                  data-photo="img/former/mizuki_hiromi.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Мизуки Хироми</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Мейсон Кларк"
+                  data-photo="img/former/mason_clark.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Мейсон Кларк</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Кон Шори"
+                  data-photo="img/former/kon_shori.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Кон Шори</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Реми Ликтфис"
+                  data-photo="img/former/remi_liktfis.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Реми Ликтфис</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Джин Фрай"
+                  data-photo="img/former/jin_fry.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Джин Фрай</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Дарси Фист"
+                  data-photo="img/former/darcy_fist.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Дарси Фист</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Альбертина Санчез"
+                  data-photo="img/former/albertina_sanchez.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Альбертина Санчез</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Ная Рей"
+                  data-photo="img/former/naya_ray.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Ная Рей</span>
+            <span class="registry-arrow">›</span>
+          </button>
+          <button class="registry-item" type="button"
+                  data-name="Камилка Копилка"
+                  data-photo="img/former/kamilka_kopilka.jpg"
+                  aria-pressed="false">
+            <span class="registry-mark">✦</span>
+            <span class="registry-label">Камилка Копилка</span>
+            <span class="registry-arrow">›</span>
+          </button>
+        </div>
+      </div>
+
+      <aside class="profile-card" id="profileCard">
+        <div class="profile-photo-wrap">
+          <img class="profile-photo"
+               id="profilePhoto"
+               src="img/former/eish_nicolescu.jpg"
+               alt="Эйш Николеску">
+        </div>
+
+        <div class="profile-info">
+          <div class="profile-name" id="profileName">Эйш Николеску</div>
+          <div class="profile-divider"><span>✦</span></div>
+          <div class="profile-caption">часть истории · LaFayette</div>
+          <div class="profile-quote">наши бывшие игроки — часть неба LaFayette</div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="clouds" aria-hidden="true">
+    <img class="cloud c1" src="img/ui/cl03.png" alt="">
+    <img class="cloud c2" src="img/ui/cl01.png" alt="">
+    <img class="cloud c3" src="img/ui/cl04.png" alt="">
+    <img class="cloud c4" src="img/ui/cl02.png" alt="">
+    <img class="cloud c5" src="img/ui/cl03.png" alt="">
+    <img class="cloud c6" src="img/ui/cl01.png" alt="">
+    <img class="cloud c7" src="img/ui/cl02.png" alt="">
+    <img class="cloud c8" src="img/ui/cl03.png" alt="">
+    <img class="cloud c9" src="img/ui/cl04.png" alt="">
+  </div>
+</div>
+
+<script>
+const items = Array.from(document.querySelectorAll('.registry-item'));
+const card = document.getElementById('profileCard');
+const photo = document.getElementById('profilePhoto');
+const nameNode = document.getElementById('profileName');
+
+function activate(item) {
+  if (!item || item.classList.contains('active')) return;
+
+  items.forEach(btn => {
+    btn.classList.remove('active');
+    btn.setAttribute('aria-pressed','false');
+  });
+
+  item.classList.add('active');
+  item.setAttribute('aria-pressed','true');
+
+  card.classList.add('changing');
+
+  const nextName = item.dataset.name;
+  const nextPhoto = item.dataset.photo;
+
+  const preload = new Image();
+
+  const swap = () => {
+    photo.src = nextPhoto;
+    photo.alt = nextName;
+    nameNode.textContent = nextName;
+    card.classList.remove('changing');
+  };
+
+  preload.onload = () => setTimeout(swap,90);
+  preload.onerror = () => setTimeout(swap,90);
+  preload.src = nextPhoto;
+}
+
+items.forEach(item => {
+  item.addEventListener('click',() => activate(item));
+});
+
+document.addEventListener('keydown',event => {
+  const currentIndex = items.findIndex(item => item.classList.contains('active'));
+  if (currentIndex < 0) return;
+
+  let nextIndex = currentIndex;
+
+  if (event.key === 'ArrowDown') nextIndex = Math.min(items.length - 1,currentIndex + 1);
+  if (event.key === 'ArrowUp') nextIndex = Math.max(0,currentIndex - 1);
+  if (event.key === 'ArrowRight') nextIndex = Math.min(items.length - 1,currentIndex + 1);
+  if (event.key === 'ArrowLeft') nextIndex = Math.max(0,currentIndex - 1);
+
+  if (nextIndex !== currentIndex) {
+    event.preventDefault();
+    items[nextIndex].focus();
+    activate(items[nextIndex]);
+  }
+});
+</script>
+</body>
+</html>

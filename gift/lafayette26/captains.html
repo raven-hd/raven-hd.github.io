@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Капитаны LaFayette · Когтевранский музей</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+@font-face {
+  font-family:'ModernoTwo';
+  src:url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');
+  font-display:swap;
+}
+
+:root {
+  --blue:#0E1C28;
+  --ink:#17354A;
+  --gold:#B89463;
+  --light:#F3EBDD;
+  --header-h:74px;
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,body {
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--blue);
+  color:var(--light);
+  font-family:'Cormorant Garamond',serif;
+}
+
+a {
+  color:inherit;
+  text-decoration:none;
+}
+
+#museum {
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:var(--blue);
+}
+
+.room-bg {
+  position:absolute;
+  inset:0;
+  background-image:url('img/ui/bg.png');
+  background-size:cover;
+  background-position:center center;
+  transform:scale(1.01);
+}
+
+.room-bg::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(7,14,21,.30),
+      rgba(7,14,21,.08) 34%,
+      rgba(7,14,21,.16) 65%,
+      rgba(7,14,21,.48)),
+    linear-gradient(90deg,
+      rgba(7,14,21,.58),
+      rgba(7,14,21,.14) 18%,
+      transparent 34%,
+      transparent 66%,
+      rgba(7,14,21,.14) 82%,
+      rgba(7,14,21,.58));
+}
+
+.room-bg::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 44% 29% at 50% 24%,
+      rgba(252,248,239,.48),
+      rgba(242,244,245,.18) 47%,
+      transparent 78%);
+}
+
+.museum-header {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:var(--header-h);
+  z-index:30;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 32px;
+
+  background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));
+  backdrop-filter:blur(5px);border-bottom:1px solid rgba(182,148,101,.24);
+}
+
+.header-logo {
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  width:210px;
+}
+
+.logo-img {
+  height:44px;
+  width:auto;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.38));
+}
+
+.logo-text {
+  font-family:'ModernoTwo','Cormorant Garamond',serif;
+  font-size:14px;
+  line-height:1.02;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#fff;
+}
+
+.museum-nav {
+  display:flex;
+  gap:28px;
+  align-items:center;
+}
+
+.museum-nav a {
+  position:relative;
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(244,238,229,.82);
+}
+
+.museum-nav a::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  width:0;
+  height:1px;
+  background:var(--gold);
+  transition:.2s ease;
+}
+
+.museum-nav a:hover,
+.museum-nav a.active {
+  color:#fff1d8;
+}
+
+.museum-nav a:hover::after,
+.museum-nav a.active::after {
+  left:0;
+  width:100%;
+}
+
+.captains-main {
+  position:absolute;
+  top:var(--header-h);
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+
+  width:min(1450px,calc(100% - 64px));
+  z-index:12;
+
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  gap:12px;
+
+  padding:24px 0 30px;
+}
+
+.hero {
+  position:relative;
+  text-align:center;
+  z-index:4;
+}
+
+.hero::before {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:53%;
+  transform:translate(-50%,-50%);
+
+  width:min(900px,72vw);
+  height:170px;
+
+  background:
+    radial-gradient(ellipse at center,
+      rgba(255,251,243,.72),
+      rgba(248,248,244,.40) 42%,
+      rgba(236,242,245,.12) 70%,
+      transparent);
+
+  filter:blur(12px);
+  z-index:-1;
+}
+
+.hero-meta {
+  font-family:'Jura',sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+.hero h1 {
+  margin-top:2px;
+  font-size:clamp(52px,4.3vw,78px);
+  line-height:.94;
+  font-weight:500;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+.hero-line {
+  width:min(350px,34vw);
+  margin:5px auto 5px;
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.hero-line::before,
+.hero-line::after {
+  content:"";
+  flex:1;
+  height:1px;
+  background:
+    linear-gradient(to right,
+      transparent,
+      rgba(177,141,91,.72),
+      transparent);
+}
+
+.hero-line span {
+  color:var(--gold);
+  font-size:9px;
+}
+
+.hero-subtitle {
+  font-family:'Jura',sans-serif;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+.captains-grid {
+  width:max-content;
+  max-width:calc(100vw - 120px);
+  margin:4px auto 0;
+
+  min-height:0;
+
+  display:grid;
+  grid-template-columns:repeat(4, clamp(205px, 12.2vw, 248px));
+  grid-template-rows:repeat(2, auto);
+
+  column-gap:24px;
+  row-gap:20px;
+
+  align-content:start;
+  justify-content:center;
+  justify-items:center;
+}
+
+.captain-card {
+  position:relative;
+  width:100%;
+  aspect-ratio:3 / 4;
+  min-width:0;
+  min-height:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:transform .25s ease, filter .25s ease;
+  filter:drop-shadow(0 10px 13px rgba(0,0,0,.20));
+}
+
+.captain-card:hover {
+  transform:translateY(-5px);
+  filter:drop-shadow(0 17px 18px rgba(0,0,0,.28));
+}
+
+.captain-ready {
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  object-position:center;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+
+.clouds {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-8px;
+  height:22%;
+  z-index:7;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.cloud {
+  position:absolute;
+  width:auto;
+  max-width:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.10));
+}
+
+/* плотные облачные банки только по краям */
+.cloud.c1 {
+  left:-7%;
+  bottom:-17%;
+  width:min(34vw,520px);
+  opacity:.86;
+}
+
+.cloud.c5 {
+  right:-7%;
+  bottom:-18%;
+  width:min(34vw,520px);
+  opacity:.84;
+}
+
+/* второй, более прозрачный слой у краев */
+.cloud.c2 {
+  left:7%;
+  bottom:-24%;
+  width:min(26vw,390px);
+  opacity:.36;
+}
+
+.cloud.c4 {
+  right:7%;
+  bottom:-23%;
+  width:min(25vw,380px);
+  opacity:.34;
+}
+
+/* в центре только легкая дымка */
+.cloud.c3 {
+  left:38%;
+  bottom:-34%;
+  width:min(23vw,340px);
+  opacity:.19;
+}
+
+.cloud.c6 {
+  right:35%;
+  bottom:-38%;
+  width:min(21vw,310px);
+  opacity:.14;
+}
+
+@media (max-height:860px) and (min-width:1000px) {
+  :root {
+    --header-h:66px;
+  }
+
+  .museum-header {
+    padding:0 28px;
+  }
+
+  .logo-img {
+    height:40px;
+  }
+
+  .logo-text {
+    font-size:13px;
+  }
+
+  .captains-main {
+    padding:16px 0 24px;
+    gap:9px;
+  }
+
+  .hero h1 {
+    font-size:clamp(44px,3.8vw,64px);
+  }
+
+  .hero-meta,
+  .hero-subtitle {
+    font-size:9px;
+  }
+
+  .captains-grid {
+    width:max-content;
+    max-width:calc(100vw - 100px);
+    grid-template-columns:repeat(4, clamp(178px, 11.2vw, 214px));
+    column-gap:20px;
+    row-gap:14px;
+    margin-top:2px;
+  }
+
+  .captain-card {
+    width:100%;
+  }
+
+  .clouds {
+    height:20%;
+    bottom:-10px;
+  }
+}
+
+@media (max-width:1100px) {
+  .museum-nav {
+    gap:18px;
+  }
+
+  .captains-grid {
+    width:max-content;
+    max-width:calc(100vw - 70px);
+    grid-template-columns:repeat(4, clamp(155px, 18vw, 205px));
+    column-gap:14px;
+    row-gap:12px;
+  }
+
+  .captain-card {
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+<div id="museum">
+
+  <div class="room-bg"></div>
+
+  <header class="museum-header">
+
+    <a href="index.html" class="header-logo">
+      <img
+        class="logo-img"
+        src="img/ui/mus_logo.png"
+        alt=""
+      >
+      <div class="logo-text">
+        КОГТЕВРАНСКИЙ<br>МУЗЕЙ
+      </div>
+    </a>
+
+    <nav class="museum-nav">
+      <a href="index.html">главная</a>
+      <a href="team.html">эскадрилья</a>
+      <a href="captains.html" class="active">капитаны</a>
+      <a href="matches.html">матчи</a>
+      <a href="form.html">форма</a>
+      <a href="former.html">история</a>
+      <a href="quotes.html">цитатник</a>
+    </nav>
+
+  </header>
+
+  <main class="captains-main">
+
+    <section class="hero">
+      <div class="hero-meta">
+        LAFAYETTE · 2011 — 2026
+      </div>
+
+      <h1>КАПИТАНЫ</h1>
+
+      <div class="hero-line">
+        <span>✦</span>
+      </div>
+
+      <div class="hero-subtitle">
+        галерея капитанов эскадрильи LaFayette
+      </div>
+    </section>
+
+    <section class="captains-grid">
+
+      <article class="captain-card">
+        <img class="captain-ready" src="img/captains/elior_lons.png" alt="Элиор Лонс">
+      </article>
+    
+
+      <article class="captain-card">
+        <img class="captain-ready" src="img/captains/erin_barns.png" alt="Эрин Барнс">
+      </article>
+    
+
+      <article class="captain-card">
+        <img class="captain-ready" src="img/captains/basil_croved.png" alt="Basil Croved">
+      </article>
+    
+
+      <article class="captain-card">
+        <img class="captain-ready" src="img/captains/surir.png" alt="Сурир">
+      </article>
+    
+
+      <article class="captain-card">
+        <img class="captain-ready" src="img/captains/eirian_hamilton.png" alt="Эйриан Гамильтон">
+      </article>
+    
+
+      <article class="captain-card">
+        <img class="captain-ready" src="img/captains/merida_croved.png" alt="Merida Croved">
+      </article>
+    
+
+      <article class="captain-card">
+        <img class="captain-ready" src="img/captains/gillian_fry_barns.png" alt="Джиллиан Фрай-Барнс">
+      </article>
+    
+
+      <article class="captain-card">
+        <img class="captain-ready" src="img/captains/amberly_shrive_stiverson.png" alt="Эмберли Шрив-Стиверсон">
+      </article>
+    
+    </section>
+
+  </main>
+
+  <div class="clouds" aria-hidden="true">
+    <img class="cloud c1" src="img/ui/cl03.png" alt="">
+    <img class="cloud c2" src="img/ui/cl01.png" alt="">
+    <img class="cloud c3" src="img/ui/cl04.png" alt="">
+    <img class="cloud c4" src="img/ui/cl02.png" alt="">
+    <img class="cloud c5" src="img/ui/cl03.png" alt="">
+    <img class="cloud c6" src="img/ui/cl01.png" alt="">
+  </div>
+
+
+</div>
+</body>
+</html>
