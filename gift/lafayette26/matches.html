@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Матчи LaFayette · Когтевранский музей</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'ModernoTwo';src:url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');font-display:swap}
+:root{--blue:#0E1C28;--ink:#17354A;--gold:#B89463;--light:#F3EBDD;--header-h:74px}
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;background:var(--blue);color:var(--light);font-family:'Cormorant Garamond',serif}body{overflow:hidden}a{color:inherit;text-decoration:none}button{font:inherit}
+#museum{position:fixed;inset:0;overflow:hidden;background:var(--blue)}
+.room-bg{position:absolute;inset:0;background-image:url('img/ui/bg.png');background-size:cover;background-position:center center;transform:scale(1.01)}
+.room-bg::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,14,21,.34),rgba(7,14,21,.08) 33%,rgba(7,14,21,.14) 64%,rgba(7,14,21,.54)),linear-gradient(90deg,rgba(7,14,21,.61),rgba(7,14,21,.14) 18%,transparent 35%,transparent 65%,rgba(7,14,21,.14) 82%,rgba(7,14,21,.61))}
+.room-bg::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 48% 29% at 50% 21%,rgba(255,251,242,.53),rgba(242,244,245,.19) 48%,transparent 79%)}
+.museum-header{position:absolute;top:0;left:0;right:0;height:var(--header-h);z-index:40;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));backdrop-filter:blur(5px);border-bottom:1px solid rgba(182,148,101,.24)}
+.header-logo{display:flex;align-items:center;gap:.75rem;width:210px;flex-shrink:0}.logo-img{height:44px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.38))}.logo-text{font-family:'ModernoTwo','Cormorant Garamond',serif;font-size:14px;line-height:1.02;letter-spacing:.04em;text-transform:uppercase;color:#fff}
+.museum-nav{display:flex;gap:19px;align-items:center}.museum-nav a{position:relative;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,238,229,.82);white-space:nowrap}.museum-nav a::after{content:"";position:absolute;left:50%;bottom:-10px;width:0;height:1px;background:var(--gold);transition:.2s ease}.museum-nav a:hover,.museum-nav a.active{color:#fff1d8}.museum-nav a:hover::after,.museum-nav a.active::after{left:0;width:100%}.museum-nav a.omg-link{letter-spacing:.16em}
+.matches-main{position:absolute;top:var(--header-h);left:50%;bottom:0;transform:translateX(-50%);z-index:12;width:min(1480px,calc(100% - 56px));padding:24px 0 44px;overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(184,148,99,.45) transparent}
+.hero{position:relative;text-align:center;z-index:4;margin-bottom:30px}.hero::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(960px,73vw);height:168px;background:radial-gradient(ellipse at center,rgba(255,251,243,.75),rgba(248,248,244,.38) 44%,rgba(236,242,245,.10) 70%,transparent);filter:blur(12px);z-index:-1}.hero-meta{font-family:'Jura',sans-serif;font-size:8px;font-weight:600;letter-spacing:.27em;text-transform:uppercase;color:var(--ink)}.hero h1{margin-top:3px;font-size:clamp(50px,4vw,74px);line-height:.92;font-weight:500;letter-spacing:.035em;text-transform:uppercase;color:var(--ink)}.hero-rule{width:min(350px,34vw);margin:6px auto 5px;display:flex;align-items:center;gap:12px}.hero-rule::before,.hero-rule::after{content:"";flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(177,141,91,.72),transparent)}.hero-rule span{color:var(--gold);font-size:9px}.hero-subtitle{font-family:'Jura',sans-serif;font-size:9px;font-weight:600;letter-spacing:.19em;text-transform:uppercase;color:var(--ink)}
+.matches-grid{width:min(1180px,92%);margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px 11px;align-items:start}
+.match-card{position:relative;padding:12px 10px 13px;border:1px solid rgba(184,148,99,.30);background:rgba(8,21,31,.72);box-shadow:0 14px 30px rgba(0,0,0,.20);backdrop-filter:blur(4px);overflow:hidden;display:flex;flex-direction:column;align-items:center;min-height:338px}.match-card::before{content:"";position:absolute;inset:8px;border:1px solid rgba(231,215,188,.07);pointer-events:none}
+.orb-wrap{position:relative;z-index:2;width:100%;display:flex;justify-content:center;align-items:center;margin:0 0 2px;min-height:185px;cursor:pointer}.orb-wrap img{display:block;width:min(178px,100%);height:auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.28));transition:transform .22s ease,filter .22s ease}.orb-wrap:hover img,.orb-wrap:focus-visible img{transform:translateY(-3px) scale(1.025);filter:drop-shadow(0 11px 22px rgba(0,0,0,.34))}.orb-wrap:focus-visible{outline:1px solid rgba(184,148,99,.55);outline-offset:-4px}.match-card.besy-win .orb-wrap::after,.match-card.kv-win .orb-wrap::after{content:"";position:absolute;left:50%;top:18px;transform:translateX(-50%);width:min(118px,70%);aspect-ratio:1/1;border-radius:50%;filter:blur(8px);opacity:0;transition:opacity .24s ease,filter .24s ease;pointer-events:none;mix-blend-mode:screen}.match-card.besy-win .orb-wrap::after{background:radial-gradient(circle at 42% 38%,rgba(255,190,190,.10) 0%,rgba(229,86,86,.14) 20%,rgba(191,31,31,.32) 48%,rgba(125,10,10,.28) 66%,rgba(74,0,0,.10) 82%,transparent 100%)}.match-card.kv-win .orb-wrap::after{background:radial-gradient(circle at 42% 38%,rgba(202,255,210,.10) 0%,rgba(88,211,112,.14) 20%,rgba(35,151,70,.32) 48%,rgba(17,101,45,.28) 66%,rgba(0,62,24,.10) 82%,transparent 100%)}.match-card.besy-win:hover .orb-wrap::after,.match-card.kv-win:hover .orb-wrap::after{opacity:1;filter:blur(10px)}.match-card.besy-win:hover .orb-wrap img,.match-card.kv-win:hover .orb-wrap img{filter:drop-shadow(0 11px 22px rgba(0,0,0,.34)) saturate(1.05)}
+.match-title{position:relative;z-index:2;margin-top:2px;text-align:center;font-size:19px;line-height:1.02;font-weight:600;color:#f3ebdd;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}.match-title .vs{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:130px;font-family:'Jura',sans-serif;font-size:8px;font-weight:600;line-height:1.2;letter-spacing:.18em;text-transform:uppercase;color:#d7b57a}.match-title .vs::before,.match-title .vs::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(215,181,122,.9),transparent)}.match-score{position:relative;z-index:2;margin-top:0;font-size:28px;line-height:1;font-weight:600;color:#d9b97f}.clouds{position:absolute;left:0;right:0;bottom:-10px;height:17%;z-index:7;overflow:hidden;pointer-events:none}.cloud{position:absolute;width:auto;max-width:none;filter:drop-shadow(0 8px 14px rgba(0,0,0,.10))}.c1{left:-7%;bottom:-17%;width:min(31vw,470px);opacity:.70}.c5{right:-7%;bottom:-18%;width:min(31vw,470px);opacity:.68}.c2{left:7%;bottom:-24%;width:min(23vw,350px);opacity:.27}.c4{right:7%;bottom:-23%;width:min(23vw,350px);opacity:.27}.c3{left:39%;bottom:-34%;width:min(20vw,300px);opacity:.12}.c6{right:35%;bottom:-38%;width:min(18vw,270px);opacity:.10}
+@media(max-height:860px) and (min-width:1000px){:root{--header-h:66px}.museum-header{padding:0 28px}.logo-img{height:40px}.logo-text{font-size:13px}.matches-main{padding:16px 0 28px}.hero{margin-bottom:22px}.hero h1{font-size:clamp(42px,3.6vw,60px)}.hero-meta,.hero-subtitle{font-size:8px}.matches-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.match-card{min-height:315px}.orb-wrap{min-height:158px}.orb-wrap img{width:min(154px,100%)}.match-title{font-size:17px;min-height:66px;gap:5px}.match-score{font-size:26px}}
+@media(max-width:1260px){.museum-nav{gap:13px}.museum-nav a{font-size:10px}.matches-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1020px){.matches-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.match-card{min-height:330px}}
+@media(max-width:720px){:root{--header-h:64px}html,body,#museum{overflow:auto}#museum{position:relative;min-height:100vh}.museum-header{position:fixed;padding:0 16px}.logo-img{height:36px}.logo-text{font-size:11px}.museum-nav{display:none}.matches-main{position:relative;top:auto;left:auto;bottom:auto;transform:none;width:calc(100% - 20px);margin:0 auto;padding:calc(var(--header-h) + 16px) 0 94px;overflow:visible}.hero h1{font-size:40px}.legend{justify-content:center}.matches-grid{width:100%;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.match-card{min-height:310px;padding:10px 8px 11px}.orb-wrap{min-height:145px}.orb-wrap img{width:min(145px,100%)}.match-title{font-size:17px;min-height:66px;gap:5px}.match-score{font-size:26px}.clouds{position:fixed;height:12%}}
+@media(max-width:480px){.matches-grid{grid-template-columns:1fr}.match-card{min-height:unset}.orb-wrap{min-height:158px}}
+</style>
+</head>
+<body>
+<div id="museum">
+  <div class="room-bg"></div>
+  <header class="museum-header">
+    <a href="index.html" class="header-logo"><img class="logo-img" src="img/ui/mus_logo.png" alt=""><div class="logo-text">КОГТЕВРАНСКИЙ<br>МУЗЕЙ</div></a>
+    <nav class="museum-nav">
+      <a href="index.html">главная</a><a href="team.html">эскадрилья</a><a href="captains.html">капитаны</a><a href="matches.html" class="active">матчи</a><a href="form.html">форма</a><a href="former.html">история</a><a href="quotes.html">цитатник</a><a href="gallery.html">галерея</a><a href="omg.html" class="omg-link">OMG</a>
+    </nav>
+  </header>
+
+  <main class="matches-main">
+    <section class="hero">
+      <div class="hero-meta">LAFAYETTE · АРХИВ МАТЧЕЙ</div>
+      <h1>МАТЧИ LAFAYETTE</h1>
+      <div class="hero-rule"><span>✦</span></div>
+      <div class="hero-subtitle">шары воспоминаний о матчах, где играла LaFayette</div>
+    </section>
+
+
+    <section class="matches-grid" aria-label="Список матчей LaFayette по датам">
+      <article class="match-card">
+        <a class="orb-wrap" href="https://rave.dhog.org/viewtopic.php?p=728#p728" target="_blank" rel="noopener" aria-label="Открыть матч: LaFayette vs Нефритовая Змея"><img src="img/matches/lf_nz_win.png" alt="LaFayette vs Нефритовая Змея"></a>
+        <div class="match-title"><span>LaFayette</span><span class="vs">VS</span><span>Нефритовая Змея</span></div>
+        <div class="match-score">10:0</div>
+      </article>
+
+      <article class="match-card besy-win">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=87" target="_blank" rel="noopener" aria-label="Открыть матч: Бесы Поднебесья vs LaFayette"><img src="img/matches/bp_lf.png" alt="Бесы Поднебесья vs LaFayette"></a>
+        <div class="match-title"><span>Бесы Поднебесья</span><span class="vs">VS</span><span>LaFayette</span></div>
+        <div class="match-score">10:0</div>
+      </article>
+
+      <article class="match-card kv-win">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=97" target="_blank" rel="noopener" aria-label="Открыть матч: LaFayette vs Клыки Василиска"><img src="img/matches/lf_kv.png" alt="LaFayette vs Клыки Василиска"></a>
+        <div class="match-title"><span>LaFayette</span><span class="vs">VS</span><span>Клыки Василиска</span></div>
+        <div class="match-score">0:160</div>
+      </article>
+
+      <article class="match-card besy-win">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=119" target="_blank" rel="noopener" aria-label="Открыть матч: Бесы Поднебесья vs LaFayette"><img src="img/matches/bp_lf.png" alt="Бесы Поднебесья vs LaFayette"></a>
+        <div class="match-title"><span>Бесы Поднебесья</span><span class="vs">VS</span><span>LaFayette</span></div>
+        <div class="match-score">10:0</div>
+      </article>
+
+      <article class="match-card">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=133" target="_blank" rel="noopener" aria-label="Открыть матч: LaFayette vs Бесы Поднебесья"><img src="img/matches/bp_lf.png" alt="LaFayette vs Бесы Поднебесья"></a>
+        <div class="match-title"><span>LaFayette</span><span class="vs">VS</span><span>Бесы Поднебесья</span></div>
+        <div class="match-score">0:0</div>
+      </article>
+
+      <article class="match-card">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=153" target="_blank" rel="noopener" aria-label="Открыть матч: Клыки Василиска vs LaFayette"><img src="img/matches/lf_kv_win.png" alt="Клыки Василиска vs LaFayette"></a>
+        <div class="match-title"><span>Клыки Василиска</span><span class="vs">VS</span><span>LaFayette</span></div>
+        <div class="match-score">10:20</div>
+      </article>
+
+      <article class="match-card">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=177" target="_blank" rel="noopener" aria-label="Открыть матч: Бесы Поднебесья vs LaFayette"><img src="img/matches/bp_lf.png" alt="Бесы Поднебесья vs LaFayette"></a>
+        <div class="match-title"><span>Бесы Поднебесья</span><span class="vs">VS</span><span>LaFayette</span></div>
+        <div class="match-score">10:10</div>
+      </article>
+
+      <article class="match-card">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=210" target="_blank" rel="noopener" aria-label="Открыть матч: LaFayette vs Карамель"><img src="img/matches/lf_kar_win.png" alt="LaFayette vs Карамель"></a>
+        <div class="match-title"><span>LaFayette</span><span class="vs">VS</span><span>Карамель</span></div>
+        <div class="match-score">150:10</div>
+      </article>
+
+      <article class="match-card besy-win">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=312" target="_blank" rel="noopener" aria-label="Открыть матч: Бесы Поднебесья vs LaFayette"><img src="img/matches/bp_lf.png" alt="Бесы Поднебесья vs LaFayette"></a>
+        <div class="match-title"><span>Бесы Поднебесья</span><span class="vs">VS</span><span>LaFayette</span></div>
+        <div class="match-score">150:10</div>
+      </article>
+
+      <article class="match-card">
+        <a class="orb-wrap" href="https://quidd.dhog.org/log_zplay.php?play=365" target="_blank" rel="noopener" aria-label="Открыть матч: LaFayette vs Карамель"><img src="img/matches/lf_kar.png" alt="LaFayette vs Карамель"></a>
+        <div class="match-title"><span>LaFayette</span><span class="vs">VS</span><span>Карамель</span></div>
+        <div class="match-score">0:0</div>
+      </article>
+    </section>
+  </main>
+
+  <div class="clouds" aria-hidden="true"><img class="cloud c1" src="img/ui/cl03.png" alt=""><img class="cloud c2" src="img/ui/cl01.png" alt=""><img class="cloud c3" src="img/ui/cl04.png" alt=""><img class="cloud c4" src="img/ui/cl02.png" alt=""><img class="cloud c5" src="img/ui/cl03.png" alt=""><img class="cloud c6" src="img/ui/cl01.png" alt=""></div>
+</div>
+
+<script>
+document.querySelectorAll('.orb-wrap').forEach(orb=>{
+  orb.addEventListener('click',()=>{
+    window.setTimeout(()=>orb.blur(),0);
+  });
+});
+</script>
+</body>
+</html>
