@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мода LaFayette · Когтевранский музей</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+@font-face {
+  font-family:'ModernoTwo';
+  src:url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');
+  font-display:swap;
+}
+
+:root {
+  --blue:#0E1C28;
+  --ink:#17354A;
+  --gold:#B89463;
+  --light:#F3EBDD;
+  --header-h:74px;
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body {
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--blue);
+  color:var(--light);
+  font-family:'Cormorant Garamond',serif;
+}
+
+a { color:inherit; text-decoration:none; }
+button { font:inherit; }
+
+#museum {
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:var(--blue);
+}
+
+/* общий фон музея */
+.room-bg {
+  position:absolute;
+  inset:0;
+  background-image:url('img/ui/bg.png');
+  background-size:cover;
+  background-position:center center;
+  transform:scale(1.01);
+}
+
+.room-bg::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(7,14,21,.34),
+      rgba(7,14,21,.10) 33%,
+      rgba(7,14,21,.17) 64%,
+      rgba(7,14,21,.54)),
+    linear-gradient(90deg,
+      rgba(7,14,21,.62),
+      rgba(7,14,21,.16) 18%,
+      transparent 34%,
+      transparent 66%,
+      rgba(7,14,21,.16) 82%,
+      rgba(7,14,21,.62));
+}
+
+.room-bg::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 44% 29% at 50% 24%,
+      rgba(252,248,239,.48),
+      rgba(242,244,245,.18) 47%,
+      transparent 78%);
+}
+
+/* единая музейная шапка */
+.museum-header {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:var(--header-h);
+  z-index:40;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 32px;
+  background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));
+  backdrop-filter:blur(5px);
+  border-bottom:1px solid rgba(182,148,101,.24);
+}
+
+.header-logo {
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  width:210px;
+  flex-shrink:0;
+}
+
+.logo-img {
+  height:44px;
+  width:auto;
+  display:block;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.38));
+}
+
+.logo-text {
+  font-family:'ModernoTwo','Cormorant Garamond',serif;
+  font-size:14px;
+  line-height:1.02;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#fff;
+}
+
+.museum-nav {
+  display:flex;
+  gap:28px;
+  align-items:center;
+}
+
+.museum-nav a {
+  position:relative;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(244,238,229,.82);
+}
+
+.museum-nav a::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  width:0;
+  height:1px;
+  background:var(--gold);
+  transition:.2s ease;
+}
+
+.museum-nav a:hover,
+.museum-nav a.active { color:#fff1d8; }
+
+.museum-nav a:hover::after,
+.museum-nav a.active::after { left:0; width:100%; }
+
+/* ровно тот же старт контента, что на остальных страницах */
+.fashion-main {
+  position:absolute;
+  top:var(--header-h);
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:min(1500px,calc(100% - 56px));
+  z-index:12;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  gap:10px;
+  padding:24px 0 28px;
+}
+
+.hero {
+  position:relative;
+  text-align:center;
+  z-index:4;
+}
+
+.hero::before {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:53%;
+  transform:translate(-50%,-50%);
+  width:min(900px,72vw);
+  height:170px;
+  background:radial-gradient(ellipse at center,
+      rgba(255,251,243,.72),
+      rgba(248,248,244,.40) 42%,
+      rgba(236,242,245,.12) 70%,
+      transparent);
+  filter:blur(12px);
+  z-index:-1;
+}
+
+.hero-meta {
+  font-family:'Jura',sans-serif;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+.hero h1 {
+  margin-top:2px;
+  font-size:clamp(48px,4.2vw,76px);
+  line-height:.94;
+  font-weight:500;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+.hero-line {
+  width:min(350px,34vw);
+  margin:5px auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.hero-line::before,
+.hero-line::after {
+  content:"";
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(177,141,91,.72),transparent);
+}
+
+.hero-line span { color:var(--gold); font-size:9px; }
+
+.hero-subtitle {
+  font-family:'Jura',sans-serif;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+
+/* подиум */
+.runway {
+  position:relative;
+  min-height:0;
+  width:min(1440px,96%);
+  margin:0 auto;
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  align-items:end;
+}
+
+.runway::before {
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:50%;
+  bottom:102px;
+  width:min(1180px,86vw);
+  height:68%;
+  transform:translateX(-50%);
+  background:
+    radial-gradient(ellipse 50% 75% at 50% 72%,rgba(228,234,235,.13),transparent 70%),
+    linear-gradient(90deg,transparent,rgba(14,28,40,.11) 20%,rgba(14,28,40,.05) 50%,rgba(14,28,40,.11) 80%,transparent);
+  pointer-events:none;
+}
+
+.runway::after {
+  content:"";
+  position:absolute;
+  z-index:1;
+  left:7%;
+  right:7%;
+  bottom:103px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(184,148,99,.18) 12%,rgba(184,148,99,.48) 50%,rgba(184,148,99,.18) 88%,transparent);
+  box-shadow:0 18px 42px rgba(0,0,0,.30);
+}
+
+.stage {
+  position:relative;
+  z-index:3;
+  min-height:0;
+  height:100%;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.look-strip {
+  --slot:190px;
+  position:absolute;
+  left:50%;
+  bottom:106px;
+  height:calc(100% - 4px);
+  display:flex;
+  align-items:flex-end;
+  gap:0;
+  will-change:transform;
+  transition:transform .52s cubic-bezier(.22,.75,.22,1);
+}
+
+.look {
+  position:relative;
+  flex:0 0 var(--slot);
+  height:100%;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  cursor:pointer;
+  border:0;
+  background:none;
+  color:inherit;
+  padding:0;
+  opacity:.33;
+  transform:scale(.84);
+  transform-origin:center bottom;
+  filter:saturate(.68) brightness(.72);
+  transition:opacity .42s ease,transform .42s ease,filter .42s ease;
+}
+
+.look.is-near {
+  opacity:.60;
+  transform:scale(.92);
+  filter:saturate(.82) brightness(.84);
+}
+
+.look.is-active {
+  opacity:1;
+  transform:scale(1.04);
+  filter:saturate(1) brightness(1.02);
+  z-index:5;
+}
+
+.look::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-7px;
+  width:62%;
+  height:18px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.33),transparent 72%);
+  filter:blur(3px);
+  opacity:.62;
+}
+
+.look img {
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  max-height:100%;
+  display:block;
+  object-fit:contain;
+  object-position:center bottom;
+  user-select:none;
+  -webkit-user-drag:none;
+  filter:drop-shadow(0 14px 12px rgba(0,0,0,.19));
+}
+
+.look:focus-visible {
+  outline:1px solid rgba(220,186,127,.8);
+  outline-offset:-2px;
+}
+
+.look-label {
+  position:absolute;
+  z-index:6;
+  left:50%;
+  bottom:10px;
+  transform:translateX(-50%) translateY(12px);
+  min-width:100px;
+  padding:4px 8px 5px;
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  text-align:center;
+  color:#e3c697;
+  background:rgba(9,23,34,.72);
+  border-top:1px solid rgba(184,148,99,.35);
+  opacity:0;
+  transition:opacity .25s ease,transform .25s ease;
+}
+
+.look.is-active .look-label {
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.stage-arrow {
+  position:absolute;
+  top:48%;
+  z-index:12;
+  width:48px;
+  height:72px;
+  transform:translateY(-50%);
+  border:0;
+  background:linear-gradient(90deg,rgba(8,20,30,.54),rgba(8,20,30,.08));
+  color:#f0ddbd;
+  font-size:40px;
+  font-weight:300;
+  line-height:1;
+  cursor:pointer;
+  opacity:.74;
+  transition:opacity .2s ease,background .2s ease;
+}
+
+.stage-arrow:hover { opacity:1; }
+.stage-arrow.prev { left:0; }
+.stage-arrow.next { right:0; transform:translateY(-50%) scaleX(-1); }
+.stage-arrow span { display:block; transform:translateY(-2px); }
+
+/* нижняя музейная подпись и навигация */
+.fashion-control {
+  position:relative;
+  z-index:10;
+  min-height:104px;
+  display:grid;
+  grid-template-columns:150px minmax(0,1fr) 150px;
+  align-items:center;
+  gap:18px;
+  padding:10px 28px 12px;
+  background:
+    linear-gradient(180deg,rgba(7,18,27,.14),rgba(7,18,27,.66)),
+    linear-gradient(90deg,transparent,rgba(184,148,99,.035),transparent);
+  border-top:1px solid rgba(184,148,99,.22);
+}
+
+.control-label {
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(235,219,190,.50);
+}
+
+.control-label.right { text-align:right; }
+
+.rail-wrap {
+  display:grid;
+  grid-template-rows:auto auto;
+  justify-items:center;
+  gap:8px;
+  min-width:0;
+}
+
+.look-info {
+  min-height:49px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:4px 14px;
+  text-align:center;
+}
+
+.look-info-main {
+  min-width:220px;
+}
+
+.active-kicker {
+  font-family:'Jura',sans-serif;
+  font-size:7px;
+  font-weight:600;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(221,194,150,.58);
+}
+
+.active-name {
+  margin-top:2px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px;
+  line-height:1.05;
+  font-weight:600;
+  letter-spacing:.055em;
+  color:#ead7b6;
+}
+
+.active-season {
+  margin-top:2px;
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:rgba(231,219,198,.60);
+}
+
+.sketch-btn {
+  display:none;
+  align-items:center;
+  justify-content:center;
+  min-height:27px;
+  padding:5px 10px 4px;
+  border:1px solid rgba(184,148,99,.34);
+  background:rgba(11,28,40,.48);
+  color:#d9bb89;
+  font-family:'Jura',sans-serif;
+  font-size:7px;
+  font-weight:600;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.sketch-btn.visible { display:inline-flex; }
+.sketch-btn:hover {
+  border-color:rgba(214,177,116,.70);
+  background:rgba(22,48,65,.66);
+  color:#f0d6a7;
+}
+
+.rail {
+  width:min(640px,52vw);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:7px;
+}
+
+.rail::before,
+.rail::after {
+  content:"";
+  height:1px;
+  flex:1;
+  max-width:42px;
+  background:linear-gradient(90deg,transparent,rgba(184,148,99,.28));
+}
+
+.rail::after { background:linear-gradient(90deg,rgba(184,148,99,.28),transparent); }
+
+.dot {
+  width:10px;
+  height:10px;
+  padding:0;
+  border:1px solid rgba(196,167,119,.34);
+  transform:rotate(45deg);
+  background:rgba(11,27,40,.72);
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.dot:hover { border-color:rgba(226,194,139,.70); }
+.dot.active {
+  background:#B89463;
+  border-color:#dec18d;
+  box-shadow:0 0 10px rgba(204,168,109,.26);
+}
+
+/* модальное окно с оригинальным эскизом */
+.sketch-modal {
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:grid;
+  place-items:center;
+  padding:34px;
+  background:rgba(4,11,17,.84);
+  backdrop-filter:blur(10px);
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .2s ease,visibility .2s ease;
+}
+
+.sketch-modal.open { opacity:1; visibility:visible; }
+
+.sketch-dialog {
+  position:relative;
+  width:min(720px,88vw);
+  height:min(82vh,820px);
+  padding:20px 20px 54px;
+  background:
+    radial-gradient(ellipse at 50% 30%,rgba(245,240,230,.98),rgba(225,231,232,.96) 64%,rgba(20,41,55,.96));
+  border:1px solid rgba(190,153,99,.58);
+  box-shadow:0 30px 76px rgba(0,0,0,.50);
+}
+
+.sketch-dialog::before {
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px solid rgba(31,60,78,.17);
+  pointer-events:none;
+}
+
+.sketch-image-wrap {
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.sketch-image-wrap img {
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 12px 18px rgba(0,0,0,.15));
+}
+
+.sketch-title {
+  position:absolute;
+  left:52px;
+  right:52px;
+  bottom:18px;
+  text-align:center;
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#d7bb8b;
+}
+
+.sketch-close {
+  position:absolute;
+  top:12px;
+  right:12px;
+  z-index:4;
+  width:34px;
+  height:34px;
+  border:1px solid rgba(184,148,99,.42);
+  border-radius:50%;
+  background:rgba(10,25,36,.78);
+  color:#ead8b8;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+}
+
+/* облака */
+.clouds {
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-10px;
+  height:17%;
+  z-index:7;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.cloud {
+  position:absolute;
+  width:auto;
+  max-width:none;
+  user-select:none;
+  -webkit-user-drag:none;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.10));
+}
+
+.c1 { left:-7%; bottom:-17%; width:min(30vw,450px); opacity:.68; }
+.c5 { right:-7%; bottom:-18%; width:min(30vw,450px); opacity:.66; }
+.c2 { left:7%; bottom:-24%; width:min(23vw,350px); opacity:.26; }
+.c4 { right:7%; bottom:-23%; width:min(22vw,335px); opacity:.25; }
+.c3 { left:40%; bottom:-36%; width:min(20vw,300px); opacity:.12; }
+.c6 { right:35%; bottom:-39%; width:min(18vw,270px); opacity:.10; }
+
+@media (min-width:1450px) {
+  .look-strip { --slot:205px; }
+}
+
+@media (max-width:1250px) {
+  .museum-nav { gap:18px; }
+  .look-strip { --slot:175px; }
+  .fashion-control { grid-template-columns:110px 1fr 110px; }
+}
+
+@media (max-height:860px) and (min-width:900px) {
+  :root { --header-h:66px; }
+  .museum-header { padding:0 28px; }
+  .logo-img { height:40px; }
+  .logo-text { font-size:13px; }
+  .fashion-main { padding:16px 0 22px; gap:7px; }
+  .hero h1 { font-size:clamp(42px,3.7vw,62px); }
+  .hero-meta,.hero-subtitle { font-size:9px; }
+  .look-strip { --slot:170px; bottom:94px; }
+  .fashion-control { min-height:92px; }
+  .runway::after { bottom:91px; }
+}
+
+@media (max-width:820px) {
+  :root { --header-h:64px; }
+  .museum-header { padding:0 16px; }
+  .logo-img { height:36px; }
+  .logo-text { font-size:11px; }
+  .museum-nav { display:none; }
+  .fashion-main {
+    width:calc(100% - 20px);
+    padding:16px 0 18px;
+  }
+  .hero h1 { font-size:40px; }
+  .hero-subtitle { font-size:8px; }
+  .look-strip { --slot:145px; bottom:96px; }
+  .fashion-control {
+    grid-template-columns:1fr;
+    min-height:94px;
+    padding:8px 10px 10px;
+  }
+  .control-label { display:none; }
+  .rail { width:min(92vw,500px); }
+  .active-name { font-size:16px; }
+  .look-info-main { min-width:180px; }
+  .sketch-modal { padding:14px; }
+  .sketch-dialog { width:94vw; height:78vh; padding:16px 16px 48px; }
+  .stage-arrow { width:38px; height:60px; font-size:32px; }
+  .clouds { height:12%; }
+}
+</style>
+</head>
+<body>
+<div id="museum">
+  <div class="room-bg"></div>
+
+  <header class="museum-header">
+    <a href="index.html" class="header-logo">
+      <img class="logo-img" src="img/ui/mus_logo.png" alt="">
+      <div class="logo-text">КОГТЕВРАНСКИЙ<br>МУЗЕЙ</div>
+    </a>
+
+    <nav class="museum-nav">
+      <a href="index.html">главная</a>
+      <a href="team.html">эскадрилья</a>
+      <a href="captains.html">капитаны</a>
+      <a href="matches.html">матчи</a>
+      <a href="form.html" class="active">форма</a>
+      <a href="former.html">история</a>
+      <a href="quotes.html">цитатник</a>
+    </nav>
+  </header>
+
+  <main class="fashion-main">
+    <section class="hero">
+      <div class="hero-meta">LAFAYETTE · 2011 — 2026</div>
+      <h1>МОДА LAFAYETTE</h1>
+      <div class="hero-line"><span>✦</span></div>
+      <div class="hero-subtitle">форма, придуманная игроками эскадрильи</div>
+    </section>
+
+    <section class="runway" aria-label="Галерея формы LaFayette">
+      <div class="stage">
+        <button class="stage-arrow prev" type="button" aria-label="Предыдущий образ"><span>‹</span></button>
+
+        <div class="look-strip" id="lookStrip">
+          <button class="look" type="button" data-index="0" data-author="Julietta Helwell-de-Kur" data-season="" data-sketch="img/form/premanneq_01.jpg" aria-label="Выбрать образ 01">
+            <img src="img/form/manneq_01.png" alt="Образ 01">
+            <span class="look-label">образ 01</span>
+          </button>
+          <button class="look" type="button" data-index="1" data-author="Julietta Helwell-de-Kur" data-season="" data-sketch="img/form/premanneq_02.jpg" aria-label="Выбрать образ 02">
+            <img src="img/form/manneq_02.png" alt="Образ 02">
+            <span class="look-label">образ 02</span>
+          </button>
+          <button class="look" type="button" data-index="2" data-author="Нимерия Блэкхорн" data-season="лето" data-sketch="img/form/premanneq_03.jpg" aria-label="Выбрать образ 03">
+            <img src="img/form/manneq_03.png" alt="Образ 03">
+            <span class="look-label">образ 03</span>
+          </button>
+          <button class="look" type="button" data-index="3" data-author="Хелена Кейн" data-season="" data-sketch="img/form/premanneq_04.jpg" aria-label="Выбрать образ 04">
+            <img src="img/form/manneq_04.png" alt="Образ 04">
+            <span class="look-label">образ 04</span>
+          </button>
+          <button class="look" type="button" data-index="4" data-author="Нимерия Блэкхорн" data-season="зима" data-sketch="" aria-label="Выбрать образ 05">
+            <img src="img/form/manneq_05.png" alt="Образ 05">
+            <span class="look-label">образ 05</span>
+          </button>
+          <button class="look" type="button" data-index="5" data-author="Нимерия Блэкхорн" data-season="осень / весна" data-sketch="" aria-label="Выбрать образ 06">
+            <img src="img/form/manneq_06.png" alt="Образ 06">
+            <span class="look-label">образ 06</span>
+          </button>
+          <button class="look" type="button" data-index="6" data-author="Нимерия Блэкхорн" data-season="" data-sketch="" aria-label="Выбрать образ 07">
+            <img src="img/form/manneq_07.png" alt="Образ 07">
+            <span class="look-label">образ 07</span>
+          </button>
+          <button class="look" type="button" data-index="7" data-author="Блейк Эллингтон" data-season="" data-sketch="" aria-label="Выбрать образ 08">
+            <img src="img/form/manneq_08.png" alt="Образ 08">
+            <span class="look-label">образ 08</span>
+          </button>
+        </div>
+
+        <button class="stage-arrow next" type="button" aria-label="Следующий образ"><span>‹</span></button>
+      </div>
+
+      <div class="fashion-control">
+        <div class="control-label">предыдущий образ</div>
+
+        <div class="rail-wrap">
+          <div class="look-info" aria-live="polite">
+            <div class="look-info-main">
+              <div class="active-kicker" id="activeKicker">образ 04 · автор</div>
+              <div class="active-name" id="activeName">Хелена Кейн</div>
+              <div class="active-season" id="activeSeason"></div>
+            </div>
+            <button class="sketch-btn visible" id="sketchBtn" type="button">оригинальный эскиз</button>
+          </div>
+          <div class="rail" id="rail" aria-label="Выбор образа">
+            <button class="dot" type="button" data-index="0" aria-label="Образ 01"></button>
+            <button class="dot" type="button" data-index="1" aria-label="Образ 02"></button>
+            <button class="dot" type="button" data-index="2" aria-label="Образ 03"></button>
+            <button class="dot active" type="button" data-index="3" aria-label="Образ 04"></button>
+            <button class="dot" type="button" data-index="4" aria-label="Образ 05"></button>
+            <button class="dot" type="button" data-index="5" aria-label="Образ 06"></button>
+            <button class="dot" type="button" data-index="6" aria-label="Образ 07"></button>
+            <button class="dot" type="button" data-index="7" aria-label="Образ 08"></button>
+          </div>
+        </div>
+
+        <div class="control-label right">следующий образ</div>
+      </div>
+    </section>
+  </main>
+
+
+  <div class="sketch-modal" id="sketchModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="sketchTitle">
+    <div class="sketch-dialog">
+      <button class="sketch-close" id="sketchClose" type="button" aria-label="Закрыть">×</button>
+      <div class="sketch-image-wrap">
+        <img id="sketchImage" src="" alt="">
+      </div>
+      <div class="sketch-title" id="sketchTitle">оригинальный эскиз</div>
+    </div>
+  </div>
+
+  <div class="clouds" aria-hidden="true">
+    <img class="cloud c1" src="img/ui/cl03.png" alt="">
+    <img class="cloud c2" src="img/ui/cl01.png" alt="">
+    <img class="cloud c3" src="img/ui/cl04.png" alt="">
+    <img class="cloud c4" src="img/ui/cl02.png" alt="">
+    <img class="cloud c5" src="img/ui/cl03.png" alt="">
+    <img class="cloud c6" src="img/ui/cl01.png" alt="">
+  </div>
+</div>
+
+<script>
+(() => {
+  const strip = document.getElementById('lookStrip');
+  const looks = Array.from(document.querySelectorAll('.look'));
+  const dots = Array.from(document.querySelectorAll('.dot'));
+  const activeName = document.getElementById('activeName');
+  const activeKicker = document.getElementById('activeKicker');
+  const activeSeason = document.getElementById('activeSeason');
+  const sketchBtn = document.getElementById('sketchBtn');
+  const sketchModal = document.getElementById('sketchModal');
+  const sketchImage = document.getElementById('sketchImage');
+  const sketchTitle = document.getElementById('sketchTitle');
+  const sketchClose = document.getElementById('sketchClose');
+  const prev = document.querySelector('.stage-arrow.prev');
+  const next = document.querySelector('.stage-arrow.next');
+
+  let active = 3;
+
+  function slotWidth() {
+    const value = getComputedStyle(strip).getPropertyValue('--slot').trim();
+    return parseFloat(value) || 190;
+  }
+
+  function render() {
+    const slot = slotWidth();
+    const offset = -(active * slot + slot / 2);
+    strip.style.transform = `translateX(${offset}px)`;
+
+    looks.forEach((look, index) => {
+      const distance = Math.abs(index - active);
+      look.classList.toggle('is-active', distance === 0);
+      look.classList.toggle('is-near', distance === 1);
+      look.setAttribute('aria-pressed', distance === 0 ? 'true' : 'false');
+    });
+
+    dots.forEach((dot, index) => dot.classList.toggle('active', index === active));
+    const current = looks[active];
+    const number = String(active + 1).padStart(2,'0');
+    const author = current.dataset.author || 'автор не указан';
+    const season = current.dataset.season || '';
+    const sketch = current.dataset.sketch || '';
+
+    activeKicker.textContent = `образ ${number} · автор`;
+    activeName.textContent = author;
+    activeSeason.textContent = season;
+    activeSeason.style.display = season ? 'block' : 'none';
+    sketchBtn.dataset.sketch = sketch;
+    sketchBtn.dataset.number = number;
+    sketchBtn.dataset.author = author;
+    sketchBtn.classList.toggle('visible', Boolean(sketch));
+  }
+
+  function select(index) {
+    active = (index + looks.length) % looks.length;
+    render();
+  }
+
+  looks.forEach((look, index) => look.addEventListener('click', () => select(index)));
+  dots.forEach((dot, index) => dot.addEventListener('click', () => select(index)));
+  prev.addEventListener('click', () => select(active - 1));
+  next.addEventListener('click', () => select(active + 1));
+
+  function openSketch() {
+    const src = sketchBtn.dataset.sketch;
+    if (!src) return;
+    const number = sketchBtn.dataset.number;
+    const author = sketchBtn.dataset.author;
+    sketchImage.src = src;
+    sketchImage.alt = `Оригинальный эскиз образа ${number}`;
+    sketchTitle.textContent = `оригинальный эскиз · образ ${number} · ${author}`;
+    sketchModal.classList.add('open');
+    sketchModal.setAttribute('aria-hidden','false');
+    sketchClose.focus();
+  }
+
+  function closeSketch() {
+    sketchModal.classList.remove('open');
+    sketchModal.setAttribute('aria-hidden','true');
+    sketchImage.src = '';
+    sketchBtn.focus();
+  }
+
+  sketchBtn.addEventListener('click', openSketch);
+  sketchClose.addEventListener('click', closeSketch);
+  sketchModal.addEventListener('click', event => {
+    if (event.target === sketchModal) closeSketch();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (sketchModal.classList.contains('open')) {
+      if (event.key === 'Escape') closeSketch();
+      return;
+    }
+    if (event.key === 'ArrowLeft') select(active - 1);
+    if (event.key === 'ArrowRight') select(active + 1);
+  });
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(render, 80);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
