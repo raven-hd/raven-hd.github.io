@@ -167,9 +167,9 @@ button { font:inherit; }
   width:min(1500px,calc(100% - 56px));
   z-index:12;
   display:grid;
-  grid-template-rows:auto auto minmax(0,1fr);
-  gap:9px;
-  padding:24px 0 28px;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:7px;
+  padding:24px 0 24px;
 }
 
 .hero {
@@ -182,7 +182,7 @@ button { font:inherit; }
   content:"";
   position:absolute;
   left:50%;
-  top:53%;
+  top:49%;
   transform:translate(-50%,-50%);
   width:min(900px,72vw);
   height:170px;
@@ -245,20 +245,20 @@ button { font:inherit; }
 .exhibit-plaque {
   position:relative;
   z-index:14;
-  width:min(650px,74vw);
-  min-height:66px;
+  width:min(720px,78vw);
+  min-height:58px;
   margin:0 auto;
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
   align-items:center;
-  gap:22px;
-  padding:10px 18px 11px 20px;
+  gap:24px;
+  padding:8px 18px 9px 20px;
   background:
-    linear-gradient(180deg,rgba(13,31,44,.88),rgba(8,22,33,.94)),
+    linear-gradient(180deg,rgba(13,31,44,.82),rgba(8,22,33,.90)),
     linear-gradient(90deg,rgba(184,148,99,.05),transparent 38%,rgba(184,148,99,.04));
   border:1px solid rgba(184,148,99,.30);
   border-left:3px solid rgba(184,148,99,.64);
-  box-shadow:0 12px 28px rgba(0,0,0,.18);
+  box-shadow:0 10px 24px rgba(0,0,0,.16);
   backdrop-filter:blur(7px);
 }
 
@@ -285,7 +285,7 @@ button { font:inherit; }
 
 .plaque-name {
   margin-top:2px;
-  font-size:21px;
+  font-size:19px;
   line-height:1.02;
   font-weight:600;
   letter-spacing:.045em;
@@ -345,7 +345,7 @@ button { font:inherit; }
   position:absolute;
   z-index:0;
   left:50%;
-  bottom:18px;
+  bottom:54px;
   width:min(1220px,88vw);
   height:88%;
   transform:translateX(-50%);
@@ -361,7 +361,7 @@ button { font:inherit; }
   z-index:1;
   left:5%;
   right:5%;
-  bottom:23px;
+  bottom:48px;
   height:1px;
   background:linear-gradient(90deg,transparent,rgba(184,148,99,.16) 10%,rgba(184,148,99,.50) 50%,rgba(184,148,99,.16) 90%,transparent);
   box-shadow:0 16px 38px rgba(0,0,0,.32);
@@ -387,7 +387,7 @@ button { font:inherit; }
   --look-saturate:.72;
   position:absolute;
   left:50%;
-  bottom:27px;
+  bottom:56px;
   width:176px;
   height:42%;
   display:flex;
@@ -419,34 +419,34 @@ button { font:inherit; }
 
 .look.is-near {
   z-index:7;
-  --scale:1.18;
-  --look-opacity:.88;
-  --look-brightness:.98;
-  --look-saturate:.92;
+  --scale:1.62;
+  --look-opacity:.96;
+  --look-brightness:1.03;
+  --look-saturate:.98;
 }
 
 .look.is-mid {
   z-index:5;
-  --scale:.91;
-  --look-opacity:.66;
-  --look-brightness:.88;
-  --look-saturate:.82;
+  --scale:1.22;
+  --look-opacity:.80;
+  --look-brightness:.96;
+  --look-saturate:.90;
 }
 
 .look.is-far {
   z-index:3;
-  --scale:.70;
-  --look-opacity:.43;
-  --look-brightness:.79;
-  --look-saturate:.70;
+  --scale:.90;
+  --look-opacity:.57;
+  --look-brightness:.87;
+  --look-saturate:.79;
 }
 
 .look.is-edge {
   z-index:2;
-  --scale:.58;
-  --look-opacity:.26;
-  --look-brightness:.70;
-  --look-saturate:.62;
+  --scale:.70;
+  --look-opacity:.34;
+  --look-brightness:.77;
+  --look-saturate:.70;
 }
 
 .look::after {
@@ -632,10 +632,11 @@ button { font:inherit; }
   .fashion-main { padding:16px 0 20px; gap:6px; }
   .hero h1 { font-size:clamp(42px,3.7vw,62px); }
   .hero-meta,.hero-subtitle { font-size:9px; }
-  .exhibit-plaque { min-height:58px; padding:8px 16px 9px 18px; }
+  .exhibit-plaque { width:min(700px,78vw); min-height:54px; padding:7px 16px 8px 18px; }
   .plaque-name { font-size:18px; }
-  .look { width:148px; height:40%; bottom:22px; }
-  .runway::after { bottom:19px; }
+  .look { width:148px; height:40%; bottom:48px; }
+  .runway::before { bottom:46px; }
+  .runway::after { bottom:41px; }
 }
 
 @media (max-width:820px) {
@@ -660,9 +661,11 @@ button { font:inherit; }
   }
   .plaque-name { font-size:17px; }
   .sketch-btn { justify-self:center; }
-  .look { width:118px; height:36%; bottom:19px; }
+  .look { width:118px; height:36%; bottom:42px; }
   .look.is-active { --scale:2.65; }
-  .look.is-near { --scale:1.08; }
+  .look.is-near { --scale:1.42; }
+  .look.is-mid { --scale:1.08; }
+  .look.is-far { --scale:.82; }
   .stage-arrow { width:38px; height:60px; font-size:32px; }
   .sketch-modal { padding:14px; }
   .sketch-dialog { width:94vw; height:78vh; padding:16px 16px 48px; }
@@ -699,15 +702,6 @@ button { font:inherit; }
       <div class="hero-subtitle">форма, придуманная игроками эскадрильи</div>
     </section>
 
-    <section class="exhibit-plaque" aria-live="polite">
-      <div class="plaque-copy">
-        <div class="plaque-kicker">конкурс костюмов · автор</div>
-        <div class="plaque-name" id="activeName">Хелена Кейн</div>
-        <div class="plaque-season" id="activeSeason">конкурсная форма LaFayette</div>
-      </div>
-      <button class="sketch-btn visible" id="sketchBtn" type="button">оригинальный эскиз</button>
-    </section>
-
     <section class="runway" aria-label="Галерея формы LaFayette">
       <div class="stage">
         <button class="stage-arrow prev" type="button" aria-label="Предыдущий образ"><span>‹</span></button>
@@ -741,6 +735,15 @@ button { font:inherit; }
 
         <button class="stage-arrow next" type="button" aria-label="Следующий образ"><span>‹</span></button>
       </div>
+    </section>
+
+    <section class="exhibit-plaque" aria-live="polite">
+      <div class="plaque-copy">
+        <div class="plaque-kicker">конкурс костюмов · автор</div>
+        <div class="plaque-name" id="activeName">Хелена Кейн</div>
+        <div class="plaque-season" id="activeSeason">конкурсная форма LaFayette</div>
+      </div>
+      <button class="sketch-btn visible" id="sketchBtn" type="button">оригинальный эскиз</button>
     </section>
   </main>
 
@@ -797,7 +800,7 @@ button { font:inherit; }
     const mobile = width < 820;
     const positions = mobile
       ? [0, width * .28, width * .47, width * .63, width * .76]
-      : [0, Math.min(330, width * .235), Math.min(535, width * .38), Math.min(700, width * .495), Math.min(840, width * .59)];
+      : [0, Math.min(360, width * .255), Math.min(585, width * .415), Math.min(750, width * .525), Math.min(875, width * .61)];
     return sign * positions[Math.min(d,4)];
   }
 
