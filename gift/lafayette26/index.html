@@ -216,15 +216,23 @@ a{color:inherit;text-decoration:none}
   justify-content:center;
   gap:11px;
   margin-top:21px;
+  width:180px;
   min-width:180px;
   padding:9px 16px 10px;
+  appearance:none;
+  -webkit-appearance:none;
+  border:0;
   border-top:1px solid rgba(184,148,99,.72);
   border-bottom:1px solid rgba(184,148,99,.72);
+  background:transparent;
+  font-family:'Jura',sans-serif;
   font-size:9px;
+  line-height:1.2;
   font-weight:600;
   letter-spacing:.18em;
   text-transform:uppercase;
   color:#D0AF81;
+  cursor:pointer;
   transition:.2s ease;
 }
 .enter::after{
@@ -240,6 +248,98 @@ a{color:inherit;text-decoration:none}
   background:rgba(255,255,255,.025);
 }
 .enter:hover::after{transform:translateX(4px)}
+
+.hero-actions{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:21px;
+}
+.hero-actions .enter{margin-top:0}
+
+/* ---------- flying snitch ---------- */
+.snitch-button{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:22;
+  width:72px;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  border:0;
+  background:none;
+  cursor:pointer;
+  transform:translate3d(0,0,0);
+  transition:filter .25s ease, transform .25s ease, opacity .25s ease;
+  will-change:transform;
+}
+.snitch-button:focus-visible{
+  outline:none;
+  filter:drop-shadow(0 0 0 1px rgba(235,214,176,.55)) drop-shadow(0 0 16px rgba(215,183,126,.35));
+}
+.snitch-button:hover{filter:drop-shadow(0 0 16px rgba(215,183,126,.28))}
+.snitch-button.paused{filter:drop-shadow(0 0 20px rgba(227,197,141,.30))}
+.snitch-button.caught{pointer-events:none}
+.snitch-button.caught .snitch-img{
+  animation:snitchCaught .55s ease forwards;
+}
+.snitch-glow{
+  position:absolute;
+  inset:20%;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,242,210,.50) 0%, rgba(215,183,126,.22) 42%, rgba(215,183,126,0) 74%);
+  opacity:.18;
+  filter:blur(6px);
+  transition:opacity .25s ease, transform .25s ease;
+}
+.snitch-button.paused .snitch-glow,
+.snitch-button:hover .snitch-glow{
+  opacity:.55;
+  transform:scale(1.16);
+}
+.snitch-img{
+  position:relative;
+  display:block;
+  width:100%;
+  height:auto;
+  user-select:none;
+  pointer-events:none;
+  filter:drop-shadow(0 5px 10px rgba(0,0,0,.18));
+  animation:snitchFloat 3.2s ease-in-out infinite;
+}
+.snitch-button::after{
+  content:"";
+  position:absolute;
+  width:13px;
+  height:13px;
+  top:10px;
+  right:10px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,252,244,1) 0%, rgba(255,241,204,.9) 32%, rgba(255,225,148,.22) 56%, transparent 72%);
+  opacity:.18;
+  animation:snitchTwinkle 2.9s ease-in-out infinite 1.3s;
+  pointer-events:none;
+}
+
+@keyframes snitchFloat{
+  0%,100%{transform:translateY(0) rotate(-3deg)}
+  50%{transform:translateY(-4px) rotate(3deg)}
+}
+@keyframes snitchTwinkle{
+  0%,66%,100%{opacity:.08; transform:scale(.72)}
+  72%{opacity:.92; transform:scale(1.35)}
+  82%{opacity:.28; transform:scale(.84)}
+}
+@keyframes snitchCaught{
+  0%{transform:scale(1);opacity:1}
+  45%{transform:scale(1.16);opacity:1}
+  100%{transform:scale(.3);opacity:0}
+}
 
 /* ---------- bottom plaque ---------- */
 .museum-plaque{
@@ -293,6 +393,121 @@ a{color:inherit;text-decoration:none}
 .c3{left:39%;bottom:-34%;width:min(20vw,300px);opacity:.10}
 .c6{right:35%;bottom:-38%;width:min(18vw,270px);opacity:.08}
 
+
+
+/* ---------- entrance credits modal ---------- */
+.credits-modal{
+  position:fixed;
+  inset:0;
+  z-index:60;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+  background:rgba(4,10,15,.72);
+  backdrop-filter:blur(5px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .2s ease, visibility .2s ease;
+}
+.credits-modal.open{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+.credits-dialog{
+  position:relative;
+  width:min(900px,92vw);
+  max-height:min(760px,88vh);
+  overflow:auto;
+  padding:34px 38px 36px;
+  background:linear-gradient(180deg,rgba(10,28,41,.98),rgba(7,21,32,.98));
+  border:1px solid rgba(184,148,99,.56);
+  box-shadow:0 28px 80px rgba(0,0,0,.48), inset 0 0 55px rgba(26,57,76,.13);
+}
+.credits-dialog::before{
+  content:"";
+  position:absolute;
+  inset:9px;
+  border:1px solid rgba(222,199,158,.11);
+  pointer-events:none;
+}
+.credits-close{
+  position:absolute;
+  top:15px;
+  right:18px;
+  z-index:3;
+  appearance:none;
+  border:0;
+  background:none;
+  color:rgba(243,235,221,.72);
+  font-family:'Jura',sans-serif;
+  font-size:28px;
+  line-height:1;
+  cursor:pointer;
+  transition:.18s ease;
+}
+.credits-close:hover{color:#fff}
+.credits-kicker{
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:rgba(215,183,126,.80);
+}
+.credits-title{
+  margin-top:6px;
+  font-family:'ModernoTwo','Jura',sans-serif;
+  font-size:clamp(24px,3vw,36px);
+  line-height:1;
+  font-weight:500;
+  letter-spacing:.035em;
+  color:#F3EBDD;
+}
+.credits-rule{
+  width:110px;
+  height:1px;
+  margin:16px 0 22px;
+  background:linear-gradient(to right,rgba(184,148,99,.78),transparent);
+}
+.credits-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px 18px;
+}
+.credit-person{
+  position:relative;
+  padding:14px 16px 15px;
+  border-left:1px solid rgba(184,148,99,.52);
+  background:rgba(255,255,255,.025);
+}
+.credit-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px;
+  line-height:1.15;
+  font-weight:600;
+  color:var(--gold);
+}
+.credit-role{
+  margin-top:5px;
+  font-family:'Jura',sans-serif;
+  font-size:10px;
+  line-height:1.55;
+  font-weight:400;
+  color:rgba(244,242,238,.76);
+}
+.credit-role + .credit-role{margin-top:2px}
+
+@media(max-width:700px){
+  .credits-modal{padding:14px}
+  .credits-dialog{width:96vw;max-height:88vh;padding:28px 22px 30px}
+  .credits-grid{grid-template-columns:1fr;gap:10px}
+  .credit-name{font-size:18px}
+  .credit-role{font-size:9px}
+}
+
 /* ---------- responsive ---------- */
 @media(max-height:860px) and (min-width:1000px){
   :root{--header-h:66px}
@@ -306,7 +521,7 @@ a{color:inherit;text-decoration:none}
   .hero h1{font-size:clamp(70px,8vw,118px)}
   .hero-rule{margin:10px auto 14px}
   .hero-copy{margin-top:16px;font-size:11px}
-  .enter{margin-top:17px}
+  .hero-actions{margin-top:17px}
   .museum-plaque{bottom:25px}
 }
 
@@ -328,6 +543,19 @@ a{color:inherit;text-decoration:none}
   }
   .hero{width:100%;transform:none}
   .hero-panel{padding:28px 20px 26px}
+  .hero-actions{gap:10px}
+  .hero-actions .enter{min-width:170px}
+  .snitch-button{
+    display:flex;
+    position:fixed;
+    width:58px;
+    height:58px;
+    top:calc(var(--header-h) + 14px);
+    left:auto;
+    right:14px;
+    transform:none !important;
+  }
+  .snitch-img{animation:none}
   .panel-top-rule{width:92%}
   .hero h1{
     font-size:clamp(58px,17vw,92px);
@@ -399,12 +627,60 @@ a{color:inherit;text-decoration:none}
           фотографии и то, что осталось между строк.
         </p>
 
-        <a class="enter" href="team.html">начать осмотр</a>
+        <div class="hero-actions">
+          <a class="enter" href="team.html">начать осмотр</a>
+        </div>
       </div>
     </section>
   </main>
 
+  <button class="snitch-button" id="snitchOpen" type="button" aria-haspopup="dialog" aria-controls="creditsModal" aria-label="поймать снитч и открыть табличку на входе">
+    <span class="snitch-glow" aria-hidden="true"></span>
+    <img class="snitch-img" src="img/ui/snitch.png" alt="">
+  </button>
+
   <div class="museum-plaque">Когтевранский музей · крыло LaFayette</div>
+
+  <div class="credits-modal" id="creditsModal" aria-hidden="true">
+    <section class="credits-dialog" role="dialog" aria-modal="true" aria-labelledby="creditsTitle">
+      <button class="credits-close" type="button" id="creditsClose" aria-label="закрыть">×</button>
+      <div class="credits-kicker">табличка на входе</div>
+      <h2 class="credits-title" id="creditsTitle">выставку подготовили</h2>
+      <div class="credits-rule"></div>
+
+      <div class="credits-grid">
+        <article class="credit-person">
+          <div class="credit-name">Блейк Эллингтон</div>
+          <p class="credit-role">министр выставки ЛаФа-квиддичного наследия и верховный хранитель квоффлов и бладжеров</p>
+        </article>
+
+        <article class="credit-person">
+          <div class="credit-name">Julietta Helwell-de-Kur</div>
+          <p class="credit-role">MainFun истории Квиддича LaFayette edition</p>
+        </article>
+
+        <article class="credit-person">
+          <div class="credit-name">Хелена Кейн</div>
+          <p class="credit-role">куратор. историк. жительница трибун. все еще главная по гонгу</p>
+        </article>
+
+        <article class="credit-person">
+          <div class="credit-name">Амилия Лиссаранд</div>
+          <p class="credit-role">главный инспектор по качеству игроков на холсте. охотница вдохновения. исследовательница феномена «командного духа»</p>
+        </article>
+
+        <article class="credit-person">
+          <div class="credit-name">Мерида Морграфт</div>
+          <p class="credit-role">экскурсовод отдела «Лафа: от метлы до холста». смотритель отдела вечных побед. хранитель квиддичной символики</p>
+        </article>
+
+        <article class="credit-person">
+          <div class="credit-name">Нимерия Блэкхорн</div>
+          <p class="credit-role">патронесса квиддичной моды. повелительница бронзовой окантовки</p>
+        </article>
+      </div>
+    </section>
+  </div>
 
   <div class="clouds" aria-hidden="true">
     <img class="cloud c1" src="img/ui/cl03.png" alt="">
@@ -415,5 +691,162 @@ a{color:inherit;text-decoration:none}
     <img class="cloud c6" src="img/ui/cl01.png" alt="">
   </div>
 </div>
+
+<script>
+(() => {
+  const modal = document.getElementById('creditsModal');
+  const closeBtn = document.getElementById('creditsClose');
+  const snitchBtn = document.getElementById('snitchOpen');
+  let lastTrigger = null;
+
+  const openCredits = (trigger) => {
+    lastTrigger = trigger || null;
+    if (snitchBtn) {
+      snitchBtn.classList.add('caught');
+      window.setTimeout(() => snitchBtn.classList.remove('caught'), 560);
+    }
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    window.setTimeout(() => closeBtn.focus(), 40);
+  };
+
+  const closeCredits = () => {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    if (lastTrigger) lastTrigger.focus();
+  };
+
+  if (snitchBtn) {
+    snitchBtn.addEventListener('click', () => openCredits(snitchBtn));
+  }
+
+  closeBtn.addEventListener('click', closeCredits);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeCredits();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) closeCredits();
+  });
+
+  // desktop-only flying snitch
+  if (snitchBtn && window.matchMedia('(min-width: 821px)').matches) {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const bounds = {
+      minX: () => 22,
+      maxX: () => Math.max(22, window.innerWidth - 94),
+      minY: () => Math.max(82, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) + 8),
+      maxY: () => Math.max(110, window.innerHeight - 112)
+    };
+
+    let state = {
+      x: Math.min(window.innerWidth - 170, bounds.maxX() - 40),
+      y: 138,
+      raf: null,
+      timer: null,
+      hovering: false,
+      moving: false,
+      targetX: 0,
+      targetY: 0,
+      startX: 0,
+      startY: 0,
+      startScale: 1,
+      targetScale: 1,
+      scale: 1,
+      startTime: 0,
+      duration: 0
+    };
+
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+    const easeInOut = (t) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const render = () => {
+      snitchBtn.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${state.scale})`;
+    };
+
+    const chooseTarget = () => {
+      const minX = bounds.minX();
+      const maxX = bounds.maxX();
+      const minY = bounds.minY();
+      const maxY = bounds.maxY();
+
+      // The snitch can cross almost the whole entrance screen instead of
+      // hovering only in the upper-right corner.
+      state.targetX = minX + Math.random() * (maxX - minX);
+      state.targetY = minY + Math.random() * (maxY - minY);
+      state.startX = state.x;
+      state.startY = state.y;
+      state.startScale = state.scale;
+      state.targetScale = prefersReduced ? 1 : (.72 + Math.random() * .52);
+
+      const distance = Math.hypot(state.targetX - state.startX, state.targetY - state.startY);
+      state.startTime = performance.now();
+      // Fast flight, but long diagonal passes still remain readable.
+      state.duration = prefersReduced ? 1900 : clamp(430 + distance * .72, 520, 1180);
+      state.moving = true;
+      snitchBtn.classList.remove('paused');
+      tick(state.startTime);
+    };
+
+    const restThenMove = () => {
+      if (state.hovering || modal.classList.contains('open')) {
+        state.timer = window.setTimeout(restThenMove, 700);
+        return;
+      }
+      snitchBtn.classList.add('paused');
+      const pauseMs = prefersReduced ? 2600 : (1350 + Math.random() * 1850);
+      state.timer = window.setTimeout(chooseTarget, pauseMs);
+    };
+
+    const tick = (now) => {
+      if (!state.moving) return;
+      const progress = Math.min((now - state.startTime) / state.duration, 1);
+      const eased = easeInOut(progress);
+      const direction = state.targetX >= state.startX ? 1 : -1;
+      const arc = Math.sin(progress * Math.PI) * (20 + Math.min(34, Math.abs(state.targetX - state.startX) * .035));
+      const sideSwerve = Math.sin(progress * Math.PI * 2) * 8 * direction;
+      state.x = state.startX + (state.targetX - state.startX) * eased + sideSwerve;
+      state.y = state.startY + (state.targetY - state.startY) * eased - arc;
+      state.scale = state.startScale + (state.targetScale - state.startScale) * eased;
+      render();
+      if (progress < 1) {
+        state.raf = requestAnimationFrame(tick);
+      } else {
+        state.moving = false;
+        restThenMove();
+      }
+    };
+
+    const resetMotion = () => {
+      if (state.raf) cancelAnimationFrame(state.raf);
+      if (state.timer) clearTimeout(state.timer);
+      state.moving = false;
+      state.x = clamp(state.x, bounds.minX(), bounds.maxX());
+      state.y = clamp(state.y, bounds.minY(), bounds.maxY());
+      state.scale = clamp(state.scale, .72, 1.24);
+      render();
+      restThenMove();
+    };
+
+    snitchBtn.addEventListener('mouseenter', () => {
+      state.hovering = true;
+      snitchBtn.classList.add('paused');
+    });
+    snitchBtn.addEventListener('mouseleave', () => {
+      state.hovering = false;
+      if (!state.moving && !modal.classList.contains('open')) {
+        restThenMove();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      state.x = clamp(state.x, bounds.minX(), bounds.maxX());
+      state.y = clamp(state.y, bounds.minY(), bounds.maxY());
+      render();
+    });
+
+    render();
+    restThenMove();
+  }
+})();
+</script>
 </body>
 </html>
