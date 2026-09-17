@@ -6,15 +6,12 @@
 <title>Квиддичисты бывшими не бывают · LaFayette</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/museum.css">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-@font-face {
-  font-family:'ModernoTwo';
-  src:url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');
-  font-display:swap;
-}
+
 
 :root {
   --blue:#0E1C28;
@@ -89,83 +86,6 @@ a { color:inherit; text-decoration:none; }
 }
 
 /* шапка — те же пропорции, что на странице капитанов */
-.museum-header {
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:var(--header-h);
-  z-index:30;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 32px;
-  background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));
-  backdrop-filter:blur(5px);border-bottom:1px solid rgba(182,148,101,.24);
-}
-
-.header-logo {
-  display:flex;
-  align-items:center;
-  gap:.75rem;
-  width:210px;
-  flex-shrink:0;
-}
-
-.logo-img {
-  height:44px;
-  width:auto;
-  display:block;
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,.38));
-}
-
-.logo-text {
-  font-family:'ModernoTwo','Cormorant Garamond',serif;
-  font-size:14px;
-  line-height:1.02;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  color:#fff;
-}
-
-.museum-nav {
-  display:flex;
-  gap:24px;
-  align-items:center;
-}
-
-.museum-nav a {
-  position:relative;
-  font-family:'Cormorant Garamond',serif;
-  font-size:13px;
-  font-weight:600;
-  line-height:1;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  color:rgba(244,238,229,.82);
-}
-
-.museum-nav a::after {
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:-10px;
-  width:0;
-  height:1px;
-  background:var(--gold);
-  transition:.2s ease;
-}
-
-.museum-nav a:hover,
-.museum-nav a.active {
-  color:#fff1d8;
-}
-
-.museum-nav a:hover::after,
-.museum-nav a.active::after {
-  left:0;
-  width:100%;
-}
 
 .former-main {
   position:absolute;
@@ -252,8 +172,8 @@ a { color:inherit; text-decoration:none; }
 .hero-subtitle {
   font-family:'Jura',sans-serif;
   font-size:9px;
-  font-weight:500;
-  letter-spacing:.16em;
+  font-weight:600;
+  letter-spacing:.19em;
   text-transform:uppercase;
   color:#2B4356;
 }
@@ -272,9 +192,9 @@ a { color:inherit; text-decoration:none; }
 .profile-card {
   position:relative;
   height:min(61vh,590px);
-  background:rgba(11,26,38,.48);
-  border:1px solid rgba(183,145,92,.42);
-  box-shadow:0 18px 44px rgba(0,0,0,.18);
+  background:rgba(10,27,40,.68);
+  border:1px solid rgba(183,145,92,.54);
+  box-shadow:0 20px 52px rgba(0,0,0,.24);
   backdrop-filter:blur(6px);
 }
 
@@ -286,7 +206,7 @@ a { color:inherit; text-decoration:none; }
   inset:7px;
   z-index:5;
   pointer-events:none;
-  border:1px solid rgba(160,169,176,.13);
+  border:1px solid rgba(160,169,176,.17);
 }
 
 .registry-card {
@@ -317,7 +237,7 @@ a { color:inherit; text-decoration:none; }
   position:relative;
   width:100%;
   min-width:0;
-  min-height:32px;
+  min-height:36px;
   display:grid;
   grid-template-columns:16px minmax(0,1fr) 12px;
   align-items:center;
@@ -369,10 +289,14 @@ a { color:inherit; text-decoration:none; }
   text-overflow:ellipsis;
   white-space:nowrap;
   text-align:center;
-  font-size:clamp(11px,.84vw,14px);
-  font-weight:500;
-  letter-spacing:.008em;
+  font-size:clamp(13px,1vw,16px);
+  font-weight:600;
+  letter-spacing:.045em;
+  text-transform:uppercase;
 }
+
+.registry-item--tall { min-height:48px; padding-top:6px; padding-bottom:6px; }
+.registry-item--tall .registry-label { white-space:normal; line-height:1.02; }
 
 .registry-arrow {
   color:rgba(226,202,161,.68);
@@ -589,9 +513,10 @@ a { color:inherit; text-decoration:none; }
       <a href="matches.html">матчи</a>
       <a href="form.html">форма</a>
       <a href="former.html" class="active">история</a>
+      <a href="articles.html">статьи</a>
       <a href="quotes.html">цитатник</a>
       <a href="gallery.html">галерея</a>
-      <a href="omg.html">OMG</a>
+      <a href="omg.html" class="omg-link">OMG</a>
     </nav>
   </header>
 
@@ -658,12 +583,12 @@ a { color:inherit; text-decoration:none; }
             <span class="registry-label">Julexa Shell</span>
             <span class="registry-arrow">›</span>
           </button>
-          <button class="registry-item" type="button"
+          <button class="registry-item registry-item--tall" type="button"
                   data-name="Винсент Бернкастель"
                   data-photo="img/former/vincent_bernkastel.jpg"
                   aria-pressed="false">
             <span class="registry-mark">✦</span>
-            <span class="registry-label">Винсент Бернкастель</span>
+            <span class="registry-label">Винсент<br>Бернкастель</span>
             <span class="registry-arrow">›</span>
           </button>
           <button class="registry-item" type="button"

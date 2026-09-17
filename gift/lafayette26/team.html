@@ -6,17 +6,13 @@
 <title>LaFayette сегодня · Когтевранский музей</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/museum.css">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
-@font-face {
-  font-family: 'ModernoTwo';
-  src: url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
+
 
 :root{
   --blue:#0E1C28;
@@ -90,84 +86,6 @@ a{color:inherit;text-decoration:none;}
 
 /* header */
 
-.museum-header{
-  position:absolute;
-  top:0; left:0; right:0;
-  height:var(--header-h);
-  z-index:30;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 32px;
-  background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));
-  backdrop-filter:blur(5px);border-bottom:1px solid rgba(182,148,101,.24);
-}
-
-.header-logo{
-  display:flex;
-  align-items:center;
-  gap:.75rem;
-  width:210px;
-  flex-shrink:0;
-}
-
-.logo-img{
-  height:44px;
-  width:auto;
-  display:block;
-  filter:drop-shadow(0 2px 6px rgba(0,0,0,.38));
-}
-
-.logo-text{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  height:44px;
-  font-family:'ModernoTwo','Cormorant Garamond',serif;
-  font-size:14px;
-  line-height:1.02;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  color:#fff;
-}
-
-.museum-nav{
-  display:flex;
-  align-items:center;
-  gap:24px;
-}
-
-.museum-nav a{
-  position:relative;
-  font-family:'Cormorant Garamond',serif;
-  font-size:13px;
-  font-weight:600;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  color:rgba(244,238,229,.82);
-  transition:color .22s ease;
-}
-
-.museum-nav a::after{
-  content:"";
-  position:absolute;
-  left:50%;
-  bottom:-10px;
-  width:0;
-  height:1px;
-  background:var(--gold);
-  transition:.22s ease;
-}
-
-.museum-nav a:hover,
-.museum-nav a.active{ color:#fff1d8; }
-
-.museum-nav a:hover::after,
-.museum-nav a.active::after{
-  left:0;
-  width:100%;
-}
-
 /* main */
 
 .museum-main{
@@ -179,9 +97,9 @@ a{color:inherit;text-decoration:none;}
   z-index:12;
   width:min(1500px, calc(100% - 54px));
   display:grid;
-  grid-template-rows:auto minmax(0,1fr) 104px;
+  grid-template-rows:auto minmax(0,1fr) 214px;
   gap:12px;
-  padding:24px 0 116px;
+  padding:24px 0 88px;
 }
 
 .hero{
@@ -275,9 +193,9 @@ a{color:inherit;text-decoration:none;}
 
 .hero-subtitle{
   font-family:'Jura',sans-serif;
-  font-size:11px;
-  font-weight:500;
-  letter-spacing:.16em;
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:.19em;
   text-transform:uppercase;
   color:var(--ink);
   text-shadow:0 1px 0 rgba(255,255,255,.20);
@@ -433,57 +351,51 @@ a{color:inherit;text-decoration:none;}
   background:linear-gradient(90deg, rgba(218,187,130,.95), transparent);
 }
 
-.player-role{
-  margin-top:5px;
-  font-family:'Jura',sans-serif;
-  font-size:7px;
-  font-weight:600;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:#CFB38A;
-}
 
-.player-role::after{
-  content:"✦";
-  display:block;
-  margin-top:9px;
-  color:rgba(188,155,104,.78);
-  font-size:8px;
-}
-
-/* fixed info panel */
+/* compact selected-player panel */
 
 .player-profile{
-  width:min(840px, 74%);
-  height:104px;
-  min-height:104px;
-  max-height:104px;
+  width:min(1080px, 86%);
+  min-height:156px;
   margin:0 auto;
   align-self:end;
   display:grid;
-  grid-template-columns:82px 1fr 110px;
-  gap:18px;
-  align-items:center;
-  padding:15px 22px;
-  background:rgba(14,28,40,.92);
-  border-top:1px solid rgba(184,149,99,.52);
-  border-bottom:1px solid rgba(184,149,99,.28);
-  box-shadow:0 12px 28px rgba(0,0,0,.18);
-  backdrop-filter:blur(8px);
+  grid-template-columns:76px minmax(0,1fr);
+  gap:22px;
+  align-items:stretch;
+  padding:20px 28px 22px;
+  background:rgba(14,28,40,.94);
+  border-top:1px solid rgba(184,149,99,.54);
+  border-bottom:1px solid rgba(184,149,99,.30);
+  box-shadow:0 16px 34px rgba(0,0,0,.24);
+  backdrop-filter:blur(9px);
   transition:opacity .16s ease;
+  z-index:14;
 }
 
-.player-profile.changing{
-  opacity:.18;
-}
+.player-profile.changing{opacity:.18;}
 
 .profile-number{
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-align:center;
-  font-size:48px;
+  font-size:46px;
   font-weight:600;
   line-height:1;
   color:#C5A572;
   border-right:1px solid rgba(184,149,99,.24);
+}
+
+.profile-content{min-width:0;}
+
+.profile-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:24px;
+  padding-bottom:9px;
+  border-bottom:1px solid rgba(184,149,99,.22);
 }
 
 .profile-name{
@@ -496,32 +408,224 @@ a{color:inherit;text-decoration:none;}
 
 .profile-position{
   margin-top:2px;
+  min-height:11px;
   font-family:'Jura',sans-serif;
   font-size:8px;
   font-weight:600;
-  letter-spacing:.24em;
+  letter-spacing:.21em;
   text-transform:uppercase;
   color:#D0B187;
 }
 
-.profile-text{
-  margin-top:7px;
-  font-size:11px;
-  line-height:1.42;
-  color:rgba(239,232,220,.72);
-  max-height:32px;
-  overflow:hidden;
-}
-
-.profile-mark{
+.profile-first-game{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:4px;
   font-family:'Jura',sans-serif;
   font-size:8px;
-  line-height:1.7;
+  font-weight:600;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:rgba(239,232,220,.74);
+  white-space:nowrap;
+}
+.profile-first-game[hidden]{display:none;}
+.profile-first-game i{
+  color:#C9A66F;
+  font-size:12px;
+  transform:rotate(-10deg);
+}
+
+.profile-text{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px 24px;
+  font-size:11.5px;
+  line-height:1.42;
+  color:rgba(239,232,220,.80);
+}
+.profile-field{
+  min-width:0;
+  padding:0;
+}
+.profile-field-label{
+  margin-bottom:3px;
+  font-family:'Jura',sans-serif;
+  font-size:7px;
+  font-weight:600;
   letter-spacing:.18em;
   text-transform:uppercase;
-  text-align:center;
-  color:rgba(196,166,120,.40);
+  color:#D0B187;
 }
+.profile-field p{margin:0;}
+
+.profile-more{
+  grid-column:1/-1;
+  justify-self:start;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:1px;
+  padding:6px 10px 7px;
+  border:1px solid rgba(184,149,99,.28);
+  background:rgba(255,255,255,.025);
+  color:#E5D6BB;
+  font-family:'Jura',sans-serif;
+  font-size:7px;
+  font-weight:600;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:.2s ease;
+}
+.profile-more::after{content:'›';font-size:13px;line-height:1;color:#C9A66F;}
+.profile-more:hover{background:rgba(255,255,255,.055);border-color:rgba(184,149,99,.48);color:#FFF2DA;}
+
+/* full player modal */
+.player-modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:grid;
+  place-items:center;
+  padding:28px;
+  background:rgba(4,11,17,.80);
+  backdrop-filter:blur(10px);
+  opacity:0;
+  visibility:hidden;
+  transition:.2s ease;
+}
+.player-modal.open{opacity:1;visibility:visible;}
+.player-modal-card{
+  position:relative;
+  width:min(820px,92vw);
+  max-height:min(82vh,760px);
+  overflow:auto;
+  padding:28px 32px 30px;
+  background:linear-gradient(180deg,rgba(14,31,44,.98),rgba(10,24,35,.98));
+  border:1px solid rgba(184,149,99,.52);
+  box-shadow:0 34px 80px rgba(0,0,0,.52);
+}
+.player-modal-card::before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  pointer-events:none;
+  border:1px solid rgba(231,215,188,.10);
+}
+.player-modal-close{
+  position:absolute;
+  top:13px;
+  right:13px;
+  z-index:3;
+  width:34px;
+  height:34px;
+  border:1px solid rgba(184,149,99,.34);
+  border-radius:50%;
+  background:rgba(8,22,32,.82);
+  color:#EAD8B8;
+  font-size:21px;
+  cursor:pointer;
+}
+.modal-top{
+  display:grid;
+  grid-template-columns:72px minmax(0,1fr) auto;
+  gap:18px;
+  align-items:start;
+  padding:4px 42px 18px 0;
+  border-bottom:1px solid rgba(184,149,99,.22);
+}
+.modal-number{
+  font-size:46px;
+  line-height:1;
+  text-align:center;
+  color:#C5A572;
+  border-right:1px solid rgba(184,149,99,.22);
+}
+.modal-name{
+  font-size:28px;
+  line-height:1;
+  font-weight:600;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+  color:#F1E8DA;
+}
+.modal-position{
+  margin-top:6px;
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.20em;
+  text-transform:uppercase;
+  color:#D0B187;
+}
+.modal-date{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:5px;
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.12em;
+  color:rgba(239,232,220,.74);
+  white-space:nowrap;
+}
+.modal-date[hidden]{display:none;}
+.modal-date i{color:#C9A66F;font-size:12px;transform:rotate(-10deg);}
+.modal-body{
+  position:relative;
+  z-index:2;
+  padding-top:18px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px 26px;
+}
+.modal-field{
+  padding:12px 14px 13px;
+  border:1px solid rgba(184,149,99,.16);
+  background:rgba(255,255,255,.018);
+}
+.modal-field-label,
+.modal-ach-title{
+  margin-bottom:6px;
+  font-family:'Jura',sans-serif;
+  font-size:7px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#D0B187;
+}
+.modal-field p{
+  margin:0;
+  font-size:14px;
+  line-height:1.45;
+  color:rgba(244,236,223,.86);
+}
+.modal-ach{
+  grid-column:1/-1;
+  padding-top:4px;
+}
+.modal-ach-list{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px 9px;
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+.modal-ach-list li{
+  padding:8px 10px;
+  border:1px solid rgba(184,149,99,.20);
+  background:rgba(255,255,255,.022);
+  font-size:12px;
+  line-height:1.3;
+  color:rgba(242,232,216,.80);
+}
+body.modal-open{overflow:hidden!important;}
 
 /* clouds */
 
@@ -531,7 +635,7 @@ a{color:inherit;text-decoration:none;}
   right:0;
   bottom:2px;
   height:275px;
-  overflow:hidden;
+  overflow:visible;
   z-index:8;
   pointer-events:none;
 }
@@ -563,87 +667,95 @@ a{color:inherit;text-decoration:none;}
 .c10{width:210px;right:38%;bottom:104px;opacity:.08;}
 .c11{width:340px;left:50%;transform:translateX(-50%) translate3d(var(--mx), var(--my), 0) scaleX(var(--flip));bottom:-120px;opacity:.14;filter:blur(2px);}
 
-@media (max-width: 1360px){
-  .players{
-    width:min(1260px, 94%);
-    gap:10px;
-  }
-
-  .hero-title{
-    font-size:clamp(46px,4vw,68px);
-  }
+@media (max-width:1360px){
+  .players{width:min(1260px,94%);gap:10px;}
+  .hero-title{font-size:clamp(46px,4vw,68px);}
 }
 
-@media (max-width: 1200px), (max-height: 860px){
+@media (max-height:860px) and (min-width:1451px){
   :root{--header-h:66px;}
-
   .museum-header{padding:0 28px;}
   .logo-img{height:40px;}
   .logo-text{height:40px;font-size:13px;}
-
-  .museum-main{
-    gap:8px;
-    padding:16px 0 96px;
-    grid-template-rows:auto minmax(0,1fr) 96px;
-  }
-
+  .museum-main{gap:8px;padding:14px 0 72px;grid-template-rows:auto minmax(0,1fr) 150px;}
   .hero-meta{font-size:10px;}
   .hero-title-wrap{padding:6px 24px 8px;}
   .hero-title{font-size:clamp(42px,3.8vw,62px);}
   .hero-divider{margin:8px auto 7px;}
-  .hero-subtitle{font-size:10px;}
-
-  .players{
-    width:min(1140px, 95%);
-    gap:9px;
-  }
-
+  .hero-subtitle{font-size:8px;}
+  .players{width:min(1180px,94%);gap:9px;}
   .player-number{font-size:28px;}
   .player-name{font-size:12px;}
-  .player-role,.player-rank{font-size:7px;}
-
-  .player-profile{
-    width:min(780px, 72%);
-    height:96px;
-    min-height:96px;
-    max-height:96px;
-    padding:12px 20px;
-  }
-
+  .player-rank{font-size:7px;}
+  .player-profile{width:min(980px,84%);min-height:150px;padding:16px 22px 18px;}
   .profile-number{font-size:43px;}
   .profile-name{font-size:21px;}
-  .profile-text{font-size:10px;max-height:30px;}
-
-  .bottom-clouds{ height:245px; }
+  .profile-text{font-size:10px;gap:8px 18px;}
+  .bottom-clouds{height:220px;}
 }
 
-@media (max-width: 1040px), (max-height: 760px){
+@media (max-width:1450px){
+  :root{--header-h:66px;}
+  html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;}
+  #museum{position:relative;inset:auto;min-height:100vh;overflow:visible;}
+  .museum-header{position:sticky;top:0;padding:0 24px;}
+  .museum-nav{gap:14px;}
+  .museum-nav a{font-size:11px;}
   .museum-main{
-    padding-top:16px;
-    padding-bottom:82px;
-    grid-template-rows:auto minmax(0,1fr) 84px;
+    position:relative;
+    top:auto;
+    left:auto;
+    bottom:auto;
+    transform:none;
+    width:100%;
+    min-height:calc(100vh - var(--header-h));
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    padding:18px 0 110px;
   }
-
-  .hero{margin-top:0;}
   .hero-meta{font-size:9px;}
-  .hero-title{font-size:clamp(36px,3.4vw,54px);}
+  .hero-title{font-size:clamp(38px,5vw,58px);}
   .hero-subtitle{font-size:9px;}
   .players{
-    width:min(1020px, 96%);
-    gap:8px;
+    width:min(790px,94%);
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(5,124px);
+    justify-content:center;
+    align-items:start;
+    gap:14px 12px;
   }
+  .player-card{width:124px;}
+  .player-card:nth-child(n+6){transform:translateX(68px);}
+  .player-card:nth-child(n+6):hover,
+  .player-card:nth-child(n+6).active{transform:translate(68px,-6px);}
+  .player-number{font-size:27px;}
   .player-name{font-size:11px;}
-  .player-role,.player-rank{font-size:6px;}
-  .player-profile{
-    width:min(760px,72%);
-    height:84px;
-    min-height:84px;
-    max-height:84px;
-    padding:10px 18px;
-  }
-  .profile-number{font-size:38px;}
-  .profile-name{font-size:18px;}
-  .profile-text{font-size:9px;line-height:1.35;max-height:24px;}
+  .player-rank{font-size:6px;margin-top:6px;}
+  .player-profile{display:none;}
+  .player-modal{padding:20px;}
+  .player-modal-card{width:min(760px,92vw);max-height:86vh;}
+  .bottom-clouds{position:absolute;height:210px;bottom:0;overflow:visible;}
+  .bottom-cloud.c1{left:-90px;}
+  .bottom-cloud.c9{right:-90px;}
+}
+
+@media (max-width:760px){
+  .museum-nav{display:none;}
+  .museum-main{padding-top:16px;}
+  .players{width:min(390px,96%);grid-template-columns:repeat(3,110px);gap:12px 10px;}
+  .player-card{width:110px;}
+  .player-card:nth-child(n+6),
+  .player-card:nth-child(n+6):hover,
+  .player-card:nth-child(n+6).active{transform:none;}
+  .player-card:hover,.player-card.active{transform:translateY(-4px);}
+  .player-profile{grid-template-columns:1fr;padding:18px 18px 20px;}
+  .profile-number{display:none;}
+  .profile-head{flex-direction:column;gap:8px;}
+  .profile-first-game{margin-top:0;}
+  .profile-text{grid-template-columns:1fr;}
+  .profile-ach{grid-column:auto;}
 }
 </style>
 </head>
@@ -665,9 +777,10 @@ a{color:inherit;text-decoration:none;}
       <a href="matches.html">матчи</a>
       <a href="form.html">форма</a>
       <a href="former.html">история</a>
+      <a href="articles.html">статьи</a>
       <a href="quotes.html">цитатник</a>
       <a href="gallery.html">галерея</a>
-      <a href="omg.html">OMG</a>
+      <a href="omg.html" class="omg-link">OMG</a>
     </nav>
   </header>
 
@@ -689,118 +802,109 @@ a{color:inherit;text-decoration:none;}
       <article class="player-card active"
         data-number="02"
         data-name="Лиария Спраут"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="лучший спортсмен · лето 2023"
+        data-info="">
         <div class="player-photo"><img src="img/players/02_liaria_sprout.jpg" alt="Лиария Спраут"></div>
         <div class="player-data">
           <div class="player-number">02</div>
           <div class="player-name">Лиария<br>Спраут</div>
-          <div class="player-role"></div>
         </div>
       </article>
 
       <article class="player-card"
         data-number="04"
         data-name="Адрианна Сноу"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="охота / защита"
+        data-info="">
         <div class="player-photo"><img src="img/players/04_adrianna_snow.jpg" alt="Адрианна Сноу"></div>
         <div class="player-data">
           <div class="player-number">04</div>
           <div class="player-name">Адрианна<br>Сноу</div>
-          <div class="player-role"></div>
         </div>
       </article>
 
       <article class="player-card"
         data-number="05"
         data-name="Morgane Dave Black"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="охотник"
+        data-info="">
         <div class="player-photo"><img src="img/players/05_morgane_dave_black.jpg" alt="Morgane Dave Black"></div>
         <div class="player-data">
           <div class="player-number">05</div>
           <div class="player-name">Morgane Dave<br>Black</div>
-          <div class="player-role"></div>
         </div>
       </article>
 
       <article class="player-card captain"
         data-number="06"
         data-name="Эмберли Шрив-Стиверсон"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="капитан · достижения"
+        data-info="">
         <div class="player-photo"><img src="img/players/06_amberly_shrive_stiverson.jpg" alt="Эмберли Шрив-Стиверсон"></div>
         <div class="player-data">
           <div class="player-number">06</div>
           <div class="player-name">Эмберли<br>Шрив-Стиверсон</div>
           <div class="player-rank"><span></span>капитан<span></span></div>
-          <div class="player-role"></div>
         </div>
       </article>
 
       <article class="player-card"
         data-number="07"
         data-name="Блейк Эллингтон"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="охотник"
+        data-info="">
         <div class="player-photo"><img src="img/players/07_blake_ellington.jpg" alt="Блейк Эллингтон"></div>
         <div class="player-data">
           <div class="player-number">07</div>
           <div class="player-name">Блейк<br>Эллингтон</div>
-          <div class="player-role"></div>
         </div>
       </article>
 
       <article class="player-card"
         data-number="08"
         data-name="Шелия МакБрайд"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="защита"
+        data-info="">
         <div class="player-photo"><img src="img/players/08_shelia_mcbride.jpg" alt="Шелия МакБрайд"></div>
         <div class="player-data">
           <div class="player-number">08</div>
           <div class="player-name">Шелия<br>МакБрайд</div>
-          <div class="player-role"></div>
         </div>
       </article>
 
       <article class="player-card"
         data-number="09"
         data-name="Grace Diamond-de-Kur"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="охотник"
+        data-info="">
         <div class="player-photo"><img src="img/players/09_grace_diamond_de_kur.jpg" alt="Grace Diamond-de-Kur"></div>
         <div class="player-data">
           <div class="player-number">09</div>
           <div class="player-name">Grace<br>Diamond-de-Kur</div>
-          <div class="player-role"></div>
         </div>
       </article>
 
       <article class="player-card"
         data-number="11"
         data-name="Мерида Морграфт"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="охотник / вратарь"
+        data-info="">
         <div class="player-photo"><img src="img/players/11_merida_morgraft.jpg" alt="Мерида Морграфт"></div>
         <div class="player-data">
           <div class="player-number">11</div>
           <div class="player-name">Мерида<br>Морграфт</div>
-          <div class="player-role"></div>
         </div>
       </article>
 
       <article class="player-card"
         data-number="13"
         data-name="Амилия Лиссаранд"
-        data-position=""
-        data-info="краткая информация об игроке появится здесь.">
+        data-position="охота / защита"
+        data-info="">
         <div class="player-photo"><img src="img/players/13_amilia_lissarand.jpg" alt="Амилия Лиссаранд"></div>
         <div class="player-data">
           <div class="player-number">13</div>
           <div class="player-name">Амилия<br>Лиссаранд</div>
-          <div class="player-role"></div>
         </div>
       </article>
 
@@ -808,15 +912,41 @@ a{color:inherit;text-decoration:none;}
 
     <section class="player-profile" id="playerProfile">
       <div class="profile-number" id="profileNumber">02</div>
-      <div>
-        <div class="profile-name" id="profileName">Лиария Спраут</div>
-        <div class="profile-position" id="profilePosition"></div>
-        <div class="profile-text" id="profileText">краткая информация об игроке появится здесь.</div>
+      <div class="profile-content">
+        <div class="profile-head">
+          <div>
+            <div class="profile-name" id="profileName">Лиария Спраут</div>
+            <div class="profile-position" id="profilePosition"></div>
+          </div>
+          <div class="profile-first-game" id="profileFirstGame" hidden>
+            <i class="fa-solid fa-broom-ball" aria-hidden="true"></i>
+            <span id="profileFirstGameDate"></span>
+          </div>
+        </div>
+        <div class="profile-text" id="profileText"></div>
       </div>
-      <div class="profile-mark">escadrille<br>lafayette</div>
     </section>
 
   </main>
+
+
+  <div class="player-modal" id="playerModal" aria-hidden="true">
+    <div class="player-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalName">
+      <button class="player-modal-close" id="playerModalClose" type="button" aria-label="Закрыть">×</button>
+      <div class="modal-top">
+        <div class="modal-number" id="modalNumber"></div>
+        <div>
+          <div class="modal-name" id="modalName"></div>
+          <div class="modal-position" id="modalPosition"></div>
+        </div>
+        <div class="modal-date" id="modalDate" hidden>
+          <i class="fa-solid fa-broom-ball" aria-hidden="true"></i>
+          <span id="modalDateText"></span>
+        </div>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
 
   <div class="bottom-clouds">
     <img class="bottom-cloud c1" data-depth="8" src="img/ui/cl01.png" alt="">
@@ -840,23 +970,177 @@ const profileNumber = document.getElementById("profileNumber");
 const profileName = document.getElementById("profileName");
 const profilePosition = document.getElementById("profilePosition");
 const profileText = document.getElementById("profileText");
+const profileFirstGame = document.getElementById("profileFirstGame");
+const profileFirstGameDate = document.getElementById("profileFirstGameDate");
+
+const compactField = (label, text) => text ? `<div class="profile-field"><div class="profile-field-label">${label}</div><p>${text}</p></div>` : "";
+const modalField = (label, text) => text ? `<div class="modal-field"><div class="modal-field-label">${label}</div><p>${text}</p></div>` : "";
+const modalAchievements = items => items?.length ? `<div class="modal-ach"><div class="modal-ach-title">достижения</div><ul class="modal-ach-list">${items.map(item=>`<li>${item}</li>`).join("")}</ul></div>` : "";
+
+const playerProfiles = {
+  "02": {
+    specialization: "",
+    firstGame: "",
+    fields: [],
+    achievements: ["Лучший спортсмен · лето 2023"]
+  },
+  "04": {
+    specialization: "охота / защита",
+    firstGame: "01.09.2025",
+    fields: [
+      ["в LaFayette", "первый матч — 21.09.2025"],
+      ["квиддичное кредо", "в любой непонятной ситуации использовать аргумент «я так чувствую, моя чуйка говорит, что надо так!»"],
+      ["если Lafayette на поле...", "это верный признак, что скоро будут необычные осадки."]
+    ],
+    achievements: []
+  },
+  "05": {
+    specialization: "охотник",
+    firstGame: "апрель–май 2015",
+    fields: [
+      ["квиддичное кредо", "«размахивай купальником и взлетай»"],
+      ["если Lafayette на поле...", "то это одного поля ягоды."]
+    ],
+    achievements: []
+  },
+  "06": {
+    specialization: "",
+    firstGame: "",
+    fields: [],
+    achievements: ["2/3 место на ВШТ’21", "Лучший спортсмен · осень 2025"]
+  },
+  "07": {
+    specialization: "охотник",
+    firstGame: "17.03.2023",
+    fields: [
+      ["квиддичное кредо", "Чтобы ни происходило на поле, с моей стороны это было непреднамеренно!"],
+      ["если Lafayette на поле...", "значит надо не забыть поставить будильник, чтобы не пропустить обсуждение!"],
+      ["план-мечта", "освоить специализацию защитник."]
+    ],
+    achievements: ["Снитчей · 2"]
+  },
+  "08": {
+    specialization: "защита",
+    firstGame: "30.03.2021",
+    fields: [
+      ["квиддичное кредо", "пусть это будет красиво! или интересно, ну или прикольно выглядеть."],
+      ["если Lafayette на поле...", "то я снова могу быть вовлеченным игроком с горящими глазами, как в первые годы, а не уставшим пенсионером."]
+    ],
+    achievements: ["Лучший спортсмен · осень 2021", "Лучший спортсмен · зима 2021–22", "Лучший спортсмен · лето 2022", "тренер", "судья", "организатор ВШТ", "автор методичек", "Снитчей · 5", "2/3 место на ВШТ’21", "3 место на ВШТ’22"]
+  },
+  "09": {
+    specialization: "охотник",
+    firstGame: "30.03.2021",
+    fields: [
+      ["квиддичное кредо", "«если опасных больше 10, то мы их не учитываем»"],
+      ["если Lafayette на поле...", "победа точно будет в Коге."]
+    ],
+    achievements: ["Лучший спортсмен · осень 2024", "единица в рейтинге на ВШТ", "победитель конкурса болельщиков"]
+  },
+  "11": {
+    specialization: "охотник / вратарь",
+    firstGame: "20.08.2025",
+    fields: [
+      ["соперник первой игры", "Амилия Лиссаранд"],
+      ["квиддичное кредо", "вовремя отбей бладжер, пока он не отбил тебя."],
+      ["если Lafayette на поле...", "значит птиц в небе стало больше."]
+    ],
+    achievements: []
+  },
+  "13": {
+    specialization: "охота / защита",
+    firstGame: "20.08.2025",
+    fields: [
+      ["соперник первой игры", "Мерида Морграфт"],
+      ["квиддичное кредо", "«если все за одним, то и все упадут»"],
+      ["если Lafayette на поле...", "побеждаем значит вскоре."]
+    ],
+    achievements: []
+  }
+};
+
+const playerModal = document.getElementById("playerModal");
+const playerModalClose = document.getElementById("playerModalClose");
+const modalNumber = document.getElementById("modalNumber");
+const modalName = document.getElementById("modalName");
+const modalPosition = document.getElementById("modalPosition");
+const modalDate = document.getElementById("modalDate");
+const modalDateText = document.getElementById("modalDateText");
+const modalBody = document.getElementById("modalBody");
+let activeCard = document.querySelector('.player-card.active');
+
+function isCompactLayout(){
+  return window.matchMedia('(max-width:1450px)').matches;
+}
+
+function compactFields(data){
+  const preferred = data.fields.filter(([label]) =>
+    label.toLowerCase().includes('квиддичное кредо') ||
+    label.toLowerCase().includes('если lafayette')
+  );
+  return preferred.slice(0,2);
+}
+
+function renderProfile(card){
+  const data = playerProfiles[card.dataset.number] || {specialization:"",firstGame:"",fields:[],achievements:[]};
+  profile.classList.add("changing");
+  setTimeout(() => {
+    profileNumber.textContent = card.dataset.number;
+    profileName.textContent = card.dataset.name;
+    profilePosition.textContent = data.specialization || "";
+    profileFirstGame.hidden = !data.firstGame;
+    profileFirstGameDate.textContent = data.firstGame || "";
+
+    const fieldsHtml = compactFields(data).map(([label,value])=>compactField(label,value)).join("");
+    const hasMore = data.achievements.length > 0 || data.fields.length > compactFields(data).length;
+    const moreButton = hasMore ? `<button class="profile-more" type="button" data-profile-more>подробнее</button>` : "";
+    profileText.innerHTML = fieldsHtml + moreButton;
+
+    const btn = profileText.querySelector('[data-profile-more]');
+    if(btn) btn.addEventListener('click', () => openPlayerModal(card));
+    profile.classList.remove("changing");
+  }, 120);
+}
+
+function openPlayerModal(card){
+  const data = playerProfiles[card.dataset.number] || {specialization:"",firstGame:"",fields:[],achievements:[]};
+  modalNumber.textContent = card.dataset.number;
+  modalName.textContent = card.dataset.name;
+  modalPosition.textContent = data.specialization || "";
+  modalDate.hidden = !data.firstGame;
+  modalDateText.textContent = data.firstGame || "";
+  modalBody.innerHTML = data.fields.map(([label,value])=>modalField(label,value)).join("") + modalAchievements(data.achievements);
+  playerModal.classList.add('open');
+  playerModal.setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-open');
+}
+
+function closePlayerModal(){
+  playerModal.classList.remove('open');
+  playerModal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-open');
+}
 
 cards.forEach(card => {
   card.addEventListener("click", () => {
     cards.forEach(item => item.classList.remove("active"));
     card.classList.add("active");
-
-    profile.classList.add("changing");
-
-    setTimeout(() => {
-      profileNumber.textContent = card.dataset.number;
-      profileName.textContent = card.dataset.name;
-      profilePosition.textContent = card.dataset.position;
-      profileText.textContent = card.dataset.info;
-      profile.classList.remove("changing");
-    }, 120);
+    activeCard = card;
+    if(isCompactLayout()) openPlayerModal(card);
+    else renderProfile(card);
   });
 });
+
+playerModalClose.addEventListener('click', closePlayerModal);
+playerModal.addEventListener('click', e => { if(e.target === playerModal) closePlayerModal(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && playerModal.classList.contains('open')) closePlayerModal(); });
+
+window.addEventListener('resize', () => {
+  if(!isCompactLayout() && playerModal.classList.contains('open')) closePlayerModal();
+  if(!isCompactLayout() && activeCard) renderProfile(activeCard);
+});
+
+renderProfile(activeCard);
 
 const clouds = document.querySelectorAll(".bottom-cloud");
 

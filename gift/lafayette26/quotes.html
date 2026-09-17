@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Цитатник LaFayette · Когтевранский музей</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/museum.css">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:'ModernoTwo';src:url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');font-display:swap}
+
 :root{--blue:#0E1C28;--ink:#17354A;--gold:#B89463;--light:#F3EBDD;--paper:rgba(243,235,221,.93);--header-h:74px}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;min-height:100%;background:var(--blue);color:var(--light);font-family:'Cormorant Garamond',serif}
@@ -18,15 +19,14 @@ a{color:inherit;text-decoration:none}
 .room-bg{position:fixed;inset:0;background-image:url('img/ui/bg.png');background-size:cover;background-position:center;transform:scale(1.01);z-index:0}
 .room-bg:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,14,21,.36),rgba(7,14,21,.10) 34%,rgba(7,14,21,.20) 68%,rgba(7,14,21,.58)),linear-gradient(90deg,rgba(7,14,21,.60),rgba(7,14,21,.14) 18%,transparent 34%,transparent 66%,rgba(7,14,21,.14) 82%,rgba(7,14,21,.60))}
 .room-bg:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 46% 31% at 50% 22%,rgba(252,248,239,.52),rgba(242,244,245,.18) 48%,transparent 79%)}
-.museum-header{position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));
-  backdrop-filter:blur(5px);border-bottom:1px solid rgba(182,148,101,.24)}
-.header-logo{display:flex;align-items:center;gap:.75rem;width:210px}.logo-img{height:44px;width:auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.38))}.logo-text{font-family:'ModernoTwo','Cormorant Garamond',serif;font-size:14px;line-height:1.02;letter-spacing:.04em;text-transform:uppercase;color:#fff}
-.museum-nav{display:flex;gap:19px;align-items:center}.museum-nav a{position:relative;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(244,238,229,.82)}.museum-nav a:after{content:"";position:absolute;left:50%;bottom:-10px;width:0;height:1px;background:var(--gold);transition:.2s}.museum-nav a:hover,.museum-nav a.active{color:#fff1d8}.museum-nav a:hover:after,.museum-nav a.active:after{left:0;width:100%}
+
 .quotes-main{position:relative;z-index:12;width:min(1180px,calc(100% - 40px));margin:0 auto;padding:calc(var(--header-h) + 24px) 0 96px}
-.hero{text-align:center;position:relative;margin-bottom:20px}.hero:before{content:"";position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(900px,78vw);height:180px;background:radial-gradient(ellipse at center,rgba(255,251,243,.78),rgba(248,248,244,.40) 42%,rgba(236,242,245,.10) 70%,transparent);filter:blur(12px);z-index:-1}.hero-meta{font-family:'Jura',sans-serif;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--ink)}.hero h1{margin-top:2px;font-size:clamp(50px,5.2vw,80px);line-height:.92;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}.hero-line{width:min(350px,34vw);margin:7px auto;display:flex;align-items:center;gap:12px}.hero-line:before,.hero-line:after{content:"";flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(177,141,91,.72),transparent)}.hero-line span{color:var(--gold);font-size:9px}.hero-subtitle{font-family:'Jura',sans-serif;font-size:10px;font-weight:500;letter-spacing:.17em;text-transform:uppercase;color:var(--ink)}
+.hero{text-align:center;position:relative;margin-bottom:20px}.hero:before{content:"";position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:min(900px,78vw);height:180px;background:radial-gradient(ellipse at center,rgba(255,251,243,.78),rgba(248,248,244,.40) 42%,rgba(236,242,245,.10) 70%,transparent);filter:blur(12px);z-index:-1}.hero-meta{font-family:'Jura',sans-serif;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--ink)}.hero h1{margin-top:2px;font-size:clamp(50px,5.2vw,80px);line-height:.92;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}.hero-line{width:min(350px,34vw);margin:7px auto;display:flex;align-items:center;gap:12px}.hero-line:before,.hero-line:after{content:"";flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(177,141,91,.72),transparent)}.hero-line span{color:var(--gold);font-size:9px}.hero-subtitle{font-family:'Jura',sans-serif;font-size:9px;font-weight:600;letter-spacing:.19em;text-transform:uppercase;color:var(--ink)}
 .quotes-grid{column-count:4;column-gap:16px;max-width:1180px;margin:0 auto}.chat-card{break-inside:avoid;margin:0 0 16px;position:relative;padding:14px 14px 12px;border:1px solid rgba(184,148,99,.34);border-radius:15px;background:linear-gradient(155deg,rgba(13,28,40,.94),rgba(18,39,54,.88));box-shadow:0 14px 28px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.03);backdrop-filter:blur(8px);overflow:hidden}.chat-card:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.025),transparent 35%,rgba(184,148,99,.035));pointer-events:none}.chat-card.light{background:linear-gradient(145deg,rgba(244,238,228,.97),rgba(225,232,233,.93));color:var(--ink);border-color:rgba(75,104,123,.25)}
 .msg{display:grid;grid-template-columns:38px 1fr;gap:10px;position:relative}.msg+.msg{margin-top:12px}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;object-position:center 15%;border:1px solid rgba(235,213,179,.62);box-shadow:0 3px 10px rgba(0,0,0,.25)}.bubble{min-width:0}.meta{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}.name{font-family:'Jura',sans-serif;font-size:11px;font-weight:600;letter-spacing:.03em;color:#d6b57d}.light .name{color:#285777}.time{font-family:'Jura',sans-serif;font-size:8px;letter-spacing:.05em;color:rgba(244,238,229,.46)}.light .time{color:rgba(23,53,74,.52)}.text{margin-top:3px;font-size:17px;line-height:1.14;color:#f3ebdd}.light .text{color:#19384d}.text.em{font-style:italic;color:rgba(243,235,221,.82)}.light .text.em{color:rgba(23,53,74,.82)}.reply{margin-top:6px;padding-left:9px;border-left:2px solid rgba(184,148,99,.48);font-size:12px;line-height:1.22;color:rgba(244,238,229,.66)}.light .reply{color:rgba(23,53,74,.64);border-color:rgba(23,53,74,.24)}.reaction{display:inline-flex;align-items:center;gap:4px;margin-top:6px;padding:1px 7px 2px;border:1px solid rgba(184,148,99,.32);border-radius:999px;background:rgba(255,255,255,.045);font-family:'Jura',sans-serif;font-size:10px}.light .reaction{background:rgba(14,28,40,.05);border-color:rgba(23,53,74,.14)}.whisper{font-style:italic;opacity:.72}.msg.anonymous{grid-template-columns:1fr;padding-left:48px}.anonymous .bubble{padding:8px 10px;border-left:2px solid rgba(184,148,99,.48);background:rgba(255,255,255,.035);border-radius:0 10px 10px 0}.light .anonymous .bubble{background:rgba(14,28,40,.045);border-left-color:rgba(23,53,74,.24)}.anonymous .text{margin-top:0;font-size:14px;font-style:italic;color:rgba(243,235,221,.76)}.light .anonymous .text{color:rgba(23,53,74,.72)}.big .text{font-size:19px}.center{text-align:center}.center .msg{display:block}.center .avatar{margin:0 auto 7px}.center .meta{justify-content:center}.center .text{font-size:20px}.signature{margin-top:10px;font-family:'Jura',sans-serif;font-size:7px;letter-spacing:.13em;text-transform:uppercase;color:rgba(244,238,229,.34);text-align:right}.light .signature{color:rgba(23,53,74,.42)}
 .clouds{position:fixed;left:0;right:0;bottom:-8px;height:22%;z-index:7;overflow:hidden;pointer-events:none}.cloud{position:absolute;width:auto;max-width:none;filter:drop-shadow(0 8px 14px rgba(0,0,0,.10))}.c1{left:-7%;bottom:-17%;width:min(34vw,520px);opacity:.86}.c5{right:-7%;bottom:-18%;width:min(34vw,520px);opacity:.84}.c2{left:7%;bottom:-24%;width:min(26vw,390px);opacity:.36}.c4{right:7%;bottom:-23%;width:min(25vw,380px);opacity:.34}.c3{left:38%;bottom:-34%;width:min(23vw,340px);opacity:.19}.c6{right:35%;bottom:-38%;width:min(21vw,310px);opacity:.14}
+
+.museum-header{position:fixed;z-index:30;}
 @media(max-width:1180px){.museum-nav{gap:16px}.quotes-grid{column-count:3;max-width:940px}.quotes-main{width:min(100% - 32px,980px)}}
 @media(max-width:840px){.quotes-grid{column-count:2;max-width:700px}}
 @media(max-width:720px){:root{--header-h:64px}.museum-header{padding:0 16px}.logo-img{height:36px}.logo-text{font-size:11px}.museum-nav{display:none}.quotes-main{width:calc(100% - 24px);padding-top:calc(var(--header-h) + 18px)}.hero h1{font-size:46px}.hero-subtitle{font-size:8px}.quotes-grid{column-count:1;max-width:560px}.chat-card{border-radius:15px;padding:14px}.clouds{height:15%}}
@@ -44,9 +44,10 @@ a{color:inherit;text-decoration:none}
       <a href="matches.html">матчи</a>
       <a href="form.html">форма</a>
       <a href="former.html">история</a>
+      <a href="articles.html">статьи</a>
       <a href="quotes.html" class="active">цитатник</a>
       <a href="gallery.html">галерея</a>
-      <a href="omg.html">OMG</a>
+      <a href="omg.html" class="omg-link">OMG</a>
     </nav>
   </header>
 
@@ -55,7 +56,6 @@ a{color:inherit;text-decoration:none}
       <div class="hero-meta">LAFAYETTE · 2011 — 2026</div>
       <h1>ЦИТАТНИК</h1>
       <div class="hero-line"><span>✦</span></div>
-      <div class="hero-subtitle">то, что лучше было не сохранять в истории сообщений</div>
     </section>
 
     <section class="quotes-grid">

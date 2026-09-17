@@ -1,0 +1,170 @@
+/* =========================================================
+   Когтевранский музей · общий каркас
+   Здесь только то, что действительно общее для всех страниц:
+   шрифт логотипа, шапка и основная навигация.
+   ========================================================= */
+
+@font-face{
+  font-family:'ModernoTwo';
+  src:url('https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/gift/house-elf/2026/ofont.ru_Moderno%20Two.ttf') format('truetype');
+  font-display:swap;
+}
+
+.museum-header{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:var(--header-h,74px);
+  z-index:40;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 32px;
+  background:linear-gradient(to bottom,rgba(7,14,21,.72),rgba(7,14,21,.20));
+  backdrop-filter:blur(5px);
+  border-bottom:1px solid rgba(182,148,101,.24);
+}
+
+.header-logo{
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  width:210px;
+  flex-shrink:0;
+}
+
+.logo-img{
+  height:44px;
+  width:auto;
+  display:block;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.38));
+}
+
+.logo-text{
+  font-family:'ModernoTwo','Cormorant Garamond',serif;
+  font-size:14px;
+  line-height:1.02;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#fff;
+}
+
+.museum-nav{
+  display:flex;
+  gap:16px;
+  align-items:center;
+}
+
+.museum-nav a{
+  position:relative;
+  font-family:'Cormorant Garamond',serif;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(244,238,229,.82);
+  white-space:nowrap;
+}
+
+.museum-nav a::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-10px;
+  width:0;
+  height:1px;
+  background:var(--gold,#B89463);
+  transition:.2s ease;
+}
+
+.museum-nav a:hover,
+.museum-nav a.active{
+  color:#fff1d8;
+}
+
+.museum-nav a:hover::after,
+.museum-nav a.active::after{
+  left:0;
+  width:100%;
+}
+
+.museum-nav a.omg-link{
+  letter-spacing:.16em;
+}
+
+@media(max-height:860px) and (min-width:1000px){
+  .museum-header{padding:0 28px;}
+  .logo-img{height:40px;}
+  .logo-text{font-size:13px;}
+}
+
+
+/* === ЕДИНАЯ НАВИГАЦИЯ: authoritative overrides ===
+   Эти правила намеренно !important: старые страничные media-query
+   остаются в HTML, но больше не меняют внешний вид общего меню. */
+.museum-header{
+  padding-left:32px !important;
+  padding-right:32px !important;
+}
+.header-logo{
+  gap:.75rem !important;
+  width:210px !important;
+}
+.logo-img{
+  height:44px !important;
+}
+.logo-text{
+  font-size:14px !important;
+  line-height:1.02 !important;
+  letter-spacing:.04em !important;
+}
+.museum-nav{
+  display:flex !important;
+  align-items:center !important;
+  gap:16px !important;
+}
+.museum-nav a{
+  font-size:12px !important;
+  font-weight:600 !important;
+  letter-spacing:.08em !important;
+}
+.museum-nav a.omg-link{
+  letter-spacing:.16em !important;
+}
+
+@media (max-height:860px) and (min-width:901px){
+  .museum-header{
+    padding-left:28px !important;
+    padding-right:28px !important;
+  }
+  .logo-img{height:40px !important;}
+  .logo-text{font-size:13px !important;}
+}
+
+@media (max-width:1360px) and (min-width:901px){
+  .museum-header{
+    padding-left:24px !important;
+    padding-right:24px !important;
+  }
+  .header-logo{width:190px !important;}
+  .logo-img{height:40px !important;}
+  .logo-text{font-size:13px !important;}
+  .museum-nav{gap:10px !important;}
+  .museum-nav a{
+    font-size:10px !important;
+    letter-spacing:.065em !important;
+  }
+  .museum-nav a.omg-link{letter-spacing:.12em !important;}
+}
+
+@media (max-width:900px){
+  .museum-header{
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+  .header-logo{width:auto !important;}
+  .logo-img{height:36px !important;}
+  .logo-text{font-size:11px !important;}
+  .museum-nav{display:none !important;}
+}

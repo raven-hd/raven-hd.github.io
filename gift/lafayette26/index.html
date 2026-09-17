@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaFayette · Когтевранский музей</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/museum.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jura:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+
+:root{
+  --blue:#0E1C28;
+  --panel:#0c1d2a;
+  --gold:#B89463;
+  --gold-soft:#D7B77E;
+  --ivory:#F3EBDD;
+  --white:#F5F2EC;
+  --header-h:74px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--blue);
+  color:var(--ivory);
+}
+a{color:inherit;text-decoration:none}
+
+#museum{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  background:var(--blue);
+}
+
+/* ---------- background ---------- */
+.room-bg{
+  position:absolute;
+  inset:0;
+  background-image:url('img/ui/bg.png');
+  background-size:cover;
+  background-position:center center;
+  transform:scale(1.01);
+}
+.room-bg::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,
+      rgba(5,12,18,.44) 0%,
+      rgba(5,12,18,.08) 28%,
+      rgba(5,12,18,.10) 62%,
+      rgba(5,12,18,.56) 100%),
+    linear-gradient(90deg,
+      rgba(5,12,18,.64) 0%,
+      rgba(5,12,18,.16) 18%,
+      transparent 35%,
+      transparent 65%,
+      rgba(5,12,18,.16) 82%,
+      rgba(5,12,18,.64) 100%);
+}
+.room-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(
+    ellipse 42% 34% at 50% 42%,
+    rgba(255,248,232,.16),
+    rgba(226,235,240,.05) 48%,
+    transparent 76%
+  );
+}
+
+/* ---------- header ---------- */
+
+/* ---------- main ---------- */
+.home-main{
+  position:absolute;
+  top:var(--header-h);
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:12;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px 30px 74px;
+}
+
+.hero{
+  width:min(960px,82vw);
+  text-align:center;
+  transform:translateY(-1vh);
+}
+
+/* plaque */
+.hero-panel{
+  position:relative;
+  width:100%;
+  padding:40px 54px 38px;
+  background:
+    linear-gradient(180deg,rgba(9,26,39,.82),rgba(8,22,34,.78));
+  border:1px solid rgba(184,148,99,.47);
+  box-shadow:
+    0 26px 70px rgba(0,0,0,.32),
+    inset 0 0 50px rgba(21,50,70,.18);
+  backdrop-filter:blur(7px);
+}
+.hero-panel::before{
+  content:"";
+  position:absolute;
+  inset:10px;
+  pointer-events:none;
+  border:1px solid rgba(222,199,158,.13);
+}
+
+
+/*
+   ONLY TWO FONTS INSIDE THE PLAQUE:
+   1) Cormorant Garamond — LAFAYETTE
+   2) Jura — everything else
+*/
+.hero-kicker,
+.hero-subtitle,
+.hero-copy,
+.enter{
+  font-family:'Jura',sans-serif;
+}
+
+.hero-kicker{
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:.31em;
+  text-transform:uppercase;
+  color:rgba(245,242,236,.86);
+}
+
+.hero h1{
+  margin-top:6px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(78px,8.7vw,142px);
+  line-height:.78;
+  font-weight:500;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+
+  /* warm ivory → muted gold gradient */
+  background:linear-gradient(
+    180deg,
+    #FFF9EF 0%,
+    #F4ECDD 34%,
+    #D7C1A0 66%,
+    #B89463 84%,
+    #8A6B49 100%
+  );
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+
+  filter:drop-shadow(0 2px 7px rgba(0,0,0,.16));
+}
+
+.hero-rule{
+  width:min(560px,58vw);
+  margin:13px auto 18px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+.hero-rule::before,
+.hero-rule::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(184,148,99,.72));
+}
+.hero-rule::after{transform:scaleX(-1)}
+.hero-rule span{
+  color:#B89463;
+  font-size:14px;
+  line-height:1;
+}
+
+.hero-subtitle{
+  font-size:clamp(15px,1.35vw,20px);
+  line-height:1.35;
+  font-weight:500;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+  color:#F4F2EE;
+}
+
+.hero-copy{
+  width:min(690px,74vw);
+  margin:20px auto 0;
+  font-size:12px;
+  line-height:1.65;
+  font-weight:400;
+  letter-spacing:.025em;
+  color:rgba(245,242,236,.78);
+}
+
+.enter{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:11px;
+  margin-top:21px;
+  min-width:180px;
+  padding:9px 16px 10px;
+  border-top:1px solid rgba(184,148,99,.72);
+  border-bottom:1px solid rgba(184,148,99,.72);
+  font-size:9px;
+  font-weight:600;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#D0AF81;
+  transition:.2s ease;
+}
+.enter::after{
+  content:'›';
+  font-family:'Jura',sans-serif;
+  font-size:15px;
+  color:#D0AF81;
+  transition:transform .2s ease;
+}
+.enter:hover{
+  color:#FFF7E7;
+  border-color:#D9B16E;
+  background:rgba(255,255,255,.025);
+}
+.enter:hover::after{transform:translateX(4px)}
+
+/* ---------- bottom plaque ---------- */
+.museum-plaque{
+  position:absolute;
+  left:50%;
+  bottom:34px;
+  transform:translateX(-50%);
+  z-index:14;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  font-family:'Jura',sans-serif;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:.20em;
+  text-transform:uppercase;
+  color:rgba(239,225,201,.74);
+  white-space:nowrap;
+}
+.museum-plaque::before,
+.museum-plaque::after{
+  content:"";
+  width:60px;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(184,148,99,.65));
+}
+.museum-plaque::after{transform:scaleX(-1)}
+
+/* ---------- clouds ---------- */
+.clouds{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-10px;
+  height:17%;
+  z-index:7;
+  overflow:hidden;
+  pointer-events:none;
+  filter:brightness(.80) saturate(.90);
+}
+.cloud{
+  position:absolute;
+  width:auto;
+  max-width:none;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.10));
+}
+.c1{left:-7%;bottom:-17%;width:min(31vw,470px);opacity:.62}
+.c5{right:-7%;bottom:-18%;width:min(31vw,470px);opacity:.60}
+.c2{left:7%;bottom:-24%;width:min(23vw,350px);opacity:.23}
+.c4{right:7%;bottom:-23%;width:min(23vw,350px);opacity:.23}
+.c3{left:39%;bottom:-34%;width:min(20vw,300px);opacity:.10}
+.c6{right:35%;bottom:-38%;width:min(18vw,270px);opacity:.08}
+
+/* ---------- responsive ---------- */
+@media(max-height:860px) and (min-width:1000px){
+  :root{--header-h:66px}
+  .museum-header{padding:0 28px}
+  .logo-img{height:40px}
+  .logo-text{font-size:13px}
+  .home-main{padding-bottom:58px}
+  .hero{transform:translateY(-1.5vh)}
+  .hero-panel{padding:27px 44px 24px}
+  .panel-top-rule{margin-bottom:11px}
+  .hero h1{font-size:clamp(70px,8vw,118px)}
+  .hero-rule{margin:10px auto 14px}
+  .hero-copy{margin-top:16px;font-size:11px}
+  .enter{margin-top:17px}
+  .museum-plaque{bottom:25px}
+}
+
+@media(max-width:1260px){
+  .museum-nav{gap:11px}
+  .museum-nav a{font-size:10px}
+}
+
+@media(max-width:820px){
+  html,body,#museum{overflow:auto}
+  #museum{position:relative;min-height:100vh}
+  .museum-header{position:fixed;padding:0 18px}
+  .museum-nav{display:none}
+  .home-main{
+    position:relative;
+    top:auto;
+    min-height:100vh;
+    padding:calc(var(--header-h) + 40px) 14px 125px;
+  }
+  .hero{width:100%;transform:none}
+  .hero-panel{padding:28px 20px 26px}
+  .panel-top-rule{width:92%}
+  .hero h1{
+    font-size:clamp(58px,17vw,92px);
+    letter-spacing:.045em;
+  }
+  .hero-rule{width:min(330px,78vw)}
+  .hero-subtitle{
+    font-size:14px;
+    line-height:1.5;
+  }
+  .hero-copy{
+    width:min(560px,88vw);
+    font-size:11px;
+  }
+  .museum-plaque{
+    position:absolute;
+    bottom:80px;
+    font-size:7px;
+    letter-spacing:.14em;
+  }
+  .museum-plaque::before,
+  .museum-plaque::after{width:32px}
+  .clouds{position:fixed;height:12%}
+}
+</style>
+</head>
+
+<body>
+<div id="museum">
+  <div class="room-bg"></div>
+
+  <header class="museum-header">
+    <a href="index.html" class="header-logo">
+      <img class="logo-img" src="img/ui/mus_logo.png" alt="">
+      <div class="logo-text">КОГТЕВРАНСКИЙ<br>МУЗЕЙ</div>
+    </a>
+
+    <nav class="museum-nav">
+      <a href="index.html" class="active">главная</a>
+      <a href="team.html">эскадрилья</a>
+      <a href="captains.html">капитаны</a>
+      <a href="matches.html">матчи</a>
+      <a href="form.html">форма</a>
+      <a href="former.html">история</a>
+      <a href="articles.html">статьи</a>
+      <a href="quotes.html">цитатник</a>
+      <a href="gallery.html">галерея</a>
+      <a href="omg.html" class="omg-link">OMG</a>
+    </nav>
+  </header>
+
+  <main class="home-main">
+    <section class="hero">
+      <div class="hero-panel">
+
+
+        <div class="hero-kicker">музейная экспозиция команды</div>
+
+        <h1>LAFAYETTE</h1>
+
+        <div class="hero-rule"><span>✦</span></div>
+
+        <div class="hero-subtitle">
+          сборная факультета Когтевран по квиддичу
+        </div>
+
+        <p class="hero-copy">
+          История эскадрильи, ее игроки и капитаны, матчи, форма,
+          фотографии и то, что осталось между строк.
+        </p>
+
+        <a class="enter" href="team.html">начать осмотр</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="museum-plaque">Когтевранский музей · крыло LaFayette</div>
+
+  <div class="clouds" aria-hidden="true">
+    <img class="cloud c1" src="img/ui/cl03.png" alt="">
+    <img class="cloud c2" src="img/ui/cl01.png" alt="">
+    <img class="cloud c3" src="img/ui/cl04.png" alt="">
+    <img class="cloud c4" src="img/ui/cl02.png" alt="">
+    <img class="cloud c5" src="img/ui/cl03.png" alt="">
+    <img class="cloud c6" src="img/ui/cl01.png" alt="">
+  </div>
+</div>
+</body>
+</html>
