@@ -7182,3 +7182,39 @@ body.vegetables-on #gameView .board .board-cell.hit::after{display:none!importan
 @media(max-width:760px){
   #gameView .game-player-name-only strong{font-size:clamp(21px,7vw,30px)!important}
 }
+/* The signed-out garden page shares the full-height paper with short game pages. */
+body:has(#needAuthBox:not(.hidden)) .site-stage{
+  display:flex;
+  flex-direction:column;
+  min-height:calc(100svh - 72px);
+}
+body:has(#needAuthBox:not(.hidden)) .page-shell{flex:1 0 auto}
+body:has(#needAuthBox:not(.hidden)) #playView{
+  padding:clamp(38px,6vw,76px) 0 150px;
+}
+#needAuthBox{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:22px;
+  width:min(900px,100%);
+  margin:0 auto;
+  text-align:center;
+}
+#needAuthBox h1{
+  margin:0;
+  color:#29442b;
+  font:400 clamp(36px,5vw,66px)/1.05 "NauryzRedKeds",Georgia,serif;
+}
+#needAuthBox p{
+  max-width:780px;
+  margin:0;
+  color:#65715f;
+  font-size:clamp(17px,2vw,22px);
+  line-height:1.45;
+}
+#needAuthBtn{max-width:100%;margin-top:8px}
+@media(max-width:760px){
+  body:has(#needAuthBox:not(.hidden)) #playView{padding-bottom:125px}
+  #needAuthBox{gap:18px}
+}
