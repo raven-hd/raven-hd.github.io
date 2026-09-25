@@ -2043,22 +2043,18 @@ body::before{display:none}
 }
 #playView .active-game-actions .join-unavailable[aria-disabled="true"]{cursor:pointer!important}
 
-#playView .join-action-stack{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:5px;
-}
-#playView .join-action-stack .join-verification-warning{
+#playView .open-game .join-verification-warning{
   display:block;
-  max-width:245px;
-  margin:0;
+  margin:7px 0 0;
   color:#a8612d;
   font-size:12px;
   line-height:1.25;
-  text-align:center;
+  white-space:nowrap;
 }
-#playView .join-action-stack .join-verification-warning.hidden{display:none}
+#playView .open-game .join-verification-warning[hidden]{display:none}
+@media(max-width:620px){
+  #playView .open-game .join-verification-warning{white-space:normal}
+}
 
 
 /* update 59: spectator action only exists for an already-started match and stays pale beige */

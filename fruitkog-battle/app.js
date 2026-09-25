@@ -26,6 +26,7 @@ let spectatorMode = false;
 let spectatorFleets = [];
 let opponentFleet = null;
 let activeGamesCache = [];
+const shownJoinWarnings = new Set();
 let matchHistoryCache = [];
 let profilesCache = new Map();
 let activeFilter = "all";
@@ -761,6 +762,18 @@ function renderActiveGames() {
     if (row.is_participant) addMatchFlag(flags,"ваш матч","mine");
     if (existingPairGame) addMatchFlag(flags,"уже есть совместный матч","pair-existing");
     left.append(strong,small,flags);
+    let warning=null;
+    if (unverifiedRatedJoin) {
+      warning=document.createElement("small");
+      warning.className="join-verification-warning";
+      warning.hidden=!shownJoinWarnings.has(row.id);
+      warning.setAttribute("role","status");
+      const icon=document.createElement("i");
+      icon.className="fas fa-exclamation-triangle";
+      icon.setAttribute("aria-hidden","true");
+      warning.append(icon,document.createTextNode(" для участия нужен подтвержденный школьный ник"));
+      left.appendChild(warning);
+    }
 
     const actions = document.createElement("div");
     actions.className = "active-game-actions";
@@ -792,18 +805,10 @@ function renderActiveGames() {
       if (unverifiedRatedJoin) {
         join.classList.add("join-unavailable");
         join.setAttribute("aria-disabled","true");
-        const warning=document.createElement("small");
-        warning.className="join-verification-warning hidden";
-        warning.setAttribute("role","status");
-        const icon=document.createElement("i");
-        icon.className="fas fa-exclamation-triangle";
-        icon.setAttribute("aria-hidden","true");
-        warning.append(icon,document.createTextNode(" для участия нужен подтвержденный школьный ник"));
-        join.addEventListener("click",()=>warning.classList.remove("hidden"));
-        const stack=document.createElement("div");
-        stack.className="join-action-stack";
-        stack.append(join,warning);
-        actions.appendChild(stack);
+        join.addEventListener("click",()=>{
+          shownJoinWarnings.add(row.id);
+          warning.hidden=false;
+        });
       } else if (existingPairGame) {
         join.disabled = true;
         join.classList.add("join-unavailable");
@@ -811,7 +816,7 @@ function renderActiveGames() {
       } else {
         join.addEventListener("click",() => joinPublicGame(row,join));
       }
-      if (!unverifiedRatedJoin) actions.appendChild(join);
+      actions.appendChild(join);
     } else if (["playing","paused"].includes(row.status)) {
       const watch = document.createElement("button");
       watch.type = "button";
