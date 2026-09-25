@@ -306,7 +306,7 @@ function renderCreateOptions() {
   const guest = profile?.account_type === "guest";
   const unverified = profile?.account_type === "registered" && !profile.school_verified;
   rated.disabled = guest || unverified;
-  hint.classList.toggle("visually-hidden",!unverified);
+  hint.classList.add("visually-hidden");
   if (guest || unverified) {
     casual.checked = true;
     hint.textContent = guest
@@ -739,9 +739,9 @@ function renderActiveGames() {
       const myReady = row.player1_id === user.id ? row.player1_ready : row.player2_ready;
       small.textContent = myReady ? "ваш флот готов — ждем соперника" : "соперник в комнате — пора расставить корабли";
     } else if (row.status === "paused") {
-      small.textContent = "матч ожидает решения администратора";
+      small.textContent = "";
     } else {
-      small.textContent = statusLabel(row.status);
+      small.textContent = "";
     }
 
     const existingPairGame = !row.is_participant && row.status === "waiting"
@@ -750,8 +750,7 @@ function renderActiveGames() {
     const unverifiedRatedJoin = !row.is_participant && row.status === "waiting"
       && row.game_type === "rated" && profile?.account_type === "registered"
       && !profile.school_verified;
-    if (unverifiedRatedJoin) small.textContent = "для участия подтвердите школьный ник";
-    else if (existingPairGame) small.textContent = "у вас уже есть незавершенный матч с этим игроком";
+    small.hidden = !small.textContent;
 
     const flags = document.createElement("div");
     flags.className = "match-flags";
@@ -791,9 +790,20 @@ function renderActiveGames() {
       join.className = "primary";
       join.textContent = "присоединиться";
       if (unverifiedRatedJoin) {
-        join.disabled = true;
         join.classList.add("join-unavailable");
-        join.title = "для рейтингового матча сначала подтвердите школьный ник";
+        join.setAttribute("aria-disabled","true");
+        const warning=document.createElement("small");
+        warning.className="join-verification-warning hidden";
+        warning.setAttribute("role","status");
+        const icon=document.createElement("i");
+        icon.className="fas fa-exclamation-triangle";
+        icon.setAttribute("aria-hidden","true");
+        warning.append(icon,document.createTextNode(" для участия нужен подтвержденный школьный ник"));
+        join.addEventListener("click",()=>warning.classList.remove("hidden"));
+        const stack=document.createElement("div");
+        stack.className="join-action-stack";
+        stack.append(join,warning);
+        actions.appendChild(stack);
       } else if (existingPairGame) {
         join.disabled = true;
         join.classList.add("join-unavailable");
@@ -801,7 +811,7 @@ function renderActiveGames() {
       } else {
         join.addEventListener("click",() => joinPublicGame(row,join));
       }
-      actions.appendChild(join);
+      if (!unverifiedRatedJoin) actions.appendChild(join);
     } else if (["playing","paused"].includes(row.status)) {
       const watch = document.createElement("button");
       watch.type = "button";

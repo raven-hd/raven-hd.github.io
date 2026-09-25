@@ -2041,6 +2041,24 @@ body::before{display:none}
   cursor:not-allowed!important;
   transform:none!important;
 }
+#playView .active-game-actions .join-unavailable[aria-disabled="true"]{cursor:pointer!important}
+
+#playView .join-action-stack{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+}
+#playView .join-action-stack .join-verification-warning{
+  display:block;
+  max-width:245px;
+  margin:0;
+  color:#a8612d;
+  font-size:12px;
+  line-height:1.25;
+  text-align:center;
+}
+#playView .join-action-stack .join-verification-warning.hidden{display:none}
 
 
 /* update 59: spectator action only exists for an already-started match and stays pale beige */
