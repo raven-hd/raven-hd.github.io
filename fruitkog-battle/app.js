@@ -223,6 +223,7 @@ function humanError(error) {
     ["Announcement body required","введите текст объявления."],
     ["Invalid notification","уведомление не найдено."],
     ["Invalid school nick length","ник должен содержать от 1 до 48 символов."],
+    ["Verified school nick required","для рейтинговой игры и участия в турнире сначала подтвердите школьный ник."],
     ["Authentication required","сначала нужно войти."],
   ];
   for (const [needle, text] of map) if (raw.includes(needle)) return text;
@@ -303,10 +304,13 @@ function renderCreateOptions() {
   const hint = $("createModeHint");
   if (!rated || !casual || !hint) return;
   const guest = profile?.account_type === "guest";
-  rated.disabled = guest;
-  if (guest) {
+  const unverified = profile?.account_type === "registered" && !profile.school_verified;
+  rated.disabled = guest || unverified;
+  if (guest || unverified) {
     casual.checked = true;
-    hint.textContent = "гостевые матчи всегда проходят без рейтинга.";
+    hint.textContent = guest
+      ? "гостевые матчи всегда проходят без рейтинга."
+      : "рейтинговые матчи доступны после подтверждения школьного ника администратором.";
   } else {
     if (!rated.checked && !casual.checked) rated.checked = true;
     hint.textContent = "одна пара может провести до трех рейтинговых матчей за 24 часа.";
@@ -780,7 +784,11 @@ function renderActiveGames() {
       join.type = "button";
       join.className = "primary";
       join.textContent = "присоединиться";
-      if (existingPairGame) {
+      if (row.game_type === "rated" && profile?.account_type === "registered" && !profile.school_verified) {
+        join.disabled = true;
+        join.classList.add("join-unavailable");
+        join.title = "для рейтингового матча сначала подтвердите школьный ник";
+      } else if (existingPairGame) {
         join.disabled = true;
         join.classList.add("join-unavailable");
         join.title = "у вас уже есть незавершенный матч с этим игроком";
@@ -826,7 +834,7 @@ async function createGame() {
     await openGame(data);
     clearPendingCreateRequest(requestedType);
   } catch(e) {
-    msg($("createMessage"),`${humanError(e)} повторная попытка продолжит тот же запрос и не создаст вторую комнату.`,"error");
+    msg($("createMessage"),humanError(e),"error");
   } finally {
     clearTimeout(slowTimer);
     createGameInProgress = false;
@@ -837,6 +845,7 @@ async function createGame() {
 
 async function joinPublicGame(row,button=null) {
   if (button?.dataset.busy==="true") return;
+  msg($("joinMessage"));
   const gameId = typeof row === "string" ? row : row.id;
   const requestedType = typeof row === "string" ? null : row.game_type;
   const oldText = button?.textContent;
@@ -856,7 +865,7 @@ async function joinPublicGame(row,button=null) {
     }
     await openGame(data);
   } catch(e) {
-    alert(humanError(e));
+    msg($("joinMessage"),humanError(e),"error");
     if (button) {
       button.disabled = false;
       button.textContent = oldText;
