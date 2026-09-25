@@ -222,6 +222,7 @@ function humanError(error) {
     ["Announcement title required","введите заголовок объявления."],
     ["Announcement body required","введите текст объявления."],
     ["Invalid notification","уведомление не найдено."],
+    ["Invalid school nick length","ник должен содержать от 1 до 48 символов."],
     ["Authentication required","сначала нужно войти."],
   ];
   for (const [needle, text] of map) if (raw.includes(needle)) return text;
@@ -274,12 +275,24 @@ function restoreSavedView(){
 function setAuthTab(name) {
   const names = ["login","register","guest"];
   names.forEach(n => {
+    if (n === name && !$(`${n}Tab`).classList.contains("active")) {
+      const message = $(`${n}Message`);
+      if (message) msg(message);
+    }
     $(`${n}Tab`).classList.toggle("active", n === name);
     $(`${n}Pane`).classList.toggle("hidden", n !== name);
   });
 }
 
 function openAuth(tab="login") {
+  for (const name of ["login", "register", "guest"]) {
+    const message = $(`${name}Message`);
+    if (message) msg(message, "");
+  }
+  for (const id of ["registerNick", "registerEmail", "registerPassword", "registerPassword2", "loginPassword"]) {
+    const input = $(id);
+    if (input) input.value = "";
+  }
   setAuthTab(tab);
   $("authDialog").showModal();
 }
@@ -3266,6 +3279,11 @@ function renderAdminPlayers(){
     const actions=document.createElement("div");
     actions.className="admin-row-actions";
     if(player.account_type==="registered"){
+      const renameButton=document.createElement("button");
+      renameButton.type="button";
+      renameButton.textContent="исправить ник";
+      renameButton.addEventListener("click",()=>changeSchoolNick(player,renameButton));
+      actions.appendChild(renameButton);
       const button=document.createElement("button");
       button.type="button";
       button.textContent=player.school_verified?"снять подтверждение":"подтвердить ник";
@@ -3277,6 +3295,31 @@ function renderAdminPlayers(){
   });
   $("adminPlayersCount").textContent=rows.length===adminPlayersCache.length?String(rows.length):`${rows.length} из ${adminPlayersCache.length}`;
   $("adminPlayersEmpty").classList.toggle("hidden",rows.length>0);
+}
+
+async function changeSchoolNick(player,button){
+  const entered=window.prompt("исправьте школьный ник игрока:",player.display_name);
+  if(entered===null)return;
+  const next=entered.trim().replace(/\s+/g," ");
+  if(!next || next.length>48){
+    msg($("adminMessage"),"ник должен содержать от 1 до 48 символов.","error");
+    return;
+  }
+  if(next===player.display_name)return;
+  if(!window.confirm(`изменить ник «${player.display_name}» на «${next}»? подтверждение ника будет снято.`))return;
+  button.disabled=true;
+  try{
+    const {data,error}=await supabase.rpc("admin_change_school_nick",{p_user_id:player.user_id,p_new_nick:next});
+    if(error)throw error;
+    player.display_name=data.display_name;
+    player.school_verified=data.school_verified;
+    renderAdminPlayers();
+    loadAdminNotifications(true);
+    msg($("adminMessage"),"ник исправлен. игрок получил уведомление; теперь подтвердите ник.","success");
+  }catch(error){
+    button.disabled=false;
+    msg($("adminMessage"),humanError(error),"error");
+  }
 }
 
 async function setSchoolVerified(player,button){
