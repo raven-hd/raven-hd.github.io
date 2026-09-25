@@ -1795,6 +1795,20 @@ async function fire(cell){
   try{
     const {data,error}=await supabase.rpc("shoot",{p_game_id:game.id,p_cell:cell});
     if(error)throw error;
+    // The RPC result is authoritative; show it before the follow-up reads finish.
+    if(game?.status==="playing"&&data?.cell===cell&&["miss","hit","sunk","win"].includes(data.result)){
+      const targetId=game.player1_id===user.id?game.player2_id:game.player1_id;
+      if(!shots.some(shot=>shot.shooter_id===user.id&&shot.cell===cell)){
+        shots.push({game_id:game.id,shooter_id:user.id,target_id:targetId,cell,result:data.result});
+      }
+      if(data.result==="miss")game.current_turn=targetId;
+      if(data.result==="win"){
+        game.status="finished";
+        game.winner_id=user.id;
+        game.current_turn=null;
+      }
+      renderBattle();
+    }
     await refreshGame();
   }catch(e){
     msg($("battleMessage"),humanError(e),"error");
