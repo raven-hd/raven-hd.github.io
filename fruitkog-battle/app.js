@@ -306,6 +306,7 @@ function renderCreateOptions() {
   const guest = profile?.account_type === "guest";
   const unverified = profile?.account_type === "registered" && !profile.school_verified;
   rated.disabled = guest || unverified;
+  hint.classList.toggle("visually-hidden",!unverified);
   if (guest || unverified) {
     casual.checked = true;
     hint.textContent = guest
@@ -746,6 +747,11 @@ function renderActiveGames() {
     const existingPairGame = !row.is_participant && row.status === "waiting"
       ? activePairGameWith(row.player1_id,row.id)
       : null;
+    const unverifiedRatedJoin = !row.is_participant && row.status === "waiting"
+      && row.game_type === "rated" && profile?.account_type === "registered"
+      && !profile.school_verified;
+    if (unverifiedRatedJoin) small.textContent = "для участия подтвердите школьный ник";
+    else if (existingPairGame) small.textContent = "у вас уже есть незавершенный матч с этим игроком";
 
     const flags = document.createElement("div");
     flags.className = "match-flags";
@@ -784,7 +790,7 @@ function renderActiveGames() {
       join.type = "button";
       join.className = "primary";
       join.textContent = "присоединиться";
-      if (row.game_type === "rated" && profile?.account_type === "registered" && !profile.school_verified) {
+      if (unverifiedRatedJoin) {
         join.disabled = true;
         join.classList.add("join-unavailable");
         join.title = "для рейтингового матча сначала подтвердите школьный ник";
