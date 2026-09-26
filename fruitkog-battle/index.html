@@ -139,7 +139,7 @@
                       <strong>режимы игры</strong>
                       <p><b>рейтинговая</b> — результат меняет рейтинг обоих зарегистрированных игроков.</p>
                       <p><b>без рейтинга</b> — обычный матч, рейтинговые очки не меняются.</p>
-                      <p>одна пара может провести <span data-setting-text="pair-limit">до 3 рейтинговых матчей</span> за 24 часа. следующие матчи этой пары за этот период пройдут без рейтинга.</p>
+                      <p>одна пара может провести до трех рейтинговых матчей за 24 часа. следующие матчи этой пары за этот период пройдут без рейтинга.</p>
                       <p>рейтинговые матчи доступны после подтверждения школьного ника администратором. до этого можно играть без рейтинга.</p>
                       <p class="guest-match-note"><b>гостевые матчи</b> всегда проходят без рейтинга.</p>
                     </div>
@@ -360,9 +360,9 @@
         </div>
         <div class="tournament-rules-grid">
           <article><strong>регистрация</strong><p>заявку можно подать до указанного срока. участник появляется в составе после одобрения администратора.</p></article>
-          <article><strong>форматы</strong><p>в плей-офф проигравший выбывает сразу. если участников не 2, 4, 8, 16…, несколько игроков по жребию проходят первый раунд без игры. в смешанном формате сначала проходит квалификация, затем лучшие игроки выходят в плей-офф.</p></article>
+          <article><strong>форматы</strong><p>в плей-офф проигравший выбывает сразу. в смешанном формате сначала проходит квалификация, затем лучшие игроки выходят в плей-офф.</p></article>
           <article><strong>результаты</strong><p>таблица, сетки и матчи обновляются автоматически после завершения каждой турнирной игры.</p></article>
-          <article><strong>рейтинг</strong><p>сыгранный турнирный матч изменяет рейтинг: победитель получает <span data-setting-text="tournament-points">12 очков</span>, проигравший теряет <span data-setting-text="tournament-points">12 очков</span>.</p></article>
+          <article><strong>рейтинг</strong><p>сыгранный турнирный матч изменяет рейтинг: победитель получает 12 очков, проигравший теряет 12 очков.</p></article>
         </div>
       </section>
 
@@ -405,18 +405,6 @@
           <p class="muted">проверяет права таблиц, серверных функций и изоляцию расстановок кораблей.</p>
           <div id="adminSecurityAuditResults" class="security-audit-list hidden"></div>
           <p id="adminSecurityAuditMessage" class="message"></p>
-        </section>
-
-        <section class="panel">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">баланс игры</p>
-              <h2>настройки рейтинга</h2>
-            </div>
-          </div>
-          <p class="muted">новые значения действуют только для будущих результатов: уже начисленный рейтинг не пересчитывается.</p>
-          <div id="adminGameSettings" class="admin-settings-list"></div>
-          <p id="adminGameSettingsMessage" class="message"></p>
         </section>
 
         <section class="panel">
@@ -488,7 +476,7 @@
               </label>
               <label>
                 <input id="knockoutTournamentFormat" type="radio" name="tournamentFormat" value="knockout">
-                <span><strong>плей-офф</strong><small>пары формируются сразу, проигравший выбывает. если участников не 2, 4, 8, 16…, некоторые по жребию проходят первый раунд без игры</small></span>
+                <span><strong>плей-офф</strong><small>пары формируются сразу, проигравший выбывает</small></span>
               </label>
               <label>
                 <input id="qualifiersTournamentFormat" type="radio" name="tournamentFormat" value="qualifiers_playoff">
@@ -873,18 +861,6 @@
           <button id="adminStartPlayoffBtn" class="primary hidden" type="button">провести жеребьевку плей-офф</button>
         </div>
       </section>
-      <section id="adminTournamentMatchesSection" class="tournament-settings hidden">
-        <div class="public-history-head admin-tournament-section-head">
-          <div>
-            <p class="eyebrow">если матч сорвался</p>
-            <h3>незавершенные матчи</h3>
-          </div>
-          <span id="adminTournamentMatchesCount" class="badge">0</span>
-        </div>
-        <p class="muted">техническая победа засчитывает матч без игры: рейтинг за него не меняется, в плей-офф победитель сразу проходит дальше. переигровка отменяет текущую игру пары и открывает новую комнату. незавершенная игра пары в обоих случаях закрывается сама.</p>
-        <div id="adminTournamentMatches" class="admin-tournament-applications"></div>
-        <p id="adminTournamentMatchesEmpty" class="muted">все назначенные матчи завершены.</p>
-      </section>
       <div class="button-row admin-dialog-actions">
         <div class="admin-tournament-danger-actions">
           <button id="adminCloseTournamentBtn" class="danger-outline hidden" type="button">закрыть турнир</button>
@@ -903,6 +879,6 @@
     <span>сначала выполните SQL и заполните <code>config.js</code>.</span>
   </div>
 
-  <script type="module" src="./src/main.js?v=118"></script>
+  <script type="module" src="./app.js?v=120"></script>
 </body>
 </html>
