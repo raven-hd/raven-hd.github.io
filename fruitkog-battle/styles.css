@@ -7242,14 +7242,16 @@ body[data-view="tournament"] .page-shell{
 /* A quiet cue on the target garden while it is the player's turn. */
 #gameView #enemyBoard.turn-glow{
   animation:target-garden-glow 3.2s ease-in-out infinite;
+  outline:2px solid rgba(205,155,72,.55);
+  outline-offset:2px;
 }
 @keyframes target-garden-glow{
-  0%,100%{box-shadow:0 0 0 2px rgba(181,133,64,.48),0 0 20px 5px rgba(224,178,99,.23)}
-  50%{box-shadow:0 0 0 3px rgba(181,133,64,.58),0 0 28px 9px rgba(224,178,99,.33)}
+  0%,100%{filter:drop-shadow(0 0 5px rgba(224,178,99,.35))}
+  50%{filter:drop-shadow(0 0 15px rgba(224,178,99,.72))}
 }
 @media(prefers-reduced-motion:reduce){
   #gameView #enemyBoard.turn-glow{
     animation:none;
-    box-shadow:0 0 0 3px rgba(181,133,64,.58),0 0 22px 6px rgba(224,178,99,.28);
+    filter:drop-shadow(0 0 9px rgba(224,178,99,.55));
   }
 }
