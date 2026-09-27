@@ -1,22 +1,23 @@
 // Бой: выстрелы, история ходов, экран зрителя.
-import { app } from "./state.js?v=118";
-import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=118";
-import { $, msg } from "./helpers.js?v=118";
-import { humanError } from "./errors.js?v=118";
-import { refreshGame } from "./room.js?v=118";
-import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=118";
+import { app } from "./state.js?v=121";
+import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=121";
+import { $, msg } from "./helpers.js?v=121";
+import { humanError } from "./errors.js?v=121";
+import { refreshGame } from "./room.js?v=121";
+import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=121";
 
 // true — данные обновлены. false — не получилось (нет сети, таймаут) или игрок уже ушел из матча:
 // тогда прежние данные не трогаем, чтобы поле не «обнулилось» до следующего обновления
 export async function refreshBattleData(){
   const game = app.game;
+  const shotRevision=app.shotRevision;
   let fleetQuery = app.supabase.from("fleets").select("owner_id,ships").eq("game_id",game.id);
   if (game.status !== "finished") fleetQuery = fleetQuery.eq("owner_id",app.user.id);
   const [fleetRes,shotsRes]=await Promise.all([
     fleetQuery,
     app.supabase.from("shots").select("*").eq("game_id",game.id).order("id",{ascending:true}),
   ]);
-  if (app.game !== game || !app.user) return false;   // игрок ушел из матча, пока грузились данные
+  if (app.game !== game || !app.user || app.shotRevision!==shotRevision) return false;
   if (fleetRes.error || shotsRes.error) {
     console.error(fleetRes.error || shotsRes.error);
     return false;
@@ -143,6 +144,7 @@ export function renderBattle(){
   });
 
   const myTurn=app.game.status==="playing"&&app.game.current_turn===app.user.id;
+  $("enemyBoard").classList.toggle("turn-glow",myTurn&&!app.shotInProgress);
   $("enemyBoard").querySelectorAll(".board-cell").forEach(b=>{
     if(!myTurn||app.shotInProgress||b.classList.contains("hit")||b.classList.contains("miss"))b.disabled=true;
   });
@@ -166,6 +168,7 @@ export function renderBattle(){
 
 export function renderSpectatorBattle(){
   $("shotBar").classList.add("hidden");
+  $("enemyBoard").classList.remove("turn-glow");
   $("ownBoardTitle").textContent=`грядка: ${app.game.player1_name}`;
   $("enemyBoardTitle").textContent=`грядка: ${app.game.player2_name}`;
   buildBoard($("ownBoard"),null);
@@ -225,15 +228,20 @@ async function fire(cell){
   if(app.shotInProgress||app.game?.status!=="playing"||app.game.current_turn!==app.user.id)return;
   if(app.shots.some(shot=>shot.shooter_id===app.user.id&&shot.cell===cell))return;
   app.shotInProgress=true;
+  app.shotRevision++;
+  $("enemyBoard").classList.remove("turn-glow");
   const pending=$("enemyBoard").querySelector(`[data-cell="${cell}"]`);
   pending?.classList.add("shot-pending");
   pending?.setAttribute("aria-busy","true");
   $("enemyBoard").querySelectorAll(".board-cell").forEach(item=>item.disabled=true);
   $("shotHint").textContent="выстрел отправлен…";
   msg($("battleMessage"),"");
+  let shotSucceeded=false;
   try{
     const {data,error}=await app.supabase.rpc("shoot",{p_game_id:app.game.id,p_cell:cell});
     if(error)throw error;
+    app.shotRevision++;
+    shotSucceeded=true;
     // The RPC result is authoritative; show it before the follow-up reads finish.
     if(app.game?.status==="playing"&&data?.cell===cell&&["miss","hit","sunk","win"].includes(data.result)){
       const targetId=app.game.player1_id===app.user.id?app.game.player2_id:app.game.player1_id;
@@ -248,11 +256,13 @@ async function fire(cell){
       }
       renderBattle();
     }
-    await refreshGame();
   }catch(e){
     msg($("battleMessage"),humanError(e),"error");
   }finally{
     app.shotInProgress=false;
     if(app.game&&["playing","paused","finished"].includes(app.game.status))renderBattle();
   }
+  // После подтверждения выстрела сервером следующий ход уже доступен. Не держим поле
+  // заблокированным, пока отдельные запросы перечитывают историю и расстановки.
+  if(shotSucceeded)refreshGame().catch(console.error);
 }

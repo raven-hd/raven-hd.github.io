@@ -1,11 +1,11 @@
 // Вход и выход, регистрация, гостевой профиль, пароль, блок аккаунта в шапке, обработка сессии.
-import { app } from "./state.js?v=118";
-import { $, cleanName, msg, wait } from "./helpers.js?v=118";
-import { humanError } from "./errors.js?v=118";
-import { restoreSavedView, switchView } from "./navigation.js?v=118";
-import { loadLobby, renderCreateOptions, subscribeToLobby } from "./lobby.js?v=118";
-import { restoreGame, setGameUrl } from "./room.js?v=118";
-import { closeAdminNotifications, renderAdminNotifications, startAdminNotificationPolling } from "./admin-notifications.js?v=118";
+import { app } from "./state.js?v=121";
+import { $, cleanName, msg, wait } from "./helpers.js?v=121";
+import { humanError } from "./errors.js?v=121";
+import { restoreSavedView, switchView } from "./navigation.js?v=121";
+import { loadLobby, renderCreateOptions, subscribeToLobby } from "./lobby.js?v=121";
+import { restoreGame, setGameUrl } from "./room.js?v=121";
+import { closeAdminNotifications, renderAdminNotifications, startAdminNotificationPolling } from "./admin-notifications.js?v=121";
 
 export function setAuthTab(name) {
   const names = ["login","register","guest"];
@@ -50,7 +50,8 @@ export function renderAccount() {
     const retry = document.createElement("button");
     retry.type = "button";
     retry.textContent = "профиль не загрузился · повторить";
-    retry.addEventListener("click", () => retryProfileLoad());
+    retry.textContent = app.user ? "профиль не загрузился · повторить" : "вход не восстановился · повторить";
+    retry.addEventListener("click", () => app.user ? retryProfileLoad() : retryInitialSession());
     const leave = document.createElement("button");
     leave.type = "button";
     leave.textContent = "выйти";
@@ -59,7 +60,8 @@ export function renderAccount() {
           && !window.confirm("выйти из гостевого профиля? восстановить его не получится.")) return;
       await logout();
     });
-    slot.append(retry, leave);
+    slot.appendChild(retry);
+    if(app.user)slot.appendChild(leave);
     return;
   }
 
@@ -301,6 +303,28 @@ export function retryProfileLoad(){
     .catch(giveUp);
 }
 
+// При сбое браузера или сети getSession может не завершиться вообще. Показываем
+// повторную попытку через 12 секунд, не оставляя шапку навсегда в загрузке.
+export async function retryInitialSession(){
+  app.authError=false;
+  renderAccount();
+  let timer;
+  try{
+    const result=await Promise.race([
+      app.supabase.auth.getSession(),
+      new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error("Session timeout")),12000);}),
+    ]);
+    if(result.error)throw result.error;
+    await handleSession(result.data?.session||null);
+  }catch(error){
+    console.error(error);
+    app.authError=true;
+    renderAccount();
+  }finally{
+    clearTimeout(timer);
+  }
+}
+
 export async function handleSession(session){
   const generation=++app.sessionGeneration;
   const nextUser=session?.user||null;
@@ -326,13 +350,13 @@ export async function handleSession(session){
       if(generation!==app.sessionGeneration)return;
     }
     if(!loadedProfile){
-      // первые две неудачи — молча пробуем снова. дальше показываем «повторить» и «выйти»,
-      // а сами пробуем реже — раз в 15 секунд, пока профиль не загрузится
+      // Сразу показываем повторную попытку: иначе несколько сетевых таймаутов подряд
+      // оставляют человека перед надписью «восстанавливаем вход…» на целую минуту.
       app.profileRetries+=1;
-      if(app.profileRetries>2&&!app.authError){app.authError=true;renderAccount();}
+      if(!app.authError){app.authError=true;renderAccount();}
       setTimeout(()=>{
         if(generation===app.sessionGeneration&&app.user?.id===nextUser.id)handleSession(session);
-      },app.profileRetries>2?15000:1500);
+      },15000);
       return;
     }
     app.profileRetries=0;

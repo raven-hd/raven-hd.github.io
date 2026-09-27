@@ -1,7 +1,7 @@
 // Турнирные сетки: квалификация, плей-офф, линии между матчами.
-import { app } from "./state.js?v=118";
-import { $, $$ } from "./helpers.js?v=118";
-import { createTournamentMatchAction, isTournamentMatchAvailableToCurrentPlayer, openTournamentMatch, tournamentMatchNote, tournamentRoundLabel } from "./tournament.js?v=118";
+import { app } from "./state.js?v=121";
+import { $, $$ } from "./helpers.js?v=121";
+import { createTournamentMatchAction, isTournamentMatchAvailableToCurrentPlayer, openTournamentMatch, tournamentMatchNote, tournamentRoundLabel } from "./tournament.js?v=121";
 
 function createBracketMatch(match){
   const card=document.createElement("article");

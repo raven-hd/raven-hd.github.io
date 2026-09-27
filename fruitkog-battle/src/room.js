@@ -1,11 +1,11 @@
 // Комната матча: открыть, наблюдать, выйти, сдаться, обновление состояния матча.
-import { app } from "./state.js?v=118";
-import { $, msg } from "./helpers.js?v=118";
-import { humanError } from "./errors.js?v=118";
-import { switchView } from "./navigation.js?v=118";
-import { loadLobby } from "./lobby.js?v=118";
-import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=118";
-import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=118";
+import { app } from "./state.js?v=121";
+import { $, msg } from "./helpers.js?v=121";
+import { humanError } from "./errors.js?v=121";
+import { switchView } from "./navigation.js?v=121";
+import { loadLobby } from "./lobby.js?v=121";
+import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=121";
+import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=121";
 
 export async function openGame(row) {
   app.spectatorMode = false;
@@ -212,6 +212,7 @@ export async function refreshGame() {
 async function refreshGameOnce() {
   if (!app.game?.id || !app.user) return;
   const requestedGameId=app.game.id;
+  const shotRevision=app.shotRevision;
   const {data,error} = await app.supabase.from("games").select("*").eq("id",requestedGameId).single();
   if (error) {
     console.error(error);
@@ -226,9 +227,11 @@ async function refreshGameOnce() {
     return;
   }
   if(!app.game||app.game.id!==requestedGameId)return;
+  if(app.shotRevision!==shotRevision){app.refreshGameQueued=true;return;}
   app.game = data;
   await loadRoomProfiles();
   if(!app.game||app.game.id!==requestedGameId)return;
+  if(app.shotRevision!==shotRevision){app.refreshGameQueued=true;return;}
   renderRoom();
 
   if (app.spectatorMode) {
@@ -281,7 +284,10 @@ async function refreshGameOnce() {
 
   if (["playing","paused","finished"].includes(app.game.status)) {
     $("placementPanel").classList.add("hidden");
-    if(!await refreshBattleData())return;   // не загрузилось — оставляем прежнюю картину
+    if(!await refreshBattleData()){
+      if(app.shotRevision!==shotRevision)app.refreshGameQueued=true;
+      return;
+    }
     renderBattle();
     $("battlePanel").classList.remove("hidden");
     app.lastGameRefreshAt=Date.now();
