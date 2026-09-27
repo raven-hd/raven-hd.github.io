@@ -1,0 +1,10 @@
+{
+  "name": "Фруктовый бой",
+  "short_name": "Фруктовый бой",
+  "icons": [
+    { "src": "./assets/favicon/android-chrome-192x192.png?v=126", "sizes": "192x192", "type": "image/png" },
+    { "src": "./assets/favicon/android-chrome-512x512.png?v=126", "sizes": "512x512", "type": "image/png" }
+  ],
+  "theme_color": "#39492A",
+  "background_color": "#FBEACC"
+}
