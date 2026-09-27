@@ -867,6 +867,14 @@
         </div>
         <p id="adminQualifierSettingsHint" class="muted">настройки можно менять до запуска квалификации.</p>
         <p id="adminQualifierProgress" class="muted hidden"></p>
+        <div id="adminQualifierTiebreakControls" class="hidden">
+          <p class="muted">выберите двух игроков с полным равенством на границе плей-офф. результат дополнительного матча решит, кто пройдет дальше.</p>
+          <div class="button-row">
+            <select id="adminTiebreakPlayer1" aria-label="первый игрок дополнительного матча"></select>
+            <select id="adminTiebreakPlayer2" aria-label="второй игрок дополнительного матча"></select>
+            <button id="adminStartTiebreakBtn" type="button">назначить дополнительный матч</button>
+          </div>
+        </div>
         <div class="button-row qualifier-actions">
           <button id="adminSaveQualifierSettingsBtn" type="button">сохранить настройки</button>
           <button id="adminStartQualifiersBtn" class="primary" type="button">запустить квалификацию</button>

@@ -102,11 +102,11 @@ export function calculateQualifierStandings(players,matches,playoffSize){
     user_id:player.user_id,
     display_name:player.display_name,
     avatar_emoji:player.avatar_emoji,
-    games:0,wins:0,losses:0,points:0,direct_points:0,opponent_strength:0,
+    games:0,wins:0,losses:0,points:0,direct_points:0,opponent_strength:0,tiebreak_wins:0,
   }));
   const byId=new Map(rows.map(row=>[row.user_id,row]));
   const settled=(matches||[]).filter(match=>
-    ["finished","technical"].includes(match.status)&&match.winner_id&&
+    match.stage==="qualifying"&&["finished","technical"].includes(match.status)&&match.winner_id&&
     byId.has(match.player1_id)&&byId.has(match.player2_id)
   );
 
@@ -140,21 +140,31 @@ export function calculateQualifierStandings(players,matches,playoffSize){
     second.opponent_strength+=first.points;
   });
 
+  (matches||[]).filter(match=>match.stage==="tiebreak"&&
+    ["finished","technical"].includes(match.status)&&match.winner_id).forEach(match=>{
+    const winner=byId.get(match.winner_id);
+    if(winner)winner.tiebreak_wins+=1;
+  });
+
   rows.sort((a,b)=>
     b.points-a.points||
     b.direct_points-a.direct_points||
     b.opponent_strength-a.opponent_strength||
+    b.tiebreak_wins-a.tiebreak_wins||
     a.display_name.localeCompare(b.display_name,"ru")
   );
   const sameResult=(a,b)=>!!a&&!!b&&
     a.points===b.points&&
     a.direct_points===b.direct_points&&
-    a.opponent_strength===b.opponent_strength;
+    a.opponent_strength===b.opponent_strength&&
+    a.tiebreak_wins===b.tiebreak_wins;
   rows.forEach((row,index)=>{
     row.position=index>0&&sameResult(row,rows[index-1])?rows[index-1].position:index+1;
   });
 
-  const completed=matches.length>0&&matches.every(match=>["finished","technical"].includes(match.status));
+  const qualifying=(matches||[]).filter(match=>match.stage==="qualifying");
+  const completed=qualifying.length>0&&(matches||[]).every(match=>
+    ["finished","technical"].includes(match.status));
   const cutoff=Math.min(Number(playoffSize)||0,rows.length);
   let boundaryTie=false;
   let boundaryIds=new Set();
@@ -237,7 +247,8 @@ function renderTournamentParticipants(tournament,players,matches){
   if(tournament.tournament_format==="qualifiers_playoff"){
     wrap.className="tournament-participants-table qualifier-table";
     const hasResults=qualifyingMatches.some(match=>["finished","technical"].includes(match.status)&&match.winner_id);
-    const result=calculateQualifierStandings(activePlayers,qualifyingMatches,tournament.playoff_size);
+    const result=calculateQualifierStandings(activePlayers,(matches||[]).filter(match=>
+      ["qualifying","tiebreak"].includes(match.stage)),tournament.playoff_size);
     const kbHeading=document.createElement("span");
     kbHeading.className="qualifier-kb-heading";
     const kbLabel=document.createElement("span");
@@ -622,8 +633,8 @@ export function renderTournamentBoard(data){
   const tournament=data.tournament;
   const players=data.players||[];
   const matches=data.matches||[];
-  const qualifyingMatches=matches.filter(match=>match.stage==="qualifying");
-  const playoffMatches=matches.filter(match=>match.stage!=="qualifying");
+  const qualifyingMatches=matches.filter(match=>["qualifying","tiebreak"].includes(match.stage));
+  const playoffMatches=matches.filter(match=>match.stage==="playoff");
   const totalRounds=Math.max(0,...playoffMatches.map(match=>match.round_no));
   app.currentTournamentId=tournament.id;
   const tournamentNumber=tournamentDisplayNumber(tournament.id);

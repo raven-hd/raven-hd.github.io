@@ -48,6 +48,8 @@ export function humanError(error) {
     ["Qualifying matches not found","квалификационные матчи не найдены."],
     ["Qualifying matches incomplete","сначала завершите все квалификационные матчи."],
     ["Qualifying tiebreak required","на границе выхода в плей-офф осталось равенство. сначала проведите дополнительный матч."],
+    ["Choose two tied players","выберите двух разных игроков с равными результатами на границе выхода в плей-офф."],
+    ["Playoff already started","плей-офф уже начался."],
     ["Tournament has pending applications","сначала рассмотрите все ожидающие заявки."],
     ["Tournament already has matches","турнирные матчи уже созданы."],
     ["Tournament pair has active game","у одной из назначенных пар уже есть незавершенный матч. сначала завершите или закройте его."],

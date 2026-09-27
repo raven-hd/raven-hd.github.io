@@ -681,7 +681,8 @@ begin
         'admin_close_tournament','admin_delete_tournament','admin_security_audit',
         'admin_set_tournament_archived','admin_set_tournament_format',
         'admin_change_school_nick','admin_get_game_settings','admin_update_game_setting',
-        'get_public_game_settings','admin_award_technical_win','admin_replay_tournament_match'
+        'get_public_game_settings','admin_award_technical_win','admin_replay_tournament_match',
+        'admin_start_qualifier_tiebreak'
       )
   ) into rpc_allowlist_safe;
 

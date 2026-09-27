@@ -16,7 +16,7 @@ import { renderTournamentDemoState, updateTournamentDemoControls } from "./tourn
 import { loadRating, openPlayerProfile } from "./rating.js?v=118";
 import { closeAdminNotifications, markAdminNotificationsRead, toggleAdminNotifications } from "./admin-notifications.js?v=118";
 import { adminCancelGame, loadAdmin, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=118";
-import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=118";
+import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=118";
 
 function wire(){
   // Только кнопки меню. У <body> тоже есть data-view (там хранится текущий раздел), и раньше
@@ -84,6 +84,7 @@ function wire(){
   bind("adminSaveQualifierSettingsBtn","click",()=>configureTournamentQualifiers(app.adminCurrentTournamentBoard?.tournament));
   bind("adminStartQualifiersBtn","click",startTournamentQualifiers);
   bind("adminStartPlayoffBtn","click",startTournamentPlayoff);
+  bind("adminStartTiebreakBtn","click",startQualifierTiebreak);
   bind("adminGenerateTournamentBtn","click",generateTournament);
   bind("adminCloseTournamentBtn","click",()=>{
     const tournament=app.tournamentsCache.find(item=>item.id===app.adminCurrentTournamentId);

@@ -51,7 +51,7 @@ export function renderTournamentQualifyingBracket(qualifyingMatches){
       const item=document.createElement("article");
       item.className="tournament-qualifying-pair";
       const number=document.createElement("span");
-      number.textContent=`матч ${index+1}`;
+      number.textContent=match.stage==="tiebreak"?"дополнительный матч":`матч ${index+1}`;
       item.append(number,createBracketMatch(match));
       wrap.appendChild(item);
   });
@@ -161,6 +161,7 @@ export function renderTournamentBracket(playoffMatches,totalRounds){
 }
 
 function activeTournamentMatchStage(match,totalRounds){
+  if(match.stage==="tiebreak")return "дополнительный матч";
   return match.stage==="qualifying"
     ? "квалификация"
     : tournamentRoundLabel(Number(match.round_no)||1,totalRounds||1);

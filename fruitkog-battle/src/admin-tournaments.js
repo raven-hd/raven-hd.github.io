@@ -193,12 +193,13 @@ function renderAdminTournament(data){
   settings.classList.toggle("hidden",!qualifyingFormat);
   if(qualifyingFormat){
     const qualifierMatches=(data.matches||[]).filter(match=>match.stage==="qualifying");
+    const tiebreakMatches=(data.matches||[]).filter(match=>match.stage==="tiebreak");
     const playoffMatches=(data.matches||[]).filter(match=>match.stage==="playoff");
     const completedMatches=qualifierMatches.filter(match=>["finished","technical"].includes(match.status)).length;
     const qualifiersStarted=!!tournament.qualifying_started_at||qualifierMatches.length>0;
     const playoffStarted=playoffMatches.length>0;
     const standings=qualifierMatches.length
-      ? calculateQualifierStandings(members,qualifierMatches,tournament.playoff_size)
+      ? calculateQualifierStandings(members,[...qualifierMatches,...tiebreakMatches],tournament.playoff_size)
       : null;
     const savedMatches=Number(tournament.qualifying_matches_per_player)||3;
     const savedPlayoff=Number(tournament.playoff_size)||0;
@@ -232,6 +233,22 @@ function renderAdminTournament(data){
           ? `завершены все ${qualifierMatches.length} матчей. можно провести жеребьевку плей-офф.`
           : `завершено ${completedMatches} из ${qualifierMatches.length} матчей.`
       : "";
+    const tiedPlayers=standings?.boundaryTie
+      ? standings.rows.filter(row=>row.boundary_tie):[];
+    const controls=$("adminQualifierTiebreakControls");
+    controls.classList.toggle("hidden",!tiedPlayers.length||playoffStarted);
+    for(const id of ["adminTiebreakPlayer1","adminTiebreakPlayer2"]){
+      const select=$(id);
+      select.innerHTML="";
+      tiedPlayers.forEach(player=>{
+        const option=document.createElement("option");
+        option.value=player.user_id;
+        option.textContent=player.display_name;
+        select.appendChild(option);
+      });
+    }
+    if(tiedPlayers.length>1)$("adminTiebreakPlayer2").selectedIndex=1;
+    $("adminStartTiebreakBtn").disabled=app.adminTournamentBusy||tiedPlayers.length<2;
     $("adminSaveQualifierSettingsBtn").classList.toggle("hidden",!editable||qualifiersStarted);
     $("adminSaveQualifierSettingsBtn").disabled=app.adminTournamentBusy||!validSizes.length;
     $("adminStartQualifiersBtn").classList.toggle("hidden",!editable||qualifiersStarted);
@@ -278,7 +295,8 @@ function renderAdminTournamentMatches(data){
     const card=document.createElement("div");card.className="admin-tournament-application admin-tournament-match";
     const text=document.createElement("span");
     const pair=document.createElement("strong");pair.textContent=`${match.player1_name} — ${match.player2_name}`;
-    const stage=match.stage==="qualifying"?"квалификация":tournamentRoundLabel(Number(match.round_no)||1,playoffRounds||1);
+    const stage=match.stage==="qualifying"?"квалификация":match.stage==="tiebreak"
+      ?"дополнительный матч":tournamentRoundLabel(Number(match.round_no)||1,playoffRounds||1);
     const state=match.status==="cancelled"?"игра закрыта администратором, результата нет":tournamentMatchNote(match);
     const note=document.createElement("small");note.textContent=`${stage} · ${state}`;
     text.append(pair,note);
@@ -492,7 +510,8 @@ export async function startTournamentQualifiers(){
 export async function startTournamentPlayoff(){
   const tournament=app.adminCurrentTournamentBoard?.tournament;
   if(!tournament||app.adminTournamentBusy)return;
-  const qualifierMatches=(app.adminCurrentTournamentBoard.matches||[]).filter(match=>match.stage==="qualifying");
+  const qualifierMatches=(app.adminCurrentTournamentBoard.matches||[]).filter(match=>
+    ["qualifying","tiebreak"].includes(match.stage));
   const standings=calculateQualifierStandings(
     app.adminCurrentTournamentBoard.players||[],qualifierMatches,tournament.playoff_size
   );
@@ -526,6 +545,38 @@ export async function startTournamentPlayoff(){
     msg($("adminTournamentMessage"),humanError(error),"error");
   }finally{
     button.textContent="провести жеребьевку плей-офф";
+  }
+}
+
+export async function startQualifierTiebreak(){
+  const board=app.adminCurrentTournamentBoard;
+  if(!board||app.adminTournamentBusy)return;
+  const first=$("adminTiebreakPlayer1").value;
+  const second=$("adminTiebreakPlayer2").value;
+  if(!first||!second||first===second){
+    msg($("adminTournamentMessage"),"выберите двух разных игроков.","error");return;
+  }
+  if(!window.confirm("назначить дополнительный матч этим игрокам за место в плей-офф?"))return;
+  app.adminTournamentBusy=true;
+  const button=$("adminStartTiebreakBtn");
+  button.disabled=true;
+  button.textContent="назначаем…";
+  try{
+    const {data,error}=await app.supabase.rpc("admin_start_qualifier_tiebreak",{
+      p_tournament_id:board.tournament.id,p_player1:first,p_player2:second,
+    });
+    if(error)throw error;
+    syncTournamentBoard(data);
+    renderAdminTournament(data);
+    if(app.currentTournamentId===data.tournament.id)renderTournamentBoard(data);
+    await Promise.all([loadLobby(),loadAdminNotifications(true)]);
+    msg($("adminTournamentMessage"),"дополнительный матч назначен, игроки получили уведомления.","success");
+  }catch(error){
+    msg($("adminTournamentMessage"),humanError(error),"error");
+  }finally{
+    app.adminTournamentBusy=false;
+    button.textContent="назначить дополнительный матч";
+    if(app.adminCurrentTournamentBoard)renderAdminTournament(app.adminCurrentTournamentBoard);
   }
 }
 
