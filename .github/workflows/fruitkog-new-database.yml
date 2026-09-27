@@ -1,0 +1,68 @@
+# Ручная установка проверенных миграций в НОВЫЙ пустой проект fruitkog-battle.
+# Этот файл располагается в main, но берет код только из fruitkog-118-test.
+name: fruitkog new database
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Preview lists pending migrations; apply installs them
+        required: true
+        type: choice
+        options:
+          - preview
+          - apply
+        default: preview
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fruitkog-new-database
+  cancel-in-progress: false
+
+jobs:
+  migrations:
+    name: new project ${{ inputs.mode }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+        working-directory: fruitkog-battle
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.FRUITKOG_SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.FRUITKOG_NEW_DB_PASSWORD }}
+      PROJECT_REF: evyxxjncdpvmxulxazxw
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: fruitkog-118-test
+          persist-credentials: false
+          sparse-checkout: fruitkog-battle
+
+      - name: verify source and target
+        run: |
+          test "$GITHUB_REF_NAME" = main
+          test -n "$SUPABASE_ACCESS_TOKEN"
+          test -n "$SUPABASE_DB_PASSWORD"
+          grep -Fxq 'export const SUPABASE_URL = "https://evyxxjncdpvmxulxazxw.supabase.co";' config.js
+          test -f supabase/migrations/20260927000039_039_qualifier_tiebreak.sql
+
+      - uses: supabase/setup-cli@1dedf2c611547ede7232d26866dd3c56ab903bbb
+        with:
+          version: 2.118.0
+
+      - name: link ONLY new fruitkog project
+        run: supabase link --project-ref "$PROJECT_REF"
+
+      - name: preview pending migrations (no changes)
+        run: supabase db push --linked --dry-run
+
+      - name: apply pending migrations (no test seed)
+        if: ${{ inputs.mode == 'apply' }}
+        run: supabase db push --linked --yes
+
+      - name: verify migration history
+        if: ${{ inputs.mode == 'apply' }}
+        run: supabase migration list --linked
