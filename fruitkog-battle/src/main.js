@@ -1,22 +1,22 @@
 // Точка входа: привязка кнопок и запуск приложения.
-import { createClient } from "../vendor/supabase.js?v=118";
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config.js?v=118";
-import { app } from "./state.js?v=118";
-import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=118";
-import { $, $$, bind, msg } from "./helpers.js?v=118";
-import { loadPublicGameSettings } from "./settings.js?v=118";
-import { restoreSavedView, switchView } from "./navigation.js?v=118";
-import { guestLogin, handleSession, login, logout, openAuth, register, renderAccount, retryProfileLoad, sendPasswordLink, setAuthTab, showPasswordDialog, updatePassword } from "./auth.js?v=118";
-import { createGame, loadLobby, renderActiveGames, resyncLobby } from "./lobby.js?v=118";
-import { exitPreGame, resyncGame, returnToLobby, surrenderGame } from "./room.js?v=118";
-import { buildBoard, syncVegetableMode } from "./board.js?v=118";
-import { cancelPlacementDrag, emptyPlacement, endPlacementDrag, movePlacementDrag, ready, renderPlacement, savePlacementDraft } from "./placement.js?v=118";
-import { activateTournamentSection, changeTournamentApplication, loadTournaments, resetTournamentDeadlineInput } from "./tournament.js?v=118";
-import { renderTournamentDemoState, updateTournamentDemoControls } from "./tournament-demo.js?v=118";
-import { loadRating, openPlayerProfile } from "./rating.js?v=118";
-import { closeAdminNotifications, markAdminNotificationsRead, toggleAdminNotifications } from "./admin-notifications.js?v=118";
-import { adminCancelGame, loadAdmin, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=118";
-import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=118";
+import { createClient } from "../vendor/supabase.js?v=121";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config.js?v=121";
+import { app } from "./state.js?v=121";
+import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=121";
+import { $, $$, bind, msg } from "./helpers.js?v=121";
+import { loadPublicGameSettings } from "./settings.js?v=121";
+import { restoreSavedView, switchView } from "./navigation.js?v=121";
+import { guestLogin, handleSession, login, logout, openAuth, register, renderAccount, retryInitialSession, retryProfileLoad, sendPasswordLink, setAuthTab, showPasswordDialog, updatePassword } from "./auth.js?v=121";
+import { createGame, loadLobby, renderActiveGames, resyncLobby } from "./lobby.js?v=121";
+import { exitPreGame, resyncGame, returnToLobby, surrenderGame } from "./room.js?v=121";
+import { buildBoard, syncVegetableMode } from "./board.js?v=121";
+import { cancelPlacementDrag, emptyPlacement, endPlacementDrag, movePlacementDrag, ready, renderPlacement, savePlacementDraft } from "./placement.js?v=121";
+import { activateTournamentSection, changeTournamentApplication, loadTournaments, resetTournamentDeadlineInput } from "./tournament.js?v=121";
+import { renderTournamentDemoState, updateTournamentDemoControls } from "./tournament-demo.js?v=121";
+import { loadRating, openPlayerProfile } from "./rating.js?v=121";
+import { closeAdminNotifications, markAdminNotificationsRead, toggleAdminNotifications } from "./admin-notifications.js?v=121";
+import { adminCancelGame, loadAdmin, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=121";
+import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=121";
 
 function wire(){
   // Только кнопки меню. У <body> тоже есть data-view (там хранится текущий раздел), и раньше
@@ -145,12 +145,19 @@ async function init(){
   // один зависший запрос не должен навсегда оставлять кнопки в состоянии «загружаем…».
   // вход, регистрация и письма ждут дольше: при регистрации сервер в это время отправляет
   // письмо, и обрыв посередине оставил бы созданный аккаунт с сообщением об ошибке.
-  // в старых браузерах (iOS до 16) AbortSignal.timeout нет — там запросы идут без таймаута, как раньше
+  // Даже если библиотека передала свой signal, запросу нужен предел ожидания.
   const timedFetch=(url,options={})=>{
-    if(options.signal||typeof AbortSignal.timeout!=="function")return fetch(url,options);
     const href=typeof url==="string"?url:(url?.url||String(url));
     const limit=href.includes("/auth/v1/")?60000:15000;
-    return fetch(url,{...options,signal:AbortSignal.timeout(limit)});
+    const controller=new AbortController();
+    let timedOut=false;
+    const forwardAbort=()=>controller.abort();
+    if(options.signal?.aborted)forwardAbort();
+    else options.signal?.addEventListener("abort",forwardAbort,{once:true});
+    const timer=setTimeout(()=>{timedOut=true;controller.abort();},limit);
+    return fetch(url,{...options,signal:controller.signal})
+      .catch(error=>{if(timedOut)throw new Error("Request timed out");throw error;})
+      .finally(()=>{clearTimeout(timer);options.signal?.removeEventListener("abort",forwardAbort);});
   };
   app.supabase=createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{global:{fetch:timedFetch}});
   // вернулись на вкладку или появилась сеть — догоняем матч и зал (и профиль, если он не
@@ -166,8 +173,7 @@ async function init(){
     if (app.authReady && (session?.user?.id||null)===(app.user?.id||null)) return;
     setTimeout(()=>handleSession(session),0);
   });
-  const {data}=await app.supabase.auth.getSession();
-  await handleSession(data.session);
+  await retryInitialSession();
 
   await loadRating();
 }

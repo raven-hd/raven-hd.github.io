@@ -1,13 +1,13 @@
 // Публичная страница турнира: список, участники, заявки, результаты.
-import { app } from "./state.js?v=118";
-import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=118";
-import { $, $$, formatAdminDate, msg } from "./helpers.js?v=118";
-import { humanError } from "./errors.js?v=118";
-import { openAuth } from "./auth.js?v=118";
-import { observeGame, openGame } from "./room.js?v=118";
-import { renderTournamentBracket, renderTournamentMatches, renderTournamentQualifyingBracket } from "./tournament-bracket.js?v=118";
-import { buildTournamentDemoBoard, renderTournamentDemoState, tournamentDemoSummary } from "./tournament-demo.js?v=118";
-import { syncTournamentBoard } from "./admin.js?v=118";
+import { app } from "./state.js?v=121";
+import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=121";
+import { $, $$, formatAdminDate, msg } from "./helpers.js?v=121";
+import { humanError } from "./errors.js?v=121";
+import { openAuth } from "./auth.js?v=121";
+import { observeGame, openGame } from "./room.js?v=121";
+import { renderTournamentBracket, renderTournamentMatches, renderTournamentQualifyingBracket } from "./tournament-bracket.js?v=121";
+import { buildTournamentDemoBoard, renderTournamentDemoState, tournamentDemoSummary } from "./tournament-demo.js?v=121";
+import { syncTournamentBoard } from "./admin.js?v=121";
 
 export function tournamentStatusLabel(status){
   return ({
@@ -482,6 +482,11 @@ export async function loadTournaments(){
   app.tournamentLoading=true;
   const generation=++app.tournamentLoadGeneration;
   $("refreshTournamentBtn").disabled=true;
+  $("tournamentEmpty").classList.add("hidden");
+  $("tournamentContent").classList.add("hidden");
+  $("tournamentPageHeadingContent").classList.add("hidden");
+  $("tournamentRulesSection").classList.add("hidden");
+  $("tournamentSectionNav").classList.add("hidden");
   msg($("tournamentMessage"),"загружаем турнир…");
   msg($("tournamentApplicationMessage"),"");
   try{
@@ -502,9 +507,6 @@ export async function loadTournaments(){
     if(current&&!current.archived_at)app.openedArchivedTournamentId=null;
     app.currentTournamentId=nextTournamentId;
 
-    $("tournamentEmpty").classList.toggle("hidden",!!current);
-    $("tournamentContent").classList.toggle("hidden",!current);
-    $("tournamentSectionNav").classList.add("hidden");
     $("tournamentPageIntro").classList.add("hidden");
     $("tournamentArchiveBackBtn").classList.toggle("hidden",!app.openedArchivedTournamentId);
     if(!app.currentTournamentId){
@@ -514,6 +516,7 @@ export async function loadTournaments(){
       $("tournamentPageEyebrow").classList.add("hidden");
       $("tournamentStatusBadge").classList.add("hidden");
       $("tournamentFormatBadge").classList.add("hidden");
+      $("tournamentEmpty").classList.remove("hidden");
       $("tournamentRulesSection").classList.remove("hidden");
       renderTournamentDirectory();
       msg($("tournamentMessage"),"");

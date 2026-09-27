@@ -7,7 +7,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https: wss:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
   <title>Фруктовый бой</title>
   <script src="./boot.js?v=42"></script>
-  <link rel="stylesheet" href="./styles.css?v=121">
+  <link rel="stylesheet" href="./styles.css?v=123">
 </head>
 <body data-view="home">
   <header class="site-header">
@@ -238,8 +238,9 @@
           <button type="button" data-tournament-demo="finished">турнир завершен</button>
         </div>
       </section>
+      <p id="tournamentMessage" class="message" role="status">загружаем турнир…</p>
       <div class="page-head tournament-page-head">
-        <div id="tournamentPageHeadingContent">
+        <div id="tournamentPageHeadingContent" class="hidden">
           <p id="tournamentPageEyebrow" class="eyebrow hidden"></p>
           <h1 id="tournamentPageTitle">турниры и ивенты</h1>
           <p id="tournamentPageIntro" class="muted">здесь собрана актуальная информация о турнирах и других событиях «Фруктового боя»: условия участия, составы, игровые сетки, назначенные матчи и результаты.</p>
@@ -252,7 +253,7 @@
         </div>
       </div>
 
-      <section id="tournamentEmpty" class="tournament-empty-state">
+      <section id="tournamentEmpty" class="tournament-empty-state hidden">
         <strong>в настоящее время турниров нет</strong>
         <p>когда будет объявлен новый турнир, здесь появятся условия участия и срок подачи заявок.</p>
       </section>
@@ -348,10 +349,9 @@
           </div>
           <div id="tournamentQualifiers" class="tournament-qualifiers"></div>
         </section>
-        <p id="tournamentMessage" class="message"></p>
       </section>
 
-      <section id="tournamentRulesSection" class="panel tournament-rules tournament-anchor-section">
+      <section id="tournamentRulesSection" class="panel tournament-rules tournament-anchor-section hidden">
         <div class="section-head">
           <div>
             <p class="eyebrow">как все устроено</p>
@@ -911,6 +911,6 @@
     <span>сначала выполните SQL и заполните <code>config.js</code>.</span>
   </div>
 
-  <script type="module" src="./src/main.js?v=118"></script>
+  <script type="module" src="./src/main.js?v=121"></script>
 </body>
 </html>

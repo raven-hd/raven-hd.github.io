@@ -7220,3 +7220,36 @@ body:has(#needAuthBox:not(.hidden)) #playView{
   body:has(#needAuthBox:not(.hidden)) #playView{padding-bottom:125px}
   #needAuthBox{gap:18px}
 }
+
+/* Keep the paper and garden corners at the viewport floor on short pages. */
+body[data-view="rating"],
+body[data-view="tournament"]{
+  display:flex;
+  flex-direction:column;
+  min-height:100svh;
+}
+body[data-view="rating"] .site-stage,
+body[data-view="tournament"] .site-stage{
+  display:flex;
+  flex:1 0 auto;
+  flex-direction:column;
+}
+body[data-view="rating"] .page-shell,
+body[data-view="tournament"] .page-shell{
+  flex:1 0 auto;
+}
+
+/* A quiet cue on the target garden while it is the player's turn. */
+#gameView #enemyBoard.turn-glow{
+  animation:target-garden-glow 3.2s ease-in-out infinite;
+}
+@keyframes target-garden-glow{
+  0%,100%{box-shadow:0 0 0 2px rgba(181,133,64,.48),0 0 20px 5px rgba(224,178,99,.23)}
+  50%{box-shadow:0 0 0 3px rgba(181,133,64,.58),0 0 28px 9px rgba(224,178,99,.33)}
+}
+@media(prefers-reduced-motion:reduce){
+  #gameView #enemyBoard.turn-glow{
+    animation:none;
+    box-shadow:0 0 0 3px rgba(181,133,64,.58),0 0 22px 6px rgba(224,178,99,.28);
+  }
+}
