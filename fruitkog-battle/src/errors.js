@@ -7,7 +7,7 @@ export function humanError(error) {
     ["Invalid login credentials","неверный email или пароль."],
     ["Email not confirmed","сначала подтвердите email по ссылке из письма."],
     ["User already registered","аккаунт с таким email уже существует."],
-    ["School nick already registered","такой школьный ник уже зарегистрирован."],
+    ["School nick already registered","этот ник уже зарегистрирован. если вы только что заполняли форму, проверьте почту и папку «спам» — возможно, осталось подтвердить аккаунт."],
     ["Guest name conflicts with registered player","это имя уже принадлежит зарегистрированному игроку."],
     ["Game not found","игра не найдена."],
     ["Game is full","в этой игре уже два игрока."],

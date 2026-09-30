@@ -13,7 +13,7 @@
   <link rel="manifest" href="./site.webmanifest?v=126">
   <meta name="theme-color" content="#39492A">
   <script src="./boot.js?v=42"></script>
-<link rel="stylesheet" href="./styles.css?v=125">
+<link rel="stylesheet" href="./styles.css?v=126">
 </head>
 <body data-view="home">
   <header class="site-header">
@@ -571,12 +571,17 @@
         <div class="section-head placement-head">
           <div class="placement-title-row">
             <h2>ваша грядка</h2>
-            <details class="placement-help">
+            <details id="placementHelp" class="placement-help">
               <summary aria-label="правила расстановки" title="правила расстановки">?</summary>
               <div class="placement-help-popover">
-                <strong>правила расстановки</strong>
-                <p>кликните по высаженному овощу, чтобы повернуть его. зажмите плод и перетащите, чтобы переместить.</p>
-                <p>овощи не могут соприкасаться сторонами или углами.</p>
+                <strong>как спрятать урожай</strong>
+                <p>выберите овощ в списке и нажмите на клетку грядки. нажмите на высаженный овощ, чтобы повернуть его, или перетащите, чтобы переместить.</p>
+                <p>овощи не могут соприкасаться даже углами.</p>
+                <p>листик в углу грядки включает и отключает изображения овощей. на правила игры это не влияет.</p>
+                <div class="placement-help-actions">
+                  <button id="placementHelpDismissBtn" type="button">понятно</button>
+                  <button id="placementHelpNeverBtn" type="button">больше не показывать</button>
+                </div>
               </div>
             </details>
           </div>
@@ -620,7 +625,7 @@
             <h3 id="enemyBoardTitle">грядка соперника</h3>
             <div class="board-scroll"><div id="enemyBoard" class="board"></div></div>
             <div id="shotBar" class="shot-bar">
-              <span id="shotHint">нажмите на клетку соперника</span>
+              <span id="shotHint">проверьте клетку на грядке соперника</span>
             </div>
           </div>
         </div>
@@ -670,7 +675,7 @@
         <input id="registerNick" maxlength="48">
       </div>
       <label class="field"><span>email</span><input id="registerEmail" type="email" autocomplete="email"></label>
-      <label class="field"><span>пароль</span><input id="registerPassword" type="password" minlength="8"></label>
+      <label class="field"><span>пароль</span><input id="registerPassword" type="password" minlength="8" aria-describedby="registerPasswordHint"><small id="registerPasswordHint" class="auth-password-hint">не менее 8 символов</small></label>
       <label class="field"><span>повторите пароль</span><input id="registerPassword2" type="password" minlength="8"></label>
       <button id="registerBtn" class="primary full" type="button">создать аккаунт</button>
       <p id="registerMessage" class="message"></p>
@@ -917,6 +922,6 @@
     <span>сначала выполните SQL и заполните <code>config.js</code>.</span>
   </div>
 
-  <script type="module" src="./src/main.js?v=121"></script>
+  <script type="module" src="./src/main.js?v=122"></script>
 </body>
 </html>

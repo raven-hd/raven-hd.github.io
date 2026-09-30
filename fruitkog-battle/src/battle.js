@@ -1,10 +1,10 @@
 // Бой: выстрелы, история ходов, экран зрителя.
-import { app } from "./state.js?v=121";
-import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=121";
-import { $, msg } from "./helpers.js?v=121";
-import { humanError } from "./errors.js?v=121";
-import { refreshGame } from "./room.js?v=121";
-import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=121";
+import { app } from "./state.js?v=122";
+import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=122";
+import { $, msg } from "./helpers.js?v=122";
+import { humanError } from "./errors.js?v=122";
+import { refreshGame } from "./room.js?v=122";
+import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=122";
 
 // true — данные обновлены. false — не получилось (нет сети, таймаут) или игрок уже ушел из матча:
 // тогда прежние данные не трогаем, чтобы поле не «обнулилось» до следующего обновления
@@ -148,7 +148,7 @@ export function renderBattle(){
   $("enemyBoard").querySelectorAll(".board-cell").forEach(b=>{
     if(!myTurn||app.shotInProgress||b.classList.contains("hit")||b.classList.contains("miss"))b.disabled=true;
   });
-  $("shotHint").textContent=app.shotInProgress?"выстрел отправлен…":myTurn?"нажмите на клетку соперника":"ожидаем ход соперника";
+  $("shotHint").textContent=app.shotInProgress?"проверяем грядку":myTurn?"проверьте клетку на грядке соперника":"ожидаем ход соперника";
 
   if(app.game.status==="finished"){
     $("turnTitle").textContent=app.game.winner_id===app.user.id?"вы победили":`${opponentName()} победил`;
@@ -234,7 +234,7 @@ async function fire(cell){
   pending?.classList.add("shot-pending");
   pending?.setAttribute("aria-busy","true");
   $("enemyBoard").querySelectorAll(".board-cell").forEach(item=>item.disabled=true);
-  $("shotHint").textContent="выстрел отправлен…";
+  $("shotHint").textContent="проверяем грядку";
   msg($("battleMessage"),"");
   let shotSucceeded=false;
   try{

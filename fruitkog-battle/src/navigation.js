@@ -1,11 +1,11 @@
 // Переключение разделов сайта и адрес страницы (?view=…).
-import { app } from "./state.js?v=121";
-import { TOURNAMENT_DEMO_ENABLED } from "./constants.js?v=121";
-import { $, $$ } from "./helpers.js?v=121";
-import { loadLobby } from "./lobby.js?v=121";
-import { loadTournaments } from "./tournament.js?v=121";
-import { loadRating } from "./rating.js?v=121";
-import { loadAdmin } from "./admin.js?v=121";
+import { app } from "./state.js?v=122";
+import { TOURNAMENT_DEMO_ENABLED } from "./constants.js?v=122";
+import { $, $$ } from "./helpers.js?v=122";
+import { loadLobby } from "./lobby.js?v=122";
+import { loadTournaments } from "./tournament.js?v=122";
+import { loadRating } from "./rating.js?v=122";
+import { loadAdmin } from "./admin.js?v=122";
 
 export function switchView(name) {
   const changed = app.currentView !== name;
