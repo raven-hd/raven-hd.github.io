@@ -1,15 +1,21 @@
 // Админ-панель: загрузка, игроки, матчи, объявления, проверка защиты.
-import { app } from "./state.js?v=122";
-import { configured } from "./constants.js?v=122";
-import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=122";
-import { humanError } from "./errors.js?v=122";
-import { statusLabel } from "./room.js?v=122";
-import { resetBoard } from "./board.js?v=122";
-import { resultLabel } from "./battle.js?v=122";
-import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=122";
-import { loadAdminNotifications } from "./admin-notifications.js?v=122";
-import { loadAdminGameSettings } from "./admin-settings.js?v=122";
-import { openAdminTournament } from "./admin-tournaments.js?v=122";
+import { app } from "./state.js?v=123";
+import { configured } from "./constants.js?v=123";
+import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=123";
+import { humanError } from "./errors.js?v=123";
+import { statusLabel } from "./room.js?v=123";
+import { resetBoard } from "./board.js?v=123";
+import { resultLabel } from "./battle.js?v=123";
+import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=123";
+import { loadAdminNotifications } from "./admin-notifications.js?v=123";
+import { loadAdminGameSettings } from "./admin-settings.js?v=123";
+import { openAdminTournament } from "./admin-tournaments.js?v=123";
+
+const ADMIN_GAMES_PAGE_SIZE = 50;
+const ADMIN_GAME_FILTER_LABELS = {
+  active: "активные", paused: "приостановленные", finished: "завершенные",
+  cancelled: "закрытые", all: "все",
+};
 
 export function setActiveAdminFilter(selector,dataName,value){
   $$(selector).forEach(button=>button.classList.toggle("active",button.dataset[dataName]===value));
@@ -22,31 +28,72 @@ export async function loadAdmin(){
   if(!allowed||!configured||app.adminLoading)return;
 
   app.adminLoading=true;
+  const filter=app.adminGameFilter;
+  ++app.adminGamesViewToken;
   $("refreshAdminBtn").disabled=true;
   msg($("adminMessage"),"загружаем данные…");
   try{
-    const [playersResult,gamesResult,tournamentsResult]=await Promise.all([
+    const [playersResult,firstGamesResult,firstCountsResult,tournamentsResult]=await Promise.all([
       app.supabase.rpc("admin_list_players"),
-      app.supabase.rpc("admin_list_games",{p_filter:app.adminGameFilter}),
+      app.supabase.rpc("admin_list_games_page",{p_filter:filter,p_offset:0,p_limit:ADMIN_GAMES_PAGE_SIZE}),
+      app.supabase.rpc("admin_game_counts"),
       app.supabase.rpc("list_public_tournaments"),
     ]);
     if(playersResult.error)throw playersResult.error;
+    let gamesResult=firstGamesResult;
+    let countsResult=firstCountsResult;
+    const legacy=[gamesResult.error,countsResult.error].some(error=>error?.code==="PGRST202");
+    if(legacy){
+      gamesResult=await app.supabase.rpc("admin_list_games",{p_filter:filter});
+      countsResult={data:null,error:null};
+    }
     if(gamesResult.error)throw gamesResult.error;
+    if(countsResult.error)throw countsResult.error;
     if(tournamentsResult.error)throw tournamentsResult.error;
     app.adminPlayersCache=playersResult.data||[];
     app.adminGamesCache=gamesResult.data||[];
+    app.adminGamesLegacy=legacy;
+    app.adminGameCounts=countsResult.data;
+    app.adminGamesTotal=legacy?app.adminGamesCache.length:Number(app.adminGameCounts?.[filter])||0;
+    app.adminGamesHasMore=!legacy&&app.adminGamesCache.length===ADMIN_GAMES_PAGE_SIZE
+      && app.adminGamesCache.length<app.adminGamesTotal;
     app.tournamentsCache=tournamentsResult.data||[];
     renderAdminPlayers();
     renderAdminTournaments();
     renderAdminGames();
     loadAdminNotifications(true);
     loadAdminGameSettings();
-    msg($("adminMessage"),"");
+    msg($("adminMessage"),legacy?"новый список пока недоступен. старый показывает не более 200 матчей.":"");
   }catch(error){
     msg($("adminMessage"),humanError(error),"error");
   }finally{
     app.adminLoading=false;
     $("refreshAdminBtn").disabled=false;
+  }
+}
+
+export async function loadMoreAdminGames(){
+  if(app.adminLoading||app.adminGamesPageLoading||!app.adminGamesHasMore)return;
+  const filter=app.adminGameFilter;
+  const viewToken=app.adminGamesViewToken;
+  app.adminGamesPageLoading=true;
+  renderAdminGames();
+  try{
+    const {data,error}=await app.supabase.rpc("admin_list_games_page",{
+      p_filter:filter,p_offset:app.adminGamesCache.length,p_limit:ADMIN_GAMES_PAGE_SIZE,
+    });
+    if(error)throw error;
+    if(viewToken!==app.adminGamesViewToken||filter!==app.adminGameFilter)return;
+    const rows=data||[];
+    const existing=new Set(app.adminGamesCache.map(row=>row.id));
+    app.adminGamesCache.push(...rows.filter(row=>!existing.has(row.id)));
+    app.adminGamesHasMore=rows.length===ADMIN_GAMES_PAGE_SIZE
+      && app.adminGamesCache.length<app.adminGamesTotal;
+  }catch(error){
+    if(viewToken===app.adminGamesViewToken)msg($("adminMessage"),humanError(error),"error");
+  }finally{
+    app.adminGamesPageLoading=false;
+    if(viewToken===app.adminGamesViewToken)renderAdminGames();
   }
 }
 
@@ -279,6 +326,11 @@ function adminGameSummary(row){
 
 function renderAdminGames(){
   setActiveAdminFilter("[data-admin-game-filter]","adminGameFilter",app.adminGameFilter);
+  $$("[data-admin-game-filter]").forEach(button=>{
+    const filter=button.dataset.adminGameFilter;
+    const count=app.adminGameCounts?.[filter];
+    button.textContent=`${ADMIN_GAME_FILTER_LABELS[filter]}${count===undefined?"":` (${count})`}`;
+  });
   const wrap=$("adminGames");
   wrap.innerHTML="";
   app.adminGamesCache.forEach(row=>{
@@ -319,8 +371,12 @@ function renderAdminGames(){
     item.append(main,facts,actions);
     wrap.appendChild(item);
   });
-  $("adminGamesCount").textContent=String(app.adminGamesCache.length);
+  $("adminGamesCount").textContent=`${app.adminGamesTotal}${app.adminGamesLegacy&&app.adminGamesTotal===200?"+":""}`;
   $("adminGamesEmpty").classList.toggle("hidden",app.adminGamesCache.length>0);
+  $("adminGamesPagination").classList.toggle("hidden",!app.adminGamesHasMore);
+  $("adminGamesLoadedCount").textContent=`показано ${app.adminGamesCache.length} из ${app.adminGamesTotal}`;
+  $("adminGamesLoadMoreBtn").disabled=app.adminGamesPageLoading;
+  $("adminGamesLoadMoreBtn").textContent=app.adminGamesPageLoading?"загружаем…":"показать еще";
 }
 
 function renderAdminBoard(container,fleet,gameShots,ownerId){

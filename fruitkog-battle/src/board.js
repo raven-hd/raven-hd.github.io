@@ -1,8 +1,8 @@
 // Игровое поле: клетки, координаты, овощные скины кораблей.
-import { app } from "./state.js?v=122";
-import { COLS, SHIP_SKINS } from "./constants.js?v=122";
-import { $ } from "./helpers.js?v=122";
-import { clearPlacementPreview } from "./placement.js?v=122";
+import { app } from "./state.js?v=123";
+import { COLS, SHIP_SKINS } from "./constants.js?v=123";
+import { $ } from "./helpers.js?v=123";
+import { clearPlacementPreview } from "./placement.js?v=123";
 
 export function coordsToCell(col,row){ return `${COLS[col]}${row+1}`; }
 

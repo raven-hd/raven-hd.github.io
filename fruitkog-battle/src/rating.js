@@ -1,10 +1,10 @@
 // Рейтинг игроков и публичный профиль.
-import { app } from "./state.js?v=122";
-import { configured } from "./constants.js?v=122";
-import { $, formatAdminDate, msg } from "./helpers.js?v=122";
-import { humanError } from "./errors.js?v=122";
-import { openAuth } from "./auth.js?v=122";
-import { openCompletedMatch } from "./lobby.js?v=122";
+import { app } from "./state.js?v=123";
+import { configured } from "./constants.js?v=123";
+import { $, formatAdminDate, msg } from "./helpers.js?v=123";
+import { humanError } from "./errors.js?v=123";
+import { openAuth } from "./auth.js?v=123";
+import { openCompletedMatch } from "./lobby.js?v=123";
 
 export async function loadRating(){
   if(!configured)return;

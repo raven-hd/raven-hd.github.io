@@ -1,8 +1,8 @@
 // Настройки баланса для игроков: числа из game_settings и склонение подсказок.
-import { app } from "./state.js?v=122";
-import { GAME_SETTING_DEFAULTS, configured } from "./constants.js?v=122";
-import { $$ } from "./helpers.js?v=122";
-import { renderCreateOptions } from "./lobby.js?v=122";
+import { app } from "./state.js?v=123";
+import { GAME_SETTING_DEFAULTS, configured } from "./constants.js?v=123";
+import { $$ } from "./helpers.js?v=123";
+import { renderCreateOptions } from "./lobby.js?v=123";
 
 // Русское склонение по числу: ruPlural(3, ["очко", "очка", "очков"]) → "очка".
 export function ruPlural(n, [one, few, many]) {
