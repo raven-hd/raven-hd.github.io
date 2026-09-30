@@ -1,13 +1,13 @@
 // Публичная страница турнира: список, участники, заявки, результаты.
-import { app } from "./state.js?v=121";
-import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=121";
-import { $, $$, formatAdminDate, msg } from "./helpers.js?v=121";
-import { humanError } from "./errors.js?v=121";
-import { openAuth } from "./auth.js?v=121";
-import { observeGame, openGame } from "./room.js?v=121";
-import { renderTournamentBracket, renderTournamentMatches, renderTournamentQualifyingBracket } from "./tournament-bracket.js?v=121";
-import { buildTournamentDemoBoard, renderTournamentDemoState, tournamentDemoSummary } from "./tournament-demo.js?v=121";
-import { syncTournamentBoard } from "./admin.js?v=121";
+import { app } from "./state.js?v=122";
+import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=122";
+import { $, $$, formatAdminDate, msg } from "./helpers.js?v=122";
+import { humanError } from "./errors.js?v=122";
+import { openAuth } from "./auth.js?v=122";
+import { observeGame, openGame } from "./room.js?v=122";
+import { renderTournamentBracket, renderTournamentMatches, renderTournamentQualifyingBracket } from "./tournament-bracket.js?v=122";
+import { buildTournamentDemoBoard, renderTournamentDemoState, tournamentDemoSummary } from "./tournament-demo.js?v=122";
+import { syncTournamentBoard } from "./admin.js?v=122";
 
 export function tournamentStatusLabel(status){
   return ({
@@ -81,7 +81,7 @@ export function tournamentMatchNote(match){
 }
 
 function tournamentMatchStateNote(match){
-  if(match.game_status==="placing")return "расстановка кораблей";
+  if(match.game_status==="placing")return "расстановка урожая";
   if(match.game_status==="paused")return "матч приостановлен";
   if(match.status==="ready")return "пара сформирована";
   if(match.status==="playing")return "идет игра";

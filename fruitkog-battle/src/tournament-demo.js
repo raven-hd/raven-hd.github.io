@@ -1,8 +1,8 @@
 // Демо-турнир для предпросмотра (?tournament-demo=1). В базу ничего не пишет.
-import { app } from "./state.js?v=121";
-import { TOURNAMENT_DEMO_ENABLED, TOURNAMENT_DEMO_STATES } from "./constants.js?v=121";
-import { $, $$, msg } from "./helpers.js?v=121";
-import { renderTournamentBoard, renderTournamentDirectory } from "./tournament.js?v=121";
+import { app } from "./state.js?v=122";
+import { TOURNAMENT_DEMO_ENABLED, TOURNAMENT_DEMO_STATES } from "./constants.js?v=122";
+import { $, $$, msg } from "./helpers.js?v=122";
+import { renderTournamentBoard, renderTournamentDirectory } from "./tournament.js?v=122";
 
 function tournamentDemoIso(daysFromNow,hour=12){
   const date=new Date();

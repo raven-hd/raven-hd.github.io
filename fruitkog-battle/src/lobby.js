@@ -1,10 +1,10 @@
 // Игровой зал: создание и поиск матчей, активные игры, история.
-import { app } from "./state.js?v=121";
-import { $, $$, msg, newRequestId, safeStorage } from "./helpers.js?v=121";
-import { humanError } from "./errors.js?v=121";
-import { pairLimitPhrase, ruPlural } from "./settings.js?v=121";
-import { exitPreGame, observeGame, openGame, statusLabel } from "./room.js?v=121";
-import { tournamentStageLabel } from "./tournament.js?v=121";
+import { app } from "./state.js?v=122";
+import { $, $$, msg, newRequestId, safeStorage } from "./helpers.js?v=122";
+import { humanError } from "./errors.js?v=122";
+import { pairLimitPhrase, ruPlural } from "./settings.js?v=122";
+import { exitPreGame, observeGame, openGame, statusLabel } from "./room.js?v=122";
+import { tournamentStageLabel } from "./tournament.js?v=122";
 
 const shownJoinWarnings = new Set();
 
@@ -246,7 +246,7 @@ export function renderActiveGames() {
       small.textContent = `сейчас ходит ${turnName}`;
     } else if (row.status === "placing" && row.is_participant) {
       const myReady = row.player1_id === app.user.id ? row.player1_ready : row.player2_ready;
-      small.textContent = myReady ? "ваш флот готов — ждем соперника" : "соперник в комнате — пора расставить корабли";
+      small.textContent = myReady ? "урожай спрятан — ждем соперника" : "соперник пришел — пора прятать урожай";
     } else if (row.status === "paused") {
       small.textContent = "";
     } else {

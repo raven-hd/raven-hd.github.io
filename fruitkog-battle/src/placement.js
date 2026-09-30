@@ -1,10 +1,10 @@
 // Расстановка кораблей: черновик, перетаскивание, палитра, готовность.
-import { app } from "./state.js?v=121";
-import { FLEET, SHIP_SKINS } from "./constants.js?v=121";
-import { $, msg, safeStorage } from "./helpers.js?v=121";
-import { humanError } from "./errors.js?v=121";
-import { isMeReady, refreshGame } from "./room.js?v=121";
-import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=121";
+import { app } from "./state.js?v=122";
+import { FLEET, SHIP_SKINS } from "./constants.js?v=122";
+import { $, msg, safeStorage } from "./helpers.js?v=122";
+import { humanError } from "./errors.js?v=122";
+import { isMeReady, refreshGame } from "./room.js?v=122";
+import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=122";
 
 export function emptyPlacement() {
   return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null };
@@ -319,9 +319,9 @@ export async function ready(){
   app.readyInProgress=true;
   const payload=app.placement.ships.map(s=>({length:s.length,cells:s.cells})).sort((a,b)=>b.length-a.length);
   const button=$("readyBtn");
-  button.textContent="сохраняем флот…";
+  button.textContent="сохраняем расстановку…";
   lockPlacement();
-  const slowTimer=setTimeout(()=>msg($("placementMessage"),"соединение медленное, но флот сохранен в браузере. продолжаем ждать."),2500);
+  const slowTimer=setTimeout(()=>msg($("placementMessage"),"связь медленная, но расстановка сохранена в браузере. продолжаем ждать."),2500);
   try{
     const {data,error}=await app.supabase.rpc("ready_with_fleet",{p_game_id:app.game.id,p_ships:payload});
     if(error)throw error;

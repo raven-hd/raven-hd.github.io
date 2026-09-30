@@ -1,11 +1,11 @@
 // Комната матча: открыть, наблюдать, выйти, сдаться, обновление состояния матча.
-import { app } from "./state.js?v=121";
-import { $, msg } from "./helpers.js?v=121";
-import { humanError } from "./errors.js?v=121";
-import { switchView } from "./navigation.js?v=121";
-import { loadLobby } from "./lobby.js?v=121";
-import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=121";
-import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=121";
+import { app } from "./state.js?v=122";
+import { $, msg, safeStorage } from "./helpers.js?v=122";
+import { humanError } from "./errors.js?v=122";
+import { switchView } from "./navigation.js?v=122";
+import { loadLobby } from "./lobby.js?v=122";
+import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=122";
+import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=122";
 
 export async function openGame(row) {
   app.spectatorMode = false;
@@ -269,6 +269,7 @@ async function refreshGameOnce() {
   }
 
   if (app.game.status === "placing") {
+    const placementWasHidden = $("placementPanel").classList.contains("hidden");
     $("placementPanel").classList.remove("hidden");
     $("battlePanel").classList.add("hidden");
     if (isMeReady()) {
@@ -278,6 +279,9 @@ async function refreshGameOnce() {
     } else {
       unlockPlacement();
       renderPlacement();
+      if (placementWasHidden && app.currentView === "game") {
+        $("placementHelp").open=safeStorage.get(`fruitkog-placement-help-hidden:${app.user.id}`)!=="1";
+      }
     }
     return;
   }
