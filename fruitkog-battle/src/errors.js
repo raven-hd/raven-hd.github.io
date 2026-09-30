@@ -28,6 +28,7 @@ export function humanError(error) {
     ["Registered profile not found","зарегистрированный профиль не найден."],
     ["Game cannot be cancelled","этот матч уже завершен или закрыт."],
     ["Invalid admin game filter","неизвестный фильтр матчей."],
+    ["Invalid admin game page","не удалось открыть страницу матчей. обновите админку и попробуйте еще раз."],
     ["Tournament not found","турнир не найден."],
     ["Tournament name required","введите название турнира."],
     ["Invalid tournament size","неверное количество участников."],

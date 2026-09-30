@@ -1,13 +1,13 @@
 // Публичная страница турнира: список, участники, заявки, результаты.
-import { app } from "./state.js?v=122";
-import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=122";
-import { $, $$, formatAdminDate, msg } from "./helpers.js?v=122";
-import { humanError } from "./errors.js?v=122";
-import { openAuth } from "./auth.js?v=122";
-import { observeGame, openGame } from "./room.js?v=122";
-import { renderTournamentBracket, renderTournamentMatches, renderTournamentQualifyingBracket } from "./tournament-bracket.js?v=122";
-import { buildTournamentDemoBoard, renderTournamentDemoState, tournamentDemoSummary } from "./tournament-demo.js?v=122";
-import { syncTournamentBoard } from "./admin.js?v=122";
+import { app } from "./state.js?v=123";
+import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=123";
+import { $, $$, formatAdminDate, msg } from "./helpers.js?v=123";
+import { humanError } from "./errors.js?v=123";
+import { openAuth } from "./auth.js?v=123";
+import { observeGame, openGame } from "./room.js?v=123";
+import { renderTournamentBracket, renderTournamentMatches, renderTournamentQualifyingBracket } from "./tournament-bracket.js?v=123";
+import { buildTournamentDemoBoard, renderTournamentDemoState, tournamentDemoSummary } from "./tournament-demo.js?v=123";
+import { syncTournamentBoard } from "./admin.js?v=123";
 
 export function tournamentStatusLabel(status){
   return ({

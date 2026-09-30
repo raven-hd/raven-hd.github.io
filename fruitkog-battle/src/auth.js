@@ -1,11 +1,11 @@
 // Вход и выход, регистрация, гостевой профиль, пароль, блок аккаунта в шапке, обработка сессии.
-import { app } from "./state.js?v=122";
-import { $, cleanName, msg, wait } from "./helpers.js?v=122";
-import { humanError } from "./errors.js?v=122";
-import { restoreSavedView, switchView } from "./navigation.js?v=122";
-import { loadLobby, renderCreateOptions, subscribeToLobby } from "./lobby.js?v=122";
-import { restoreGame, setGameUrl } from "./room.js?v=122";
-import { closeAdminNotifications, renderAdminNotifications, startAdminNotificationPolling } from "./admin-notifications.js?v=122";
+import { app } from "./state.js?v=123";
+import { $, cleanName, msg, wait } from "./helpers.js?v=123";
+import { humanError } from "./errors.js?v=123";
+import { restoreSavedView, switchView } from "./navigation.js?v=123";
+import { loadLobby, renderCreateOptions, subscribeToLobby } from "./lobby.js?v=123";
+import { restoreGame, setGameUrl } from "./room.js?v=123";
+import { closeAdminNotifications, renderAdminNotifications, startAdminNotificationPolling } from "./admin-notifications.js?v=123";
 
 export function setAuthTab(name) {
   const names = ["login","register","guest"];
