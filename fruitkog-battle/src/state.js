@@ -1,6 +1,6 @@
 // Общее состояние приложения: всё, что раньше было глобальными переменными app.js.
 // Читать и менять из любого модуля через объект app: app.user, app.game, app.placement …
-import { GAME_SETTING_DEFAULTS, TOURNAMENT_DEMO_STATES } from "./constants.js?v=123";
+import { GAME_SETTING_DEFAULTS, TOURNAMENT_DEMO_STATES } from "./constants.js?v=124";
 
 export const app = {
   supabase: null,
@@ -25,6 +25,8 @@ export const app = {
   tournamentLoadGeneration: 0,
   playerProfileGeneration: 0,
   profilesCache: new Map(),
+  fruitkogAvatarCache: new Map(),
+  fruitkogAvatarLoaded: new Set(),
   activeFilter: "all",
   currentView: "home",
   authReady: false,

@@ -1,10 +1,10 @@
 // Бой: выстрелы, история ходов, экран зрителя.
-import { app } from "./state.js?v=123";
-import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=123";
-import { $, msg } from "./helpers.js?v=123";
-import { humanError } from "./errors.js?v=123";
-import { refreshGame } from "./room.js?v=123";
-import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=123";
+import { app } from "./state.js?v=124";
+import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=124";
+import { $, msg } from "./helpers.js?v=124";
+import { humanError } from "./errors.js?v=124";
+import { refreshGame } from "./room.js?v=124";
+import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=124";
 
 // true — данные обновлены. false — не получилось (нет сети, таймаут) или игрок уже ушел из матча:
 // тогда прежние данные не трогаем, чтобы поле не «обнулилось» до следующего обновления

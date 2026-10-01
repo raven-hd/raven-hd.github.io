@@ -1,11 +1,12 @@
 // Вход и выход, регистрация, гостевой профиль, пароль, блок аккаунта в шапке, обработка сессии.
-import { app } from "./state.js?v=123";
-import { $, cleanName, msg, wait } from "./helpers.js?v=123";
-import { humanError } from "./errors.js?v=123";
-import { restoreSavedView, switchView } from "./navigation.js?v=123";
-import { loadLobby, renderCreateOptions, subscribeToLobby } from "./lobby.js?v=123";
-import { restoreGame, setGameUrl } from "./room.js?v=123";
-import { closeAdminNotifications, renderAdminNotifications, startAdminNotificationPolling } from "./admin-notifications.js?v=123";
+import { app } from "./state.js?v=124";
+import { $, cleanName, msg, wait } from "./helpers.js?v=124";
+import { humanError } from "./errors.js?v=124";
+import { restoreSavedView, switchView } from "./navigation.js?v=124";
+import { loadLobby, renderCreateOptions, subscribeToLobby } from "./lobby.js?v=124";
+import { restoreGame, setGameUrl } from "./room.js?v=124";
+import { closeAdminNotifications, renderAdminNotifications, startAdminNotificationPolling } from "./admin-notifications.js?v=124";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=124";
 
 export function setAuthTab(name) {
   const names = ["login","register","guest"];
@@ -94,12 +95,11 @@ export function renderAccount() {
 
   const btn = document.createElement("button");
   btn.type = "button";
-  if (app.profile.avatar_emoji) {
-    const avatar = document.createElement("span");
-    avatar.className = "account-avatar";
-    avatar.textContent = app.profile.avatar_emoji;
-    btn.appendChild(avatar);
-  }
+  const avatar = document.createElement("span");
+  avatar.className = "account-avatar";
+  avatar.id = "accountAvatar";
+  renderFruitkogAvatar(avatar,app.user.id,app.profile.avatar_emoji||"");
+  btn.appendChild(avatar);
   const accountName = document.createElement("span");
   accountName.className = "account-name";
   accountName.textContent = app.profile.display_name;
@@ -113,8 +113,8 @@ export function renderAccount() {
     btn.appendChild(warning);
   }
   btn.addEventListener("click", () => {
-    $("profileAvatar").textContent = app.profile.avatar_emoji || "🍏";
-    $("profileAvatar").classList.remove("hidden");
+    renderFruitkogAvatar($("profileAvatar"),app.user.id,app.profile.avatar_emoji||"🍏");
+    $("avatarEditBtn").classList.toggle("hidden",app.profile.account_type!=="registered");
     $("profileName").textContent = app.profile.display_name;
     $("profileEmail").textContent = app.profile.account_type === "guest"
       ? "гостевой аккаунт без email"
@@ -335,6 +335,8 @@ export async function handleSession(session){
   app.authReady=false;
   app.user=nextUser;
   app.profile=null;
+  app.fruitkogAvatarCache.clear();
+  app.fruitkogAvatarLoaded.clear();
   if(!nextUser){app.authError=false;app.profileRetryUser=null;app.profileRetries=0;}
   renderAccount();
   if(app.user){
@@ -365,6 +367,13 @@ export async function handleSession(session){
   }
   app.authReady=true;
   renderAccount();
+  if(app.user){
+    loadFruitkogAvatars([app.user.id]).then(()=>{
+      if(generation!==app.sessionGeneration)return;
+      renderAccount();
+      if($("profileDialog").open)renderFruitkogAvatar($("profileAvatar"),app.user.id,app.profile?.avatar_emoji||"🍏");
+    });
+  }
   startAdminNotificationPolling();
   if(app.user){
     await subscribeToLobby();

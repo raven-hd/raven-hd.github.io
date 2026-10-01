@@ -13,7 +13,7 @@
   <link rel="manifest" href="./site.webmanifest?v=126">
   <meta name="theme-color" content="#39492A">
   <script src="./boot.js?v=42"></script>
-<link rel="stylesheet" href="./styles.css?v=126">
+<link rel="stylesheet" href="./styles.css?v=127">
 </head>
 <body data-view="home">
   <header class="site-header">
@@ -719,7 +719,10 @@
     <section class="dialog-pane">
       <p class="eyebrow">профиль</p>
       <div class="account-profile-head">
-        <div id="profileAvatar" class="profile-avatar account-profile-avatar" aria-label="аватар игрока">🍏</div>
+        <div class="avatar-edit-wrap">
+          <div id="profileAvatar" class="profile-avatar account-profile-avatar" aria-label="аватар игрока">🍏</div>
+          <button id="avatarEditBtn" class="avatar-edit-btn hidden" type="button" aria-label="сменить аватар" title="сменить аватар">✎</button>
+        </div>
         <div class="account-profile-copy">
           <h2 id="profileName">игрок</h2>
           <p id="profileStatus" class="profile-status"></p>
@@ -728,6 +731,17 @@
       </div>
       <button id="openPlayerProfileBtn" class="full" type="button">статистика и история</button>
       <button id="logoutBtn" class="full" type="button">выйти</button>
+    </section>
+  </dialog>
+
+  <dialog id="avatarPickerDialog" class="avatar-picker-dialog">
+    <form method="dialog" class="dialog-close"><button aria-label="закрыть">×</button></form>
+    <section class="dialog-pane">
+      <p class="eyebrow">профиль</p>
+      <h2>выбрать аватар</h2>
+      <div id="avatarPickerGrid" class="avatar-picker-grid" role="group" aria-label="овощные аватары"></div>
+      <button id="saveAvatarBtn" class="primary full" type="button" disabled>сохранить аватар</button>
+      <p id="avatarPickerMessage" class="message" role="status"></p>
     </section>
   </dialog>
 
@@ -926,6 +940,6 @@
     <span>сначала выполните SQL и заполните <code>config.js</code>.</span>
   </div>
 
-  <script type="module" src="./src/main.js?v=123"></script>
+  <script type="module" src="./src/main.js?v=124"></script>
 </body>
 </html>

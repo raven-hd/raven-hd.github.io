@@ -1,10 +1,10 @@
 // Расстановка кораблей: черновик, перетаскивание, палитра, готовность.
-import { app } from "./state.js?v=123";
-import { FLEET, SHIP_SKINS } from "./constants.js?v=123";
-import { $, msg, safeStorage } from "./helpers.js?v=123";
-import { humanError } from "./errors.js?v=123";
-import { isMeReady, refreshGame } from "./room.js?v=123";
-import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=123";
+import { app } from "./state.js?v=124";
+import { FLEET, SHIP_SKINS } from "./constants.js?v=124";
+import { $, msg, safeStorage } from "./helpers.js?v=124";
+import { humanError } from "./errors.js?v=124";
+import { isMeReady, refreshGame } from "./room.js?v=124";
+import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=124";
 
 export function emptyPlacement() {
   return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null };

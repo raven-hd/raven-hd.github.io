@@ -1,5 +1,5 @@
 // Константы и флаги: правила поля и флота, скины, режим демо-турнира.
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config.js?v=123";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config.js?v=124";
 
 export const configured =
   SUPABASE_URL &&

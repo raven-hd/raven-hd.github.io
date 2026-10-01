@@ -5405,6 +5405,18 @@ body{
   box-shadow:inset 0 0 0 4px rgba(255,255,255,.32);
   font-size:43px;
 }
+.profile-avatar img,.player-avatar img,.account-avatar img{display:block;width:100%;height:100%;object-fit:contain}
+.avatar-edit-wrap{position:relative;width:max-content}
+.avatar-edit-btn{position:absolute;right:-8px;bottom:-8px;display:grid;place-items:center;width:29px;height:29px;padding:0;border:1px solid rgba(104,92,55,.4);border-radius:50%;background:#fff8e9;color:#39492a;font-size:17px;cursor:pointer}
+.avatar-edit-btn:hover{background:#f2dfbd}
+.avatar-picker-dialog{width:min(530px,calc(100% - 24px));max-height:min(90vh,850px)}
+.avatar-picker-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:16px 0 20px;max-height:55vh;overflow-y:auto}
+.avatar-choice{display:grid;place-items:center;aspect-ratio:1;padding:5px;border:2px solid transparent;border-radius:13px;background:#f6e6c7;cursor:pointer}
+.avatar-choice:hover,.avatar-choice:focus-visible{border-color:#a8612d}
+.avatar-choice[aria-pressed="true"]{border-color:#39492a;background:#fff8e9;box-shadow:0 0 0 2px rgba(57,73,42,.16)}
+.avatar-choice img{display:block;width:100%;height:100%;object-fit:contain}
+.account-avatar img{width:24px;height:24px}
+.player-avatar img{width:100%;height:100%}
 .account-profile-copy{
   min-width:0;
 }
@@ -5445,6 +5457,7 @@ body{
     border-radius:15px;
     font-size:36px;
   }
+  .avatar-picker-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
 /* update 78: isolated tournament preview controls */
