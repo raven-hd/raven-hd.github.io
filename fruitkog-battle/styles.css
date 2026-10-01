@@ -7266,6 +7266,7 @@ body[data-view="tournament"] .page-shell{
 }
 #gameView .battle-layout>div>h3{
   font-size:clamp(18px,2vw,23px)!important;
+  white-space:nowrap;
 }
 @media(max-width:760px){
   #gameView .game-player-name-only strong{
@@ -7287,8 +7288,7 @@ body[data-view="tournament"] .page-shell{
 .page-shell .page-head h1,
 #tournamentView .tournament-page-head h1,
 #needAuthBox h1,
-.home-display-title,
-#gameView .game-player-name-only strong{
+.home-display-title{
   font-size:var(--title-primary-size)!important;
 }
 .page-shell h2,
@@ -7300,7 +7300,6 @@ body[data-view="tournament"] .page-shell{
 #tournamentView .tournament-registration-title h2,
 #gameView #placementPanel .placement-title-row h2,
 #gameView #placementPanel .fleet-heading h3,
-#gameView .battle-layout>div>h3,
 #gameView .battle-history-title{
   font-size:var(--title-secondary-size)!important;
 }
