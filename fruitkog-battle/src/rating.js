@@ -1,11 +1,11 @@
 // Рейтинг игроков и публичный профиль.
-import { app } from "./state.js?v=126";
-import { configured } from "./constants.js?v=126";
-import { $, formatAdminDate, msg } from "./helpers.js?v=126";
-import { humanError } from "./errors.js?v=126";
-import { openAuth } from "./auth.js?v=126";
-import { openCompletedMatch } from "./lobby.js?v=126";
-import { createFruitkogTableAvatar, loadFruitkogAvatars, loadFruitkogTableAvatars, renderFruitkogAvatar } from "./avatars.js?v=126";
+import { app } from "./state.js?v=127";
+import { configured } from "./constants.js?v=127";
+import { $, formatAdminDate, msg } from "./helpers.js?v=127";
+import { humanError } from "./errors.js?v=127";
+import { openAuth } from "./auth.js?v=127";
+import { openCompletedMatch } from "./lobby.js?v=127";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=127";
 
 export async function loadRating(){
   if(!configured)return;
@@ -15,16 +15,13 @@ export async function loadRating(){
   (data||[]).forEach((r,i)=>{
     const row=document.createElement("div");row.className="rating-row";
     const rank=document.createElement("span");rank.textContent=i+1;
-    const name=document.createElement("button");name.type="button";name.className="profile-link ranking-player-name";
-    const label=document.createElement("span");label.textContent=r.display_name;
-    name.append(createFruitkogTableAvatar(r.user_id),label);
+    const name=document.createElement("button");name.type="button";name.className="profile-link";name.textContent=r.display_name;
     name.addEventListener("click",()=>openPlayerProfile(r.user_id));
     row.append(rank,name);
     [r.rating,r.games_played,r.wins,r.losses,`${r.win_rate}%`].forEach(v=>{const s=document.createElement("span");s.textContent=v;row.appendChild(s);});
     wrap.appendChild(row);
   });
   $("ratingEmpty").classList.toggle("hidden",!!data?.length);
-  void loadFruitkogTableAvatars((data||[]).map(row=>row.user_id),wrap);
 }
 
 export async function openPlayerProfile(playerId){
