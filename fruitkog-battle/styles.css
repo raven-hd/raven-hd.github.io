@@ -7315,3 +7315,26 @@ body[data-view="tournament"] .page-shell{
     --title-secondary-size:22px;
   }
 }
+
+/* Bound image avatars to their existing containers. */
+#accountSlot .account-avatar{
+  width:28px;
+  height:28px;
+  overflow:hidden;
+  line-height:1;
+}
+#accountSlot .account-avatar>img{
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:100%;
+  object-fit:contain;
+}
+.profile-avatar>img{
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:100%;
+  object-fit:contain;
+  border-radius:inherit;
+}
