@@ -1,11 +1,12 @@
 // Комната матча: открыть, наблюдать, выйти, сдаться, обновление состояния матча.
-import { app } from "./state.js?v=123";
-import { $, msg, safeStorage } from "./helpers.js?v=123";
-import { humanError } from "./errors.js?v=123";
-import { switchView } from "./navigation.js?v=123";
-import { loadLobby } from "./lobby.js?v=123";
-import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=123";
-import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=123";
+import { app } from "./state.js?v=124";
+import { $, msg, safeStorage } from "./helpers.js?v=124";
+import { humanError } from "./errors.js?v=124";
+import { switchView } from "./navigation.js?v=124";
+import { loadLobby } from "./lobby.js?v=124";
+import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=124";
+import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=124";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=124";
 
 export async function openGame(row) {
   app.spectatorMode = false;
@@ -132,10 +133,8 @@ function renderRoom() {
   $("player2Name").textContent = app.game.player2_name || "ожидаем игрока";
   const player1Profile = app.profilesCache.get(app.game.player1_id);
   const player2Profile = app.profilesCache.get(app.game.player2_id);
-  $("player1Avatar").textContent = player1Profile?.avatar_emoji || "";
-  $("player2Avatar").textContent = player2Profile?.avatar_emoji || "";
-  $("player1Avatar").classList.toggle("hidden",!player1Profile?.avatar_emoji);
-  $("player2Avatar").classList.toggle("hidden",!player2Profile?.avatar_emoji);
+  renderFruitkogAvatar($("player1Avatar"),app.game.player1_id,player1Profile?.avatar_emoji||"");
+  renderFruitkogAvatar($("player2Avatar"),app.game.player2_id,player2Profile?.avatar_emoji||"");
   $("player1Ready").textContent = app.game.player1_ready ? "готов" : "не готов";
   $("player2Ready").textContent = app.game.player2_ready ? "готов" : "не готов";
   const canClose = !app.spectatorMode && app.game.game_type !== "tournament" && app.game.player1_id === app.user.id && ["waiting","placing"].includes(app.game.status);
@@ -180,9 +179,10 @@ function renderRoom() {
 async function loadRoomProfiles() {
   const ids = [app.game?.player1_id,app.game?.player2_id].filter(Boolean);
   if (!ids.length) return;
-  const {data,error} = await app.supabase.from("profiles")
-    .select("user_id,account_type,avatar_emoji")
-    .in("user_id",ids);
+  const [{data,error}] = await Promise.all([
+    app.supabase.from("profiles").select("user_id,account_type,avatar_emoji").in("user_id",ids),
+    loadFruitkogAvatars(ids)
+  ]);
   if (error) return console.error(error);
   (data || []).forEach(player => app.profilesCache.set(player.user_id,player));
 }

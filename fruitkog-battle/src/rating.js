@@ -1,10 +1,11 @@
 // Рейтинг игроков и публичный профиль.
-import { app } from "./state.js?v=123";
-import { configured } from "./constants.js?v=123";
-import { $, formatAdminDate, msg } from "./helpers.js?v=123";
-import { humanError } from "./errors.js?v=123";
-import { openAuth } from "./auth.js?v=123";
-import { openCompletedMatch } from "./lobby.js?v=123";
+import { app } from "./state.js?v=124";
+import { configured } from "./constants.js?v=124";
+import { $, formatAdminDate, msg } from "./helpers.js?v=124";
+import { humanError } from "./errors.js?v=124";
+import { openAuth } from "./auth.js?v=124";
+import { openCompletedMatch } from "./lobby.js?v=124";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=124";
 
 export async function loadRating(){
   if(!configured)return;
@@ -29,8 +30,7 @@ export async function openPlayerProfile(playerId){
   const dialog=$("playerProfileDialog");
   dialog.classList.toggle("is-own-profile",playerId===app.user?.id);
   $("publicProfileName").textContent="загружаем профиль…";
-  $("publicProfileAvatar").textContent="🍏";
-  $("publicProfileAvatar").classList.remove("hidden");
+  renderFruitkogAvatar($("publicProfileAvatar"),playerId,"🍏");
   $("publicProfileVerified").classList.add("hidden");
   $("publicProfileStats").innerHTML="";
   $("publicProfileHistory").innerHTML="";
@@ -42,14 +42,16 @@ export async function openPlayerProfile(playerId){
   if(!dialog.open)dialog.showModal();
 
   try{
-    const {data,error}=await app.supabase.rpc("get_public_player_profile",{p_user_id:playerId});
+    const [{data,error}]=await Promise.all([
+      app.supabase.rpc("get_public_player_profile",{p_user_id:playerId}),
+      loadFruitkogAvatars([playerId],true)
+    ]);
     if(generation!==app.playerProfileGeneration)return;   // уже открыт профиль другого игрока
     if(error)throw error;
     const player=data.profile;
     const matches=data.matches||[];
     $("publicProfileName").textContent=player.display_name;
-    $("publicProfileAvatar").textContent=player.avatar_emoji||"🍏";
-    $("publicProfileAvatar").classList.remove("hidden");
+    renderFruitkogAvatar($("publicProfileAvatar"),playerId,player.avatar_emoji||"🍏");
     if(!player.school_verified){
       $("publicProfileVerified").textContent="ник ожидает проверки";
       $("publicProfileVerified").classList.remove("hidden");

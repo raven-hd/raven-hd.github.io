@@ -1,10 +1,10 @@
 // Игровой зал: создание и поиск матчей, активные игры, история.
-import { app } from "./state.js?v=123";
-import { $, $$, msg, newRequestId, safeStorage } from "./helpers.js?v=123";
-import { humanError } from "./errors.js?v=123";
-import { pairLimitPhrase, ruPlural } from "./settings.js?v=123";
-import { exitPreGame, observeGame, openGame, statusLabel } from "./room.js?v=123";
-import { tournamentStageLabel } from "./tournament.js?v=123";
+import { app } from "./state.js?v=124";
+import { $, $$, msg, newRequestId, safeStorage } from "./helpers.js?v=124";
+import { humanError } from "./errors.js?v=124";
+import { pairLimitPhrase, ruPlural } from "./settings.js?v=124";
+import { exitPreGame, observeGame, openGame, statusLabel } from "./room.js?v=124";
+import { tournamentStageLabel } from "./tournament.js?v=124";
 
 const shownJoinWarnings = new Set();
 
