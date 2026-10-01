@@ -7278,3 +7278,40 @@ body[data-view="tournament"] .page-shell{
     font-size:18px!important;
   }
 }
+
+/* Shared title scale: identical in player and spectator views and across pages. */
+:root{
+  --title-primary-size:36px;
+  --title-secondary-size:28px;
+}
+.page-shell .page-head h1,
+#tournamentView .tournament-page-head h1,
+#needAuthBox h1,
+.home-display-title,
+#gameView .game-player-name-only strong{
+  font-size:var(--title-primary-size)!important;
+}
+.page-shell h2,
+.home-rules-title,
+#playView .lobby-section-head h2,
+#playView .lobby-create-heading h2,
+#tournamentView .section-head h2,
+#tournamentView .tournament-summary .section-head h2,
+#tournamentView .tournament-registration-title h2,
+#gameView #placementPanel .placement-title-row h2,
+#gameView #placementPanel .fleet-heading h3,
+#gameView .battle-layout>div>h3,
+#gameView .battle-history-title{
+  font-size:var(--title-secondary-size)!important;
+}
+#gameView .game-player-name-only strong{
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+}
+@media(max-width:760px){
+  :root{
+    --title-primary-size:28px;
+    --title-secondary-size:22px;
+  }
+}
