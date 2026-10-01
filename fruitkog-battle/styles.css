@@ -5417,6 +5417,11 @@ body{
 .avatar-choice img{display:block;width:100%;height:100%;object-fit:contain}
 .account-avatar img{width:24px;height:24px}
 .player-avatar img{width:100%;height:100%}
+.ranking-player-name{display:inline-flex;align-items:center;gap:8px;min-width:0;text-align:left}
+.ranking-player-name>span:last-child{min-width:0;overflow-wrap:anywhere}
+.ranking-avatar{display:inline-grid;place-items:center;flex:0 0 26px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.38);font-size:18px;line-height:1}
+.ranking-avatar img{display:block;width:100%;height:100%;object-fit:contain}
+@media(max-width:760px){.ranking-avatar{flex-basis:22px;width:22px;height:22px}.ranking-player-name{gap:6px}}
 .account-profile-copy{
   min-width:0;
 }
@@ -7281,5 +7286,28 @@ body[data-view="tournament"] .page-shell{
   #gameView #enemyBoard.turn-glow{
     animation:none;
     filter:drop-shadow(0 0 15px rgba(240,188,90,.72));
+  }
+}
+
+/* The match title stays unchanged; both gardens align when a long name wraps. */
+#gameView .battle-layout > div > h3{
+  overflow-wrap:anywhere;
+  text-wrap:balance;
+}
+@media(min-width:881px){
+  #gameView .battle-layout{
+    align-items:stretch;
+  }
+  #gameView .battle-layout > div{
+    display:grid;
+    grid-row:span 2;
+    grid-template-rows:subgrid;
+    align-content:start;
+  }
+  #gameView .battle-layout > div > h3{
+    align-self:end;
+  }
+  #gameView .battle-layout > div > .board-scroll{
+    align-self:start;
   }
 }
