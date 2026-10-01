@@ -7288,20 +7288,3 @@ body[data-view="tournament"] .page-shell{
 #gameView .battle-layout > div > h3{
   font-size:clamp(18px,2vw,26px)!important;
 }
-@media(min-width:881px){
-  #gameView .battle-layout{
-    align-items:stretch;
-  }
-  #gameView .battle-layout > div{
-    display:grid;
-    grid-row:span 2;
-    grid-template-rows:subgrid;
-    align-content:start;
-  }
-  #gameView .battle-layout > div > h3{
-    align-self:end;
-  }
-  #gameView .battle-layout > div > .board-scroll{
-    align-self:start;
-  }
-}
