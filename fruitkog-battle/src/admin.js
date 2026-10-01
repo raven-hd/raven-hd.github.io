@@ -1,15 +1,15 @@
 // Админ-панель: загрузка, игроки, матчи, объявления, проверка защиты.
-import { app } from "./state.js?v=124";
-import { configured } from "./constants.js?v=124";
-import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=124";
-import { humanError } from "./errors.js?v=124";
-import { statusLabel } from "./room.js?v=124";
-import { resetBoard } from "./board.js?v=124";
-import { resultLabel } from "./battle.js?v=124";
-import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=124";
-import { loadAdminNotifications } from "./admin-notifications.js?v=124";
-import { loadAdminGameSettings } from "./admin-settings.js?v=124";
-import { openAdminTournament } from "./admin-tournaments.js?v=124";
+import { app } from "./state.js?v=125";
+import { configured } from "./constants.js?v=125";
+import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=125";
+import { humanError } from "./errors.js?v=125";
+import { statusLabel } from "./room.js?v=125";
+import { resetBoard } from "./board.js?v=125";
+import { resultLabel } from "./battle.js?v=125";
+import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=125";
+import { loadAdminNotifications } from "./admin-notifications.js?v=125";
+import { loadAdminGameSettings } from "./admin-settings.js?v=125";
+import { openAdminTournament } from "./admin-tournaments.js?v=125";
 
 const ADMIN_GAMES_PAGE_SIZE = 50;
 const ADMIN_GAME_FILTER_LABELS = {
