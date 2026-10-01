@@ -5407,10 +5407,10 @@ body{
 }
 .profile-avatar img,.player-avatar img,.account-avatar img{display:block;width:100%;height:100%;object-fit:contain}
 .avatar-edit-wrap{position:relative;width:max-content}
-.avatar-edit-btn{position:absolute;right:-8px;bottom:-8px;display:grid;place-items:center;width:29px;height:29px;padding:0;border:1px solid rgba(104,92,55,.4);border-radius:50%;background:#fff8e9;color:#39492a;font-size:17px;cursor:pointer}
+.avatar-edit-btn{position:absolute;right:-8px;bottom:-8px;display:grid;place-items:center;box-sizing:border-box;width:30px;height:30px;min-width:30px;min-height:30px;padding:0;border:1px solid rgba(104,92,55,.4);border-radius:50%;background:#fff8e9;color:#39492a;font-size:17px;line-height:1;cursor:pointer}
 .avatar-edit-btn:hover{background:#f2dfbd}
-.avatar-picker-dialog{width:min(530px,calc(100% - 24px));max-height:min(90vh,850px)}
-.avatar-picker-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:16px 0 20px;max-height:55vh;overflow-y:auto}
+.avatar-picker-dialog{width:min(530px,calc(100% - 24px));max-height:min(90vh,850px);overflow-x:hidden;overflow-y:auto}
+.avatar-picker-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:16px 0 20px}
 .avatar-choice{display:grid;place-items:center;aspect-ratio:1;padding:5px;border:2px solid transparent;border-radius:13px;background:#f6e6c7;cursor:pointer}
 .avatar-choice:hover,.avatar-choice:focus-visible{border-color:#a8612d}
 .avatar-choice[aria-pressed="true"]{border-color:#39492a;background:#fff8e9;box-shadow:0 0 0 2px rgba(57,73,42,.16)}

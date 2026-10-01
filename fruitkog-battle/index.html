@@ -13,7 +13,7 @@
   <link rel="manifest" href="./site.webmanifest?v=126">
   <meta name="theme-color" content="#39492A">
   <script src="./boot.js?v=42"></script>
-<link rel="stylesheet" href="./styles.css?v=127">
+<link rel="stylesheet" href="./styles.css?v=128">
 </head>
 <body data-view="home">
   <header class="site-header">
@@ -719,10 +719,7 @@
     <section class="dialog-pane">
       <p class="eyebrow">профиль</p>
       <div class="account-profile-head">
-        <div class="avatar-edit-wrap">
-          <div id="profileAvatar" class="profile-avatar account-profile-avatar" aria-label="аватар игрока">🍏</div>
-          <button id="avatarEditBtn" class="avatar-edit-btn hidden" type="button" aria-label="сменить аватар" title="сменить аватар">✎</button>
-        </div>
+        <div id="profileAvatar" class="profile-avatar account-profile-avatar" aria-label="аватар игрока">🍏</div>
         <div class="account-profile-copy">
           <h2 id="profileName">игрок</h2>
           <p id="profileStatus" class="profile-status"></p>
@@ -750,7 +747,10 @@
     <section class="dialog-pane">
       <p class="eyebrow">профиль игрока</p>
       <div class="public-profile-head">
-        <div id="publicProfileAvatar" class="profile-avatar public-profile-avatar" aria-label="аватар игрока">🍏</div>
+        <div class="avatar-edit-wrap">
+          <div id="publicProfileAvatar" class="profile-avatar public-profile-avatar" aria-label="аватар игрока">🍏</div>
+          <button id="avatarEditBtn" class="avatar-edit-btn hidden" type="button" aria-label="сменить аватар" title="сменить аватар">✎</button>
+        </div>
         <div class="public-profile-identity">
           <h2 id="publicProfileName">игрок</h2>
           <span id="publicProfileVerified" class="badge hidden"></span>
@@ -940,6 +940,6 @@
     <span>сначала выполните SQL и заполните <code>config.js</code>.</span>
   </div>
 
-  <script type="module" src="./src/main.js?v=124"></script>
+  <script type="module" src="./src/main.js?v=125"></script>
 </body>
 </html>

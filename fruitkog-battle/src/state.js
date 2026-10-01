@@ -1,6 +1,6 @@
 // Общее состояние приложения: всё, что раньше было глобальными переменными app.js.
 // Читать и менять из любого модуля через объект app: app.user, app.game, app.placement …
-import { GAME_SETTING_DEFAULTS, TOURNAMENT_DEMO_STATES } from "./constants.js?v=124";
+import { GAME_SETTING_DEFAULTS, TOURNAMENT_DEMO_STATES } from "./constants.js?v=125";
 
 export const app = {
   supabase: null,

@@ -1,11 +1,11 @@
 // Рейтинг игроков и публичный профиль.
-import { app } from "./state.js?v=124";
-import { configured } from "./constants.js?v=124";
-import { $, formatAdminDate, msg } from "./helpers.js?v=124";
-import { humanError } from "./errors.js?v=124";
-import { openAuth } from "./auth.js?v=124";
-import { openCompletedMatch } from "./lobby.js?v=124";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=124";
+import { app } from "./state.js?v=125";
+import { configured } from "./constants.js?v=125";
+import { $, formatAdminDate, msg } from "./helpers.js?v=125";
+import { humanError } from "./errors.js?v=125";
+import { openAuth } from "./auth.js?v=125";
+import { openCompletedMatch } from "./lobby.js?v=125";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=125";
 
 export async function loadRating(){
   if(!configured)return;
@@ -29,6 +29,7 @@ export async function openPlayerProfile(playerId){
   const generation=++app.playerProfileGeneration;
   const dialog=$("playerProfileDialog");
   dialog.classList.toggle("is-own-profile",playerId===app.user?.id);
+  $("avatarEditBtn").classList.toggle("hidden",playerId!==app.user?.id||app.profile?.account_type!=="registered");
   $("publicProfileName").textContent="загружаем профиль…";
   renderFruitkogAvatar($("publicProfileAvatar"),playerId,"🍏");
   $("publicProfileVerified").classList.add("hidden");

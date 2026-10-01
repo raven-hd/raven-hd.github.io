@@ -1,7 +1,7 @@
 // Картинки профиля используются только во «Фруктовом бое».
-import { app } from "./state.js?v=124";
-import { $, msg } from "./helpers.js?v=124";
-import { humanError } from "./errors.js?v=124";
+import { app } from "./state.js?v=125";
+import { $, msg } from "./helpers.js?v=125";
+import { humanError } from "./errors.js?v=125";
 
 const vegetables = ["tomato", "celery", "mushroom", "eggplant", "garlic", "corn"];
 const expressions = ["happy", "grumpy", "cool", "surprised"];
@@ -90,10 +90,14 @@ export async function saveAvatarChoice() {
     app.fruitkogAvatarCache.set(userId,id);
     app.fruitkogAvatarLoaded.add(userId);
     renderFruitkogAvatar($("profileAvatar"),userId,app.profile?.avatar_emoji||"🍏");
+    renderFruitkogAvatar($("publicProfileAvatar"),userId,app.profile?.avatar_emoji||"🍏");
     renderFruitkogAvatar($("accountAvatar"),userId,app.profile?.avatar_emoji||"");
     $("avatarPickerDialog").close();
   } catch(e) {
-    msg($("avatarPickerMessage"),humanError(e),"error");
+    console.error("не удалось сохранить аватар",e);
+    msg($("avatarPickerMessage"),e.code==="PGRST205"
+      ? "выбор аватара пока недоступен: таблица аватаров не найдена. сообщите администратору."
+      : humanError(e),"error");
     $("saveAvatarBtn").disabled = false;
   }
 }
