@@ -1,9 +1,9 @@
 // Бой: выстрелы, история ходов, экран зрителя.
 import { app } from "./state.js?v=127";
 import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=127";
-import { $, msg } from "./helpers.js?v=127";
+import { $, fitSingleLineText, msg } from "./helpers.js?v=128";
 import { humanError } from "./errors.js?v=127";
-import { refreshGame } from "./room.js?v=127";
+import { refreshGame } from "./room.js?v=128";
 import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=127";
 
 // true — данные обновлены. false — не получилось (нет сети, таймаут) или игрок уже ушел из матча:
@@ -171,6 +171,8 @@ export function renderSpectatorBattle(){
   $("enemyBoard").classList.remove("turn-glow");
   $("ownBoardTitle").textContent=`грядка: ${app.game.player1_name}`;
   $("enemyBoardTitle").textContent=`грядка: ${app.game.player2_name}`;
+  fitSingleLineText($("ownBoardTitle"),{max:23,min:13});
+  fitSingleLineText($("enemyBoardTitle"),{max:23,min:13});
   buildBoard($("ownBoard"),null);
   buildBoard($("enemyBoard"),null);
   resetBoard($("ownBoard"));
