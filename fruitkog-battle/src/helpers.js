@@ -87,3 +87,20 @@ export function formatAdminDate(value){
     day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"
   }).format(new Date(value));
 }
+
+
+/* Keeps a heading on one line by shrinking only as much as needed. */
+export function fitSingleLineText(element,{max=32,min=14}={}) {
+  if (!element) return;
+  const fit=()=>{
+    element.style.fontSize=`${max}px`;
+    let size=max;
+    while (size>min && element.scrollWidth>element.clientWidth+1) {
+      size-=1;
+      element.style.fontSize=`${size}px`;
+    }
+  };
+  fit();
+  requestAnimationFrame(fit);
+  if (document.fonts?.ready) document.fonts.ready.then(fit).catch(()=>{});
+}
