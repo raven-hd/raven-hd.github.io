@@ -7337,3 +7337,107 @@ body[data-view="tournament"] .page-shell{
   object-fit:contain;
   border-radius:inherit;
 }
+
+
+/* update 116: avatar picker sizing and single-line game headings. */
+#avatarPickerDialog.avatar-picker-dialog{
+  width:min(650px,calc(100% - 24px));
+  max-height:calc(100vh - 24px);
+  overflow:hidden;
+}
+#avatarPickerDialog .dialog-pane{
+  max-height:calc(100vh - 70px);
+  overflow-y:auto;
+}
+#avatarPickerGrid.avatar-picker-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin:16px 0 18px;
+}
+#avatarPickerGrid .avatar-choice{
+  display:grid;
+  place-items:center;
+  width:100%;
+  min-width:0;
+  min-height:0;
+  aspect-ratio:1;
+  padding:8px;
+  border:1px solid rgba(168,97,45,.28);
+  border-radius:16px;
+  background:rgba(255,248,233,.72);
+  box-shadow:none;
+  overflow:hidden;
+}
+#avatarPickerGrid .avatar-choice:hover{
+  border-color:rgba(168,97,45,.62);
+  background:#fff8e9;
+  transform:none;
+}
+#avatarPickerGrid .avatar-choice[aria-pressed="true"]{
+  border-color:#A8612D;
+  box-shadow:inset 0 0 0 2px rgba(168,97,45,.20);
+}
+#avatarPickerGrid .avatar-choice img{
+  display:block;
+  width:100%;
+  height:100%;
+  max-width:108px;
+  max-height:108px;
+  object-fit:contain;
+}
+#playerProfileDialog .avatar-edit-wrap{
+  position:relative;
+  width:max-content;
+}
+#playerProfileDialog .avatar-edit-btn{
+  position:absolute;
+  right:-7px;
+  bottom:-7px;
+  display:grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  min-width:30px;
+  min-height:30px;
+  padding:0;
+  border:1px solid rgba(168,97,45,.34);
+  border-radius:50%;
+  background:#fff2d6;
+  color:#29442b;
+  box-shadow:0 2px 7px rgba(72,55,30,.13);
+  font:700 15px/1 "Segoe UI",system-ui,sans-serif;
+}
+#playerProfileDialog .avatar-edit-btn:hover{
+  border-color:#A8612D;
+  background:#f8e5bf;
+  transform:none;
+}
+#gameView .player-identity{
+  min-width:0;
+}
+#gameView .game-player-name-only strong{
+  display:block;
+  width:100%;
+  min-width:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:clip;
+}
+#gameView .battle-layout>div>h3{
+  display:block;
+  width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:clip;
+}
+@media(max-width:560px){
+  #avatarPickerGrid.avatar-picker-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px;
+  }
+  #avatarPickerGrid .avatar-choice{
+    padding:6px;
+    border-radius:14px;
+  }
+}
