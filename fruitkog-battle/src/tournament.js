@@ -1,14 +1,13 @@
 // Публичная страница турнира: список, участники, заявки, результаты.
-import { app } from "./state.js?v=126";
-import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=126";
-import { $, $$, formatAdminDate, msg } from "./helpers.js?v=126";
-import { humanError } from "./errors.js?v=126";
-import { openAuth } from "./auth.js?v=126";
-import { observeGame, openGame } from "./room.js?v=126";
-import { renderTournamentBracket, renderTournamentMatches, renderTournamentQualifyingBracket } from "./tournament-bracket.js?v=126";
-import { buildTournamentDemoBoard, renderTournamentDemoState, tournamentDemoSummary } from "./tournament-demo.js?v=126";
-import { syncTournamentBoard } from "./admin.js?v=126";
-import { createFruitkogTableAvatar, loadFruitkogTableAvatars } from "./avatars.js?v=126";
+import { app } from "./state.js?v=127";
+import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=127";
+import { $, $$, formatAdminDate, msg } from "./helpers.js?v=127";
+import { humanError } from "./errors.js?v=127";
+import { openAuth } from "./auth.js?v=127";
+import { observeGame, openGame } from "./room.js?v=127";
+import { renderTournamentBracket, renderTournamentMatches, renderTournamentQualifyingBracket } from "./tournament-bracket.js?v=127";
+import { buildTournamentDemoBoard, renderTournamentDemoState, tournamentDemoSummary } from "./tournament-demo.js?v=127";
+import { syncTournamentBoard } from "./admin.js?v=127";
 
 export function tournamentStatusLabel(status){
   return ({
@@ -209,17 +208,6 @@ function renderTournamentParticipants(tournament,players,matches){
   tiebreak.textContent="";
   empty.classList.toggle("hidden",activePlayers.length>0);
   const hasStarted=tournament.status==="active"||tournament.status==="finished"||settledMatches.length>0;
-  const playerName=player=>{
-    const cell=document.createElement("strong");
-    cell.className="ranking-player-name";
-    const label=document.createElement("span");
-    label.textContent=player.display_name;
-    cell.append(createFruitkogTableAvatar(player.user_id,player.avatar_emoji||""),label);
-    return cell;
-  };
-  const loadTableAvatars=()=>{
-    void loadFruitkogTableAvatars(activePlayers.map(player=>player.user_id),wrap);
-  };
   $("tournamentParticipantsEyebrow").textContent=!hasStarted
     ? "предварительный"
     : tournament.status==="finished"
@@ -275,7 +263,7 @@ function renderTournamentParticipants(tournament,players,matches){
     rows.forEach((row,index)=>{
       const line=appendRow("qualifier-standing-row",[
         row.position,
-        playerName(row),
+        `${row.avatar_emoji?`${row.avatar_emoji} `:""}${row.display_name}`,
         row.games,
         row.wins,
         row.losses,
@@ -295,7 +283,6 @@ function renderTournamentParticipants(tournament,players,matches){
       tiebreak.textContent="на границе выхода в плей-офф осталось полное равенство. этим игрокам нужен дополнительный матч.";
       tiebreak.classList.remove("hidden");
     }
-    loadTableAvatars();
     return;
   }
 
@@ -329,7 +316,7 @@ function renderTournamentParticipants(tournament,players,matches){
       : "ожидает матча";
     const line=appendRow("tournament-result-row",[
       index+1,
-      playerName(row),
+      `${row.avatar_emoji?`${row.avatar_emoji} `:""}${row.display_name}`,
       row.games,
       row.wins,
       row.losses,
@@ -337,7 +324,6 @@ function renderTournamentParticipants(tournament,players,matches){
     ]);
     if(status==="победитель")line.classList.add("winner");
   });
-  loadTableAvatars();
 }
 
 export function activateTournamentSection(targetId){

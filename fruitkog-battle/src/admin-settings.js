@@ -1,9 +1,9 @@
 // Админ-панель: настройки баланса (K-фактор, турнирные очки, лимит пары).
-import { app } from "./state.js?v=126";
-import { configured } from "./constants.js?v=126";
-import { $, formatAdminDate, msg } from "./helpers.js?v=126";
-import { humanError } from "./errors.js?v=126";
-import { loadPublicGameSettings } from "./settings.js?v=126";
+import { app } from "./state.js?v=127";
+import { configured } from "./constants.js?v=127";
+import { $, formatAdminDate, msg } from "./helpers.js?v=127";
+import { humanError } from "./errors.js?v=127";
+import { loadPublicGameSettings } from "./settings.js?v=127";
 
 export async function loadAdminGameSettings() {
   if (!app.profile?.is_admin || !configured) return;

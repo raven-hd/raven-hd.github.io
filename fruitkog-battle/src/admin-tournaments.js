@@ -1,12 +1,12 @@
 // Админ-панель: создание и проведение турниров.
-import { app } from "./state.js?v=126";
-import { $, $$, cleanText, formatAdminDate, msg, newRequestId, safeStorage } from "./helpers.js?v=126";
-import { humanError } from "./errors.js?v=126";
-import { loadLobby } from "./lobby.js?v=126";
-import { calculateQualifierStandings, dateTimeLocalValue, isTournamentRegistrationOpen, loadTournaments, qualifierSummary, registrationDeadlineLabel, renderTournamentBoard, resetTournamentDeadlineInput, tournamentFormatLabel, tournamentMatchNote, tournamentRoundLabel, tournamentStatusLabel } from "./tournament.js?v=126";
-import { loadAdminNotifications } from "./admin-notifications.js?v=126";
-import { renderAdminTournaments, syncTournamentBoard } from "./admin.js?v=126";
-import { ruPlural } from "./settings.js?v=126";
+import { app } from "./state.js?v=127";
+import { $, $$, cleanText, formatAdminDate, msg, newRequestId, safeStorage } from "./helpers.js?v=127";
+import { humanError } from "./errors.js?v=127";
+import { loadLobby } from "./lobby.js?v=127";
+import { calculateQualifierStandings, dateTimeLocalValue, isTournamentRegistrationOpen, loadTournaments, qualifierSummary, registrationDeadlineLabel, renderTournamentBoard, resetTournamentDeadlineInput, tournamentFormatLabel, tournamentMatchNote, tournamentRoundLabel, tournamentStatusLabel } from "./tournament.js?v=127";
+import { loadAdminNotifications } from "./admin-notifications.js?v=127";
+import { renderAdminTournaments, syncTournamentBoard } from "./admin.js?v=127";
+import { ruPlural } from "./settings.js?v=127";
 
 export async function createAdminTournament(){
   if(app.adminTournamentBusy)return;

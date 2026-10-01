@@ -1,7 +1,7 @@
 // Картинки профиля используются только во «Фруктовом бое».
-import { app } from "./state.js?v=126";
-import { $, msg } from "./helpers.js?v=126";
-import { humanError } from "./errors.js?v=126";
+import { app } from "./state.js?v=127";
+import { $, msg } from "./helpers.js?v=127";
+import { humanError } from "./errors.js?v=127";
 
 const vegetables = ["tomato", "celery", "mushroom", "eggplant", "garlic", "corn"];
 const expressions = ["happy", "grumpy", "cool", "surprised"];
@@ -28,22 +28,6 @@ export function renderFruitkogAvatar(element, userId, fallback="") {
     element.textContent = fallback;
   }
   element.classList.toggle("hidden", !id && !fallback);
-}
-
-export function createFruitkogTableAvatar(userId,fallback="") {
-  const avatar=document.createElement("span");
-  avatar.className="ranking-avatar";
-  avatar.dataset.avatarUserId=userId;
-  avatar.dataset.avatarFallback=fallback;
-  renderFruitkogAvatar(avatar,userId,fallback);
-  return avatar;
-}
-
-export async function loadFruitkogTableAvatars(ids,container) {
-  await loadFruitkogAvatars(ids);
-  container.querySelectorAll(".ranking-avatar").forEach(avatar=>{
-    renderFruitkogAvatar(avatar,avatar.dataset.avatarUserId,avatar.dataset.avatarFallback||"");
-  });
 }
 
 export async function loadFruitkogAvatars(ids,refresh=false) {
@@ -108,9 +92,6 @@ export async function saveAvatarChoice() {
     renderFruitkogAvatar($("profileAvatar"),userId,app.profile?.avatar_emoji||"🍏");
     renderFruitkogAvatar($("publicProfileAvatar"),userId,app.profile?.avatar_emoji||"🍏");
     renderFruitkogAvatar($("accountAvatar"),userId,app.profile?.avatar_emoji||"");
-    document.querySelectorAll(".ranking-avatar").forEach(avatar=>{
-      if(avatar.dataset.avatarUserId===userId)renderFruitkogAvatar(avatar,userId,avatar.dataset.avatarFallback||"");
-    });
     $("avatarPickerDialog").close();
   } catch(e) {
     console.error("не удалось сохранить аватар",e);
