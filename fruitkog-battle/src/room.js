@@ -1,12 +1,12 @@
 // Комната матча: открыть, наблюдать, выйти, сдаться, обновление состояния матча.
 import { app } from "./state.js?v=127";
-import { $, msg, safeStorage } from "./helpers.js?v=127";
+import { $, fitSingleLineText, msg, safeStorage } from "./helpers.js?v=128";
 import { humanError } from "./errors.js?v=127";
 import { switchView } from "./navigation.js?v=127";
 import { loadLobby } from "./lobby.js?v=127";
 import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=127";
-import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=127";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=127";
+import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=128";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=128";
 
 export async function openGame(row) {
   app.spectatorMode = false;
@@ -131,6 +131,8 @@ function renderRoom() {
   $("gameTypeBadge").textContent = app.game.game_type === "rated" ? "рейтинговая игра" : app.game.game_type === "tournament" ? "турнирный матч" : "без рейтинга";
   $("player1Name").textContent = app.game.player1_name || "—";
   $("player2Name").textContent = app.game.player2_name || "ожидаем игрока";
+  fitSingleLineText($("player1Name"),{max:32,min:17});
+  fitSingleLineText($("player2Name"),{max:32,min:17});
   const player1Profile = app.profilesCache.get(app.game.player1_id);
   const player2Profile = app.profilesCache.get(app.game.player2_id);
   renderFruitkogAvatar($("player1Avatar"),app.game.player1_id,player1Profile?.avatar_emoji||"");
