@@ -5419,9 +5419,9 @@ body{
 .player-avatar img{width:100%;height:100%}
 .ranking-player-name{display:inline-flex;align-items:center;gap:8px;min-width:0;text-align:left}
 .ranking-player-name>span:last-child{min-width:0;overflow-wrap:anywhere}
-.ranking-avatar{display:inline-grid;place-items:center;flex:0 0 26px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.38);font-size:18px;line-height:1}
-.ranking-avatar img{display:block;width:100%;height:100%;object-fit:contain}
-@media(max-width:760px){.ranking-avatar{flex-basis:22px;width:22px;height:22px}.ranking-player-name{gap:6px}}
+.ranking-avatar{display:inline-flex;align-items:center;justify-content:center;flex:0 0 26px;width:26px;min-width:26px;max-width:26px;height:26px;min-height:26px;max-height:26px;overflow:hidden;border-radius:50%;background:rgba(255,255,255,.38);font-size:18px;line-height:1}
+.ranking-avatar img{display:block;flex:none;width:26px;max-width:26px;height:26px;max-height:26px;object-fit:contain}
+@media(max-width:760px){.ranking-avatar{flex-basis:22px;width:22px;min-width:22px;max-width:22px;height:22px;min-height:22px;max-height:22px}.ranking-avatar img{width:22px;max-width:22px;height:22px;max-height:22px}.ranking-player-name{gap:6px}}
 .account-profile-copy{
   min-width:0;
 }
