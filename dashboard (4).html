@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления — Башня Когтеврана</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <style>
+
+        :root {
+            --gold:   #BA9868;
+            --gold2:  #EBCEA7;
+            --navy:   #15273F;
+            --navy2:  #23385A;
+            --navy3:  #1a2d4a;
+            --text:   #CCCCCC;
+            --text2:  #8fa8c0;
+            --border: #404A5B;
+            --outline:#2E3952;
+            --speed:  .2s;
+        }
+
+        @font-face {
+            font-family:'Romul';
+            src:url('https://drive.dhog.org/rave/fonts/Romul.woff2') format('woff2'),
+                url('https://drive.dhog.org/rave/fonts/Romul.woff') format('woff');
+            font-display:swap;
+        }
+        @font-face {
+            font-family:'SpecialElite';
+            src:url('https://raven-hd.github.io/feather/font/specialelite-cyrillic.ttf') format('truetype');
+        }
+
+        *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+        body {
+            font-family:"Open Sans","Segoe UI",Tahoma,sans-serif;
+            font-size:14px;
+            min-height:100vh;
+            color:var(--text);
+        }
+
+        .content {
+            min-height:300px;
+            padding:28px 38px 48px;
+            background:transparent;
+        }
+
+        .dashboard-note {
+            max-width:620px;
+            margin:0 auto 24px;
+            text-align:center;
+            font-family:'SpecialElite',serif;
+            color:var(--text2);
+            font-size:11px;
+            letter-spacing:.7px;
+            line-height:1.45;
+        }
+
+        .icons-grid {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(118px,1fr));
+            gap:30px 22px;
+            max-width:690px;
+            margin:0 auto;
+            padding:20px 0 30px;
+        }
+
+        .app-icon-item {
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            text-decoration:none;
+            cursor:pointer;
+            transition:transform var(--speed), opacity var(--speed);
+        }
+
+        .app-icon-item:hover { transform:translateY(-4px); }
+
+        .app-icon-box {
+            width:78px;
+            height:78px;
+            border:1px solid var(--outline);
+            border-radius:17px;
+            background:rgba(35,56,90,.72);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+            box-shadow:0 4px 13px rgba(0,0,0,.34);
+            transition:border-color var(--speed), background var(--speed), box-shadow var(--speed);
+        }
+
+        .app-icon-item:hover .app-icon-box {
+            border-color:var(--gold);
+            background:rgba(35,56,90,.96);
+            box-shadow:0 6px 18px rgba(186,152,104,.18);
+        }
+
+        .app-icon-box i {
+            color:var(--gold);
+            font-size:27px;
+        }
+
+        .app-icon-box img {
+            width:46px;
+            height:46px;
+            object-fit:contain;
+            filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));
+        }
+
+        .app-icon-label {
+            max-width:115px;
+            margin-top:9px;
+            color:var(--text);
+            text-align:center;
+            font-family:'SpecialElite',serif;
+            font-size:11px;
+            line-height:1.32;
+            letter-spacing:.4px;
+            transition:color var(--speed);
+        }
+
+        .app-icon-item:hover .app-icon-label { color:var(--gold2); }
+        .app-icon-label-wrap { white-space:normal; }
+
+        .app-icon-disabled {
+            cursor:default;
+            opacity:.48;
+        }
+        .app-icon-disabled:hover { transform:none; }
+        .app-icon-disabled:hover .app-icon-box {
+            border-color:var(--outline);
+            background:rgba(35,56,90,.72);
+            box-shadow:0 4px 13px rgba(0,0,0,.34);
+        }
+        .app-icon-disabled:hover .app-icon-label { color:var(--text); }
+
+        .scroll-btns {
+            position:fixed;
+            right:18px;
+            bottom:18px;
+            display:none;
+            flex-direction:column;
+            gap:5px;
+            z-index:400;
+        }
+        .scroll-btns.visible { display:flex; }
+
+        .scroll-btn {
+            width:34px;
+            height:34px;
+            border:0;
+            border-radius:50%;
+            background:#9a7e38;
+            color:#fff;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:11px;
+            box-shadow:0 2px 7px rgba(0,0,0,.34);
+            transition:background .2s,transform .15s;
+        }
+        .scroll-btn:hover { background:#BA9868; transform:scale(1.06); }
+
+        @media(max-width:700px) {
+            .content { padding:22px 22px 38px; }
+            .icons-grid {
+                grid-template-columns:repeat(3,minmax(90px,1fr));
+                gap:24px 14px;
+            }
+        }
+
+        @media(max-width:480px) {
+            .content { padding:18px 16px 34px; }
+            .icons-grid {
+                grid-template-columns:repeat(2,1fr);
+                gap:22px 14px;
+            }
+        }
+
+        /* ==========================================================
+           FORUM SHELL — reconstructed from the actual Ravenclaw CSS
+           ========================================================== */
+
+        :root {
+            --hd-wrap-max-width: 1080px;
+            --hd-header-height: 56px;
+            --hd-site-banner-height: min(33vw, 355px);
+            --rave-wrap-outline-border-width: clamp(15px, 4.2vw, 25px);
+            --rave-frame-border-width: clamp(22px, 4.2vw, 35px);
+            --hd-chunk-pd-x: var(--rave-wrap-outline-border-width);
+
+            --forum-body-bg: #172234;
+            --forum-wrap-bg: #15273f;
+            --forum-body-color: #cdc0ae;
+            --forum-border: #b18c5a;
+            --forum-emphasis: #8a6a3e;
+            --forum-link: #ba9868;
+            --forum-link-hover: #ebcea7;
+            --forum-tertiary: #203756;
+        }
+
+        /* the forum itself has no 20px body inset around #wrap */
+        body:not(.preview-mode) {
+            display: block;
+            padding: 0;
+            color: var(--forum-body-color);
+            background-color: var(--forum-body-bg);
+            background-image: url('https://rave.dhog.org/styles/dhog/theme/variants/1/images/bs_body_bg.jpg');
+            background-repeat: repeat;
+            background-position: top center;
+            background-attachment: fixed;
+        }
+
+        body:not(.preview-mode) .container {
+            width: min(100%, var(--hd-wrap-max-width));
+            max-width: var(--hd-wrap-max-width);
+            min-width: 320px;
+            margin: 18px auto;
+            box-shadow: none;
+        }
+
+        /*
+          Exact decorative #wrap construction from the supplied forum CSS.
+          Unlike the old archive border-image, these lines/corners are
+          backgrounds, so they do not consume 40px of usable width.
+        */
+        body:not(.preview-mode) .outer-border {
+            --big-bg-position: top;
+            --big-bg-size: 160%;
+            --sbg: url('https://drive.dhog.org/rave/images/rave-wrap-star.svg');
+            --so: 6px;
+            --ss: calc(var(--cg) / 1.8);
+
+            --bi: 5px;
+            --cg: 22px;
+            --bw: 1px;
+            --bc: #8A6A3E;
+
+            --bi2: 0px;
+            --cg2: 35px;
+            --bw2: .8px;
+            --bc2: #B67729;
+
+            border: 0;
+            padding:
+                calc(var(--cg) * 3.141592653589793 / 2)
+                calc(var(--bi) + var(--bw) * 3);
+            margin: 0;
+            box-shadow: none;
+
+            background-image:
+                var(--sbg), var(--sbg), var(--sbg), var(--sbg),
+
+                radial-gradient(circle at 0 0,
+                    transparent calc(var(--cg) - var(--bw)),
+                    var(--bc) calc(var(--cg) - var(--bw)) var(--cg),
+                    transparent var(--cg)),
+                radial-gradient(circle at 100% 0,
+                    transparent calc(var(--cg) - var(--bw)),
+                    var(--bc) calc(var(--cg) - var(--bw)) var(--cg),
+                    transparent var(--cg)),
+                radial-gradient(circle at 100% 100%,
+                    transparent calc(var(--cg) - var(--bw)),
+                    var(--bc) calc(var(--cg) - var(--bw)) var(--cg),
+                    transparent var(--cg)),
+                radial-gradient(circle at 0 100%,
+                    transparent calc(var(--cg) - var(--bw)),
+                    var(--bc) calc(var(--cg) - var(--bw)) var(--cg),
+                    transparent var(--cg)),
+
+                linear-gradient(var(--bc), var(--bc)),
+                linear-gradient(var(--bc), var(--bc)),
+                linear-gradient(var(--bc), var(--bc)),
+                linear-gradient(var(--bc), var(--bc)),
+
+                radial-gradient(circle at 0 0,
+                    transparent calc(var(--cg2) - var(--bw2)),
+                    var(--bc2) calc(var(--cg2) - var(--bw2)) var(--cg2),
+                    transparent var(--cg2)),
+                radial-gradient(circle at 100% 0,
+                    transparent calc(var(--cg2) - var(--bw2)),
+                    var(--bc2) calc(var(--cg2) - var(--bw2)) var(--cg2),
+                    transparent var(--cg2)),
+                radial-gradient(circle at 100% 100%,
+                    transparent calc(var(--cg2) - var(--bw2)),
+                    var(--bc2) calc(var(--cg2) - var(--bw2)) var(--cg2),
+                    transparent var(--cg2)),
+                radial-gradient(circle at 0 100%,
+                    transparent calc(var(--cg2) - var(--bw2)),
+                    var(--bc2) calc(var(--cg2) - var(--bw2)) var(--cg2),
+                    transparent var(--cg2)),
+
+                linear-gradient(var(--bc2), var(--bc2)),
+                linear-gradient(var(--bc2), var(--bc2)),
+                linear-gradient(var(--bc2), var(--bc2)),
+                linear-gradient(var(--bc2), var(--bc2)),
+
+                linear-gradient(var(--forum-wrap-bg), var(--forum-wrap-bg));
+
+            background-repeat:
+                no-repeat, no-repeat, no-repeat, no-repeat,
+                no-repeat, no-repeat, no-repeat, no-repeat,
+                no-repeat, no-repeat, no-repeat, no-repeat,
+                no-repeat, no-repeat, no-repeat, no-repeat,
+                no-repeat, no-repeat, no-repeat, no-repeat,
+                repeat;
+
+            background-position:
+                calc(var(--ss) / 2) calc(var(--ss) / 2),
+                calc(100% - var(--ss) / 2) calc(var(--ss) / 2),
+                calc(100% - var(--ss) / 2) calc(100% - var(--ss) / 2),
+                calc(var(--ss) / 2) calc(100% - var(--ss) / 2),
+
+                var(--bi) var(--bi),
+                calc(100% - var(--bi)) var(--bi),
+                calc(100% - var(--bi)) calc(100% - var(--bi)),
+                var(--bi) calc(100% - var(--bi)),
+
+                calc(var(--bi) + var(--cg)) var(--bi),
+                calc(100% - var(--bi)) calc(var(--bi) + var(--cg)),
+                calc(var(--bi) + var(--cg)) calc(100% - var(--bi)),
+                var(--bi) calc(var(--bi) + var(--cg)),
+
+                var(--bi2) var(--bi2),
+                calc(100% - var(--bi2)) var(--bi2),
+                calc(100% - var(--bi2)) calc(100% - var(--bi2)),
+                var(--bi2) calc(100% - var(--bi2)),
+
+                calc(var(--bi2) + var(--cg2)) var(--bi2),
+                calc(100% - var(--bi2)) calc(var(--bi2) + var(--cg2)),
+                calc(var(--bi2) + var(--cg2)) calc(100% - var(--bi2)),
+                var(--bi2) calc(var(--bi2) + var(--cg2)),
+
+                var(--big-bg-position);
+
+            background-size:
+                var(--ss) var(--ss),
+                var(--ss) var(--ss),
+                var(--ss) var(--ss),
+                var(--ss) var(--ss),
+
+                var(--cg) var(--cg),
+                var(--cg) var(--cg),
+                var(--cg) var(--cg),
+                var(--cg) var(--cg),
+
+                calc(100% - var(--bi) * 2 - var(--cg) * 2) var(--bw),
+                var(--bw) calc(100% - var(--bi) * 2 - var(--cg) * 2),
+                calc(100% - var(--bi) * 2 - var(--cg) * 2) var(--bw),
+                var(--bw) calc(100% - var(--bi) * 2 - var(--cg) * 2),
+
+                var(--cg2) var(--cg2),
+                var(--cg2) var(--cg2),
+                var(--cg2) var(--cg2),
+                var(--cg2) var(--cg2),
+
+                calc(100% - var(--bi2) * 2 - var(--cg2) * 2) var(--bw2),
+                var(--bw2) calc(100% - var(--bi2) * 2 - var(--cg2) * 2),
+                calc(100% - var(--bi2) * 2 - var(--cg2) * 2) var(--bw2),
+                var(--bw2) calc(100% - var(--bi2) * 2 - var(--cg2) * 2),
+
+                var(--big-bg-size);
+        }
+
+        /* ── forum header geometry ── */
+        .forum-header {
+            width: calc(100% - var(--hd-chunk-pd-x) * 2);
+            max-width: var(--hd-wrap-max-width);
+            height: var(--hd-header-height);
+            margin: 0 auto calc(var(--hd-header-height) * -1);
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            background: rgba(21,39,63,.72);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .forum-navbar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 10px;
+        }
+
+        .forum-logo {
+            width: 42px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 42px;
+        }
+
+        .forum-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .forum-nav-main {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            min-width: 0;
+        }
+
+        .forum-nav-link {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ebcea7;
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: 14px;
+            line-height: 1;
+            transition: color .16s;
+        }
+
+        .forum-nav-link:hover,
+        .forum-nav-link[aria-expanded="true"] { color: #ba9868; }
+
+        .forum-nav-link small {
+            font-size: 8px;
+            opacity: .8;
+            transition: transform .16s;
+        }
+
+        .forum-nav-link[aria-expanded="true"] small { transform: rotate(180deg); }
+
+        .forum-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            display: none;
+            z-index: 1050;
+            padding: 20px 28px 24px;
+            background: #15273f;
+            color: #cdc0ae;
+            border: 1px solid rgba(205,192,174,.34);
+            box-shadow: 0 5px 16px rgba(0,0,0,.18);
+        }
+
+        .forum-dropdown.open { display: block; }
+
+        .forum-dropdown-grid {
+            display: grid;
+            gap: 42px;
+        }
+
+        .forum-dropdown-grid-castle {
+            grid-template-columns: minmax(260px, 1fr) minmax(300px, 1fr);
+        }
+
+        .forum-dropdown-grid-tower {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .forum-menu-column h3 {
+            margin: 0 0 14px;
+            font-family: "Open Sans","Segoe UI",Tahoma,sans-serif;
+            font-size: 17px;
+            line-height: 1.2;
+            font-weight: 400;
+            color: #cdc0ae;
+        }
+
+        .forum-menu-column h3.forum-menu-subhead { margin-top: 26px; }
+
+        .forum-menu-column > a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 0 11px;
+            color: #ebcea7;
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 1.3;
+        }
+
+        .forum-menu-column > a:hover { color: #ba9868; }
+
+        .forum-menu-column > a i {
+            width: 18px;
+            flex: 0 0 18px;
+            text-align: center;
+        }
+
+        .forum-house-links,
+        .forum-place-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .forum-house-links a,
+        .forum-place-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .forum-house-links img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .forum-place-links img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            display: block;
+        }
+
+        @media (max-width: 760px) {
+            .forum-nav-main { gap: 12px; }
+            .forum-nav-link { font-size: 12px; gap: 5px; }
+            .forum-dropdown { padding: 18px 20px 22px; }
+            .forum-dropdown-grid-castle,
+            .forum-dropdown-grid-tower {
+                grid-template-columns: 1fr 1fr;
+                gap: 28px;
+            }
+            .forum-dropdown-grid-tower .forum-menu-column:last-child {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .forum-nav-link span,
+            .forum-nav-link small { display:none; }
+            .forum-navbar { gap: 12px; }
+            .forum-nav-main { gap: 18px; }
+            .forum-dropdown-grid-castle,
+            .forum-dropdown-grid-tower { grid-template-columns: 1fr; }
+            .forum-dropdown-grid-tower .forum-menu-column:last-child { grid-column: auto; }
+        }
+
+        /* ── real forum banner structure ── */
+        .site-header {
+            position: relative;
+            width: calc(100% - var(--hd-chunk-pd-x) * 2) !important;
+            margin: 0 auto 1.5rem;
+            background: var(--forum-wrap-bg);
+        }
+
+        .head-banner {
+            position: relative;
+            width: 100%;
+            height: var(--hd-site-banner-height);
+            background-image: url('https://raven-hd.github.io/tower/feather/hd_head_banner.png');
+            background-position: center center !important;
+            background-size: cover !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .head-banner::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            box-sizing: border-box;
+            border-image-outset: 0;
+            border-image-repeat: stretch stretch;
+            border-style: solid;
+            border-image-source: url('https://drive.dhog.org/rave/images/inner-border-latest.svg');
+            border-image-slice: 32;
+            border-width: var(--rave-frame-border-width);
+            border-image-width: var(--rave-frame-border-width);
+            opacity: 1;
+        }
+
+        .page-description {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 18px;
+            z-index: 3;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .page-description h1 {
+            margin: 0;
+            font-family: 'Romul', serif;
+            font-weight: normal;
+            font-size: clamp(.85rem, 2.2vw, 1.35rem);
+            line-height: 1.1;
+            letter-spacing: 1.6px;
+            color: var(--gold);
+            text-shadow: 0 0 clamp(5px, 1vw, 10px) #000;
+            -webkit-text-stroke: clamp(.4px, .08vw, .8px) #0f1011;
+            paint-order: stroke fill;
+        }
+
+        /* the archive content starts on the same inner rhythm */
+        body:not(.preview-mode) .breadcrumb,
+        body:not(.preview-mode) .content,
+        body:not(.preview-mode) .site-footer {
+            width: calc(100% - var(--hd-chunk-pd-x) * 2);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        body:not(.preview-mode) .breadcrumb,
+        body:not(.preview-mode) .content {
+            background: transparent;
+        }
+
+
+        /* ==========================================================
+           v5 — breadcrumbs / footer / compact page navigation
+           ========================================================== */
+
+        /* Хлебные крошки на форуме не имеют нашей старой верхней
+           внутренней подушки. Высоту задает отступ после баннера. */
+        body:not(.preview-mode) .breadcrumb {
+            width: calc(100% - var(--hd-chunk-pd-x) * 2);
+            min-height: 18px;
+            margin: 0 auto 16px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            line-height: 18px;
+            background: transparent;
+        }
+
+        body:not(.preview-mode) .breadcrumb a,
+        body:not(.preview-mode) .breadcrumb span {
+            line-height: 18px;
+        }
+
+        /* Нижнее меню повторяет структуру footer-nav настоящего форума:
+           две ссылки — герб — две ссылки. */
+        .page-footer {
+            width: calc(100% - var(--hd-chunk-pd-x) * 2);
+            margin: 38px auto 8px;
+            color: #cdc0ae;
+        }
+
+        /*
+          На самом форуме footer-nav — компактная группа по центру,
+          а не панель на всю ширину страницы.
+        */
+        .footer-nav {
+            width: fit-content;
+            max-width: 100%;
+            margin: 0 auto;
+            min-height: 0;
+            display: grid;
+            grid-template-columns: 72px 72px 156px 84px 72px;
+            align-items: center;
+            justify-content: center;
+            column-gap: 18px;
+            padding: 4px 0 8px;
+            border: 0;
+            background: transparent;
+        }
+
+        .footer-fun-icon {
+            width: 100%;
+            min-width: 0;
+            min-height: 58px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            color: #ebcea7;
+            text-decoration: none;
+            text-align: center;
+            font-size: 9px;
+            line-height: 1.18;
+            transition: color .16s, opacity .16s;
+        }
+
+        .footer-fun-icon i {
+            color: #ebcea7;
+            font-size: 13px;
+            line-height: 1;
+        }
+
+        .footer-fun-icon:hover,
+        .footer-fun-icon:hover i {
+            color: #ba9868;
+        }
+
+        /* Центральный знак заметно крупнее соседних пунктов. */
+        .footer-home-link {
+            width: 156px;
+            height: 156px;
+            margin: 0 auto;
+            display: block;
+            color: #ebcea7;
+            text-decoration: none;
+        }
+
+        .footer-home-link .hd-logo-svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            fill: currentColor;
+            color: #ebcea7;
+        }
+
+        /* Надпись по кругу в оригинальном знаке — отдельный SVG-текст.
+           Даем ему форумный Romul вместо браузерного шрифта по умолчанию. */
+        .footer-home-link .hd-logo-svg .textcircle {
+            font-family: 'Romul', serif;
+            font-size: 27px;
+            letter-spacing: 2.5px;
+            fill: currentColor;
+        }
+
+        .footer-home-link:hover {
+            color: #ba9868;
+        }
+
+        .footer-copyright {
+            padding: 10px 12px 4px;
+            color: #8fa0b4;
+            font-size: 8px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .footer-copyright p {
+            margin: 2px 0 0;
+        }
+
+        /* более компактные кнопки навигации */
+        .scroll-btns {
+            right: 18px;
+            bottom: 18px;
+            gap: 5px;
+        }
+
+        .scroll-btn {
+            width: 34px;
+            height: 34px;
+            font-size: 11px;
+            box-shadow: 0 2px 7px rgba(0,0,0,.34);
+        }
+
+        @media (max-width: 700px) {
+            .footer-nav {
+                grid-template-columns: 60px 60px 126px 72px 60px;
+                column-gap: 10px;
+            }
+            .footer-home-link {
+                width: 126px;
+                height: 126px;
+            }
+            .footer-fun-icon {
+                font-size: 8px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .footer-nav {
+                width: 100%;
+                grid-template-columns: 1fr 1fr;
+                row-gap: 10px;
+            }
+            .footer-home-link {
+                grid-column: 1 / -1;
+                grid-row: 1;
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+
+        /* Верхнее меню: прозрачно поверх баннера, непрозрачно при прокрутке. */
+        .forum-header {
+            transition: background-color .18s ease;
+        }
+        .forum-header.is-scrolled {
+            background: #15273f;
+        }
+
+
+
+        /* базовый стиль хлебных крошек — как на Перышке */
+        .breadcrumb {
+            font-size:12px;
+            color:var(--text);
+        }
+
+        .breadcrumb a {
+            color:inherit;
+            text-decoration:none;
+            transition:opacity var(--speed);
+        }
+
+        .breadcrumb a:hover { opacity:.8; }
+
+        .breadcrumb-sep {
+            color:var(--text);
+        }
+
+        .breadcrumb-cur {
+            color:var(--gold);
+        }
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+</head>
+<body>
+<div class="container">
+  <div class="outer-border">
+
+    <!-- FORUM HEADER -->
+    <header class="forum-header" id="forumHeader">
+      <nav class="forum-navbar">
+        <a class="forum-logo" href="https://rave.dhog.org/index.php" title="Главная страница" aria-label="Главная страница">
+          <img src="https://rave.dhog.org/styles/dhog/theme/images/websitelogo.png?assets_version=264" alt="">
+        </a>
+
+        <div class="forum-nav-main">
+          <button class="forum-nav-link forum-nav-toggle" type="button"
+                  data-menu="castle" aria-expanded="false" aria-controls="menuCastle">
+            <i class="fab fa-fort-awesome"></i><span>Замок</span><small>▼</small>
+          </button>
+
+          <button class="forum-nav-link forum-nav-toggle" type="button"
+                  data-menu="tower" aria-expanded="false" aria-controls="menuTower">
+            <i class="fas fa-chess-rook"></i><span>Башня</span><small>▼</small>
+          </button>
+
+          <a class="forum-nav-link" href="https://legacy.dhog.org/og/">
+            <i class="fas fa-couch"></i><span>Гостиная</span>
+          </a>
+
+          <a class="forum-nav-link" href="https://rave.dhog.org/memberlist.php?sk=l&sd=d">
+            <i class="fas fa-hat-wizard"></i><span>Обитатели</span>
+          </a>
+        </div>
+      </nav>
+
+      <div class="forum-dropdown" id="menuCastle" data-dropdown="castle">
+        <div class="forum-dropdown-grid forum-dropdown-grid-castle">
+          <section class="forum-menu-column">
+            <h3>Основные помещения</h3>
+            <a href="https://dhog.org/"><i class="fa-brands fa-fort-awesome"></i> Хогвартс</a>
+            <a href="https://dhog.org/ucp.php"><i class="fa-solid fa-key"></i> Личная комната</a>
+            <a href="https://dhog.org/subjects"><i class="fa-solid fa-wand-magic-sparkles"></i> Кабинеты</a>
+            <a href="https://dhog.org/journal"><i class="fa-solid fa-book-open"></i> Журнал</a>
+            <a href="https://dhog.org/competition"><i class="fa-solid fa-trophy"></i> Соревнования факультетов</a>
+            <a href="https://oraclehd.wordpress.com/"><i class="fa-regular fa-newspaper"></i> Газета «Оракул»</a>
+          </section>
+
+          <section class="forum-menu-column">
+            <h3>Жилые этажи</h3>
+            <div class="forum-house-links">
+              <a href="https://huffhd.mybb.ru/" title="Пуффендуй"><img src="https://rave.dhog.org/images/smilies/3.svg" alt="Пуффендуй"></a>
+              <a href="https://slytherin.dhog.org/" title="Слизерин"><img src="https://rave.dhog.org/images/smilies/4.svg" alt="Слизерин"></a>
+              <a href="https://rave.dhog.org/" title="Когтевран"><img src="https://rave.dhog.org/images/smilies/5.svg" alt="Когтевран"></a>
+              <a href="https://gryff.dhog.org/" title="Гриффиндор"><img src="https://rave.dhog.org/images/smilies/6.svg" alt="Гриффиндор"></a>
+            </div>
+
+            <h3 class="forum-menu-subhead">Окрестности замка</h3>
+            <div class="forum-place-links">
+              <a href="https://quidd.dhog.org/" title="Квиддич"><img src="https://dhog.org/images/icons/places/quidd.svg" alt="Квиддич"></a>
+              <a href="https://hogsmeade.dhog.org/" title="Хогсмид"><img src="https://dhog.org/images/icons/places/hogsmeade.svg" alt="Хогсмид"></a>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="forum-dropdown" id="menuTower" data-dropdown="tower">
+        <div class="forum-dropdown-grid forum-dropdown-grid-tower">
+          <section class="forum-menu-column">
+            <h3>Южное крыло</h3>
+            <a href="https://rave.dhog.org/viewforum.php?f=17"><i class="fa-solid fa-palette"></i> Волшебная арт-студия</a>
+            <a href="https://dhogsheliamcbride.wixsite.com/rovenatheatre"><i class="fa-solid fa-masks-theater"></i> Театр Ровены</a>
+            <a href="https://rave.dhog.org/viewforum.php?f=15"><i class="fa-solid fa-book-open"></i> Литературный клуб</a>
+            <a href="https://rave.dhog.org/viewforum.php?f=16"><i class="fa-solid fa-film"></i> Raven Cinema</a>
+            <a href="https://rave.dhog.org/viewforum.php?f=12"><i class="fa-solid fa-broom-ball"></i> Квиддичная команда LaFayette</a>
+          </section>
+
+          <section class="forum-menu-column">
+            <h3>Северное крыло</h3>
+            <a href="https://rave.dhog.org/viewforum.php?f=109"><i class="fa-solid fa-seedling"></i> Фруктовый и цветочный сад</a>
+            <a href="https://rave.dhog.org/viewforum.php?f=33"><i class="fa-solid fa-crow"></i> Орлятня</a>
+            <a href="https://rave.dhog.org/viewforum.php?f=108"><i class="fa-solid fa-tree"></i> Роща лукотрусов</a>
+          </section>
+
+          <section class="forum-menu-column">
+            <h3>Медиа и СМИ</h3>
+            <a href="https://peroraven.wordpress.com/"><i class="fa-regular fa-newspaper"></i> Газета «Перо Ровены»</a>
+            <a href="https://ravenfm.myrh.ru/"><i class="fa-solid fa-bullhorn"></i> Радио RavenFM</a>
+            <a href="https://dhogbase.fandom.com/ru/wiki/Когтевран"><i class="fa-brands fa-wikipedia-w"></i> Когтевран в Базе знаний ХД</a>
+          </section>
+        </div>
+      </div>
+    </header>
+
+    <!-- BANNER — same structure as the forum -->
+    <div class="site-header">
+      <div class="head-banner" role="img" aria-label="Башня Когтевран"></div>
+      <div class="page-description">
+        <h1>Панель управления</h1>
+      </div>
+    </div>
+
+
+    <!-- BREADCRUMBS -->
+    <nav class="breadcrumb">
+      <a href="https://rave.dhog.org/index.php">
+        <i class="fab fa-fort-awesome" style="color:var(--gold);font-size:11px"></i>
+      </a>
+      <span class="breadcrumb-sep">&gt;</span>
+      <a href="https://rave.dhog.org/viewforum.php?f=20">
+        <span class="breadcrumb-cur">Башня Когтевран</span>
+      </a>
+      <span class="breadcrumb-sep">&gt;</span>
+      <span class="breadcrumb-cur">Панель управления</span>
+    </nav>
+
+    <main class="content">
+      <div class="dashboard-note">Выберите нужный раздел</div>
+
+      <div class="icons-grid">
+        <a href="https://raven-hd.github.io/tower/feather/" class="app-icon-item">
+          <div class="app-icon-box">
+            <i class="fas fa-book-open" aria-hidden="true"></i>
+          </div>
+          <span class="app-icon-label">Архив</span>
+        </a>
+
+        <a href="https://raven-hd.github.io/tower/feather/editor.html" class="app-icon-item">
+          <div class="app-icon-box">
+            <i class="fas fa-feather-alt" aria-hidden="true"></i>
+          </div>
+          <span class="app-icon-label">Редактор</span>
+        </a>
+
+        <a href="https://raven-hd.github.io/richpeach/lp_decoder.html" class="app-icon-item">
+          <div class="app-icon-box">
+            <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/richpeach/img/goldenpeach.png"
+                 alt="Lucky Peach">
+          </div>
+          <span class="app-icon-label">Lucky Peach</span>
+        </a>
+
+        <a href="https://raven-hd.github.io/tower/questionnaire/editor/editor.html"
+           class="app-icon-item" aria-label="редактор анкет">
+          <div class="app-icon-box">
+            <i class="fas fa-id-card" aria-hidden="true"></i>
+          </div>
+          <span class="app-icon-label app-icon-label-wrap">редактор анкет</span>
+        </a>
+
+        <span id="gifts-shortcut" class="app-icon-item app-icon-disabled"
+              role="link" aria-disabled="true" title="ссылка на подарки пока не добавлена">
+          <div class="app-icon-box">
+            <i class="fas fa-gift" aria-hidden="true"></i>
+          </div>
+          <span class="app-icon-label">подарки</span>
+        </span>
+      </div>
+
+    </main>
+
+    <!-- FORUM FOOTER -->
+    <div id="page-footer" class="page-footer" role="contentinfo">
+      <nav class="footer-nav" role="navigation">
+        <a href="https://rave.dhog.org/memberlist.php?mode=team" class="footer-fun-icon team-link">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>Администрация</span>
+        </a>
+
+        <a href="https://rave.dhog.org/help/faq" rel="help" title="Вопросы и ответы" class="footer-fun-icon faq-link">
+          <i class="far fa-question-circle"></i>
+          <span>Вопросы и ответы</span>
+        </a>
+
+        <a href="https://dhog.org/" title="В Хогвартс Дамблдора" class="footer-home-link">
+          <svg class="hd-logo-svg" xmlns="http://www.w3.org/2000/svg" xml:lang="en" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 500">
+			<defs>
+				<path id="textcircle" d="M250,415 a165,165 0 0,1 0,-330a165,165 0 0,1 0,330Z" transform="rotate(12,250,250)" />
+			</defs>
+			<g x="100" y="100">
+				<path
+					d="M225.622 315.689L224.53 318.611C224.236 319.39 223.526 319.937 222.695 320.026C220.016 320.303 217.703 320.089 216.618 322.694C216.438 323.128 216.644 323.625 217.08 323.804C217.112 323.818 217.143 323.829 217.176 323.838L219.593 324.513C220.058 324.645 220.555 324.462 220.821 324.06C221.77 322.638 223.732 322.503 225.622 322.218C226.508 322.077 227.17 321.335 227.202 320.447C227.26 318.641 227.023 317.055 226.492 315.689C226.394 315.449 226.121 315.331 225.883 315.425C225.762 315.472 225.668 315.568 225.622 315.689ZM206.769 317.253C207.717 316.388 208.571 315.8 209.982 315.593C211.923 315.307 214.063 314.762 216.402 313.957C216.779 313.826 217.04 313.482 217.064 313.083C217.296 309.803 217.248 308.167 214.536 305.895C213.021 304.624 207.712 299.893 198.609 291.701C198.061 291.21 197.294 291.049 196.599 291.28C193.768 292.225 190.394 293.854 187.124 294.33C183.504 294.854 178.894 295.029 176.11 297.952C175.812 298.263 175.769 298.737 176.006 299.096L181.087 306.673C181.309 307.005 181.76 307.095 182.093 306.874C182.109 306.863 182.125 306.852 182.139 306.84C184.128 305.257 185.806 303.949 187.172 302.916C189.203 301.381 191.091 301.532 192.835 303.37C195.621 306.308 199.705 310.904 205.085 317.158C205.508 317.646 206.249 317.7 206.739 317.279C206.749 317.27 206.758 317.262 206.769 317.253ZM172.322 268.929C172.267 268.8 172.114 268.742 171.981 268.8C171.944 268.816 171.91 268.841 171.883 268.874L160.877 282.265C160.489 282.739 160.523 283.431 160.957 283.87L165.91 288.794C166.438 289.321 167.181 289.578 167.927 289.493L169.507 289.31C169.84 289.269 170.177 289.324 170.479 289.469C172.792 290.573 174.156 291.51 176.23 291.638C178.697 291.791 181.031 290.894 183.232 288.945C186.954 285.646 188.416 281.587 187.619 276.769C187.565 276.444 187.26 276.223 186.938 276.275C186.878 276.285 186.819 276.305 186.765 276.332C185.846 276.798 184.811 277.354 183.663 278C181.159 279.421 177.147 275.951 175.209 274.259C173.622 272.877 173.159 270.812 172.322 268.929ZM211.928 260.74C211.598 260.518 211.232 260.417 210.828 260.438C208.414 260.565 206.718 260.605 205.74 260.557C204.711 260.508 203.786 259.922 203.307 259.016L202.142 256.817C201.909 256.373 202.077 255.827 202.518 255.596C202.617 255.543 202.725 255.51 202.837 255.498L206.442 255.077C206.756 255.041 207.04 255.267 207.076 255.581C207.079 255.609 207.08 255.637 207.079 255.664C207.069 255.961 206.928 256.337 206.657 256.793C206.444 257.131 206.547 257.576 206.887 257.789C207.11 257.927 207.391 257.936 207.621 257.809L209.113 257.023C209.278 256.933 209.478 256.93 209.648 257.015L212.71 258.564C212.916 258.673 213.172 258.594 213.281 258.389C213.346 258.267 213.347 258.122 213.284 257.999C211.418 254.336 208.438 252.307 204.344 251.915C204.024 251.884 203.607 251.977 203.091 252.194C199.375 253.767 201.672 259.461 203.506 261.59C205.077 263.409 210.054 261.876 211.888 261.161C212.011 261.112 212.07 260.973 212.021 260.85C212.001 260.805 211.97 260.766 211.928 260.74ZM248.584 340.669C248.733 340.351 248.805 340.018 248.799 339.668C248.714 329.729 248.475 306.512 248.082 270.018C248.078 269.732 247.843 269.504 247.557 269.507C247.546 269.507 247.534 269.508 247.523 269.509C240.225 269.97 234.076 272.527 227.345 275.243C224.905 276.229 221.993 272.893 220.454 271.082C219.242 269.657 218.811 267.809 219.162 265.538C219.295 264.674 220.22 260.026 221.938 251.59C222.209 250.239 222.161 249.033 221.794 247.968C221.554 247.272 220.914 246.79 220.175 246.753L189.094 245.101C188.301 245.057 187.549 245.462 187.148 246.149L176.788 264.029C176.643 264.282 176.708 264.601 176.939 264.767C178.848 266.149 180.566 267.238 182.092 268.032C184.987 269.533 186.415 268.317 188.009 265.672C188.286 265.217 189.985 262.342 193.106 257.047C195.201 253.494 198.447 250.83 202.844 249.056C205.471 247.997 207.667 248.159 209.432 249.541C211.649 251.278 214.201 253.996 217.088 257.698C219.529 260.819 216.929 263.091 214.066 263.838C209.961 264.923 207.542 265.58 206.808 265.807C206.501 265.902 206.329 266.227 206.424 266.533C206.473 266.69 206.587 266.819 206.736 266.888L214.441 270.359C214.673 270.459 214.888 270.593 215.079 270.756C217.001 272.345 218.046 274.529 220.223 275.593C226.388 278.595 232.211 282.527 236.238 287.738C239.922 292.504 239.723 297.976 239.787 304.1C239.792 304.858 240.01 305.603 240.417 306.252C242.921 310.256 246.75 315.855 243.727 320.216C243.366 320.746 242.667 320.931 242.084 320.652C239.809 319.551 237.283 315.987 234.507 309.961C234.345 309.606 233.925 309.448 233.568 309.61C233.405 309.683 233.277 309.814 233.207 309.978L232.808 310.883C232.565 311.429 232.565 312.055 232.808 312.607L236.222 320.248C236.594 321.079 236.366 322.056 235.663 322.638L230.447 326.967C230.174 327.196 230.136 327.6 230.361 327.87C230.417 327.937 230.488 327.993 230.567 328.031C237.163 331.264 243.687 334.592 247.898 340.724C248.024 340.904 248.273 340.948 248.454 340.822C248.509 340.782 248.554 340.73 248.584 340.669ZM282.879 266.522C283.235 266.448 283.838 266.024 284.69 265.251C284.834 265.111 285.066 265.113 285.208 265.258C285.318 265.371 285.344 265.541 285.271 265.68C283.57 269.239 280.853 271.738 277.12 273.178C275.164 273.93 273.691 274.121 272.702 273.75C270.448 272.903 268.533 272.207 266.959 271.661C266.127 271.373 265.217 271.8 264.91 272.623C262.509 278.977 263.187 287.095 264.686 294.179C266.388 302.249 267.959 309.832 269.4 316.927C269.443 317.14 269.469 317.248 269.48 317.253C269.677 317.385 269.945 317.332 270.077 317.136C270.122 317.069 270.147 316.992 270.15 316.912L270.421 308.921C270.43 308.717 270.567 308.542 270.764 308.484L270.78 308.476C271.019 308.456 271.235 308.618 271.274 308.849L272.048 313.353C272.083 313.562 272.279 313.702 272.488 313.668C272.532 313.661 272.575 313.645 272.614 313.624C273.018 313.385 273.244 313.072 273.292 312.687C273.521 310.854 273.542 307.778 273.356 303.457C273.351 303.189 273.565 302.968 273.834 302.963C273.996 302.961 274.148 303.039 274.241 303.171L275.167 304.561C275.294 304.75 275.552 304.8 275.742 304.673C275.848 304.603 275.914 304.488 275.924 304.362L276.331 299.263C276.354 298.833 276.722 298.504 277.153 298.527C277.485 298.545 277.77 298.77 277.862 299.088L278.07 299.739C278.169 300.044 278.498 300.211 278.803 300.112C278.937 300.068 279.051 299.978 279.122 299.859C280 298.381 280.23 296.149 279.968 294.306C279.457 290.753 279.228 288.257 279.282 286.816C279.291 286.562 279.506 286.364 279.762 286.374C279.837 286.376 279.911 286.397 279.975 286.435C280.156 286.536 280.284 286.692 280.359 286.903C282.102 291.86 284.101 297.187 286.356 302.885C286.938 304.354 287.042 305.387 286.508 306.777C285.434 309.567 283.937 312.639 282.018 315.99C279.505 320.374 276.85 322.178 272.28 325.545C271.45 326.154 270.745 327.184 270.166 328.635C270.073 328.865 270.182 329.128 270.413 329.231L270.437 329.239C270.645 329.328 270.887 329.246 270.995 329.048C272.471 326.277 275.11 325.1 278.078 323.473C278.301 323.348 278.583 323.43 278.709 323.657C278.73 323.694 278.746 323.733 278.755 323.774C278.846 324.166 279.008 324.425 279.242 324.553C279.501 324.698 279.826 324.652 280.039 324.442C281.188 323.266 282.983 321.193 284.961 320.121C285.169 320.003 285.419 319.975 285.654 320.041L289.985 321.264C290.236 321.332 290.494 321.185 290.563 320.935C290.597 320.806 290.576 320.67 290.504 320.558L290.32 320.279C290.102 319.959 289.793 319.715 289.434 319.58L285.288 318.039C285.063 317.961 284.948 317.712 285.029 317.485C285.03 317.482 285.031 317.479 285.032 317.476L289.483 305.617C289.588 305.33 289.757 305.071 289.977 304.863C291.213 303.679 292.394 303.306 293.239 301.876C293.332 301.727 293.528 301.68 293.678 301.772C293.768 301.827 293.824 301.923 293.829 302.027C293.851 303.234 294.451 303.909 295.631 304.052C295.854 304.079 296.024 304.259 296.039 304.481C296.155 306.509 295.772 308.477 294.89 310.382C293.508 313.39 292.423 316.149 291.636 318.659C291.546 318.953 291.712 319.263 292.007 319.353C292.237 319.423 292.486 319.338 292.625 319.144L297.586 312.019C297.723 311.826 297.991 311.777 298.182 311.909C298.252 311.958 298.306 312.026 298.336 312.106C298.649 312.911 299.184 313.758 299.939 314.648C300.057 314.797 300.273 314.818 300.422 314.696C300.505 314.628 300.553 314.525 300.553 314.418C300.529 311.955 300.273 309.771 301.812 308.023C302.733 306.98 303.695 306.194 304.7 305.664C304.993 305.513 305.347 305.538 305.617 305.728C306.032 306.008 306.415 306.469 306.766 307.11C306.87 307.303 307.112 307.375 307.306 307.271C307.41 307.214 307.484 307.115 307.507 306.999C307.938 305.018 307.332 303.494 305.689 302.424C305.389 302.229 304.995 302.262 304.732 302.504L299.492 307.269C299.248 307.498 298.864 307.485 298.635 307.243C298.534 307.135 298.476 306.995 298.471 306.848C298.349 303.539 298.636 300.274 299.332 297.055C300.09 293.583 303.073 289.009 303.91 285.577C305.226 280.168 304.142 274.116 302.817 268.77C302.769 268.596 302.875 268.418 303.054 268.373C303.165 268.345 303.284 268.376 303.368 268.453C305.896 270.756 306.327 274.544 307.228 278.818C307.267 279.042 307.482 279.193 307.708 279.154C307.892 279.122 308.032 278.971 308.05 278.786C308.135 278.081 308.329 277.473 308.632 276.959C308.779 276.714 309.097 276.634 309.343 276.781C309.474 276.859 309.565 276.991 309.589 277.142L311.815 291.693C311.819 291.725 311.845 291.749 311.878 291.748L312.181 291.757C312.41 291.761 312.599 291.576 312.604 291.344L312.723 284.934C312.724 284.789 312.828 284.667 312.97 284.64L313.369 284.568C313.556 284.537 313.733 284.663 313.764 284.85C313.766 284.861 313.767 284.874 313.768 284.886C313.907 287.905 314.454 290.734 315.411 293.377C315.481 293.577 315.701 293.679 315.903 293.605C316.01 293.566 316.096 293.482 316.136 293.377L317.349 290.152C317.42 289.964 317.631 289.868 317.819 289.938L318.058 290.025C318.243 290.093 318.349 290.283 318.306 290.47C318.024 291.847 318.013 293.144 318.275 294.362C318.315 294.551 318.502 294.671 318.691 294.631C318.814 294.604 318.914 294.514 318.953 294.394C319.691 292.165 320.125 290.947 320.252 290.74C320.391 290.518 320.608 290.42 320.906 290.446C321.315 290.478 321.518 290.684 321.512 291.066C321.465 295.185 322.626 298.895 324.998 302.193C325.101 302.347 325.308 302.388 325.462 302.285C325.576 302.209 325.632 302.073 325.604 301.939C324.759 297.38 324.291 293.123 324.2 289.168C324.196 288.891 324.411 288.662 324.68 288.657C324.728 288.656 324.776 288.661 324.822 288.675C325.04 288.743 325.175 288.884 325.229 289.096C325.803 291.394 326.601 293.976 327.622 296.84C327.685 297.023 327.885 297.119 328.068 297.057C328.162 297.024 328.237 296.955 328.276 296.864C328.403 296.584 328.477 296.149 328.499 295.562C328.786 288.906 329.041 279.493 327.255 273.138C325.572 267.141 323.124 262.424 319.981 256.586C317.158 251.344 315.188 246.784 310.084 244.569C309.854 244.468 309.585 244.571 309.484 244.8C309.46 244.855 309.447 244.914 309.446 244.974C309.403 246.911 309.44 249.302 309.557 252.146C309.599 253.236 309.453 254.089 309.119 254.704C307.667 257.356 305.027 259.938 300.983 264.473C300.794 264.681 300.473 264.701 300.266 264.516C300.22 264.475 300.182 264.426 300.154 264.37C299.253 262.646 299.244 260.835 299.061 258.142C298.958 256.76 298.168 254.314 297.426 253.592C294.148 250.375 289.092 247.285 284.418 247.483C284.176 247.496 283.989 247.698 284.001 247.935C284.003 247.97 284.009 248.005 284.019 248.039L284.099 248.301C284.182 248.557 284.411 248.738 284.681 248.762L287.473 248.984C287.821 249.01 288.079 249.314 288.048 249.662C288.026 249.917 287.852 250.136 287.609 250.215L285.878 250.763C285.605 250.851 285.454 251.141 285.541 251.412C285.565 251.484 285.603 251.55 285.654 251.606L286.508 252.527C286.731 252.787 286.701 253.178 286.44 253.401C286.243 253.569 285.962 253.597 285.734 253.472C283.964 252.432 283.413 250.446 282.352 247.881C282.103 247.271 281.497 246.883 280.837 246.911C276.052 247.092 272.765 248.961 270.979 252.52C270.827 252.83 270.957 253.206 271.269 253.358C271.394 253.419 271.537 253.437 271.673 253.409C275.187 252.694 279.125 252.734 283.485 253.528C283.943 253.613 284.271 254.021 284.259 254.488C284.184 256.48 284.713 257.573 285.845 257.769C286.389 257.861 286.755 258.373 286.663 258.914C286.653 258.97 286.638 259.026 286.619 259.08C285.694 261.653 284.354 263.983 282.599 266.069C282.497 266.185 282.509 266.361 282.625 266.462C282.694 266.522 282.79 266.545 282.879 266.522ZM295.823 230.565C295.871 230.618 295.958 230.668 296.087 230.716C296.118 230.731 296.156 230.718 296.172 230.687C296.179 230.671 296.18 230.653 296.174 230.637C296.132 230.473 296.075 230.372 296.006 230.335C295.931 230.299 295.84 230.331 295.804 230.406C295.78 230.458 295.787 230.52 295.823 230.565ZM295.328 229.676L294.308 228.564C294.115 228.359 294.125 228.037 294.33 227.845C294.35 227.826 294.372 227.808 294.396 227.793L295.831 226.84C296.109 226.654 296.183 226.279 295.996 226.002C295.889 225.843 295.712 225.744 295.521 225.736C293.441 225.651 291.602 226.233 290.001 227.484C289.598 227.803 289.533 228.39 289.858 228.795C289.87 228.811 289.883 228.826 289.897 228.841L291.38 230.462C291.69 230.795 292.155 230.935 292.593 230.828L295.17 230.192C295.34 230.148 295.442 229.973 295.397 229.804C295.385 229.757 295.361 229.713 295.328 229.676ZM225.79 220.803L227.138 219.461C227.483 219.118 228.039 219.114 228.382 219.453C231.716 222.733 232.665 230.732 232.481 235.085C232.362 237.801 231.469 239.549 229.458 241.376C228.172 242.546 227.465 243.277 227.337 243.568C227.292 243.673 227.34 243.794 227.445 243.839C227.492 243.859 227.544 243.862 227.592 243.846L231.476 242.432C231.918 242.269 232.409 242.494 232.572 242.934C232.603 243.018 232.621 243.105 232.625 243.194C232.848 248.405 232.941 253.374 232.904 258.103C232.888 260.358 232.211 263.226 230.807 264.417C229.503 265.508 228.746 266.168 228.533 266.395C228.356 266.584 228.367 266.881 228.557 267.058C228.611 267.109 228.677 267.145 228.749 267.165C230.344 267.618 232.003 267.659 233.789 267.198C236.395 266.525 239.428 266.226 242.89 266.3C244.006 266.326 244.915 265.823 245.617 264.791C245.776 264.549 245.707 264.224 245.464 264.065C245.307 263.963 245.107 263.952 244.939 264.036L243.695 264.688C242.795 265.161 241.681 264.818 241.205 263.922C241.201 263.912 241.195 263.903 241.191 263.893C240.111 261.765 239.542 259.344 239.484 256.633C239.356 250.147 239.306 245.013 239.332 241.232C239.332 241.017 239.511 240.844 239.731 240.844C243.089 240.819 244.915 241.828 247.946 243.036C248.407 243.216 248.915 243.25 249.398 243.13L258.586 240.867C258.837 240.801 259.094 240.954 259.161 241.209C259.169 241.243 259.174 241.277 259.176 241.312C259.431 247.444 259.412 252.876 259.119 257.61C259.019 259.205 258.476 260.989 257.493 262.964C257.003 263.944 256.543 264.367 256.113 264.235C255.9 264.166 255.417 263.737 254.662 262.948C254.473 262.751 254.161 262.742 253.963 262.929C253.867 263.019 253.812 263.143 253.808 263.274L253.8 263.989C253.791 264.41 253.994 264.809 254.342 265.053C256.554 266.605 259.035 266.79 261.783 265.609C262.906 265.127 263.541 264.859 263.69 264.806C263.943 264.719 264.226 264.779 264.423 264.966C266.566 266.967 269.01 267.277 271.753 265.895C272.7 265.418 273.175 264.738 273.18 263.854C273.179 263.638 273.003 263.465 272.788 263.467C272.688 263.467 272.591 263.507 272.519 263.576L271.418 264.672C271.014 265.075 270.357 265.076 269.952 264.674C269.943 264.666 269.935 264.657 269.926 264.648C268.703 263.35 267.85 261.836 267.367 260.104C265.819 254.545 265.954 246.641 266.537 241.383C266.595 240.863 266.955 240.426 267.454 240.271C269.087 239.773 270.56 238.847 271.872 237.491C273.619 235.68 271.586 233.242 269.935 232.337C269.687 232.2 269.377 232.293 269.242 232.544C269.172 232.672 269.16 232.826 269.209 232.964L270.046 235.228C270.343 236.042 269.925 236.94 269.113 237.237L267.573 237.793C267.054 237.986 266.475 237.724 266.28 237.206C266.26 237.152 266.245 237.096 266.234 237.039C265.224 231.611 265.617 226.213 267.415 220.843C267.521 220.532 267.86 220.365 268.173 220.47C268.26 220.5 268.339 220.548 268.403 220.613L270.628 222.837C270.727 222.93 270.884 222.926 270.978 222.828C271.013 222.791 271.036 222.744 271.043 222.694C271.378 220.263 270.86 216.3 267.343 217.261C263.28 218.373 259.537 218.458 256.113 217.515C255.814 217.437 255.502 217.429 255.204 217.492C253.848 217.777 253.141 218.788 253.082 220.526C253.074 220.736 253.238 220.913 253.449 220.922C253.607 220.928 253.753 220.837 253.816 220.692L254.103 220.033C254.363 219.437 255.058 219.164 255.656 219.423C255.754 219.465 255.846 219.521 255.929 219.588C260.069 222.908 258.976 231.852 258.825 236.824C258.817 237.083 258.601 237.287 258.341 237.279C258.329 237.278 258.317 237.278 258.306 237.277C254.446 236.943 251.561 235.222 249.653 232.114C249.386 231.677 248.825 231.524 248.376 231.765C245.681 233.189 242.775 234.224 239.659 234.87C239.237 234.96 238.822 234.691 238.732 234.271C238.726 234.241 238.721 234.21 238.718 234.179C238.439 231.034 238.312 221.765 241.319 220.16C241.619 219.996 241.998 220.106 242.162 220.406C242.202 220.477 242.227 220.556 242.235 220.637L242.427 222.225C242.467 222.574 242.783 222.824 243.133 222.784C243.368 222.757 243.569 222.603 243.655 222.384C244.389 220.584 244.506 219.101 244.006 217.936C243.753 217.331 243.082 217.013 242.451 217.197L236.621 218.897C236.002 219.076 235.357 219.159 234.706 219.143C232.226 218.985 226.037 215.998 225.088 220.43C225.041 220.653 225.186 220.872 225.41 220.918C225.548 220.947 225.691 220.903 225.79 220.803ZM303.886 223.099C304.524 223.061 305.038 223.199 305.426 223.512C305.641 223.682 305.743 223.958 305.689 224.227C304.875 228.405 303.081 232.94 301.876 235.855C301.769 236.105 301.888 236.395 302.144 236.501C302.223 236.535 302.31 236.547 302.395 236.538L308.281 235.847C308.478 235.828 308.622 235.649 308.601 235.449C308.598 235.422 308.592 235.396 308.584 235.371C307.547 232.201 304.971 229.795 306.191 225.768C306.837 223.647 304.629 221.638 304.022 220.232C304.012 220.216 304.006 220.2 304.006 220.184L302.817 213.647C302.802 213.53 302.694 213.447 302.576 213.462C302.549 213.466 302.523 213.475 302.499 213.488L302.187 213.655C302.103 213.697 302.06 213.79 302.084 213.877L303.951 221.399C303.986 221.543 303.975 221.694 303.918 221.828L303.559 222.639C303.489 222.809 303.57 223.004 303.741 223.074C303.786 223.093 303.836 223.101 303.886 223.099ZM270.142 178.492C269.95 178.656 269.82 178.942 269.751 179.35C269.693 179.72 269.517 179.967 269.225 180.088C268.911 180.215 268.549 180.245 268.14 180.176C267.879 180.135 267.634 180.309 267.594 180.564C267.592 180.575 267.591 180.586 267.59 180.597C267.531 181.1 267.656 181.587 267.964 182.058C268.093 182.259 268.36 182.322 268.57 182.201C269.789 181.481 270.666 180.692 271.203 179.834C271.328 179.631 271.397 179.398 271.402 179.159C271.413 178.942 271.418 178.831 271.418 178.826C271.337 178.431 270.921 178.203 270.489 178.316C270.362 178.348 270.243 178.409 270.142 178.492ZM267.446 171.772C267.522 171.659 267.49 171.506 267.376 171.431C267.317 171.392 267.244 171.38 267.175 171.399C264.979 171.955 262.31 172.323 259.167 172.503C257.604 172.59 256.384 173.02 255.26 173.973C253.617 175.379 250.219 177.88 250.203 180.2C250.15 190.096 250.166 201.489 250.251 214.377C250.25 214.707 250.52 214.974 250.854 214.974C250.89 214.974 250.926 214.971 250.961 214.965L259.503 213.433C259.702 213.396 259.833 213.205 259.796 213.007C259.788 212.963 259.772 212.922 259.75 212.884C258.306 210.565 259.255 209.541 260.714 207.229C265.644 199.405 270.206 194.418 279.051 191.105C283.905 189.284 287.648 187.801 290.281 186.657C293.502 185.251 293.917 182.836 293.726 179.66C293.478 175.744 290.153 173.822 286.547 174.981C284.319 175.696 282.485 176.581 281.044 177.634C277.216 180.438 262.964 192.138 259.415 187.158C259.238 186.914 259.14 186.626 259.136 186.332C259.104 184.558 259.218 183.366 259.479 182.757C261.217 178.675 265.843 174.226 267.446 171.772ZM198.928 185.204C198.968 185.329 199.102 185.399 199.228 185.359C199.282 185.343 199.329 185.307 199.359 185.259C200.433 183.602 200.999 181.651 201.058 179.405C201.072 178.787 200.704 178.225 200.132 177.991C196.841 176.657 195.605 174.038 196.424 170.136C196.506 169.759 196.814 169.471 197.198 169.413C204.24 168.341 204.312 177.269 203.889 181.979C203.379 187.769 200.476 195.132 198.354 201.486C196.4 207.34 198.769 212.455 201.289 217.88C203.785 223.265 199.454 224.576 196.105 226.999C195.428 227.49 195.045 228.287 195.084 229.12C195.265 232.752 195.844 236.048 196.823 239.008C196.909 239.273 197.147 239.461 197.429 239.485L204.097 240.017C204.487 240.044 204.826 239.756 204.853 239.376C204.854 239.357 204.854 239.337 204.854 239.318C204.822 235.775 202.31 235.942 200.117 235.14C199.777 235.02 199.561 234.684 199.59 234.322C199.861 230.771 204.36 229.612 206.337 228.254C206.775 227.986 207.159 227.638 207.47 227.229L210.341 223.488C210.484 223.298 210.754 223.26 210.944 223.403C211.063 223.491 211.128 223.635 211.115 223.782C210.979 225.394 210.493 226.435 209.273 227.674C208.587 228.373 208.188 228.876 208.076 229.183C207.962 229.481 208 229.816 208.18 230.081C209.833 232.511 212.178 235.495 215.214 239.032C217.224 241.376 220.255 241.153 222.998 241.01C223.318 240.993 223.566 240.725 223.557 240.406C223.485 237.253 220.263 236.625 217.973 236.157C217.004 235.957 216.184 235.317 215.757 234.425C215.092 233.027 214.706 231.73 214.6 230.533C214.565 230.097 214.737 229.672 215.063 229.382C217.695 227.063 220.606 224.068 218.014 220.772C217.461 220.072 216.793 219.36 216.012 218.635C215.685 218.327 215.612 217.837 215.836 217.452L220.446 209.509C220.826 208.851 221.668 208.623 222.328 209L227.018 211.701C227.103 211.749 227.194 211.783 227.289 211.804C232.226 212.924 238.112 214.386 242.522 213.464C242.937 213.379 243.202 212.973 243.114 212.557C243.091 212.452 243.048 212.352 242.985 212.265C242.007 210.92 240.651 210.03 238.917 209.596C234.35 208.447 231.448 207.785 230.208 207.61C229.838 207.56 229.578 207.22 229.628 206.85C229.64 206.763 229.669 206.678 229.714 206.602L231.5 203.512C231.781 203.028 232.275 202.704 232.832 202.638L236.709 202.185C237.291 202.116 237.738 201.638 237.761 201.057C237.945 196.999 231.182 194.29 227.999 193.194C227.437 193 227.14 192.389 227.335 191.829C227.366 191.739 227.41 191.653 227.465 191.574C228.613 189.921 232.641 190.446 234.563 190.502C235.124 190.52 235.601 190.094 235.648 189.532L235.711 188.778C235.753 188.253 235.359 187.794 234.832 187.754C234.83 187.754 234.828 187.754 234.826 187.753L232.154 187.539C231.785 187.51 231.51 187.189 231.539 186.821C231.547 186.721 231.578 186.625 231.628 186.538L232.043 185.815C232.311 185.355 232.82 185.089 233.35 185.132L235.616 185.315C235.928 185.342 236.202 185.111 236.228 184.801C236.229 184.795 236.229 184.789 236.23 184.783C236.315 183.11 235.573 182.156 234.005 181.923C232.144 181.654 230.429 181.481 228.86 181.407C228.539 181.398 228.286 181.131 228.295 180.811C228.3 180.622 228.398 180.447 228.557 180.342C229.046 180.02 229.493 179.831 229.898 179.779C230.3 179.733 230.59 179.372 230.544 178.971C230.537 178.905 230.52 178.839 230.495 178.778C229.586 176.538 227.869 174.682 225.343 173.21C225.029 173.028 224.673 172.927 224.306 172.916C223.03 172.873 222.007 172.487 221.236 171.756C220.978 171.51 220.569 171.519 220.322 171.777C220.207 171.897 220.142 172.058 220.143 172.225C220.149 172.834 220.064 173.266 219.888 173.519C219.776 173.689 219.447 173.641 218.899 173.377C218.378 173.128 217.753 173.3 217.025 173.893C214.526 175.932 212.931 178.484 212.239 181.55C212.178 181.815 212.346 182.08 212.617 182.142C212.642 182.148 212.668 182.152 212.694 182.153C213.178 182.186 213.451 182.302 213.516 182.503C213.586 182.728 213.544 182.971 213.404 183.154C211.945 185.108 210.604 187.467 211.171 189.819C211.235 190.094 211.362 191.195 211.553 193.123C211.579 193.432 211.844 193.668 212.16 193.662C212.665 193.662 213.13 193.509 213.556 193.202C213.756 193.052 214.041 193.093 214.192 193.293C214.287 193.42 214.309 193.587 214.249 193.735L213.699 195.211C213.605 195.455 213.687 195.732 213.898 195.887C216.179 197.565 218.348 198.884 220.406 199.842C222.799 200.954 225.766 200.231 227.76 199.969C227.939 199.947 228.103 200.074 228.124 200.253C228.141 200.394 228.065 200.53 227.935 200.589C225.537 201.606 222.945 201.762 220.159 201.057C218.245 200.565 215.485 198.055 213.005 197.174C212.358 196.944 211.646 197.281 211.416 197.925C211.397 197.978 211.382 198.032 211.37 198.087C210.373 202.853 207.558 209.882 202.374 211.526C201.75 211.728 201.079 211.384 200.875 210.758C200.862 210.718 200.851 210.677 200.842 210.636C199.986 206.453 200.258 202.315 201.656 198.222C203.219 193.621 204.538 189.776 205.611 186.689C207.885 180.152 208.252 167.372 198.091 166.935C192.125 166.681 192.061 171.614 194.622 175.521C196.238 177.994 197.673 181.222 198.928 185.204ZM302.69 222.805C302.413 222.741 302.113 222.696 301.788 222.67C301.576 222.654 301.246 222.31 300.8 221.638C299.641 219.89 298.144 218.643 296.309 217.897C296.124 217.82 295.972 217.679 295.879 217.499L295.352 216.498C295.218 216.251 294.941 216.115 294.659 216.157C289.799 216.909 285.944 219.093 283.095 222.709C281.536 224.69 280.723 227.335 280.653 230.644C280.646 231.141 280.25 231.545 279.752 231.566L277.743 231.669C277.338 231.686 276.996 231.373 276.979 230.969C276.978 230.927 276.979 230.885 276.985 230.843C277.612 226.253 278.785 221.624 280.502 216.959C280.734 216.333 281.069 215.751 281.491 215.236C284.657 211.415 289.276 207.062 294.18 205.966C297.599 205.198 299.856 206.326 300.952 209.35C301 209.496 301.158 209.575 301.304 209.527C301.43 209.485 301.509 209.362 301.494 209.23C301.255 206.212 301.121 202.895 301.095 199.278C300.999 186.165 308.895 173.885 319.734 167.023C319.905 166.915 319.954 166.687 319.842 166.513C319.821 166.481 319.795 166.452 319.766 166.427C313.967 161.661 309.277 157.8 306.183 150.819C305.843 150.051 305.061 149.578 304.23 149.635C296.844 150.12 290.328 154.274 285.152 158.881C280.042 163.429 274.895 167.255 269.711 170.359C269.597 170.417 269.553 170.556 269.611 170.669C269.66 170.763 269.767 170.812 269.87 170.788C274.616 169.977 277.846 168.412 283.892 166.006C292.409 162.614 301.677 169.055 302.841 177.976C303.687 184.462 301.499 189.599 296.278 193.385C291.54 196.816 286.141 199.064 280.366 201.55C276.682 203.139 273.773 205.529 271.641 208.722C271.517 208.914 271.571 209.17 271.764 209.294C271.843 209.345 271.938 209.368 272.032 209.358C273.627 209.183 275.948 208.714 277.081 209.771C277.197 209.882 277.647 210.501 278.428 211.629C279.875 213.737 280.199 215.95 279.402 218.269C277.328 224.29 275.589 229.978 275.781 236.149C275.789 236.396 275.995 236.591 276.243 236.586C277.302 236.564 280.3 236.602 285.24 236.697C286.048 236.713 288.055 237.136 291.261 237.968C291.393 238.005 291.531 238.018 291.668 238.008L298.208 237.484C298.472 237.463 298.672 237.235 298.663 236.967C298.567 234.425 297.865 232.434 296.557 230.994C296.484 230.889 296.34 230.862 296.234 230.934C296.128 231.007 296.101 231.151 296.174 231.256L298.096 234.886C298.41 235.48 298.18 236.215 297.583 236.527C297.423 236.61 297.247 236.657 297.068 236.665C292.609 236.848 288.27 236.991 284.649 234.6C281.954 232.821 281.02 230.287 281.85 226.999C283.365 220.946 290.2 218.468 295.76 219.064C297.721 219.271 299.268 220.385 300.401 222.408C300.904 223.305 301.861 223.377 302.69 223.154C302.787 223.129 302.849 223.032 302.828 222.937C302.813 222.868 302.759 222.817 302.69 222.805ZM182.53 205.577C182.574 205.89 182.353 206.178 182.039 206.221C181.961 206.232 181.881 206.226 181.805 206.204C175.382 204.351 169.729 201.489 164.849 197.618C159.494 193.382 157.081 187.846 157.607 181.01C157.99 176.045 160.861 170.962 166.093 169.938C169.148 169.342 170.639 169.183 172.92 167.443C175.321 165.609 179.029 161.518 182.259 158.412C184.705 156.072 186.329 153.472 187.132 150.612C188.033 147.404 191.041 143.162 194.765 143.297C199.869 143.482 204.362 145.391 208.244 149.024C215.541 155.847 221.188 161.709 229.403 163.297C233.008 163.996 237.514 164.155 240.593 166.887C242.539 168.613 244.45 170.273 246.327 171.868C247.694 173.027 249.039 172.823 250.362 171.256C251.862 169.482 253.316 167.766 254.725 166.109C256.783 163.67 260.946 164.56 264.296 164.925C269.599 165.505 275.231 161.939 278.644 158.031C280.93 155.415 283.549 152.572 286.499 149.501C289.825 146.045 296.294 139.977 301.151 142.67C302.538 143.437 303.897 144.669 305.226 146.363C310.043 152.487 313.936 162.654 324.105 166.427C332.057 169.373 339.29 171.59 337.527 182.217C336.49 188.46 333.132 192.082 327.35 196.228C323.996 198.632 320.851 201.317 317.915 204.283C317.509 204.689 316.859 204.717 316.424 204.346C312.97 201.407 317.533 196.808 320.045 194.6C323.426 191.634 325.939 189.514 327.582 188.238C330.156 186.242 331.389 183.692 331.283 180.589C331.131 175.998 326.051 175.116 322.381 176.483C313.345 179.85 309.581 190.803 309.11 199.501C308.744 206.315 309.318 213.006 310.833 219.572C314.837 236.904 322.142 251.59 335.102 263.345C338.314 266.263 342.19 269.749 346.731 273.806C348.103 275.029 349.142 276.334 349.85 277.722C349.969 277.95 350.019 278.209 349.993 278.469C349.913 279.406 349.491 280.298 348.725 281.145C339.122 291.82 330.53 302.8 322.948 314.084C322.593 314.611 321.951 314.869 321.329 314.735C319.024 314.251 317.301 312.4 314.486 310.041C313.635 309.33 312.385 309.364 311.575 310.12C309.113 312.429 305.644 316.017 301.167 320.883C298.487 323.79 293.981 326.911 289.403 328.588C282.799 331.002 279.354 332.252 279.067 332.337C271.266 334.719 263.339 338.897 259.064 346.149C256.751 350.073 255.1 352.795 254.111 354.315C253.201 355.72 251.033 358.056 249.158 356.467C245.617 353.473 244.716 346.371 241.238 342.829C236.78 338.278 230.918 335.721 224.721 333.163C216.208 329.647 210.309 327.057 207.023 325.394C200.667 322.178 195.738 317.603 189.565 311.987C189.122 311.588 188.454 311.578 188.009 311.964C184.724 314.775 183.416 316.355 179.683 316.539C179.356 316.558 179.054 316.366 178.933 316.062C176.19 309.009 173.494 303.171 167.672 298.612C161.994 294.169 157.61 290.613 154.52 287.944C152.936 286.578 151.484 284.955 150.166 283.075C149.923 282.73 149.949 282.264 150.229 281.948C157.402 273.808 164.642 265.029 171.947 255.609C176.663 249.525 180.359 242.302 183.033 233.941C186.191 224.052 188.401 213.861 187.643 203.417C186.973 194.179 182.475 184.378 173.869 180.065C168.206 177.229 162.113 179.135 164.833 186.697C166.946 192.567 171.692 195.061 176.932 198.047C180.712 200.2 181.908 201.51 182.53 205.577Z" />
+
+
+				<text textLength="1037" lengthAdjust="spacing" class="textcircle">
+					<textPath xlink:href="#textcircle" textLength="1037" lengthAdjust="spacing">Хогвартс &#9679; Дамблдора &#9679;&nbsp;</textPath>
+				</text>
+			</g>
+		</svg>
+        </a>
+
+        <a href="https://rave.dhog.org/memberlist.php?mode=contactadmin" class="footer-fun-icon contact-link">
+          <i class="far fa-envelope"></i>
+          <span>Написать администрации</span>
+        </a>
+
+        <a href="https://rave.dhog.org/memberlist.php?sk=l&sd=d" title="Просмотр всего списка пользователей" class="footer-fun-icon members-link">
+          <i class="fas fa-hat-wizard"></i>
+          <span>Обитатели</span>
+        </a>
+      </nav>
+
+      <div class="footer-copyright">
+        © 2025 Хогвартс Дамблдора — некоммерческий фан-проект.
+        <p>Мы не связаны с J.K. Rowling, Warner Bros. или другими правообладателями.</p>
+        <p>Все права на оригинальные материалы принадлежат их владельцам.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="scroll-btns">
+  <button class="scroll-btn" title="Наверх"><i class="fas fa-chevron-up"></i></button>
+  <button class="scroll-btn" title="Вниз"><i class="fas fa-chevron-down"></i></button>
+</div>
+
+<script>
+(function () {
+  const header = document.getElementById('forumHeader');
+  if (!header) return;
+
+  const toggles = [...header.querySelectorAll('.forum-nav-toggle')];
+  const panels = [...header.querySelectorAll('.forum-dropdown')];
+
+  function closeMenus(except = null) {
+    toggles.forEach(btn => {
+      if (btn.dataset.menu !== except) btn.setAttribute('aria-expanded', 'false');
+    });
+    panels.forEach(panel => {
+      if (panel.dataset.dropdown !== except) panel.classList.remove('open');
+    });
+  }
+
+  toggles.forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const name = btn.dataset.menu;
+      const panel = header.querySelector(`[data-dropdown="${name}"]`);
+      if (!panel) return;
+
+      const shouldOpen = !panel.classList.contains('open');
+      closeMenus();
+      if (shouldOpen) {
+        panel.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  panels.forEach(panel => panel.addEventListener('click', e => e.stopPropagation()));
+  document.addEventListener('click', () => closeMenus());
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenus();
+  });
+})();
+</script>
+
+<script>
+(function () {
+  const nav = document.querySelector('.scroll-btns');
+  if (!nav) return;
+
+  const up = nav.querySelector('.scroll-btn:first-child');
+  const down = nav.querySelector('.scroll-btn:last-child');
+  const footer = document.getElementById('page-footer');
+
+  function footerScrollTop() {
+    if (!footer) return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    return Math.max(0, footer.offsetTop - window.innerHeight + 90);
+  }
+
+  function update() {
+    const overflow = document.documentElement.scrollHeight - window.innerHeight;
+    const isLongPage = overflow > 320;
+    nav.classList.toggle('visible', isLongPage);
+    if (!isLongPage) return;
+
+    up.style.display = window.scrollY < 40 ? 'none' : 'flex';
+    down.style.display = window.scrollY >= footerScrollTop() - 20 ? 'none' : 'flex';
+  }
+
+  up.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+  down.addEventListener('click', () => window.scrollTo({ top:footerScrollTop(), behavior:'smooth' }));
+
+  window.addEventListener('scroll', update, { passive:true });
+  window.addEventListener('resize', update, { passive:true });
+  window.addEventListener('load', update);
+  update();
+})();
+</script>
+
+<script>
+(function () {
+  const header = document.getElementById('forumHeader');
+  if (!header) return;
+
+  const toggles = [...header.querySelectorAll('.forum-nav-toggle')];
+  const panels = [...header.querySelectorAll('.forum-dropdown')];
+
+  function closeMenus(except = null) {
+    toggles.forEach(btn => {
+      if (btn.dataset.menu !== except) btn.setAttribute('aria-expanded', 'false');
+    });
+    panels.forEach(panel => {
+      if (panel.dataset.dropdown !== except) panel.classList.remove('open');
+    });
+  }
+
+  toggles.forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const name = btn.dataset.menu;
+      const panel = header.querySelector(`[data-dropdown="${name}"]`);
+      if (!panel) return;
+
+      const shouldOpen = !panel.classList.contains('open');
+      closeMenus();
+      if (shouldOpen) {
+        panel.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  panels.forEach(panel => panel.addEventListener('click', e => e.stopPropagation()));
+  document.addEventListener('click', () => closeMenus());
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenus();
+  });
+})();
+</script>
+
+
+<script>
+(function () {
+  const header = document.getElementById('forumHeader');
+  if (!header) return;
+
+  function updateForumHeaderOpacity() {
+    header.classList.toggle('is-scrolled', window.scrollY > 12);
+  }
+
+  window.addEventListener('scroll', updateForumHeaderOpacity, { passive: true });
+  window.addEventListener('load', updateForumHeaderOpacity);
+  updateForumHeaderOpacity();
+})();
+</script>
+</body>
+</html>
