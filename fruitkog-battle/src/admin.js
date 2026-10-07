@@ -10,6 +10,7 @@ import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tou
 import { loadAdminNotifications } from "./admin-notifications.js?v=127";
 import { loadAdminGameSettings } from "./admin-settings.js?v=127";
 import { openAdminTournament } from "./admin-tournaments.js?v=127";
+import { openAdminRewards } from "./admin-rewards.js?v=129";
 
 const ADMIN_GAMES_PAGE_SIZE = 50;
 const ADMIN_GAME_FILTER_LABELS = {
@@ -134,6 +135,11 @@ export function renderAdminPlayers(){
     const actions=document.createElement("div");
     actions.className="admin-row-actions";
     if(player.account_type==="registered"){
+      const rewardButton=document.createElement("button");
+      rewardButton.type="button";
+      rewardButton.textContent="награды";
+      rewardButton.addEventListener("click",()=>openAdminRewards(player));
+      actions.appendChild(rewardButton);
       const renameButton=document.createElement("button");
       renameButton.type="button";
       renameButton.textContent="исправить ник";
