@@ -7657,3 +7657,57 @@ body.vegetables-on #gameView .square-reward-ship{
     grid-template-columns:64px minmax(0,1fr) auto;
   }
 }
+
+
+/* reward admin */
+.admin-reward-dialog{
+  width:min(760px,calc(100% - 24px));
+}
+.admin-reward-form{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:16px;
+}
+.admin-reward-form .field{
+  margin:0;
+}
+.admin-reward-form .admin-reward-source,
+.admin-reward-form #adminRewardGrantBtn{
+  grid-column:1/-1;
+}
+.admin-reward-history-head{
+  margin:24px 0 6px;
+}
+.admin-reward-history{
+  display:grid;
+}
+.admin-reward-history-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-top:1px solid var(--line);
+}
+.admin-reward-history-row:first-child{
+  border-top:0;
+}
+.admin-reward-history-row .admin-row-main small{
+  line-height:1.35;
+}
+@media(max-width:620px){
+  .admin-reward-form{
+    grid-template-columns:1fr;
+  }
+  .admin-reward-form .admin-reward-source,
+  .admin-reward-form #adminRewardGrantBtn{
+    grid-column:1;
+  }
+  .admin-reward-history-row{
+    grid-template-columns:1fr;
+  }
+  .admin-reward-history-row .admin-row-actions{
+    justify-content:flex-start;
+  }
+}
