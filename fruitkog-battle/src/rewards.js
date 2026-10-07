@@ -104,3 +104,43 @@ export async function selectShipSkin(skin){
   app.rewardsUserId=app.user?.id||null;
   return app.rewards;
 }
+
+
+export function resetGameBoosts(){
+  app.gameBoosts={game_id:null,auto_miss_enabled:false,square_ship_used:false};
+}
+
+export async function loadMyGameBoosts(gameId=app.game?.id){
+  if(!gameId||!app.user){
+    resetGameBoosts();
+    return app.gameBoosts;
+  }
+
+  if(rewardDemoEnabled()){
+    app.gameBoosts={
+      game_id:gameId,
+      auto_miss_enabled:!!app.placement?.useAutoMiss,
+      square_ship_used:!!app.placement?.useSquareShip,
+    };
+    return app.gameBoosts;
+  }
+
+  try{
+    const {data,error}=await app.supabase.rpc("get_my_game_boosts",{p_game_id:gameId});
+    if(error)throw error;
+    app.gameBoosts={
+      game_id:gameId,
+      auto_miss_enabled:!!data?.auto_miss_enabled,
+      square_ship_used:!!data?.square_ship_used,
+    };
+  }catch(error){
+    console.warn("Fruitkog game boosts are not available yet",error);
+    resetGameBoosts();
+  }
+  return app.gameBoosts;
+}
+
+export function autoMissEnabledForGame(gameId=app.game?.id){
+  if(rewardDemoEnabled())return !!app.placement?.useAutoMiss;
+  return app.gameBoosts?.game_id===gameId&&!!app.gameBoosts?.auto_miss_enabled;
+}
