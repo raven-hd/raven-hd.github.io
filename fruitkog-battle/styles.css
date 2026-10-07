@@ -7701,3 +7701,26 @@ body.vegetables-on #gameView .square-reward-ship{
     justify-content:flex-start;
   }
 }
+
+
+/* reward skin polish: character mushrooms stay upright in the picker */
+#gameView #shipPalette .ship-choice[data-skin="mushroom"] .palette-vegetable,
+#gameView #shipPalette .square-ship-choice .palette-vegetable{
+  transform:none!important;
+}
+#gameView #shipPalette .ship-choice[data-skin="mushroom"][data-length="4"] .palette-vegetable{
+  width:44px;
+  height:64px;
+}
+#gameView #shipPalette .ship-choice[data-skin="mushroom"][data-length="3"] .palette-vegetable{
+  width:42px;
+  height:64px;
+}
+#gameView #shipPalette .ship-choice[data-skin="mushroom"][data-length="2"] .palette-vegetable{
+  width:44px;
+  height:62px;
+}
+#gameView #shipPalette .ship-choice[data-skin="mushroom"][data-length="1"] .palette-vegetable{
+  width:52px;
+  height:52px;
+}
