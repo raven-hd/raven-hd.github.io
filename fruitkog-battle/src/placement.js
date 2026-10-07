@@ -1,11 +1,11 @@
 // Расстановка кораблей: черновик, перетаскивание, палитра, готовность.
 import { app } from "./state.js?v=127";
-import { FLEET, SHIP_SKINS } from "./constants.js?v=127";
+import { FLEET, shipSkinAsset } from "./constants.js?v=129";
 import { $, msg, safeStorage } from "./helpers.js?v=127";
 import { humanError } from "./errors.js?v=127";
 import { isMeReady, refreshGame } from "./room.js?v=127";
 import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=127";
-import { autoMissUsesLabel, canUseAutoMisses, canUseSquareShip, loadMyRewards, squareShipUsesLabel } from "./rewards.js?v=129";
+import { activeRewards, autoMissUsesLabel, canUseAutoMisses, canUseSquareShip, loadMyRewards, squareShipUsesLabel } from "./rewards.js?v=129";
 
 export function emptyPlacement() {
   return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null, useSquareShip: false, useAutoMiss: false };
@@ -301,7 +301,10 @@ function syncAutoMissRewardControl(){
 function renderPalette(){
   const wrap=$("shipPalette");wrap.innerHTML="";
   const used=new Set(app.placement.ships.map(s=>s.fleetIndex));
-  const names={4:"сельдерей",3:"морковь",2:"баклажан",1:"гриб"};
+  const activeSkin=activeRewards().selected_ship_skin==="mushroom"?"mushroom":"vegetable";
+  const names=activeSkin==="mushroom"
+    ? {4:"опята",3:"сморчок",2:"мухомор",1:"сыроежка"}
+    : {4:"сельдерей",3:"морковь",2:"баклажан",1:"шампиньон"};
   [4,3,2,1].forEach(length=>{
     const available=FLEET.map((ship,index)=>({ship,index}))
       .filter(item=>item.ship.length===length&&!used.has(item.index));
@@ -318,13 +321,15 @@ function renderPalette(){
     if(selected)b.classList.add("active");
     const visual=document.createElement("span");visual.className="palette-visual";
     const art=document.createElement("img");
-    art.className="palette-vegetable";art.src=`./assets/ships/${SHIP_SKINS[length]}.png?v=108`;
+    art.className="palette-vegetable";
+    art.src=`./assets/ships/${shipSkinAsset(activeSkin,length,{square:squareMode})}?v=129`;
     art.alt="";art.draggable=false;
-    if(!squareMode)visual.append(art);
+    visual.append(art);
     const preview=document.createElement("span");preview.className="ship-preview"+(squareMode?" square-preview":"");
     for(let i=0;i<length;i++)preview.appendChild(document.createElement("i"));
     visual.append(preview);b.append(visual);
-    const name=document.createElement("span");name.className="palette-name";name.textContent=squareMode?"корабль 2×2":names[length];b.append(name);
+    const name=document.createElement("span");name.className="palette-name";
+    name.textContent=squareMode?(activeSkin==="mushroom"?"белый гриб 2×2":"капуста 2×2"):names[length];b.append(name);
     const count=document.createElement("span");count.className="palette-count";count.textContent=`×${available.length}`;b.append(count);
     b.addEventListener("click",()=>{
       if(!available.length)return;
@@ -409,8 +414,9 @@ export function unlockPlacement(){
 export async function ready(){
   if(app.placement.ships.length!==FLEET.length||app.readyInProgress)return;
   app.readyInProgress=true;
+  const activeSkin=activeRewards().selected_ship_skin==="mushroom"?"mushroom":"vegetable";
   const payload=app.placement.ships
-    .map(s=>({length:s.length,cells:s.cells,shape:s.shape||"line"}))
+    .map(s=>({length:s.length,cells:s.cells,shape:s.shape||"line",skin:activeSkin}))
     .sort((a,b)=>b.length-a.length);
   const button=$("readyBtn");
   button.textContent="сохраняем расстановку…";
