@@ -5,16 +5,26 @@ import { app } from "./state.js?v=127";
 
 export const DEFAULT_REWARDS = Object.freeze({
   mushroom_skin_unlocked:false,
+  mushroom_skin_expires_at:null,
   auto_miss_uses:0,
+  auto_miss_unlimited:false,
+  auto_miss_expires_at:null,
   square_ship_uses:0,
+  square_ship_unlimited:false,
+  square_ship_expires_at:null,
   selected_ship_skin:"vegetable",
 });
 
 function normalizedRewards(value={}){
   return {
     mushroom_skin_unlocked:!!value.mushroom_skin_unlocked,
+    mushroom_skin_expires_at:value.mushroom_skin_expires_at||null,
     auto_miss_uses:Math.max(0,Number(value.auto_miss_uses)||0),
+    auto_miss_unlimited:!!value.auto_miss_unlimited,
+    auto_miss_expires_at:value.auto_miss_expires_at||null,
     square_ship_uses:Math.max(0,Number(value.square_ship_uses)||0),
+    square_ship_unlimited:!!value.square_ship_unlimited,
+    square_ship_expires_at:value.square_ship_expires_at||null,
     selected_ship_skin:value.selected_ship_skin==="mushroom"?"mushroom":"vegetable",
   };
 }
@@ -26,8 +36,13 @@ export function rewardDemoEnabled(){
 export function rewardDemoState(){
   return {
     mushroom_skin_unlocked:true,
+    mushroom_skin_expires_at:null,
     auto_miss_uses:30,
+    auto_miss_unlimited:false,
+    auto_miss_expires_at:null,
     square_ship_uses:15,
+    square_ship_unlimited:false,
+    square_ship_expires_at:null,
     selected_ship_skin:"mushroom",
   };
 }
@@ -73,15 +88,23 @@ export function activeRewards(){
 }
 
 export function canUseAutoMisses(game=app.game){
-  return gameAllowsBoosts(game)&&Number(activeRewards().auto_miss_uses)>0;
+  const rewards=activeRewards();
+  return gameAllowsBoosts(game)&&(rewards.auto_miss_unlimited||Number(rewards.auto_miss_uses)>0);
 }
 
 export function canUseSquareShip(game=app.game){
-  return gameAllowsBoosts(game)&&Number(activeRewards().square_ship_uses)>0;
+  const rewards=activeRewards();
+  return gameAllowsBoosts(game)&&(rewards.square_ship_unlimited||Number(rewards.square_ship_uses)>0);
 }
 
-export function squareShipUses(){
-  return Math.max(0,Number(activeRewards().square_ship_uses)||0);
+export function squareShipUsesLabel(){
+  const rewards=activeRewards();
+  return rewards.square_ship_unlimited?"∞":String(Math.max(0,Number(rewards.square_ship_uses)||0));
+}
+
+export function autoMissUsesLabel(){
+  const rewards=activeRewards();
+  return rewards.auto_miss_unlimited?"∞":String(Math.max(0,Number(rewards.auto_miss_uses)||0));
 }
 
 export function canUseMushroomSkin(){
