@@ -805,6 +805,80 @@
     </section>
   </dialog>
 
+  <dialog id="adminRewardDialog" class="admin-reward-dialog">
+    <form method="dialog" class="dialog-close"><button aria-label="закрыть">×</button></form>
+    <section class="dialog-pane">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">награды игрока</p>
+          <h2 id="adminRewardPlayerName">игрок</h2>
+        </div>
+      </div>
+
+      <div class="admin-reward-form">
+        <label class="field">
+          <span>награда</span>
+          <select id="adminRewardType">
+            <option value="auto_miss">автопромахи</option>
+            <option value="square_ship">корабль 2×2</option>
+            <option value="mushroom_skin">грибной скин</option>
+          </select>
+        </label>
+
+        <label id="adminRewardUseModeField" class="field">
+          <span>ограничение по играм</span>
+          <select id="adminRewardUseMode">
+            <option value="games">количество игр</option>
+            <option value="unlimited">без лимита игр</option>
+          </select>
+        </label>
+
+        <label id="adminRewardUsesField" class="field">
+          <span>количество игр</span>
+          <input id="adminRewardUses" type="number" min="1" max="10000" value="5" inputmode="numeric">
+        </label>
+
+        <label class="field">
+          <span>срок действия</span>
+          <select id="adminRewardExpiryMode">
+            <option value="never">бессрочно</option>
+            <option value="7">7 дней</option>
+            <option value="30">30 дней</option>
+            <option value="90">90 дней</option>
+            <option value="date">конкретная дата</option>
+          </select>
+        </label>
+
+        <label id="adminRewardExpiryDateField" class="field hidden">
+          <span>действует до</span>
+          <input id="adminRewardExpiryDate" type="datetime-local">
+        </label>
+
+        <label class="field admin-reward-source">
+          <span>источник</span>
+          <input id="adminRewardSource" maxlength="120" placeholder="например, Фруктоког 2026 — I место">
+        </label>
+
+        <button id="adminRewardGrantBtn" class="primary" type="button">выдать награду</button>
+      </div>
+
+      <p id="adminRewardMessage" class="message"></p>
+
+      <div class="section-head admin-reward-history-head">
+        <div>
+          <p class="eyebrow">история</p>
+          <h3>выданные награды</h3>
+        </div>
+      </div>
+      <div id="adminRewardHistory" class="admin-reward-history"></div>
+      <p id="adminRewardHistoryEmpty" class="muted">наград пока нет.</p>
+
+      <div class="button-row admin-dialog-actions">
+        <button id="adminRewardCloseBtn" type="button">закрыть</button>
+      </div>
+    </section>
+  </dialog>
+
   <dialog id="adminGameDialog" class="admin-game-dialog">
     <form method="dialog" class="dialog-close"><button>×</button></form>
     <section class="dialog-pane">
