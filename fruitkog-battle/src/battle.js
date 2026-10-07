@@ -81,14 +81,6 @@ function foundProduceName(shot,allShots=app.shots){
   }
   if(found.size===4){
     const points=[...found].map(cellToCoords);
-    const cols=new Set(points.map(point=>point.col));
-    const rows=new Set(points.map(point=>point.row));
-    if(cols.size===2&&rows.size===2){
-      return playerShipSkin(shot.target_id)==="mushroom"?"белый гриб":"капуста";
-    }
-  }
-  if(found.size===4){
-    const points=[...found].map(cellToCoords);
     const cols=[...new Set(points.map(point=>point.col))].sort((a,b)=>a-b);
     const rows=[...new Set(points.map(point=>point.row))].sort((a,b)=>a-b);
     const square=cols.length===2&&rows.length===2&&cols[1]-cols[0]===1&&rows[1]-rows[0]===1;
