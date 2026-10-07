@@ -15,7 +15,7 @@ import { activateTournamentSection, changeTournamentApplication, loadTournaments
 import { renderTournamentDemoState, updateTournamentDemoControls } from "./tournament-demo.js?v=127";
 import { loadRating, openPlayerProfile } from "./rating.js?v=129";
 import { closeAdminNotifications, markAdminNotificationsRead, toggleAdminNotifications } from "./admin-notifications.js?v=127";
-import { adminCancelGame, loadAdmin, loadMoreAdminGames, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=127";
+import { adminCancelGame, loadAdmin, loadMoreAdminGames, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=129";
 import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=127";
 import { openAvatarPicker, saveAvatarChoice } from "./avatars.js?v=128";
 import { bindAdminRewards } from "./admin-rewards.js?v=129";
