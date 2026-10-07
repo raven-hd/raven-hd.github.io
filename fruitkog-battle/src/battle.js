@@ -79,6 +79,14 @@ function foundProduceName(shot,allShots=app.shots){
       if(hitCells.has(next)&&!found.has(next)){found.add(next);queue.push(next);}
     });
   }
+  if(found.size===4){
+    const points=[...found].map(cellToCoords);
+    const cols=new Set(points.map(point=>point.col));
+    const rows=new Set(points.map(point=>point.row));
+    if(cols.size===2&&rows.size===2){
+      return playerShipSkin(shot.target_id)==="mushroom"?"белый гриб":"капуста";
+    }
+  }
   return PRODUCE_BY_SKIN[playerShipSkin(shot.target_id)]?.[found.size]||"плод";
 }
 
