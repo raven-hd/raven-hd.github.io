@@ -74,6 +74,12 @@ export const app = {
   adminNotificationsLoading: false,
   adminNotificationsTimer: null,
   gameSettings: { ...GAME_SETTING_DEFAULTS },
+  rewards: {
+    mushroom_skin_unlocked: false,
+    auto_miss_uses: 0,
+    square_ship_uses: 0,
+    selected_ship_skin: "vegetable",
+  },
   adminGameSettingsCache: [],
   placement: { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null },
   vegetablesEnabled: true,
