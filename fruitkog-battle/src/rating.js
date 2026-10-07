@@ -1,6 +1,6 @@
 // Рейтинг игроков и публичный профиль.
 import { app } from "./state.js?v=127";
-import { configured } from "./constants.js?v=127";
+import { configured, shipSkinAsset } from "./constants.js?v=129";
 import { $, formatAdminDate, msg } from "./helpers.js?v=127";
 import { humanError } from "./errors.js?v=127";
 import { openAuth } from "./auth.js?v=127";
@@ -40,7 +40,7 @@ async function renderSkinInventory(playerId){
 
   const skins=[
     {id:"vegetable",name:"овощной",note:"стандартный набор",unlocked:true},
-    {id:"mushroom",name:"грибной",note:"награда турнира",unlocked:!!rewards.mushroom_skin_unlocked},
+    {id:"mushroom",name:"грибной",note:"награда",unlocked:!!rewards.mushroom_skin_unlocked},
   ].filter(skin=>skin.unlocked);
 
   skins.forEach(skin=>{
@@ -51,17 +51,11 @@ async function renderSkinInventory(playerId){
     const preview=document.createElement("div");
     preview.className=`profile-skin-preview ${skin.id}`;
     preview.setAttribute("aria-hidden","true");
-    if(skin.id==="vegetable"){
-      [4,3,2,1].forEach(length=>{
-        const img=document.createElement("img");
-        img.src=`./assets/ships/${({4:"celery",3:"carrot",2:"eggplant",1:"mushroom"})[length]}.png?v=108`;
-        img.alt="";preview.appendChild(img);
-      });
-    }else{
-      const mark=document.createElement("span");
-      mark.textContent="грибной набор";
-      preview.appendChild(mark);
-    }
+    [4,3,2,1].forEach(length=>{
+      const img=document.createElement("img");
+      img.src=`./assets/ships/${shipSkinAsset(skin.id,length)}?v=129`;
+      img.alt="";img.draggable=false;preview.appendChild(img);
+    });
 
     const copy=document.createElement("div");
     copy.className="profile-skin-copy";
