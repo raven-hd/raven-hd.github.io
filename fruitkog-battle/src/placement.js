@@ -311,6 +311,7 @@ function renderPalette(){
     const selected=available.some(item=>item.index===app.placement.selectedShipIndex);
     const b=document.createElement("button");
     b.type="button";b.className="ship-choice";b.disabled=available.length===0;
+    b.dataset.skin=activeSkin;
     const squareMode=length===4&&!!app.placement.useSquareShip;
     if(squareMode)b.classList.add("square-ship-choice");
     b.dataset.length=String(length);
