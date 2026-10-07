@@ -73,6 +73,37 @@ export async function openPlayerProfile(playerId){
       card.append(strong,span);$("publicProfileStats").appendChild(card);
     });
 
+    const tournaments=data.tournaments||[];
+    const tournamentCard=document.createElement("details");
+    tournamentCard.className="public-stat public-stat-tournaments";
+    const tournamentSummary=document.createElement("summary");
+    const tournamentValue=document.createElement("strong");
+    tournamentValue.textContent=player.tournament_count||0;
+    const tournamentLabel=document.createElement("span");
+    tournamentLabel.textContent="турниры";
+    tournamentSummary.append(tournamentValue,tournamentLabel);
+    const tournamentList=document.createElement("div");
+    tournamentList.className="public-tournament-list";
+    if(tournaments.length){
+      tournaments.forEach(tournament=>{
+        const row=document.createElement("div");
+        row.className="public-tournament-row";
+        const name=document.createElement("strong");
+        name.textContent=tournament.name;
+        const result=document.createElement("span");
+        result.textContent=tournament.result||"участник";
+        row.append(name,result);
+        tournamentList.appendChild(row);
+      });
+    }else{
+      const empty=document.createElement("span");
+      empty.className="public-tournament-empty";
+      empty.textContent="завершенных турниров пока нет";
+      tournamentList.appendChild(empty);
+    }
+    tournamentCard.append(tournamentSummary,tournamentList);
+    $("publicProfileStats").appendChild(tournamentCard);
+
     const renderProfileMatch=match=>{
       const row=document.createElement("div");row.className="public-match-row";
       const main=document.createElement("div");main.className="public-match-main";
