@@ -77,7 +77,8 @@ export async function loadMyRewards(){
     // До применения будущей миграции основной backend этой RPC не знает.
     // В таком случае интерфейс просто считает, что наград еще нет.
     console.warn("Fruitkog rewards are not available yet",error);
-    resetMyRewards();
+    app.rewards={...DEFAULT_REWARDS};
+    app.rewardsUserId=app.user?.id||null;
   }
   return app.rewards;
 }
