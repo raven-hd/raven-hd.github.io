@@ -4,8 +4,8 @@ import { $, fitSingleLineText, msg, safeStorage } from "./helpers.js?v=128";
 import { humanError } from "./errors.js?v=127";
 import { switchView } from "./navigation.js?v=127";
 import { loadLobby } from "./lobby.js?v=127";
-import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=127";
-import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=128";
+import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=129";
+import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=129";
 import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=128";
 
 export async function openGame(row) {
