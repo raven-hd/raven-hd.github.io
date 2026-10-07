@@ -3,7 +3,7 @@ import { app } from "./state.js?v=127";
 import { $, $$, msg, newRequestId, safeStorage } from "./helpers.js?v=127";
 import { humanError } from "./errors.js?v=127";
 import { pairLimitPhrase, ruPlural } from "./settings.js?v=127";
-import { exitPreGame, observeGame, openGame, statusLabel } from "./room.js?v=127";
+import { exitPreGame, observeGame, openGame, statusLabel } from "./room.js?v=129";
 import { tournamentStageLabel } from "./tournament.js?v=127";
 
 const shownJoinWarnings = new Set();
