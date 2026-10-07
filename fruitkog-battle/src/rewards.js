@@ -34,6 +34,7 @@ export function rewardDemoState(){
 
 export function resetMyRewards(){
   app.rewards={...DEFAULT_REWARDS};
+  app.rewardsUserId=null;
 }
 
 export async function loadMyRewards(){
@@ -44,6 +45,7 @@ export async function loadMyRewards(){
 
   if(rewardDemoEnabled()){
     app.rewards=rewardDemoState();
+    app.rewardsUserId=app.user.id;
     return app.rewards;
   }
 
@@ -51,6 +53,7 @@ export async function loadMyRewards(){
     const {data,error}=await app.supabase.rpc("get_my_fruitkog_rewards");
     if(error)throw error;
     app.rewards=normalizedRewards(data);
+    app.rewardsUserId=app.user.id;
   }catch(error){
     // До применения будущей миграции основной backend этой RPC не знает.
     // В таком случае интерфейс просто считает, что наград еще нет.
@@ -65,7 +68,8 @@ export function gameAllowsBoosts(game=app.game){
 }
 
 export function activeRewards(){
-  return rewardDemoEnabled()?rewardDemoState():(app.rewards||DEFAULT_REWARDS);
+  if(rewardDemoEnabled())return rewardDemoState();
+  return app.rewardsUserId===app.user?.id?(app.rewards||DEFAULT_REWARDS):DEFAULT_REWARDS;
 }
 
 export function canUseAutoMisses(game=app.game){
@@ -89,12 +93,14 @@ export async function selectShipSkin(skin){
   if(wanted==="mushroom"&&!canUseMushroomSkin())throw new Error("грибной скин пока недоступен");
 
   if(rewardDemoEnabled()){
-    app.rewards={...app.rewards,selected_ship_skin:wanted};
+    app.rewards={...activeRewards(),selected_ship_skin:wanted};
+    app.rewardsUserId=app.user?.id||null;
     return app.rewards;
   }
 
   const {data,error}=await app.supabase.rpc("set_fruitkog_ship_skin",{p_skin:wanted});
   if(error)throw error;
   app.rewards=normalizedRewards(data);
+  app.rewardsUserId=app.user?.id||null;
   return app.rewards;
 }
