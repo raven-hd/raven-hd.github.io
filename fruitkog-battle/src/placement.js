@@ -5,7 +5,7 @@ import { $, msg, safeStorage } from "./helpers.js?v=127";
 import { humanError } from "./errors.js?v=127";
 import { isMeReady, refreshGame } from "./room.js?v=127";
 import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=127";
-import { canUseAutoMisses, canUseSquareShip, loadMyRewards, squareShipUses, activeRewards } from "./rewards.js?v=129";
+import { autoMissUsesLabel, canUseAutoMisses, canUseSquareShip, loadMyRewards, squareShipUsesLabel } from "./rewards.js?v=129";
 
 export function emptyPlacement() {
   return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null, useSquareShip: false, useAutoMiss: false };
@@ -266,7 +266,7 @@ function syncSquareRewardControl(){
   if(!wrap||!toggle||!count)return;
   const available=canUseSquareShip(app.game);
   wrap.classList.toggle("hidden",!available);
-  count.textContent=String(squareShipUses());
+  count.textContent=squareShipUsesLabel();
   toggle.checked=available&&!!app.placement.useSquareShip;
   toggle.disabled=!available||isMeReady()||app.game?.status!=="placing";
   toggle.onchange=()=>{
@@ -289,7 +289,7 @@ function syncAutoMissRewardControl(){
   if(!wrap||!toggle||!count)return;
   const available=canUseAutoMisses(app.game);
   wrap.classList.toggle("hidden",!available);
-  count.textContent=String(Math.max(0,Number(activeRewards().auto_miss_uses)||0));
+  count.textContent=autoMissUsesLabel();
   toggle.checked=available&&!!app.placement.useAutoMiss;
   toggle.disabled=!available||isMeReady()||app.game?.status!=="placing";
   toggle.onchange=()=>{
