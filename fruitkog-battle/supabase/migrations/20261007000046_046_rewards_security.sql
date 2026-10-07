@@ -143,7 +143,8 @@ begin
         'get_public_game_settings','admin_award_technical_win','admin_replay_tournament_match',
         'admin_start_qualifier_tiebreak',
         'set_fruitkog_avatar','get_my_fruitkog_rewards','set_fruitkog_ship_skin',
-        'admin_set_fruitkog_rewards','get_my_game_boosts'
+        'get_my_game_boosts','admin_grant_fruitkog_reward',
+        'admin_revoke_fruitkog_reward','admin_list_fruitkog_rewards'
       )
   ) into rpc_allowlist_safe;
 
