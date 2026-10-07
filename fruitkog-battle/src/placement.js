@@ -5,10 +5,10 @@ import { $, msg, safeStorage } from "./helpers.js?v=127";
 import { humanError } from "./errors.js?v=127";
 import { isMeReady, refreshGame } from "./room.js?v=127";
 import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=127";
-import { canUseSquareShip, loadMyRewards, squareShipUses } from "./rewards.js?v=129";
+import { canUseAutoMisses, canUseSquareShip, loadMyRewards, squareShipUses, activeRewards } from "./rewards.js?v=129";
 
 export function emptyPlacement() {
-  return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null, useSquareShip: false };
+  return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null, useSquareShip: false, useAutoMiss: false };
 }
 
 function placementDraftKey(gameId=app.game?.id) {
@@ -22,6 +22,7 @@ export function loadPlacementDraft(gameId=app.game?.id) {
     const saved = JSON.parse(safeStorage.get(key));
     if (!saved || !Array.isArray(saved.ships) || !["h","v"].includes(saved.orientation)) return emptyPlacement();
     const useSquareShip=!!saved.useSquareShip && canUseSquareShip(app.game);
+    const useAutoMiss=!!saved.useAutoMiss && canUseAutoMisses(app.game);
     const ships=useSquareShip
       ? saved.ships
       : saved.ships.filter(ship=>ship?.shape!=="square");
@@ -31,6 +32,7 @@ export function loadPlacementDraft(gameId=app.game?.id) {
       selectedShipIndex: saved.selectedShipIndex ?? null,
       selectedPlacedIndex: null,
       useSquareShip,
+      useAutoMiss,
     };
   } catch {
     return emptyPlacement();
@@ -280,6 +282,22 @@ function syncSquareRewardControl(){
   };
 }
 
+function syncAutoMissRewardControl(){
+  const wrap=$("autoMissReward");
+  const toggle=$("autoMissToggle");
+  const count=$("autoMissUses");
+  if(!wrap||!toggle||!count)return;
+  const available=canUseAutoMisses(app.game);
+  wrap.classList.toggle("hidden",!available);
+  count.textContent=String(Math.max(0,Number(activeRewards().auto_miss_uses)||0));
+  toggle.checked=available&&!!app.placement.useAutoMiss;
+  toggle.disabled=!available||isMeReady()||app.game?.status!=="placing";
+  toggle.onchange=()=>{
+    app.placement.useAutoMiss=canUseAutoMisses(app.game)&&toggle.checked;
+    savePlacementDraft();
+  };
+}
+
 function renderPalette(){
   const wrap=$("shipPalette");wrap.innerHTML="";
   const used=new Set(app.placement.ships.map(s=>s.fleetIndex));
@@ -369,6 +387,7 @@ export function renderPlacement(){
   $("placementBoard").onmouseleave=clearPlacementPreview;
   renderFleetSkins($("placementBoard"),app.placement.ships);
   syncSquareRewardControl();
+  syncAutoMissRewardControl();
   renderPalette();
   $("placementCounter").textContent=`высажено ${app.placement.ships.length} из ${FLEET.length}`;
   $("readyBtn").disabled=app.placement.ships.length!==FLEET.length;
@@ -376,7 +395,7 @@ export function renderPlacement(){
 }
 
 export function lockPlacement(){
-  ["resetFleetBtn","readyBtn","squareShipToggle"].forEach(id=>{const el=$(id);if(el)el.disabled=true;});
+  ["resetFleetBtn","readyBtn","squareShipToggle","autoMissToggle"].forEach(id=>{const el=$(id);if(el)el.disabled=true;});
   $("placementBoard").querySelectorAll(".board-cell").forEach(b=>b.disabled=true);
   $("shipPalette").querySelectorAll("button").forEach(b=>b.disabled=true);
 }
@@ -384,6 +403,7 @@ export function lockPlacement(){
 export function unlockPlacement(){
   ["resetFleetBtn"].forEach(id=>$(id).disabled=false);
   syncSquareRewardControl();
+  syncAutoMissRewardControl();
 }
 
 export async function ready(){
@@ -397,7 +417,11 @@ export async function ready(){
   lockPlacement();
   const slowTimer=setTimeout(()=>msg($("placementMessage"),"связь медленная, но расстановка сохранена в браузере. продолжаем ждать."),2500);
   try{
-    const {data,error}=await app.supabase.rpc("ready_with_fleet",{p_game_id:app.game.id,p_ships:payload});
+    const {data,error}=await app.supabase.rpc("ready_with_fleet",{
+      p_game_id:app.game.id,
+      p_ships:payload,
+      p_options:{auto_miss:!!app.placement.useAutoMiss},
+    });
     if(error)throw error;
     app.game=data;
     await refreshGame();
