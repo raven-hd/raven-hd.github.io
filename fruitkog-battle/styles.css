@@ -7441,3 +7441,65 @@ body[data-view="tournament"] .page-shell{
     border-radius:14px;
   }
 }
+
+
+/* reward preview: tournament card in player profile */
+#playerProfileDialog .public-profile-stats{
+  grid-template-columns:repeat(6,minmax(0,1fr));
+}
+#playerProfileDialog .public-stat-tournaments{
+  align-content:start;
+}
+#playerProfileDialog .public-stat-tournaments>summary{
+  display:grid;
+  gap:3px;
+  min-width:0;
+  cursor:pointer;
+  list-style:none;
+}
+#playerProfileDialog .public-stat-tournaments>summary::-webkit-details-marker{
+  display:none;
+}
+#playerProfileDialog .public-stat-tournaments>summary::after{
+  content:"⌄";
+  position:absolute;
+  right:8px;
+  bottom:8px;
+  color:var(--muted);
+  font-size:10px;
+  transition:transform .18s ease;
+}
+#playerProfileDialog .public-stat-tournaments{
+  position:relative;
+}
+#playerProfileDialog .public-stat-tournaments[open]>summary::after{
+  transform:rotate(180deg);
+}
+#playerProfileDialog .public-tournament-list{
+  display:grid;
+  gap:7px;
+  margin-top:7px;
+  padding-top:7px;
+  border-top:1px solid rgba(104,112,72,.18);
+}
+#playerProfileDialog .public-tournament-row{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+#playerProfileDialog .public-tournament-row strong{
+  overflow:hidden;
+  font-size:10px;
+  line-height:1.2;
+  text-overflow:ellipsis;
+}
+#playerProfileDialog .public-tournament-row span,
+#playerProfileDialog .public-tournament-empty{
+  font-size:9px;
+  line-height:1.2;
+}
+@media(max-width:760px){
+  #playerProfileDialog .public-profile-stats{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
