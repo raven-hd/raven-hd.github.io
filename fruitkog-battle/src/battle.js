@@ -1,10 +1,10 @@
 // Бой: выстрелы, история ходов, экран зрителя.
 import { app } from "./state.js?v=127";
-import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=127";
+import { PRODUCE_BY_SKIN } from "./constants.js?v=129";
 import { $, fitSingleLineText, msg } from "./helpers.js?v=128";
 import { humanError } from "./errors.js?v=127";
 import { refreshGame } from "./room.js?v=128";
-import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=127";
+import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=129";
 import { autoMissEnabledForGame, loadMyGameBoosts } from "./rewards.js?v=129";
 
 // true — данные обновлены. false — не получилось (нет сети, таймаут) или игрок уже ушел из матча:
@@ -54,6 +54,12 @@ export async function refreshSpectatorData(){
 
 function opponentName(){ return app.game.player1_id===app.user.id?app.game.player2_name:app.game.player1_name; }
 
+function playerShipSkin(playerId){
+  if(playerId===app.game?.player1_id)return app.game.player1_ship_skin==="mushroom"?"mushroom":"vegetable";
+  if(playerId===app.game?.player2_id)return app.game.player2_ship_skin==="mushroom"?"mushroom":"vegetable";
+  return "vegetable";
+}
+
 function foundProduceName(shot,allShots=app.shots){
   if(!shot?.cell)return "плод";
   const hitCells=new Set(allShots
@@ -73,7 +79,7 @@ function foundProduceName(shot,allShots=app.shots){
       if(hitCells.has(next)&&!found.has(next)){found.add(next);queue.push(next);}
     });
   }
-  return PRODUCE_BY_SHIP_LENGTH[found.size]||"плод";
+  return PRODUCE_BY_SKIN[playerShipSkin(shot.target_id)]?.[found.size]||"плод";
 }
 
 export function resultLabel(shot,allShots=app.shots){
@@ -147,7 +153,11 @@ export function renderBattle(){
   const ownShots=app.shots.filter(s=>s.target_id===app.user.id);
   const enemyShots=app.shots.filter(s=>s.shooter_id===app.user.id);
   renderFleetSkins($("ownBoard"),app.myFleet?.ships,ownShots);
-  renderFleetSkins($("enemyBoard"),app.game.status==="finished"?app.opponentFleet?.ships:sunkShipsFromShots(enemyShots),enemyShots);
+  const opponentId=app.game.player1_id===app.user.id?app.game.player2_id:app.game.player1_id;
+  const visibleOpponentShips=app.game.status==="finished"
+    ? app.opponentFleet?.ships
+    : sunkShipsFromShots(enemyShots).map(ship=>({...ship,skin:playerShipSkin(opponentId)}));
+  renderFleetSkins($("enemyBoard"),visibleOpponentShips,enemyShots);
   const own=new Set((app.myFleet?.ships||[]).flatMap(s=>s.cells));
   $("ownBoard").querySelectorAll(".board-cell").forEach(b=>{if(own.has(b.dataset.cell))b.classList.add("ship");});
   if (app.game.status === "finished") {
@@ -223,7 +233,8 @@ export function renderSpectatorBattle(){
   if(app.game.status!=="finished"){
     [app.game.player1_id,app.game.player2_id].forEach((owner,index)=>{
       const boardShots=app.shots.filter(s=>s.target_id===owner);
-      renderFleetSkins($(index===0?"ownBoard":"enemyBoard"),sunkShipsFromShots(boardShots),boardShots);
+      const visibleShips=sunkShipsFromShots(boardShots).map(ship=>({...ship,skin:playerShipSkin(owner)}));
+      renderFleetSkins($(index===0?"ownBoard":"enemyBoard"),visibleShips,boardShots);
     });
   }
 
