@@ -32,4 +32,30 @@ export const FLEET = [
 
 export const SHIP_SKINS = {1:"mushroom",2:"eggplant",3:"carrot",4:"celery"};
 
+export const SHIP_SKIN_SETS = {
+  vegetable: {
+    line: {
+      1:"mushroom.png",
+      2:"eggplant.png",
+      3:"carrot.png",
+      4:"celery.png",
+    },
+    square:"veg-4-square-cabbage.webp",
+  },
+  mushroom: {
+    line: {
+      1:"fungi-1-russula.webp",
+      2:"fungi-2-fly-agaric.webp",
+      3:"fungi-3-morel.webp",
+      4:"fungi-4-cluster.webp",
+    },
+    square:"fungi-4-square-porcini.webp",
+  },
+};
+
+export function shipSkinAsset(skin,length,{square=false}={}){
+  const set=SHIP_SKIN_SETS[skin]||SHIP_SKIN_SETS.vegetable;
+  return square?set.square:set.line[length];
+}
+
 export const PRODUCE_BY_SHIP_LENGTH={1:"шампиньон",2:"баклажан",3:"морковь",4:"сельдерей"};
