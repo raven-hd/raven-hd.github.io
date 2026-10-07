@@ -1,8 +1,9 @@
 // Игровое поле: клетки, координаты, овощные скины кораблей.
 import { app } from "./state.js?v=127";
-import { COLS, SHIP_SKINS } from "./constants.js?v=127";
+import { COLS, SHIP_SKINS, shipSkinAsset } from "./constants.js?v=129";
 import { $ } from "./helpers.js?v=127";
 import { clearPlacementPreview } from "./placement.js?v=127";
+import { activeRewards } from "./rewards.js?v=129";
 
 export function coordsToCell(col,row){ return `${COLS[col]}${row+1}`; }
 
@@ -26,6 +27,14 @@ export function syncVegetableMode(){
   });
 }
 
+function skinForBoard(board,ship){
+  if(ship?.skin==="mushroom"||ship?.skin==="vegetable")return ship.skin;
+  if(board?.id==="placementBoard"||board?.id==="ownBoard"){
+    return activeRewards().selected_ship_skin==="mushroom"?"mushroom":"vegetable";
+  }
+  return "vegetable";
+}
+
 // Whole-ship artwork uses the same responsive cell size as the board.
 // Call only with fleets already visible to this player.
 export function addShipSkin(board,ship,preview=false,valid=true){
@@ -46,17 +55,14 @@ export function addShipSkin(board,ship,preview=false,valid=true){
   sprite.style.setProperty("--ship-height",square?2:(horizontal?1:ship.length));
   if(horizontal)sprite.classList.add("horizontal");
   if(ship.sunk&&!preview)sprite.classList.add("vegetable-sunk");
-  if(square){
-    const grid=document.createElement("span");
-    grid.className="square-reward-grid";
-    for(let i=0;i<4;i++)grid.appendChild(document.createElement("i"));
-    sprite.append(grid);
-  }else{
-    const img=document.createElement("img");
-    img.src=`./assets/ships/${SHIP_SKINS[ship.length]}.png?v=108`;
-    img.alt="";img.draggable=false;
-    sprite.append(img);
-  }
+  const skin=skinForBoard(board,ship);
+  sprite.dataset.skin=skin;
+  const asset=shipSkinAsset(skin,ship.length,{square});
+  if(!asset)return;
+  const img=document.createElement("img");
+  img.src=`./assets/ships/${asset}?v=129`;
+  img.alt="";img.draggable=false;
+  sprite.append(img);
   board.append(sprite);
 }
 
