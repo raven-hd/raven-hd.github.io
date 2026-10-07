@@ -58,4 +58,9 @@ export function shipSkinAsset(skin,length,{square=false}={}){
   return square?set.square:set.line[length];
 }
 
-export const PRODUCE_BY_SHIP_LENGTH={1:"шампиньон",2:"баклажан",3:"морковь",4:"сельдерей"};
+export const PRODUCE_BY_SKIN = {
+  vegetable:{1:"шампиньон",2:"баклажан",3:"морковь",4:"сельдерей"},
+  mushroom:{1:"сыроежка",2:"мухомор",3:"сморчок",4:"опята"},
+};
+
+export const PRODUCE_BY_SHIP_LENGTH=PRODUCE_BY_SKIN.vegetable;
