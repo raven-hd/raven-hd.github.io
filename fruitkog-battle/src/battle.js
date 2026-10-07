@@ -5,6 +5,7 @@ import { $, fitSingleLineText, msg } from "./helpers.js?v=128";
 import { humanError } from "./errors.js?v=127";
 import { refreshGame } from "./room.js?v=128";
 import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=127";
+import { autoMissEnabledForGame, loadMyGameBoosts } from "./rewards.js?v=129";
 
 // true — данные обновлены. false — не получилось (нет сети, таймаут) или игрок уже ушел из матча:
 // тогда прежние данные не трогаем, чтобы поле не «обнулилось» до следующего обновления
@@ -28,6 +29,7 @@ export async function refreshBattleData(){
     ? fleets.find(fleet => fleet.owner_id !== app.user.id) || null
     : null;
   app.shots=shotsRes.data||[];
+  await loadMyGameBoosts(game.id);
   return true;
 }
 
@@ -112,6 +114,27 @@ function appendHitMarker(cell){
   const icon=document.createElement("i");icon.className="fa-solid fa-xmark";marker.append(icon);cell.append(marker);
 }
 
+function derivedAutoMissCells(enemyShots){
+  const result=new Set();
+  if(!autoMissEnabledForGame(app.game?.id))return result;
+  const actualShots=new Set(enemyShots.map(shot=>shot.cell));
+  const sunkShips=sunkShipsFromShots(enemyShots);
+  sunkShips.forEach(ship=>{
+    const shipCells=new Set(ship.cells);
+    ship.cells.forEach(cell=>{
+      const {col,row}=cellToCoords(cell);
+      for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
+        if(dr===0&&dc===0)continue;
+        const nextCol=col+dc,nextRow=row+dr;
+        if(nextCol<0||nextCol>9||nextRow<0||nextRow>9)continue;
+        const next=coordsToCell(nextCol,nextRow);
+        if(!shipCells.has(next)&&!actualShots.has(next))result.add(next);
+      }
+    });
+  });
+  return result;
+}
+
 export function renderBattle(){
   $("shotBar").classList.remove("hidden");
   $("ownBoardTitle").textContent="ваша грядка";
@@ -141,6 +164,14 @@ export function renderBattle(){
     b.classList.remove("ship");
     b.classList.add(s.result==="miss"?"miss":"hit");b.disabled=true;
     if(s.result!=="miss")appendHitMarker(b);
+  });
+
+  derivedAutoMissCells(enemyShots).forEach(cell=>{
+    const b=$("enemyBoard").querySelector(`[data-cell="${cell}"]`);
+    if(!b||b.classList.contains("hit")||b.classList.contains("miss"))return;
+    b.classList.add("miss","auto-miss");
+    b.disabled=true;
+    b.title="пустая клетка";
   });
 
   const myTurn=app.game.status==="playing"&&app.game.current_turn===app.user.id;
@@ -228,6 +259,7 @@ export function renderSpectatorBattle(){
 
 async function fire(cell){
   if(app.shotInProgress||app.game?.status!=="playing"||app.game.current_turn!==app.user.id)return;
+  if($("enemyBoard").querySelector(`[data-cell="${cell}"]`)?.classList.contains("auto-miss"))return;
   if(app.shots.some(shot=>shot.shooter_id===app.user.id&&shot.cell===cell))return;
   app.shotInProgress=true;
   app.shotRevision++;
