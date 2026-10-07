@@ -80,6 +80,7 @@ export const app = {
     square_ship_uses: 0,
     selected_ship_skin: "vegetable",
   },
+  rewardsUserId: null,
   adminGameSettingsCache: [],
   placement: { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null },
   vegetablesEnabled: true,
