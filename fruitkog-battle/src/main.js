@@ -18,8 +18,10 @@ import { closeAdminNotifications, markAdminNotificationsRead, toggleAdminNotific
 import { adminCancelGame, loadAdmin, loadMoreAdminGames, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=127";
 import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=127";
 import { openAvatarPicker, saveAvatarChoice } from "./avatars.js?v=128";
+import { bindAdminRewards } from "./admin-rewards.js?v=129";
 
 function wire(){
+  bindAdminRewards();
   // Только кнопки меню. У <body> тоже есть data-view (там хранится текущий раздел), и раньше
   // обработчик вешался и на него: любой клик по странице заново открывал текущий раздел и
   // перезагружал его данные (в админке — 6 запросов на каждый клик), а медленный ответ мог
