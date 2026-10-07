@@ -34,6 +34,10 @@ export function rewardDemoEnabled(){
 }
 
 export function rewardDemoState(){
+  const selected=app.rewardsUserId===app.user?.id
+    && ["vegetable","mushroom"].includes(app.rewards?.selected_ship_skin)
+    ? app.rewards.selected_ship_skin
+    : "mushroom";
   return {
     mushroom_skin_unlocked:true,
     mushroom_skin_expires_at:null,
@@ -43,7 +47,7 @@ export function rewardDemoState(){
     square_ship_uses:15,
     square_ship_unlimited:false,
     square_ship_expires_at:null,
-    selected_ship_skin:"mushroom",
+    selected_ship_skin:selected,
   };
 }
 
