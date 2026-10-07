@@ -83,8 +83,7 @@ export async function saveAvatarChoice() {
   if (!allowedIds.has(id)) return;
   $("saveAvatarBtn").disabled = true;
   try {
-    const {error} = await app.supabase.from("fruitkog_avatars")
-      .upsert({user_id:userId,avatar_id:id},{onConflict:"user_id"});
+    const {error} = await app.supabase.rpc("set_fruitkog_avatar",{p_avatar_id:id});
     if (error) throw error;
     if (app.user?.id !== userId) return;
     app.fruitkogAvatarCache.set(userId,id);
