@@ -7503,3 +7503,71 @@ body[data-view="tournament"] .page-shell{
     grid-template-columns:repeat(3,minmax(0,1fr));
   }
 }
+
+
+/* reward preview: square 2x2 ship */
+#gameView .placement-reward{
+  margin:0 0 10px;
+  padding:10px 11px;
+  border:1px solid rgba(126,131,102,.26);
+  border-radius:12px;
+  background:rgba(255,244,223,.72);
+}
+#gameView .placement-reward-toggle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+}
+#gameView .placement-reward-toggle input{
+  width:18px;
+  height:18px;
+  min-height:0;
+  margin:0;
+  accent-color:#7E8366;
+}
+#gameView .placement-reward-toggle span{
+  display:grid;
+  gap:2px;
+}
+#gameView .placement-reward-toggle strong{
+  color:#29442b;
+  font-size:13px;
+}
+#gameView .placement-reward-toggle small{
+  color:#817863;
+  font-size:10px;
+}
+#gameView .square-preview{
+  display:grid!important;
+  grid-template-columns:repeat(2,15px);
+  grid-template-rows:repeat(2,15px);
+  gap:2px;
+}
+#gameView .square-ship-choice .palette-vegetable{
+  display:none!important;
+}
+#gameView .square-reward-ship{
+  display:none;
+}
+body.vegetables-on #gameView .square-reward-ship{
+  display:block;
+}
+#gameView .square-reward-grid{
+  position:absolute;
+  inset:3px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  grid-template-rows:repeat(2,1fr);
+  gap:2px;
+}
+#gameView .square-reward-grid i{
+  display:block;
+  border:1px solid rgba(255,248,233,.55);
+  border-radius:5px;
+  background:linear-gradient(145deg,#a9b369,#81934f);
+  box-shadow:inset 0 0 0 1px rgba(58,77,43,.14);
+}
+#gameView .vegetable-preview.square-reward-ship.invalid .square-reward-grid i{
+  background:linear-gradient(145deg,#c98572,#9f594c 58%,#743d35);
+}
