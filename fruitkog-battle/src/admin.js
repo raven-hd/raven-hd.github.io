@@ -1,11 +1,11 @@
 // Админ-панель: загрузка, игроки, матчи, объявления, проверка защиты.
 import { app } from "./state.js?v=127";
-import { configured } from "./constants.js?v=127";
+import { configured } from "./constants.js?v=129";
 import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=127";
 import { humanError } from "./errors.js?v=127";
 import { statusLabel } from "./room.js?v=127";
-import { resetBoard } from "./board.js?v=127";
-import { resultLabel } from "./battle.js?v=127";
+import { resetBoard } from "./board.js?v=129";
+import { resultLabel } from "./battle.js?v=129";
 import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=127";
 import { loadAdminNotifications } from "./admin-notifications.js?v=127";
 import { loadAdminGameSettings } from "./admin-settings.js?v=127";
