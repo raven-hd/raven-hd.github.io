@@ -7571,3 +7571,89 @@ body.vegetables-on #gameView .square-reward-ship{
 #gameView .vegetable-preview.square-reward-ship.invalid .square-reward-grid i{
   background:linear-gradient(145deg,#c98572,#9f594c 58%,#743d35);
 }
+
+
+/* reward preview: skin warehouse in own profile */
+#playerProfileDialog .profile-skin-inventory{
+  margin:16px 0 6px;
+  padding-top:14px;
+  border-top:1px solid rgba(104,112,72,.18);
+}
+#playerProfileDialog .profile-skin-head{
+  margin:0 0 9px;
+}
+#playerProfileDialog .profile-skin-head h3{
+  margin:0;
+  font-family:"NauryzRedKeds",Georgia,"Times New Roman",serif;
+  font-size:24px;
+  font-weight:400;
+}
+#playerProfileDialog .profile-skin-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+#playerProfileDialog .profile-skin-card{
+  display:grid;
+  grid-template-columns:72px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  padding:9px;
+  border:1px solid rgba(104,112,72,.20);
+  border-radius:12px;
+  background:rgba(246,230,199,.52);
+}
+#playerProfileDialog .profile-skin-preview{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  min-height:48px;
+  overflow:hidden;
+  border-radius:9px;
+  background:rgba(255,248,233,.68);
+}
+#playerProfileDialog .profile-skin-preview.vegetable img{
+  width:15px;
+  height:45px;
+  object-fit:contain;
+}
+#playerProfileDialog .profile-skin-preview.mushroom span{
+  padding:8px;
+  color:#766b57;
+  font-size:9px;
+  line-height:1.15;
+  text-align:center;
+}
+#playerProfileDialog .profile-skin-copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+#playerProfileDialog .profile-skin-copy strong{
+  color:#29442b;
+  font-size:13px;
+}
+#playerProfileDialog .profile-skin-copy span{
+  color:#817863;
+  font-size:9.5px;
+}
+#playerProfileDialog .profile-skin-card button{
+  min-height:32px;
+  padding:6px 9px;
+  font-size:10px;
+}
+#playerProfileDialog .profile-skin-card button.active{
+  border-color:rgba(126,131,102,.24);
+  background:#DDD2B8;
+  color:#665f50;
+}
+@media(max-width:700px){
+  #playerProfileDialog .profile-skin-grid{
+    grid-template-columns:1fr;
+  }
+  #playerProfileDialog .profile-skin-card{
+    grid-template-columns:64px minmax(0,1fr) auto;
+  }
+}
