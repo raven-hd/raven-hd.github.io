@@ -64,16 +64,24 @@ export function gameAllowsBoosts(game=app.game){
   return !!game&&game.game_type!=="tournament";
 }
 
+export function activeRewards(){
+  return rewardDemoEnabled()?rewardDemoState():(app.rewards||DEFAULT_REWARDS);
+}
+
 export function canUseAutoMisses(game=app.game){
-  return gameAllowsBoosts(game)&&Number(app.rewards?.auto_miss_uses)>0;
+  return gameAllowsBoosts(game)&&Number(activeRewards().auto_miss_uses)>0;
 }
 
 export function canUseSquareShip(game=app.game){
-  return gameAllowsBoosts(game)&&Number(app.rewards?.square_ship_uses)>0;
+  return gameAllowsBoosts(game)&&Number(activeRewards().square_ship_uses)>0;
+}
+
+export function squareShipUses(){
+  return Math.max(0,Number(activeRewards().square_ship_uses)||0);
 }
 
 export function canUseMushroomSkin(){
-  return !!app.rewards?.mushroom_skin_unlocked;
+  return !!activeRewards().mushroom_skin_unlocked;
 }
 
 export async function selectShipSkin(skin){
