@@ -5,7 +5,7 @@ import { $, msg, safeStorage } from "./helpers.js?v=127";
 import { humanError } from "./errors.js?v=127";
 import { isMeReady, refreshGame } from "./room.js?v=127";
 import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=127";
-import { canUseSquareShip, squareShipUses } from "./rewards.js?v=129";
+import { canUseSquareShip, loadMyRewards, squareShipUses } from "./rewards.js?v=129";
 
 export function emptyPlacement() {
   return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null, useSquareShip: false };
@@ -21,12 +21,16 @@ export function loadPlacementDraft(gameId=app.game?.id) {
   try {
     const saved = JSON.parse(safeStorage.get(key));
     if (!saved || !Array.isArray(saved.ships) || !["h","v"].includes(saved.orientation)) return emptyPlacement();
+    const useSquareShip=!!saved.useSquareShip && canUseSquareShip(app.game);
+    const ships=useSquareShip
+      ? saved.ships
+      : saved.ships.filter(ship=>ship?.shape!=="square");
     return {
-      ships: saved.ships,
+      ships,
       orientation: saved.orientation,
       selectedShipIndex: saved.selectedShipIndex ?? null,
       selectedPlacedIndex: null,
-      useSquareShip: !!saved.useSquareShip && canUseSquareShip(app.game),
+      useSquareShip,
     };
   } catch {
     return emptyPlacement();
@@ -316,6 +320,11 @@ function renderPalette(){
 }
 
 export function renderPlacement(){
+  if(app.profile?.account_type==="registered" && app.rewardsUserId!==app.user?.id){
+    loadMyRewards().then(()=>{
+      if(app.game?.status==="placing"&&!isMeReady())renderPlacement();
+    });
+  }
   const savedScroll=window.scrollY;
   if(document.activeElement instanceof HTMLElement)document.activeElement.blur();
   $("placementBoard").innerHTML="";
