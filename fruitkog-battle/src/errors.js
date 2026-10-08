@@ -26,6 +26,7 @@ export function humanError(error) {
     ["Invalid fleet","сервер отклонил расстановку."],
     ["Admin required","этот раздел доступен только администратору."],
     ["Achievement request is no longer pending","заявка уже рассмотрена. обновите уведомления."],
+    ["Achievement security audit allowlist anchor missing","проверка защиты не смогла учесть новые функции."],
     ["Registered profile not found","зарегистрированный профиль не найден."],
     ["Game cannot be cancelled","этот матч уже завершен или закрыт."],
     ["Invalid admin game filter","неизвестный фильтр матчей."],

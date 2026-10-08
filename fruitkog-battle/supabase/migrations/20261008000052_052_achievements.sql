@@ -279,4 +279,21 @@ grant execute on function public.list_player_achievements(uuid) to authenticated
 grant execute on function public.admin_list_achievement_requests(integer) to authenticated;
 grant execute on function public.admin_decide_achievement(uuid,boolean) to authenticated;
 
+-- Проверка защиты содержит белый список открытых RPC. Расширяем ее текущую
+-- версию, сохраняя дополнения из других веток при будущем объединении.
+do $achievement_audit$
+declare
+  audit_definition text:=pg_get_functiondef('public.admin_security_audit()'::regprocedure);
+  revised_definition text;
+begin
+  revised_definition:=replace(audit_definition,
+    '''admin_start_qualifier_tiebreak''',
+    '''admin_start_qualifier_tiebreak'',''list_player_achievements'',''admin_list_achievement_requests'',''admin_decide_achievement''');
+  if revised_definition=audit_definition then
+    raise exception 'Achievement security audit allowlist anchor missing';
+  end if;
+  execute revised_definition;
+end;
+$achievement_audit$;
+
 commit;
