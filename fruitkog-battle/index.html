@@ -13,7 +13,7 @@
   <link rel="manifest" href="./site.webmanifest?v=126">
   <meta name="theme-color" content="#39492A">
   <script src="./boot.js?v=42"></script>
-<link rel="stylesheet" href="./styles.css?v=132">
+<link rel="stylesheet" href="./styles.css?v=133">
 </head>
 <body data-view="home">
   <header class="site-header">
@@ -757,6 +757,10 @@
         </div>
       </div>
       <div id="publicProfileStats" class="public-profile-stats"></div>
+      <section id="publicProfileAchievements" class="profile-achievements hidden" aria-label="ачивки игрока">
+        <div class="section-head"><div><p class="eyebrow">достижения</p><h3>ачивки</h3></div></div>
+        <div id="publicProfileAchievementGrid" class="achievement-grid"></div>
+      </section>
       <div class="section-head public-history-head">
         <div>
           <p class="eyebrow">последние матчи</p>
@@ -770,6 +774,21 @@
       </details>
       <p id="publicProfileHistoryEmpty" class="muted">завершенных матчей пока нет.</p>
       <p id="publicProfileMessage" class="message"></p>
+    </section>
+  </dialog>
+
+  <dialog id="achievementReviewDialog" class="achievement-review-dialog">
+    <form method="dialog" class="dialog-close"><button aria-label="закрыть">×</button></form>
+    <section class="dialog-pane">
+      <p class="eyebrow">проверка ачивки</p>
+      <h2 id="achievementReviewPlayer">игрок</h2>
+      <p id="achievementReviewTitle" class="achievement-review-title"></p>
+      <p id="achievementReviewEvidence" class="muted"></p>
+      <div class="achievement-review-actions">
+        <button id="achievementApproveBtn" class="primary" type="button">подтвердить выдачу</button>
+        <button id="achievementRejectBtn" type="button">отклонить</button>
+      </div>
+      <p id="achievementReviewMessage" class="message" role="status"></p>
     </section>
   </dialog>
 
@@ -940,6 +959,6 @@
     <span>сначала выполните SQL и заполните <code>config.js</code>.</span>
   </div>
 
-  <script type="module" src="./src/main.js?v=128"></script>
+  <script type="module" src="./src/main.js?v=131"></script>
 </body>
 </html>

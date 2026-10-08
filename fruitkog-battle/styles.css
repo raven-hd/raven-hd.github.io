@@ -7441,3 +7441,15 @@ body[data-view="tournament"] .page-shell{
     border-radius:14px;
   }
 }
+
+/* Ачивки в профиле и проверка заявки администратором. */
+.profile-achievements{margin:1.2rem 0 1.7rem}
+.achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:.65rem}
+.achievement-card{display:flex;align-items:flex-start;gap:.7rem;padding:.85rem;border:1px solid #c9b691;border-radius:14px;background:#fff9eb;color:#39492a}
+.achievement-icon{font-size:1.75rem;line-height:1.2}
+.achievement-card strong,.achievement-card small,.achievement-card time{display:block}
+.achievement-card small{margin:.25rem 0;color:#59634e}
+.achievement-card time{font-size:.72rem;color:#677060}
+.achievement-review-dialog{width:min(92vw,480px)}
+.achievement-review-title{font-weight:700;font-size:1.15rem;color:#39492a}
+.achievement-review-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.1rem}

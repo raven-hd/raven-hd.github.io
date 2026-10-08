@@ -1,12 +1,12 @@
 // Комната матча: открыть, наблюдать, выйти, сдаться, обновление состояния матча.
-import { app } from "./state.js?v=127";
-import { $, fitSingleLineText, msg, safeStorage } from "./helpers.js?v=128";
-import { humanError } from "./errors.js?v=127";
-import { switchView } from "./navigation.js?v=127";
-import { loadLobby } from "./lobby.js?v=127";
-import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=127";
-import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=128";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=128";
+import { app } from "./state.js?v=131";
+import { $, fitSingleLineText, msg, safeStorage } from "./helpers.js?v=131";
+import { humanError } from "./errors.js?v=131";
+import { switchView } from "./navigation.js?v=131";
+import { loadLobby } from "./lobby.js?v=131";
+import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=131";
+import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=131";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=131";
 
 export async function openGame(row) {
   app.spectatorMode = false;
