@@ -18,7 +18,7 @@ create table public.player_achievements (
 create index player_achievements_pending_idx on public.player_achievements(earned_at,id) where status='pending';
 create index player_achievements_public_idx on public.player_achievements(user_id,earned_at desc) where status='approved';
 alter table public.player_achievements enable row level security;
-revoke all on public.player_achievements from anon,authenticated;
+revoke all on public.player_achievements from public,anon,authenticated;
 
 create or replace function public.propose_player_achievement(
   p_user_id uuid,p_code text,p_context_key text,p_evidence text,p_tournament_id uuid default null
@@ -102,7 +102,7 @@ create table public.achievement_rating_snapshots (
 create index achievement_rating_snapshots_lookup_idx
 on public.achievement_rating_snapshots(user_id,recorded_at desc,id desc);
 alter table public.achievement_rating_snapshots enable row level security;
-revoke all on public.achievement_rating_snapshots from anon,authenticated;
+revoke all on public.achievement_rating_snapshots from public,anon,authenticated;
 
 insert into public.achievement_rating_snapshots(user_id,rating,wins,games)
 select user_id,rating,rated_wins,rated_games from public.profiles where account_type='registered';
@@ -129,7 +129,7 @@ create table public.achievement_leader_check (
 insert into public.achievement_leader_check(singleton,last_checked_day)
 values(true,(now() at time zone 'Europe/Moscow')::date);
 alter table public.achievement_leader_check enable row level security;
-revoke all on public.achievement_leader_check from anon,authenticated;
+revoke all on public.achievement_leader_check from public,anon,authenticated;
 
 create or replace function public.refresh_achievement_leaders()
 returns void language plpgsql security definer set search_path=''
