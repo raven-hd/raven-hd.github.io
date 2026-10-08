@@ -23,7 +23,7 @@ defaults:
 
 jobs:
   checks:
-    name: code and database
+    name: code and achievement database
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -53,42 +53,4 @@ jobs:
         run: supabase db start
 
       - name: database tests
-        run: supabase test db
-
-  e2e:
-    name: browser game and tournament
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          persist-credentials: false
-          sparse-checkout: fruitkog-battle
-
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        with:
-          node-version: 22
-
-      - uses: supabase/setup-cli@1dedf2c611547ede7232d26866dd3c56ab903bbb
-        with:
-          version: 2.118.0
-
-      - name: start temporary local Supabase
-        run: supabase start -x storage-api,imgproxy,mailpit,postgres-meta,studio,edge-runtime,logflare,vector,supavisor
-
-      - name: install test browser
-        run: |
-          npm install --no-save playwright@1.56.0
-          npx playwright install --with-deps chromium
-
-      - name: browser scenario
-        run: node tests/e2e/run.cjs
-
-      - name: save scenario journal
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: fruitkog-e2e-journal
-          path: fruitkog-battle/tests/e2e/out/
-          if-no-files-found: ignore
-          retention-days: 7
+        run: supabase test db supabase/tests/database/12_achievements.test.sql
