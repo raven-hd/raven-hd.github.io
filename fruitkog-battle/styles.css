@@ -7441,3 +7441,286 @@ body[data-view="tournament"] .page-shell{
     border-radius:14px;
   }
 }
+
+
+/* reward preview: tournament card in player profile */
+#playerProfileDialog .public-profile-stats{
+  grid-template-columns:repeat(6,minmax(0,1fr));
+}
+#playerProfileDialog .public-stat-tournaments{
+  align-content:start;
+}
+#playerProfileDialog .public-stat-tournaments>summary{
+  display:grid;
+  gap:3px;
+  min-width:0;
+  cursor:pointer;
+  list-style:none;
+}
+#playerProfileDialog .public-stat-tournaments>summary::-webkit-details-marker{
+  display:none;
+}
+#playerProfileDialog .public-stat-tournaments>summary::after{
+  content:"⌄";
+  position:absolute;
+  right:8px;
+  bottom:8px;
+  color:var(--muted);
+  font-size:10px;
+  transition:transform .18s ease;
+}
+#playerProfileDialog .public-stat-tournaments{
+  position:relative;
+}
+#playerProfileDialog .public-stat-tournaments[open]>summary::after{
+  transform:rotate(180deg);
+}
+#playerProfileDialog .public-tournament-list{
+  display:grid;
+  gap:7px;
+  margin-top:7px;
+  padding-top:7px;
+  border-top:1px solid rgba(104,112,72,.18);
+}
+#playerProfileDialog .public-tournament-row{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+#playerProfileDialog .public-tournament-row strong{
+  overflow:hidden;
+  font-size:10px;
+  line-height:1.2;
+  text-overflow:ellipsis;
+}
+#playerProfileDialog .public-tournament-row span,
+#playerProfileDialog .public-tournament-empty{
+  font-size:9px;
+  line-height:1.2;
+}
+@media(max-width:760px){
+  #playerProfileDialog .public-profile-stats{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+
+
+/* reward preview: square 2x2 ship */
+#gameView .placement-reward{
+  margin:0 0 10px;
+  padding:10px 11px;
+  border:1px solid rgba(126,131,102,.26);
+  border-radius:12px;
+  background:rgba(255,244,223,.72);
+}
+#gameView .placement-reward-toggle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+}
+#gameView .placement-reward-toggle input{
+  width:18px;
+  height:18px;
+  min-height:0;
+  margin:0;
+  accent-color:#7E8366;
+}
+#gameView .placement-reward-toggle span{
+  display:grid;
+  gap:2px;
+}
+#gameView .placement-reward-toggle strong{
+  color:#29442b;
+  font-size:13px;
+}
+#gameView .placement-reward-toggle small{
+  color:#817863;
+  font-size:10px;
+}
+#gameView .square-preview{
+  display:grid!important;
+  grid-template-columns:repeat(2,15px);
+  grid-template-rows:repeat(2,15px);
+  gap:2px;
+}
+#gameView .square-ship-choice .palette-vegetable{
+  width:54px;
+  height:54px;
+  object-fit:contain;
+}
+#gameView .square-reward-ship{
+  display:none;
+}
+body.vegetables-on #gameView .square-reward-ship{
+  display:block;
+}
+#gameView .square-reward-ship img,
+#gameView .square-reward-ship.horizontal img{
+  width:calc(var(--garden-cell) * 2.18);
+  height:calc(var(--garden-cell) * 2.18);
+  object-fit:contain;
+  transform:translate(-50%,-50%);
+}
+#gameView .vegetable-preview.square-reward-ship.invalid img{
+  filter:sepia(.5) saturate(1.8) hue-rotate(320deg);
+}
+
+
+/* reward preview: skin warehouse in own profile */
+#playerProfileDialog .profile-skin-inventory{
+  margin:16px 0 6px;
+  padding-top:14px;
+  border-top:1px solid rgba(104,112,72,.18);
+}
+#playerProfileDialog .profile-skin-head{
+  margin:0 0 9px;
+}
+#playerProfileDialog .profile-skin-head h3{
+  margin:0;
+  font-family:"NauryzRedKeds",Georgia,"Times New Roman",serif;
+  font-size:24px;
+  font-weight:400;
+}
+#playerProfileDialog .profile-skin-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+#playerProfileDialog .profile-skin-card{
+  display:grid;
+  grid-template-columns:72px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  padding:9px;
+  border:1px solid rgba(104,112,72,.20);
+  border-radius:12px;
+  background:rgba(246,230,199,.52);
+}
+#playerProfileDialog .profile-skin-preview{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  min-height:48px;
+  overflow:hidden;
+  border-radius:9px;
+  background:rgba(255,248,233,.68);
+}
+#playerProfileDialog .profile-skin-preview img{
+  width:16px;
+  height:46px;
+  object-fit:contain;
+}
+#playerProfileDialog .profile-skin-preview.mushroom img:first-child{
+  width:20px;
+}
+#playerProfileDialog .profile-skin-copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+#playerProfileDialog .profile-skin-copy strong{
+  color:#29442b;
+  font-size:13px;
+}
+#playerProfileDialog .profile-skin-copy span{
+  color:#817863;
+  font-size:9.5px;
+}
+#playerProfileDialog .profile-skin-card button{
+  min-height:32px;
+  padding:6px 9px;
+  font-size:10px;
+}
+#playerProfileDialog .profile-skin-card button.active{
+  border-color:rgba(126,131,102,.24);
+  background:#DDD2B8;
+  color:#665f50;
+}
+@media(max-width:700px){
+  #playerProfileDialog .profile-skin-grid{
+    grid-template-columns:1fr;
+  }
+  #playerProfileDialog .profile-skin-card{
+    grid-template-columns:64px minmax(0,1fr) auto;
+  }
+}
+
+
+/* reward admin */
+.admin-reward-dialog{
+  width:min(760px,calc(100% - 24px));
+}
+.admin-reward-form{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:16px;
+}
+.admin-reward-form .field{
+  margin:0;
+}
+.admin-reward-form .admin-reward-source,
+.admin-reward-form #adminRewardGrantBtn{
+  grid-column:1/-1;
+}
+.admin-reward-history-head{
+  margin:24px 0 6px;
+}
+.admin-reward-history{
+  display:grid;
+}
+.admin-reward-history-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-top:1px solid var(--line);
+}
+.admin-reward-history-row:first-child{
+  border-top:0;
+}
+.admin-reward-history-row .admin-row-main small{
+  line-height:1.35;
+}
+@media(max-width:620px){
+  .admin-reward-form{
+    grid-template-columns:1fr;
+  }
+  .admin-reward-form .admin-reward-source,
+  .admin-reward-form #adminRewardGrantBtn{
+    grid-column:1;
+  }
+  .admin-reward-history-row{
+    grid-template-columns:1fr;
+  }
+  .admin-reward-history-row .admin-row-actions{
+    justify-content:flex-start;
+  }
+}
+
+
+/* reward skin polish: character mushrooms stay upright in the picker */
+#gameView #shipPalette .ship-choice[data-skin="mushroom"] .palette-vegetable,
+#gameView #shipPalette .square-ship-choice .palette-vegetable{
+  transform:none!important;
+}
+#gameView #shipPalette .ship-choice[data-skin="mushroom"][data-length="4"] .palette-vegetable{
+  width:44px;
+  height:64px;
+}
+#gameView #shipPalette .ship-choice[data-skin="mushroom"][data-length="3"] .palette-vegetable{
+  width:42px;
+  height:64px;
+}
+#gameView #shipPalette .ship-choice[data-skin="mushroom"][data-length="2"] .palette-vegetable{
+  width:44px;
+  height:62px;
+}
+#gameView #shipPalette .ship-choice[data-skin="mushroom"][data-length="1"] .palette-vegetable{
+  width:52px;
+  height:52px;
+}

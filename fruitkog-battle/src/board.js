@@ -1,12 +1,22 @@
 // Игровое поле: клетки, координаты, овощные скины кораблей.
-import { app } from "./state.js?v=127";
-import { COLS, SHIP_SKINS } from "./constants.js?v=127";
-import { $ } from "./helpers.js?v=127";
-import { clearPlacementPreview } from "./placement.js?v=127";
+import { app } from "./state.js?v=130";
+import { COLS, SHIP_SKINS, shipSkinAsset } from "./constants.js?v=130";
+import { $ } from "./helpers.js?v=130";
+import { clearPlacementPreview } from "./placement.js?v=130";
+import { activeRewards } from "./rewards.js?v=130";
 
 export function coordsToCell(col,row){ return `${COLS[col]}${row+1}`; }
 
 export function cellToCoords(cell){ return {col:COLS.indexOf(cell[0]),row:Number(cell.slice(1))-1}; }
+
+function isSquareGeometry(ship){
+  if(ship?.shape==="square")return true;
+  if(!ship?.cells||ship.cells.length!==4)return false;
+  const points=ship.cells.map(cellToCoords);
+  const cols=[...new Set(points.map(point=>point.col))].sort((a,b)=>a-b);
+  const rows=[...new Set(points.map(point=>point.row))].sort((a,b)=>a-b);
+  return cols.length===2&&rows.length===2&&cols[1]-cols[0]===1&&rows[1]-rows[0]===1;
+}
 
 export function syncVegetableMode(){
   document.body.classList.toggle("vegetables-on",app.vegetablesEnabled);
@@ -17,28 +27,43 @@ export function syncVegetableMode(){
   });
 }
 
+function skinForBoard(board,ship){
+  if(ship?.skin==="mushroom"||ship?.skin==="vegetable")return ship.skin;
+  if(board?.id==="placementBoard"||board?.id==="ownBoard"){
+    return activeRewards().selected_ship_skin==="mushroom"?"mushroom":"vegetable";
+  }
+  return "vegetable";
+}
+
 // Whole-ship artwork uses the same responsive cell size as the board.
 // Call only with fleets already visible to this player.
 export function addShipSkin(board,ship,preview=false,valid=true){
   if(!ship.cells?.length||!SHIP_SKINS[ship.length])return;
   const points=ship.cells.map(cellToCoords);
   const col=Math.min(...points.map(p=>p.col)),row=Math.min(...points.map(p=>p.row));
-  const horizontal=ship.length>1&&points.every(p=>p.row===row);
+  const square=isSquareGeometry(ship);
+  const horizontal=!square&&ship.length>1&&points.every(p=>p.row===row);
   const sprite=document.createElement("span");
-  sprite.className="vegetable-ship"+(preview?" vegetable-preview":"")+(!valid?" invalid":"");
+  sprite.className="vegetable-ship"+(preview?" vegetable-preview":"")+(!valid?" invalid":"")+(square?" square-reward-ship":"");
   sprite.setAttribute("aria-hidden","true");
   sprite.setAttribute("data-length",String(ship.length));
+  if(square)sprite.setAttribute("data-shape","square");
   sprite.style.setProperty("--ship-col",col);
   sprite.style.setProperty("--ship-row",row);
   sprite.style.setProperty("--ship-length",ship.length);
-  sprite.style.setProperty("--ship-width",horizontal?ship.length:1);
-  sprite.style.setProperty("--ship-height",horizontal?1:ship.length);
+  sprite.style.setProperty("--ship-width",square?2:(horizontal?ship.length:1));
+  sprite.style.setProperty("--ship-height",square?2:(horizontal?1:ship.length));
   if(horizontal)sprite.classList.add("horizontal");
   if(ship.sunk&&!preview)sprite.classList.add("vegetable-sunk");
+  const skin=skinForBoard(board,ship);
+  sprite.dataset.skin=skin;
+  const asset=shipSkinAsset(skin,ship.length,{square});
+  if(!asset)return;
   const img=document.createElement("img");
-  img.src=`./assets/ships/${SHIP_SKINS[ship.length]}.png?v=108`;
+  img.src=`./assets/ships/${asset}?v=129`;
   img.alt="";img.draggable=false;
-  sprite.append(img);board.append(sprite);
+  sprite.append(img);
+  board.append(sprite);
 }
 
 export function renderFleetSkins(board,ships,boardShots=[]){
@@ -67,7 +92,11 @@ export function sunkShipsFromShots(boardShots){
         if(hits.has(next)&&!seen.has(next)){seen.add(next);queue.push(next);}
       });
     }
-    if(SHIP_SKINS[cells.length])ships.push({length:cells.length,cells});
+    if(SHIP_SKINS[cells.length])ships.push({
+      length:cells.length,
+      cells,
+      shape:isSquareGeometry({cells})?"square":"line",
+    });
   });
   return ships;
 }
@@ -117,3 +146,4 @@ export function resetBoard(container) {
     delete cell.dataset.fleetIndex;
   });
 }
+

@@ -1,13 +1,14 @@
 // Расстановка кораблей: черновик, перетаскивание, палитра, готовность.
-import { app } from "./state.js?v=127";
-import { FLEET, SHIP_SKINS } from "./constants.js?v=127";
-import { $, msg, safeStorage } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { isMeReady, refreshGame } from "./room.js?v=127";
-import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=127";
+import { app } from "./state.js?v=130";
+import { FLEET, shipSkinAsset } from "./constants.js?v=130";
+import { $, msg, safeStorage } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
+import { isMeReady, refreshGame } from "./room.js?v=130";
+import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=130";
+import { activeRewards, autoMissUsesLabel, canUseAutoMisses, canUseSquareShip, loadMyRewards, squareShipUsesLabel } from "./rewards.js?v=130";
 
 export function emptyPlacement() {
-  return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null };
+  return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null, useSquareShip: false, useAutoMiss: false };
 }
 
 function placementDraftKey(gameId=app.game?.id) {
@@ -20,11 +21,18 @@ export function loadPlacementDraft(gameId=app.game?.id) {
   try {
     const saved = JSON.parse(safeStorage.get(key));
     if (!saved || !Array.isArray(saved.ships) || !["h","v"].includes(saved.orientation)) return emptyPlacement();
+    const useSquareShip=!!saved.useSquareShip && canUseSquareShip(app.game);
+    const useAutoMiss=!!saved.useAutoMiss && canUseAutoMisses(app.game);
+    const ships=useSquareShip
+      ? saved.ships
+      : saved.ships.filter(ship=>ship?.shape!=="square");
     return {
-      ships: saved.ships,
+      ships,
       orientation: saved.orientation,
       selectedShipIndex: saved.selectedShipIndex ?? null,
       selectedPlacedIndex: null,
+      useSquareShip,
+      useAutoMiss,
     };
   } catch {
     return emptyPlacement();
@@ -50,6 +58,31 @@ function candidateCells(start,length,orientation=app.placement.orientation){
     out.push(coordsToCell(c,r));
   }
   return out;
+}
+
+function squareCandidateCells(anchor,grabOffset=0){
+  const {col,row}=cellToCoords(anchor);
+  const offsetCol=grabOffset%2;
+  const offsetRow=Math.floor(grabOffset/2);
+  const startCol=col-offsetCol;
+  const startRow=row-offsetRow;
+  if(startCol<0||startRow<0||startCol+1>=10||startRow+1>=10)return null;
+  return [
+    coordsToCell(startCol,startRow),
+    coordsToCell(startCol+1,startRow),
+    coordsToCell(startCol,startRow+1),
+    coordsToCell(startCol+1,startRow+1),
+  ];
+}
+
+function isSquareFleetIndex(index){
+  return index===0 && !!app.placement.useSquareShip && FLEET[index]?.length===4;
+}
+
+function candidateCellsForFleetIndex(index,start,orientation=app.placement.orientation){
+  return isSquareFleetIndex(index)
+    ? squareCandidateCells(start)
+    : candidateCells(start,FLEET[index].length,orientation);
 }
 
 function canPlace(cells,ignoreFleetIndex=null){
@@ -87,6 +120,7 @@ function shipAtCell(cell){
 
 function shipOrientation(ship){
   if(!ship || ship.length===1)return app.placement.orientation;
+  if(ship.shape==="square")return "square";
   return ship.cells[0][0]===ship.cells[1][0]?"v":"h";
 }
 
@@ -113,9 +147,10 @@ function previewPlacement(start){
   if(app.game?.status!=="placing"||isMeReady()||app.placementDrag)return;
   const idx=app.placement.selectedShipIndex;
   if(idx===null||app.placement.ships.some(ship=>ship.fleetIndex===idx)||shipAtCell(start))return;
-  const cells=candidateCells(start,FLEET[idx].length);
+  const cells=candidateCellsForFleetIndex(idx,start);
   const valid=canPlace(cells);
-  if(cells)addShipSkin($("placementBoard"),{length:FLEET[idx].length,cells},true,valid);
+  const shape=isSquareFleetIndex(idx)?"square":"line";
+  if(cells)addShipSkin($("placementBoard"),{length:FLEET[idx].length,cells,shape},true,valid);
   const previewCells=cells||[start];
   previewCells.forEach(cell=>{
     const button=$("placementBoard").querySelector(`[data-cell="${cell}"]`);
@@ -127,7 +162,7 @@ function rotatePlacedShip(fleetIndex,anchorCell=null){
   if(!app.game||app.game.status!=="placing"||isMeReady())return;
   const ship=app.placement.ships.find(item=>item.fleetIndex===fleetIndex);
   if(!ship)return;
-  if(ship.length===1)return;
+  if(ship.length===1||ship.shape==="square")return;
   const orientation=shipOrientation(ship)==="h"?"v":"h";
   const anchor=anchorCell||ship.cells[0];
   const preferred=Math.max(0,ship.cells.indexOf(anchor));
@@ -150,8 +185,9 @@ function cellFromPointer(event){
 
 function dragCandidate(ship,cell){
   if(!cell)return null;
-  const orientation=shipOrientation(ship);
   const offset=Math.max(0,app.placementDrag?.grabOffset||0);
+  if(ship.shape==="square")return squareCandidateCells(cell,offset);
+  const orientation=shipOrientation(ship);
   const {col,row}=cellToCoords(cell);
   const startCol=orientation==="h"?col-offset:col;
   const startRow=orientation==="v"?row-offset:row;
@@ -186,7 +222,7 @@ export function movePlacementDrag(event){
   const valid=canPlace(cells,ship.fleetIndex);
   app.placementDrag.cells=cells;
   app.placementDrag.valid=valid;
-  if(cells)addShipSkin($("placementBoard"),{length:ship.length,cells},true,valid);
+  if(cells)addShipSkin($("placementBoard"),{length:ship.length,cells,shape:ship.shape||"line"},true,valid);
   (cells||[]).forEach(cell=>{
     $("placementBoard").querySelector(`[data-cell="${cell}"]`)
       ?.classList.add(valid?"candidate-valid":"candidate-invalid");
@@ -223,34 +259,82 @@ function hoverPlacedShip(fleetIndex,active,relatedTarget=null){
     .forEach(cell=>cell.classList.toggle("ship-hover",active));
 }
 
+function syncSquareRewardControl(){
+  const wrap=$("squareShipReward");
+  const toggle=$("squareShipToggle");
+  const count=$("squareShipUses");
+  if(!wrap||!toggle||!count)return;
+  const available=canUseSquareShip(app.game);
+  wrap.classList.toggle("hidden",!available);
+  count.textContent=squareShipUsesLabel();
+  toggle.checked=available&&!!app.placement.useSquareShip;
+  toggle.disabled=!available||isMeReady()||app.game?.status!=="placing";
+  toggle.onchange=()=>{
+    if(!canUseSquareShip(app.game)){toggle.checked=false;return;}
+    const enabled=toggle.checked;
+    const celery=app.placement.ships.find(ship=>ship.fleetIndex===0);
+    if(celery)app.placement.ships=app.placement.ships.filter(ship=>ship.fleetIndex!==0);
+    app.placement.useSquareShip=enabled;
+    app.placement.selectedShipIndex=0;
+    app.placement.selectedPlacedIndex=null;
+    savePlacementDraft();
+    renderPlacement();
+  };
+}
+
+function syncAutoMissRewardControl(){
+  const wrap=$("autoMissReward");
+  const toggle=$("autoMissToggle");
+  const count=$("autoMissUses");
+  if(!wrap||!toggle||!count)return;
+  const available=canUseAutoMisses(app.game);
+  wrap.classList.toggle("hidden",!available);
+  count.textContent=autoMissUsesLabel();
+  toggle.checked=available&&!!app.placement.useAutoMiss;
+  toggle.disabled=!available||isMeReady()||app.game?.status!=="placing";
+  toggle.onchange=()=>{
+    app.placement.useAutoMiss=canUseAutoMisses(app.game)&&toggle.checked;
+    savePlacementDraft();
+  };
+}
+
 function renderPalette(){
   const wrap=$("shipPalette");wrap.innerHTML="";
   const used=new Set(app.placement.ships.map(s=>s.fleetIndex));
-  const names={4:"сельдерей",3:"морковь",2:"баклажан",1:"гриб"};
+  const activeSkin=activeRewards().selected_ship_skin==="mushroom"?"mushroom":"vegetable";
+  const names=activeSkin==="mushroom"
+    ? {4:"опята",3:"сморчок",2:"мухомор",1:"сыроежка"}
+    : {4:"сельдерей",3:"морковь",2:"баклажан",1:"шампиньон"};
   [4,3,2,1].forEach(length=>{
     const available=FLEET.map((ship,index)=>({ship,index}))
       .filter(item=>item.ship.length===length&&!used.has(item.index));
     const selected=available.some(item=>item.index===app.placement.selectedShipIndex);
     const b=document.createElement("button");
     b.type="button";b.className="ship-choice";b.disabled=available.length===0;
+    b.dataset.skin=activeSkin;
+    const squareMode=length===4&&!!app.placement.useSquareShip;
+    if(squareMode)b.classList.add("square-ship-choice");
     b.dataset.length=String(length);
-    b.setAttribute("aria-label",`${names[length]}, осталось ${available.length}, ${length} клеток`);
+    b.setAttribute("aria-label",squareMode?`призовой корабль 2 на 2, осталось ${available.length}`:`${names[length]}, осталось ${available.length}, ${length} клеток`);
     b.setAttribute("aria-pressed",String(selected));
-    b.title=`${names[length]} · ${length} клеток`;
+    b.title=squareMode?"призовой корабль 2×2":`${names[length]} · ${length} клеток`;
     if(!available.length)b.classList.add("used");
     if(selected)b.classList.add("active");
     const visual=document.createElement("span");visual.className="palette-visual";
     const art=document.createElement("img");
-    art.className="palette-vegetable";art.src=`./assets/ships/${SHIP_SKINS[length]}.png?v=108`;
-    art.alt="";art.draggable=false;visual.append(art);
-    const preview=document.createElement("span");preview.className="ship-preview";
+    art.className="palette-vegetable";
+    art.src=`./assets/ships/${shipSkinAsset(activeSkin,length,{square:squareMode})}?v=129`;
+    art.alt="";art.draggable=false;
+    visual.append(art);
+    const preview=document.createElement("span");preview.className="ship-preview"+(squareMode?" square-preview":"");
     for(let i=0;i<length;i++)preview.appendChild(document.createElement("i"));
     visual.append(preview);b.append(visual);
-    const name=document.createElement("span");name.className="palette-name";name.textContent=names[length];b.append(name);
+    const name=document.createElement("span");name.className="palette-name";
+    name.textContent=squareMode?(activeSkin==="mushroom"?"белый гриб 2×2":"капуста 2×2"):names[length];b.append(name);
     const count=document.createElement("span");count.className="palette-count";count.textContent=`×${available.length}`;b.append(count);
     b.addEventListener("click",()=>{
       if(!available.length)return;
-      if(selected)app.placement.orientation=app.placement.orientation==="h"?"v":"h";
+      if(selected&&!squareMode)app.placement.orientation=app.placement.orientation==="h"?"v":"h";
       else app.placement.selectedShipIndex=available[0].index;
       app.placement.selectedPlacedIndex=null;
       savePlacementDraft();renderPlacement();
@@ -260,6 +344,11 @@ function renderPalette(){
 }
 
 export function renderPlacement(){
+  if(app.profile?.account_type==="registered" && app.rewardsUserId!==app.user?.id){
+    loadMyRewards().then(()=>{
+      if(app.game?.status==="placing"&&!isMeReady())renderPlacement();
+    });
+  }
   const savedScroll=window.scrollY;
   if(document.activeElement instanceof HTMLElement)document.activeElement.blur();
   $("placementBoard").innerHTML="";
@@ -272,9 +361,14 @@ export function renderPlacement(){
     }
     const idx=app.placement.selectedShipIndex;
     if(idx===null||app.placement.ships.some(s=>s.fleetIndex===idx))return;
-    const cells=candidateCells(cell,FLEET[idx].length);
+    const cells=candidateCellsForFleetIndex(idx,cell);
     if(!canPlace(cells))return previewPlacement(cell);
-    app.placement.ships.push({fleetIndex:idx,length:FLEET[idx].length,cells});
+    app.placement.ships.push({
+      fleetIndex:idx,
+      length:FLEET[idx].length,
+      cells,
+      shape:isSquareFleetIndex(idx)?"square":"line",
+    });
     app.placement.selectedShipIndex=nextUnused(FLEET[idx].length);
     savePlacementDraft();
     msg($("placementMessage"),"");
@@ -298,6 +392,8 @@ export function renderPlacement(){
   });
   $("placementBoard").onmouseleave=clearPlacementPreview;
   renderFleetSkins($("placementBoard"),app.placement.ships);
+  syncSquareRewardControl();
+  syncAutoMissRewardControl();
   renderPalette();
   $("placementCounter").textContent=`высажено ${app.placement.ships.length} из ${FLEET.length}`;
   $("readyBtn").disabled=app.placement.ships.length!==FLEET.length;
@@ -305,25 +401,34 @@ export function renderPlacement(){
 }
 
 export function lockPlacement(){
-  ["resetFleetBtn","readyBtn"].forEach(id=>$(id).disabled=true);
+  ["resetFleetBtn","readyBtn","squareShipToggle","autoMissToggle"].forEach(id=>{const el=$(id);if(el)el.disabled=true;});
   $("placementBoard").querySelectorAll(".board-cell").forEach(b=>b.disabled=true);
   $("shipPalette").querySelectorAll("button").forEach(b=>b.disabled=true);
 }
 
 export function unlockPlacement(){
   ["resetFleetBtn"].forEach(id=>$(id).disabled=false);
+  syncSquareRewardControl();
+  syncAutoMissRewardControl();
 }
 
 export async function ready(){
   if(app.placement.ships.length!==FLEET.length||app.readyInProgress)return;
   app.readyInProgress=true;
-  const payload=app.placement.ships.map(s=>({length:s.length,cells:s.cells})).sort((a,b)=>b.length-a.length);
+  const activeSkin=activeRewards().selected_ship_skin==="mushroom"?"mushroom":"vegetable";
+  const payload=app.placement.ships
+    .map(s=>({length:s.length,cells:s.cells,shape:s.shape||"line",skin:activeSkin}))
+    .sort((a,b)=>b.length-a.length);
   const button=$("readyBtn");
   button.textContent="сохраняем расстановку…";
   lockPlacement();
   const slowTimer=setTimeout(()=>msg($("placementMessage"),"связь медленная, но расстановка сохранена в браузере. продолжаем ждать."),2500);
   try{
-    const {data,error}=await app.supabase.rpc("ready_with_fleet",{p_game_id:app.game.id,p_ships:payload});
+    const {data,error}=await app.supabase.rpc("ready_with_fleet",{
+      p_game_id:app.game.id,
+      p_ships:payload,
+      p_options:{auto_miss:!!app.placement.useAutoMiss},
+    });
     if(error)throw error;
     app.game=data;
     await refreshGame();
@@ -341,3 +446,4 @@ export async function ready(){
     }
   }
 }
+

@@ -1,10 +1,11 @@
 // Бой: выстрелы, история ходов, экран зрителя.
-import { app } from "./state.js?v=127";
-import { PRODUCE_BY_SHIP_LENGTH } from "./constants.js?v=127";
-import { $, fitSingleLineText, msg } from "./helpers.js?v=128";
-import { humanError } from "./errors.js?v=127";
-import { refreshGame } from "./room.js?v=128";
-import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=127";
+import { app } from "./state.js?v=130";
+import { PRODUCE_BY_SKIN } from "./constants.js?v=130";
+import { $, fitSingleLineText, msg } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
+import { refreshGame } from "./room.js?v=130";
+import { buildBoard, cellToCoords, coordsToCell, renderFleetSkins, resetBoard, sunkShipsFromShots } from "./board.js?v=130";
+import { autoMissEnabledForGame, loadMyGameBoosts } from "./rewards.js?v=130";
 
 // true — данные обновлены. false — не получилось (нет сети, таймаут) или игрок уже ушел из матча:
 // тогда прежние данные не трогаем, чтобы поле не «обнулилось» до следующего обновления
@@ -28,6 +29,7 @@ export async function refreshBattleData(){
     ? fleets.find(fleet => fleet.owner_id !== app.user.id) || null
     : null;
   app.shots=shotsRes.data||[];
+  await loadMyGameBoosts(game.id);
   return true;
 }
 
@@ -52,6 +54,12 @@ export async function refreshSpectatorData(){
 
 function opponentName(){ return app.game.player1_id===app.user.id?app.game.player2_name:app.game.player1_name; }
 
+function playerShipSkin(playerId){
+  if(playerId===app.game?.player1_id)return app.game.player1_ship_skin==="mushroom"?"mushroom":"vegetable";
+  if(playerId===app.game?.player2_id)return app.game.player2_ship_skin==="mushroom"?"mushroom":"vegetable";
+  return "vegetable";
+}
+
 function foundProduceName(shot,allShots=app.shots){
   if(!shot?.cell)return "плод";
   const hitCells=new Set(allShots
@@ -71,7 +79,14 @@ function foundProduceName(shot,allShots=app.shots){
       if(hitCells.has(next)&&!found.has(next)){found.add(next);queue.push(next);}
     });
   }
-  return PRODUCE_BY_SHIP_LENGTH[found.size]||"плод";
+  if(found.size===4){
+    const points=[...found].map(cellToCoords);
+    const cols=[...new Set(points.map(point=>point.col))].sort((a,b)=>a-b);
+    const rows=[...new Set(points.map(point=>point.row))].sort((a,b)=>a-b);
+    const square=cols.length===2&&rows.length===2&&cols[1]-cols[0]===1&&rows[1]-rows[0]===1;
+    if(square)return playerShipSkin(shot.target_id)==="mushroom"?"белый гриб":"капусту";
+  }
+  return PRODUCE_BY_SKIN[playerShipSkin(shot.target_id)]?.[found.size]||"плод";
 }
 
 export function resultLabel(shot,allShots=app.shots){
@@ -112,6 +127,27 @@ function appendHitMarker(cell){
   const icon=document.createElement("i");icon.className="fa-solid fa-xmark";marker.append(icon);cell.append(marker);
 }
 
+function derivedAutoMissCells(enemyShots){
+  const result=new Set();
+  if(!autoMissEnabledForGame(app.game?.id))return result;
+  const actualShots=new Set(enemyShots.map(shot=>shot.cell));
+  const sunkShips=sunkShipsFromShots(enemyShots);
+  sunkShips.forEach(ship=>{
+    const shipCells=new Set(ship.cells);
+    ship.cells.forEach(cell=>{
+      const {col,row}=cellToCoords(cell);
+      for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
+        if(dr===0&&dc===0)continue;
+        const nextCol=col+dc,nextRow=row+dr;
+        if(nextCol<0||nextCol>9||nextRow<0||nextRow>9)continue;
+        const next=coordsToCell(nextCol,nextRow);
+        if(!shipCells.has(next)&&!actualShots.has(next))result.add(next);
+      }
+    });
+  });
+  return result;
+}
+
 export function renderBattle(){
   $("shotBar").classList.remove("hidden");
   $("ownBoardTitle").textContent="ваша грядка";
@@ -124,7 +160,11 @@ export function renderBattle(){
   const ownShots=app.shots.filter(s=>s.target_id===app.user.id);
   const enemyShots=app.shots.filter(s=>s.shooter_id===app.user.id);
   renderFleetSkins($("ownBoard"),app.myFleet?.ships,ownShots);
-  renderFleetSkins($("enemyBoard"),app.game.status==="finished"?app.opponentFleet?.ships:sunkShipsFromShots(enemyShots),enemyShots);
+  const opponentId=app.game.player1_id===app.user.id?app.game.player2_id:app.game.player1_id;
+  const visibleOpponentShips=app.game.status==="finished"
+    ? app.opponentFleet?.ships
+    : sunkShipsFromShots(enemyShots).map(ship=>({...ship,skin:playerShipSkin(opponentId)}));
+  renderFleetSkins($("enemyBoard"),visibleOpponentShips,enemyShots);
   const own=new Set((app.myFleet?.ships||[]).flatMap(s=>s.cells));
   $("ownBoard").querySelectorAll(".board-cell").forEach(b=>{if(own.has(b.dataset.cell))b.classList.add("ship");});
   if (app.game.status === "finished") {
@@ -141,6 +181,14 @@ export function renderBattle(){
     b.classList.remove("ship");
     b.classList.add(s.result==="miss"?"miss":"hit");b.disabled=true;
     if(s.result!=="miss")appendHitMarker(b);
+  });
+
+  derivedAutoMissCells(enemyShots).forEach(cell=>{
+    const b=$("enemyBoard").querySelector(`[data-cell="${cell}"]`);
+    if(!b||b.classList.contains("hit")||b.classList.contains("miss"))return;
+    b.classList.add("miss","auto-miss");
+    b.disabled=true;
+    b.title="пустая клетка";
   });
 
   const myTurn=app.game.status==="playing"&&app.game.current_turn===app.user.id;
@@ -192,7 +240,8 @@ export function renderSpectatorBattle(){
   if(app.game.status!=="finished"){
     [app.game.player1_id,app.game.player2_id].forEach((owner,index)=>{
       const boardShots=app.shots.filter(s=>s.target_id===owner);
-      renderFleetSkins($(index===0?"ownBoard":"enemyBoard"),sunkShipsFromShots(boardShots),boardShots);
+      const visibleShips=sunkShipsFromShots(boardShots).map(ship=>({...ship,skin:playerShipSkin(owner)}));
+      renderFleetSkins($(index===0?"ownBoard":"enemyBoard"),visibleShips,boardShots);
     });
   }
 
@@ -228,6 +277,7 @@ export function renderSpectatorBattle(){
 
 async function fire(cell){
   if(app.shotInProgress||app.game?.status!=="playing"||app.game.current_turn!==app.user.id)return;
+  if($("enemyBoard").querySelector(`[data-cell="${cell}"]`)?.classList.contains("auto-miss"))return;
   if(app.shots.some(shot=>shot.shooter_id===app.user.id&&shot.cell===cell))return;
   app.shotInProgress=true;
   app.shotRevision++;
@@ -268,3 +318,4 @@ async function fire(cell){
   // заблокированным, пока отдельные запросы перечитывают историю и расстановки.
   if(shotSucceeded)refreshGame().catch(console.error);
 }
+

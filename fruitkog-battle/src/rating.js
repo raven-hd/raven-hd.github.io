@@ -1,11 +1,12 @@
 // Рейтинг игроков и публичный профиль.
-import { app } from "./state.js?v=127";
-import { configured } from "./constants.js?v=127";
-import { $, formatAdminDate, msg } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { openAuth } from "./auth.js?v=127";
-import { openCompletedMatch } from "./lobby.js?v=127";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=127";
+import { app } from "./state.js?v=130";
+import { configured, shipSkinAsset } from "./constants.js?v=130";
+import { $, formatAdminDate, msg } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
+import { openAuth } from "./auth.js?v=130";
+import { openCompletedMatch } from "./lobby.js?v=130";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=130";
+import { activeRewards, loadMyRewards, selectShipSkin } from "./rewards.js?v=130";
 
 export async function loadRating(){
   if(!configured)return;
@@ -24,6 +25,68 @@ export async function loadRating(){
   $("ratingEmpty").classList.toggle("hidden",!!data?.length);
 }
 
+async function renderSkinInventory(playerId){
+  const section=$("profileSkinInventory");
+  const grid=$("profileSkinGrid");
+  const message=$("profileSkinMessage");
+  const own=playerId===app.user?.id&&app.profile?.account_type==="registered";
+  section.classList.toggle("hidden",!own);
+  if(!own)return;
+
+  await loadMyRewards();
+  const rewards=activeRewards();
+  grid.innerHTML="";
+  msg(message,"");
+
+  const skins=[
+    {id:"vegetable",name:"овощной",note:"стандартный набор",unlocked:true},
+    {id:"mushroom",name:"грибной",note:"награда",unlocked:!!rewards.mushroom_skin_unlocked},
+  ].filter(skin=>skin.unlocked);
+
+  skins.forEach(skin=>{
+    const card=document.createElement("article");
+    card.className="profile-skin-card";
+    card.dataset.skin=skin.id;
+
+    const preview=document.createElement("div");
+    preview.className=`profile-skin-preview ${skin.id}`;
+    preview.setAttribute("aria-hidden","true");
+    [4,3,2,1].forEach(length=>{
+      const img=document.createElement("img");
+      img.src=`./assets/ships/${shipSkinAsset(skin.id,length)}?v=129`;
+      img.alt="";img.draggable=false;preview.appendChild(img);
+    });
+
+    const copy=document.createElement("div");
+    copy.className="profile-skin-copy";
+    const name=document.createElement("strong");name.textContent=skin.name;
+    const note=document.createElement("span");note.textContent=skin.note;
+    copy.append(name,note);
+
+    const button=document.createElement("button");
+    button.type="button";
+    const active=rewards.selected_ship_skin===skin.id;
+    button.textContent=active?"активный":"выбрать";
+    button.disabled=active;
+    if(active)button.classList.add("active");
+    button.addEventListener("click",async()=>{
+      if(button.disabled)return;
+      const old=button.textContent;
+      button.disabled=true;button.textContent="сохраняем…";
+      try{
+        await selectShipSkin(skin.id);
+        await renderSkinInventory(playerId);
+      }catch(error){
+        button.disabled=false;button.textContent=old;
+        msg(message,humanError(error),"error");
+      }
+    });
+
+    card.append(preview,copy,button);
+    grid.appendChild(card);
+  });
+}
+
 export async function openPlayerProfile(playerId){
   if(!app.user){openAuth("login");return;}
   const generation=++app.playerProfileGeneration;
@@ -33,6 +96,9 @@ export async function openPlayerProfile(playerId){
   $("publicProfileName").textContent="загружаем профиль…";
   renderFruitkogAvatar($("publicProfileAvatar"),playerId,"🍏");
   $("publicProfileVerified").classList.add("hidden");
+  $("profileSkinInventory").classList.add("hidden");
+  $("profileSkinGrid").innerHTML="";
+  msg($("profileSkinMessage"),"");
   $("publicProfileStats").innerHTML="";
   $("publicProfileHistory").innerHTML="";
   $("publicProfileHistoryMoreList").innerHTML="";
@@ -72,6 +138,40 @@ export async function openPlayerProfile(playerId){
       const span=document.createElement("span");span.textContent=label;
       card.append(strong,span);$("publicProfileStats").appendChild(card);
     });
+
+    const tournaments=data.tournaments||[];
+    const tournamentCard=document.createElement("details");
+    tournamentCard.className="public-stat public-stat-tournaments";
+    const tournamentSummary=document.createElement("summary");
+    const tournamentValue=document.createElement("strong");
+    tournamentValue.textContent=player.tournament_count||0;
+    const tournamentLabel=document.createElement("span");
+    tournamentLabel.textContent="турниры";
+    tournamentSummary.append(tournamentValue,tournamentLabel);
+    const tournamentList=document.createElement("div");
+    tournamentList.className="public-tournament-list";
+    if(tournaments.length){
+      tournaments.forEach(tournament=>{
+        const row=document.createElement("div");
+        row.className="public-tournament-row";
+        const name=document.createElement("strong");
+        name.textContent=tournament.name;
+        const result=document.createElement("span");
+        result.textContent=tournament.result||"участник";
+        row.append(name,result);
+        tournamentList.appendChild(row);
+      });
+    }else{
+      const empty=document.createElement("span");
+      empty.className="public-tournament-empty";
+      empty.textContent="завершенных турниров пока нет";
+      tournamentList.appendChild(empty);
+    }
+    tournamentCard.append(tournamentSummary,tournamentList);
+    $("publicProfileStats").appendChild(tournamentCard);
+
+    await renderSkinInventory(playerId);
+    if(generation!==app.playerProfileGeneration)return;
 
     const renderProfileMatch=match=>{
       const row=document.createElement("div");row.className="public-match-row";
@@ -124,3 +224,4 @@ export async function openPlayerProfile(playerId){
     msg($("publicProfileMessage"),humanError(error),"error");
   }
 }
+

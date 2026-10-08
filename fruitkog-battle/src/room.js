@@ -1,16 +1,19 @@
 // Комната матча: открыть, наблюдать, выйти, сдаться, обновление состояния матча.
-import { app } from "./state.js?v=127";
-import { $, fitSingleLineText, msg, safeStorage } from "./helpers.js?v=128";
-import { humanError } from "./errors.js?v=127";
-import { switchView } from "./navigation.js?v=127";
-import { loadLobby } from "./lobby.js?v=127";
-import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=127";
-import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=128";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=128";
+import { app } from "./state.js?v=130";
+import { $, fitSingleLineText, msg, safeStorage } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
+import { switchView } from "./navigation.js?v=130";
+import { loadLobby } from "./lobby.js?v=130";
+import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=130";
+import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=130";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=130";
+import { loadMyRewards } from "./rewards.js?v=130";
 
 export async function openGame(row) {
   app.spectatorMode = false;
   app.game = row;
+  await loadMyRewards();
+  if(app.game?.id!==row.id)return;
   app.placement = loadPlacementDraft(app.game.id);
   app.opponentFleet = null;
   setGameUrl(app.game.id,"game");
@@ -351,7 +354,11 @@ export async function restoreGame(){
     app.spectatorMode=!!watchId&&!participant;
     if(participant&&watchId)setGameUrl(id,"game");
     app.game=data;
-    if(participant)app.placement=loadPlacementDraft(id);
+    if(participant){
+      await loadMyRewards();
+      if(app.game?.id!==id)return;
+      app.placement=loadPlacementDraft(id);
+    }
     $("placementPanel").classList.add("hidden");
     $("battlePanel").classList.add("hidden");
     renderRoom();
@@ -372,3 +379,4 @@ export async function returnToLobby(){
   switchView("play");
   if(channel)await app.supabase.removeChannel(channel);
 }
+

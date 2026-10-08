@@ -1,6 +1,6 @@
 // Общее состояние приложения: всё, что раньше было глобальными переменными app.js.
 // Читать и менять из любого модуля через объект app: app.user, app.game, app.placement …
-import { GAME_SETTING_DEFAULTS, TOURNAMENT_DEMO_STATES } from "./constants.js?v=127";
+import { GAME_SETTING_DEFAULTS, TOURNAMENT_DEMO_STATES } from "./constants.js?v=130";
 
 export const app = {
   supabase: null,
@@ -74,9 +74,18 @@ export const app = {
   adminNotificationsLoading: false,
   adminNotificationsTimer: null,
   gameSettings: { ...GAME_SETTING_DEFAULTS },
+  rewards: {
+    mushroom_skin_unlocked: false,
+    auto_miss_uses: 0,
+    square_ship_uses: 0,
+    selected_ship_skin: "vegetable",
+  },
+  rewardsUserId: null,
+  gameBoosts: { game_id: null, auto_miss_enabled: false, square_ship_used: false },
   adminGameSettingsCache: [],
   placement: { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null },
   vegetablesEnabled: true,
 };
 
 try { app.vegetablesEnabled = localStorage.getItem("fruitkog-vegetables") !== "off"; } catch {}
+

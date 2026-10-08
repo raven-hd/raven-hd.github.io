@@ -1,7 +1,7 @@
 // Картинки профиля используются только во «Фруктовом бое».
-import { app } from "./state.js?v=127";
-import { $, msg } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
+import { app } from "./state.js?v=130";
+import { $, msg } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
 
 const vegetables = ["tomato", "celery", "mushroom", "eggplant", "garlic", "corn"];
 const expressions = ["happy", "grumpy", "cool", "surprised"];
@@ -83,8 +83,7 @@ export async function saveAvatarChoice() {
   if (!allowedIds.has(id)) return;
   $("saveAvatarBtn").disabled = true;
   try {
-    const {error} = await app.supabase.from("fruitkog_avatars")
-      .upsert({user_id:userId,avatar_id:id},{onConflict:"user_id"});
+    const {error} = await app.supabase.rpc("set_fruitkog_avatar",{p_avatar_id:id});
     if (error) throw error;
     if (app.user?.id !== userId) return;
     app.fruitkogAvatarCache.set(userId,id);
@@ -101,3 +100,4 @@ export async function saveAvatarChoice() {
     $("saveAvatarBtn").disabled = false;
   }
 }
+

@@ -4,7 +4,7 @@ name: fruitkog 118 test
 
 on:
   push:
-    branches: [fruitkog-118-test]
+    branches: [fruitkog-118-test, fruitkog-rewards]
     paths:
       - 'fruitkog-battle/**'
       - '.github/workflows/fruitkog-118-test.yml'

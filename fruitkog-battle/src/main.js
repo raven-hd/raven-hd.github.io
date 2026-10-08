@@ -1,25 +1,27 @@
 // Точка входа: привязка кнопок и запуск приложения.
-import { createClient } from "../vendor/supabase.js?v=127";
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config.js?v=127";
-import { app } from "./state.js?v=127";
-import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=127";
-import { $, $$, bind, msg, safeStorage } from "./helpers.js?v=128";
-import { loadPublicGameSettings } from "./settings.js?v=127";
-import { restoreSavedView, switchView } from "./navigation.js?v=127";
-import { guestLogin, handleSession, login, logout, openAuth, register, renderAccount, retryInitialSession, retryProfileLoad, sendPasswordLink, setAuthTab, showPasswordDialog, updatePassword } from "./auth.js?v=127";
-import { createGame, loadLobby, renderActiveGames, resyncLobby } from "./lobby.js?v=127";
-import { exitPreGame, resyncGame, returnToLobby, surrenderGame } from "./room.js?v=128";
-import { buildBoard, syncVegetableMode } from "./board.js?v=127";
-import { cancelPlacementDrag, emptyPlacement, endPlacementDrag, movePlacementDrag, ready, renderPlacement, savePlacementDraft } from "./placement.js?v=127";
-import { activateTournamentSection, changeTournamentApplication, loadTournaments, resetTournamentDeadlineInput } from "./tournament.js?v=127";
-import { renderTournamentDemoState, updateTournamentDemoControls } from "./tournament-demo.js?v=127";
-import { loadRating, openPlayerProfile } from "./rating.js?v=127";
-import { closeAdminNotifications, markAdminNotificationsRead, toggleAdminNotifications } from "./admin-notifications.js?v=127";
-import { adminCancelGame, loadAdmin, loadMoreAdminGames, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=127";
-import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=127";
-import { openAvatarPicker, saveAvatarChoice } from "./avatars.js?v=128";
+import { createClient } from "../vendor/supabase.js?v=130";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config.js?v=130";
+import { app } from "./state.js?v=130";
+import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=130";
+import { $, $$, bind, msg, safeStorage } from "./helpers.js?v=130";
+import { loadPublicGameSettings } from "./settings.js?v=130";
+import { restoreSavedView, switchView } from "./navigation.js?v=130";
+import { guestLogin, handleSession, login, logout, openAuth, register, renderAccount, retryInitialSession, retryProfileLoad, sendPasswordLink, setAuthTab, showPasswordDialog, updatePassword } from "./auth.js?v=130";
+import { createGame, loadLobby, renderActiveGames, resyncLobby } from "./lobby.js?v=130";
+import { exitPreGame, resyncGame, returnToLobby, surrenderGame } from "./room.js?v=130";
+import { buildBoard, syncVegetableMode } from "./board.js?v=130";
+import { cancelPlacementDrag, emptyPlacement, endPlacementDrag, movePlacementDrag, ready, renderPlacement, savePlacementDraft } from "./placement.js?v=130";
+import { activateTournamentSection, changeTournamentApplication, loadTournaments, resetTournamentDeadlineInput } from "./tournament.js?v=130";
+import { renderTournamentDemoState, updateTournamentDemoControls } from "./tournament-demo.js?v=130";
+import { loadRating, openPlayerProfile } from "./rating.js?v=130";
+import { closeAdminNotifications, markAdminNotificationsRead, toggleAdminNotifications } from "./admin-notifications.js?v=130";
+import { adminCancelGame, loadAdmin, loadMoreAdminGames, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=130";
+import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=130";
+import { openAvatarPicker, saveAvatarChoice } from "./avatars.js?v=130";
+import { bindAdminRewards } from "./admin-rewards.js?v=130";
 
 function wire(){
+  bindAdminRewards();
   // Только кнопки меню. У <body> тоже есть data-view (там хранится текущий раздел), и раньше
   // обработчик вешался и на него: любой клик по странице заново открывал текущий раздел и
   // перезагружал его данные (в админке — 6 запросов на каждый клик), а медленный ответ мог
@@ -189,3 +191,4 @@ async function init(){
 }
 
 init();
+
