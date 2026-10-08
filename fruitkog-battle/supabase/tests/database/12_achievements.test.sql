@@ -25,6 +25,7 @@ select throws_ok(
   'P0001','Admin required','обычный игрок не может одобрить ачивку');
 
 select pg_temp.as_user('1a000000-0000-4000-8000-000000000001');
+select diag(public.admin_security_audit()::text);
 select is((public.admin_security_audit()->>'passed')::boolean,true,'новые RPC учтены встроенной проверкой защиты');
 select is((public.admin_list_achievement_requests(30)->>'unread_count')::int,1,'админ видит заявку в колокольчике');
 select is((public.admin_decide_achievement((select id from public.player_achievements where code='games_50'),true)->>'status'),'approved','админ одобряет заявку');
