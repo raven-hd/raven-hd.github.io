@@ -1,10 +1,10 @@
 // Расстановка кораблей: черновик, перетаскивание, палитра, готовность.
-import { app } from "./state.js?v=127";
-import { FLEET, SHIP_SKINS } from "./constants.js?v=127";
-import { $, msg, safeStorage } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { isMeReady, refreshGame } from "./room.js?v=127";
-import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=127";
+import { app } from "./state.js?v=131";
+import { FLEET, SHIP_SKINS } from "./constants.js?v=131";
+import { $, msg, safeStorage } from "./helpers.js?v=131";
+import { humanError } from "./errors.js?v=131";
+import { isMeReady, refreshGame } from "./room.js?v=131";
+import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=131";
 
 export function emptyPlacement() {
   return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null };
@@ -241,7 +241,7 @@ function renderPalette(){
     if(selected)b.classList.add("active");
     const visual=document.createElement("span");visual.className="palette-visual";
     const art=document.createElement("img");
-    art.className="palette-vegetable";art.src=`./assets/ships/${SHIP_SKINS[length]}.png?v=108`;
+    art.className="palette-vegetable";art.src=`./assets/ships/${SHIP_SKINS[length]}.png?v=131`;
     art.alt="";art.draggable=false;visual.append(art);
     const preview=document.createElement("span");preview.className="ship-preview";
     for(let i=0;i<length;i++)preview.appendChild(document.createElement("i"));

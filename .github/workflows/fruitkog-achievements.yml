@@ -1,0 +1,56 @@
+# проверка ачивок в изолированной ветке. рабочая база не используется.
+# запускается при загрузке в тестовую ветку. публикации сайта и доступа к рабочей БД нет.
+name: fruitkog achievements test
+
+on:
+  push:
+    branches: [fruitkog-achievements]
+    paths:
+      - 'fruitkog-battle/**'
+      - '.github/workflows/fruitkog-achievements.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fruitkog-achievements-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+    working-directory: fruitkog-battle
+
+jobs:
+  checks:
+    name: code and achievement database
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          sparse-checkout: fruitkog-battle
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+
+      - name: check modules
+        run: python3 scripts/check_modules.py
+
+      - name: check JavaScript
+        run: npx --yes eslint@10.11.0 .
+
+      - name: check error messages
+        run: python3 scripts/check_error_keys.py
+
+      - uses: supabase/setup-cli@1dedf2c611547ede7232d26866dd3c56ab903bbb
+        with:
+          version: 2.118.0
+
+      - name: start temporary local database
+        run: supabase db start
+
+      - name: database tests
+        run: supabase test db supabase/tests/database/12_achievements.test.sql

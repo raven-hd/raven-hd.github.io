@@ -1,13 +1,14 @@
 // Колокольчик уведомлений администратора.
-import { app } from "./state.js?v=127";
-import { configured } from "./constants.js?v=127";
-import { $, formatAdminDate, msg, wait } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { switchView } from "./navigation.js?v=127";
-import { openGame } from "./room.js?v=127";
-import { renderTournamentBoard } from "./tournament.js?v=127";
-import { renderAdminPlayers } from "./admin.js?v=127";
-import { openAdminTournament } from "./admin-tournaments.js?v=127";
+import { app } from "./state.js?v=131";
+import { configured } from "./constants.js?v=131";
+import { $, formatAdminDate, msg, wait } from "./helpers.js?v=131";
+import { humanError } from "./errors.js?v=131";
+import { switchView } from "./navigation.js?v=131";
+import { openGame } from "./room.js?v=131";
+import { renderTournamentBoard } from "./tournament.js?v=131";
+import { renderAdminPlayers } from "./admin.js?v=131";
+import { openAdminTournament } from "./admin-tournaments.js?v=131";
+import { openAchievementReview } from "./achievements.js?v=131";
 
 export function renderAdminNotifications(data={}){
   app.adminNotificationsCache=data.items||[];
@@ -15,7 +16,7 @@ export function renderAdminNotifications(data={}){
   const counter=$("adminNotificationCount");
   counter.textContent=unread>99?"99+":String(unread);
   counter.classList.toggle("hidden",unread===0);
-  $("adminMarkAllNotificationsBtn").disabled=unread===0||app.adminNotificationsLoading;
+  $("adminMarkAllNotificationsBtn").disabled=app.adminNotificationsLoading||!app.adminNotificationsCache.some(item=>item.source!=="achievement"&&!item.read_at);
 
   const list=$("adminNotificationsList");
   list.innerHTML="";
@@ -36,20 +37,25 @@ export function renderAdminNotifications(data={}){
 
 async function fetchCombinedNotifications(){
   const requests=[app.supabase.rpc("list_user_notifications",{p_limit:30})];
-  if(app.profile?.is_admin)requests.push(app.supabase.rpc("admin_list_notifications",{p_limit:30}));
+  if(app.profile?.is_admin){
+    requests.push(app.supabase.rpc("admin_list_notifications",{p_limit:30}));
+    requests.push(app.supabase.rpc("admin_list_achievement_requests",{p_limit:30}));
+  }
   const results=await Promise.all(requests);
-  results.forEach(result=>{if(result.error)throw result.error;});
+  results.forEach((result,index)=>{if(result.error&&!(index===2&&result.error.code==="PGRST202"))throw result.error;});
   const userData=results[0].data||{};
   const adminData=app.profile?.is_admin?(results[1]?.data||{}):{};
+  const achievementsData=app.profile?.is_admin?(results[2]?.data||{}):{};
   const items=[
     ...(userData.items||[]).map(item=>({...item,source:"user"})),
     ...(adminData.items||[]).map(item=>({...item,source:"admin",item_type:"admin"})),
+    ...(achievementsData.items||[]).map(item=>({...item,source:"achievement"})),
   ].sort((a,b)=>{
     const unreadDifference=Number(!b.read_at)-Number(!a.read_at);
     return unreadDifference||new Date(b.created_at)-new Date(a.created_at);
   }).slice(0,30);
   return {
-    unread_count:(Number(userData.unread_count)||0)+(Number(adminData.unread_count)||0),
+    unread_count:(Number(userData.unread_count)||0)+(Number(adminData.unread_count)||0)+(Number(achievementsData.unread_count)||0),
     items,
   };
 }
@@ -66,7 +72,7 @@ export async function loadAdminNotifications(silent=true){
     if(!silent)msg($("adminNotificationsMessage"),humanError(error),"error");
   }finally{
     app.adminNotificationsLoading=false;
-    $("adminMarkAllNotificationsBtn").disabled=!app.adminNotificationsCache.some(item=>!item.read_at);
+    $("adminMarkAllNotificationsBtn").disabled=!app.adminNotificationsCache.some(item=>item.source!=="achievement"&&!item.read_at);
   }
 }
 
@@ -109,7 +115,7 @@ export async function markAdminNotificationsRead(notification=null){
     return false;
   }finally{
     app.adminNotificationsLoading=false;
-    $("adminMarkAllNotificationsBtn").disabled=!app.adminNotificationsCache.some(item=>!item.read_at);
+    $("adminMarkAllNotificationsBtn").disabled=!app.adminNotificationsCache.some(item=>item.source!=="achievement"&&!item.read_at);
   }
 }
 
@@ -118,6 +124,11 @@ async function waitForAdminLoad(){
 }
 
 async function openAdminNotification(notification){
+  if(notification.source==="achievement"){
+    closeAdminNotifications();
+    openAchievementReview(notification);
+    return;
+  }
   if(!notification.read_at)await markAdminNotificationsRead(notification);
   closeAdminNotifications();
   if(notification.source!=="admin"){
