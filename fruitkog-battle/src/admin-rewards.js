@@ -1,7 +1,7 @@
 // Универсальная выдача наград игрокам из админ-панели.
-import { app } from "./state.js?v=127";
-import { $, formatAdminDate, msg } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
+import { app } from "./state.js?v=130";
+import { $, formatAdminDate, msg } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
 
 let currentPlayer=null;
 
@@ -156,3 +156,4 @@ export function bindAdminRewards(){
     }
   });
 }
+

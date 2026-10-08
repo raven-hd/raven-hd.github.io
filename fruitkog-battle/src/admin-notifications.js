@@ -1,13 +1,13 @@
 // Колокольчик уведомлений администратора.
-import { app } from "./state.js?v=127";
-import { configured } from "./constants.js?v=127";
-import { $, formatAdminDate, msg, wait } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { switchView } from "./navigation.js?v=127";
-import { openGame } from "./room.js?v=127";
-import { renderTournamentBoard } from "./tournament.js?v=127";
-import { renderAdminPlayers } from "./admin.js?v=127";
-import { openAdminTournament } from "./admin-tournaments.js?v=127";
+import { app } from "./state.js?v=130";
+import { configured } from "./constants.js?v=130";
+import { $, formatAdminDate, msg, wait } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
+import { switchView } from "./navigation.js?v=130";
+import { openGame } from "./room.js?v=130";
+import { renderTournamentBoard } from "./tournament.js?v=130";
+import { renderAdminPlayers } from "./admin.js?v=130";
+import { openAdminTournament } from "./admin-tournaments.js?v=130";
 
 export function renderAdminNotifications(data={}){
   app.adminNotificationsCache=data.items||[];
@@ -175,3 +175,4 @@ export function startAdminNotificationPolling(){
   loadAdminNotifications(true);
   app.adminNotificationsTimer=setInterval(()=>{if(!document.hidden)loadAdminNotifications(true);},20000);
 }
+

@@ -1,12 +1,12 @@
 // Рейтинг игроков и публичный профиль.
-import { app } from "./state.js?v=127";
-import { configured, shipSkinAsset } from "./constants.js?v=129";
-import { $, formatAdminDate, msg } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { openAuth } from "./auth.js?v=127";
-import { openCompletedMatch } from "./lobby.js?v=127";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=127";
-import { activeRewards, loadMyRewards, selectShipSkin } from "./rewards.js?v=129";
+import { app } from "./state.js?v=130";
+import { configured, shipSkinAsset } from "./constants.js?v=130";
+import { $, formatAdminDate, msg } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
+import { openAuth } from "./auth.js?v=130";
+import { openCompletedMatch } from "./lobby.js?v=130";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=130";
+import { activeRewards, loadMyRewards, selectShipSkin } from "./rewards.js?v=130";
 
 export async function loadRating(){
   if(!configured)return;
@@ -224,3 +224,4 @@ export async function openPlayerProfile(playerId){
     msg($("publicProfileMessage"),humanError(error),"error");
   }
 }
+

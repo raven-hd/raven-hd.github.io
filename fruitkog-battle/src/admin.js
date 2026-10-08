@@ -1,16 +1,16 @@
 // Админ-панель: загрузка, игроки, матчи, объявления, проверка защиты.
-import { app } from "./state.js?v=127";
-import { configured } from "./constants.js?v=129";
-import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { statusLabel } from "./room.js?v=127";
-import { resetBoard } from "./board.js?v=129";
-import { resultLabel } from "./battle.js?v=129";
-import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=127";
-import { loadAdminNotifications } from "./admin-notifications.js?v=127";
-import { loadAdminGameSettings } from "./admin-settings.js?v=127";
-import { openAdminTournament } from "./admin-tournaments.js?v=127";
-import { openAdminRewards } from "./admin-rewards.js?v=129";
+import { app } from "./state.js?v=130";
+import { configured } from "./constants.js?v=130";
+import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=130";
+import { humanError } from "./errors.js?v=130";
+import { statusLabel } from "./room.js?v=130";
+import { resetBoard } from "./board.js?v=130";
+import { resultLabel } from "./battle.js?v=130";
+import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=130";
+import { loadAdminNotifications } from "./admin-notifications.js?v=130";
+import { loadAdminGameSettings } from "./admin-settings.js?v=130";
+import { openAdminTournament } from "./admin-tournaments.js?v=130";
+import { openAdminRewards } from "./admin-rewards.js?v=130";
 
 const ADMIN_GAMES_PAGE_SIZE = 50;
 const ADMIN_GAME_FILTER_LABELS = {
@@ -485,3 +485,4 @@ export async function adminCancelGame(gameId){
     msg(target,humanError(error),"error");
   }
 }
+
