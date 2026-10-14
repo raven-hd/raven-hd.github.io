@@ -1,11 +1,12 @@
 // Рейтинг игроков и публичный профиль.
-import { app } from "./state.js?v=127";
-import { configured } from "./constants.js?v=127";
-import { $, formatAdminDate, msg } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { openAuth } from "./auth.js?v=127";
-import { openCompletedMatch } from "./lobby.js?v=127";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=127";
+import { app } from "./state.js?v=132";
+import { configured } from "./constants.js?v=132";
+import { $, formatAdminDate, msg } from "./helpers.js?v=132";
+import { humanError } from "./errors.js?v=132";
+import { openAuth } from "./auth.js?v=132";
+import { openCompletedMatch } from "./lobby.js?v=132";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=132";
+import { renderPlayerAchievements } from "./achievements.js?v=132";
 
 export async function loadRating(){
   if(!configured)return;
@@ -113,6 +114,7 @@ export async function openPlayerProfile(playerId){
       return row;
     };
     const historyRows=[...matches].sort((a,b)=>new Date(b.finished_at)-new Date(a.finished_at));
+    renderPlayerAchievements(playerId,generation);
     historyRows.slice(0,3).forEach(match=>$("publicProfileHistory").appendChild(renderProfileMatch(match)));
     historyRows.slice(3).forEach(match=>$("publicProfileHistoryMoreList").appendChild(renderProfileMatch(match)));
     const hiddenMatches=Math.max(0,historyRows.length-3);
