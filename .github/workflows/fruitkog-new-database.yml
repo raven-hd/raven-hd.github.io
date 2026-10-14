@@ -1,6 +1,6 @@
-# Ручная установка проверенных миграций в НОВЫЙ пустой проект fruitkog-battle.
-# Этот файл располагается в main, но берет код только из fruitkog-118-test.
-name: fruitkog new database
+# Ручная установка миграций в рабочий проект после проверки копии данных.
+# Запускать только из интеграционной ветки fruitkog-release.
+name: fruitkog production migrations
 
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   migrations:
-    name: new project ${{ inputs.mode }}
+    name: production ${{ inputs.mode }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
     defaults:
@@ -37,23 +37,24 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: fruitkog-118-test
+          ref: ${{ github.sha }}
           persist-credentials: false
           sparse-checkout: fruitkog-battle
 
       - name: verify source and target
         run: |
-          test "$GITHUB_REF_NAME" = main
+          test "$GITHUB_REF_NAME" = fruitkog-release
           test -n "$SUPABASE_ACCESS_TOKEN"
           test -n "$SUPABASE_DB_PASSWORD"
           grep -Fxq 'export const SUPABASE_URL = "https://evyxxjncdpvmxulxazxw.supabase.co";' config.js
           test -f supabase/migrations/20260927000039_039_qualifier_tiebreak.sql
+          test -f supabase/migrations/20261008000052_052_achievements.sql
 
       - uses: supabase/setup-cli@1dedf2c611547ede7232d26866dd3c56ab903bbb
         with:
           version: 2.118.0
 
-      - name: link ONLY new fruitkog project
+      - name: link fruitkog production project
         run: supabase link --project-ref "$PROJECT_REF"
 
       - name: preview pending migrations (no changes)
