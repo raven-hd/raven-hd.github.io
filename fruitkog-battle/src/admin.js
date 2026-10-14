@@ -1,15 +1,16 @@
 // Админ-панель: загрузка, игроки, матчи, объявления, проверка защиты.
-import { app } from "./state.js?v=127";
-import { configured } from "./constants.js?v=127";
-import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=127";
-import { humanError } from "./errors.js?v=127";
-import { statusLabel } from "./room.js?v=127";
-import { resetBoard } from "./board.js?v=127";
-import { resultLabel } from "./battle.js?v=127";
-import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=127";
-import { loadAdminNotifications } from "./admin-notifications.js?v=127";
-import { loadAdminGameSettings } from "./admin-settings.js?v=127";
-import { openAdminTournament } from "./admin-tournaments.js?v=127";
+import { app } from "./state.js?v=133";
+import { configured } from "./constants.js?v=133";
+import { $, $$, cleanName, cleanText, formatAdminDate, msg } from "./helpers.js?v=133";
+import { humanError } from "./errors.js?v=133";
+import { statusLabel } from "./room.js?v=133";
+import { resetBoard } from "./board.js?v=133";
+import { resultLabel } from "./battle.js?v=133";
+import { qualifierSummary, registrationDeadlineLabel, tournamentFormatLabel, tournamentStatusLabel } from "./tournament.js?v=133";
+import { loadAdminNotifications } from "./admin-notifications.js?v=133";
+import { loadAdminGameSettings } from "./admin-settings.js?v=133";
+import { openAdminTournament } from "./admin-tournaments.js?v=133";
+import { openAdminRewards } from "./admin-rewards.js?v=133";
 
 const ADMIN_GAMES_PAGE_SIZE = 50;
 const ADMIN_GAME_FILTER_LABELS = {
@@ -134,6 +135,11 @@ export function renderAdminPlayers(){
     const actions=document.createElement("div");
     actions.className="admin-row-actions";
     if(player.account_type==="registered"){
+      const rewardButton=document.createElement("button");
+      rewardButton.type="button";
+      rewardButton.textContent="награды";
+      rewardButton.addEventListener("click",()=>openAdminRewards(player));
+      actions.appendChild(rewardButton);
       const renameButton=document.createElement("button");
       renameButton.type="button";
       renameButton.textContent="исправить ник";
@@ -479,3 +485,4 @@ export async function adminCancelGame(gameId){
     msg(target,humanError(error),"error");
   }
 }
+
