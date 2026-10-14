@@ -1,7 +1,7 @@
 // Картинки профиля используются только во «Фруктовом бое».
-import { app } from "./state.js?v=130";
-import { $, msg } from "./helpers.js?v=130";
-import { humanError } from "./errors.js?v=130";
+import { app } from "./state.js?v=133";
+import { $, msg } from "./helpers.js?v=133";
+import { humanError } from "./errors.js?v=133";
 
 const vegetables = ["tomato", "celery", "mushroom", "eggplant", "garlic", "corn"];
 const expressions = ["happy", "grumpy", "cool", "surprised"];

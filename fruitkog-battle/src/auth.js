@@ -1,12 +1,12 @@
 // Вход и выход, регистрация, гостевой профиль, пароль, блок аккаунта в шапке, обработка сессии.
-import { app } from "./state.js?v=130";
-import { $, cleanName, msg, wait } from "./helpers.js?v=130";
-import { humanError } from "./errors.js?v=130";
-import { restoreSavedView, switchView } from "./navigation.js?v=130";
-import { loadLobby, renderCreateOptions, subscribeToLobby } from "./lobby.js?v=130";
-import { restoreGame, setGameUrl } from "./room.js?v=130";
-import { closeAdminNotifications, renderAdminNotifications, startAdminNotificationPolling } from "./admin-notifications.js?v=130";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=130";
+import { app } from "./state.js?v=133";
+import { $, cleanName, msg, wait } from "./helpers.js?v=133";
+import { humanError } from "./errors.js?v=133";
+import { restoreSavedView, switchView } from "./navigation.js?v=133";
+import { loadLobby, renderCreateOptions, subscribeToLobby } from "./lobby.js?v=133";
+import { restoreGame, setGameUrl } from "./room.js?v=133";
+import { closeAdminNotifications, renderAdminNotifications, startAdminNotificationPolling } from "./admin-notifications.js?v=133";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=133";
 
 export function setAuthTab(name) {
   const names = ["login","register","guest"];

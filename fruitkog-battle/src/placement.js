@@ -1,11 +1,11 @@
 // Расстановка кораблей: черновик, перетаскивание, палитра, готовность.
-import { app } from "./state.js?v=130";
-import { FLEET, shipSkinAsset } from "./constants.js?v=130";
-import { $, msg, safeStorage } from "./helpers.js?v=130";
-import { humanError } from "./errors.js?v=130";
-import { isMeReady, refreshGame } from "./room.js?v=130";
-import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=130";
-import { activeRewards, autoMissUsesLabel, canUseAutoMisses, canUseSquareShip, loadMyRewards, squareShipUsesLabel } from "./rewards.js?v=130";
+import { app } from "./state.js?v=133";
+import { FLEET, shipSkinAsset } from "./constants.js?v=133";
+import { $, msg, safeStorage } from "./helpers.js?v=133";
+import { humanError } from "./errors.js?v=133";
+import { isMeReady, refreshGame } from "./room.js?v=133";
+import { addShipSkin, buildBoard, cellToCoords, coordsToCell, flashInvalidPlacement, renderFleetSkins, resetBoard } from "./board.js?v=133";
+import { activeRewards, autoMissUsesLabel, canUseAutoMisses, canUseSquareShip, loadMyRewards, squareShipUsesLabel } from "./rewards.js?v=133";
 
 export function emptyPlacement() {
   return { ships: [], orientation: "h", selectedShipIndex: 0, selectedPlacedIndex: null, useSquareShip: false, useAutoMiss: false };

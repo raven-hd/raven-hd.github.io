@@ -1,7 +1,7 @@
 // Будущие награды Fruitkog: безопасное чтение и тестовый режим.
 // ?reward-demo=1 включает локальные тестовые награды без обращения к Supabase.
 
-import { app } from "./state.js?v=130";
+import { app } from "./state.js?v=133";
 
 export const DEFAULT_REWARDS = Object.freeze({
   mushroom_skin_unlocked:false,

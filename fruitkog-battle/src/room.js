@@ -1,13 +1,13 @@
 // Комната матча: открыть, наблюдать, выйти, сдаться, обновление состояния матча.
-import { app } from "./state.js?v=130";
-import { $, fitSingleLineText, msg, safeStorage } from "./helpers.js?v=130";
-import { humanError } from "./errors.js?v=130";
-import { switchView } from "./navigation.js?v=130";
-import { loadLobby } from "./lobby.js?v=130";
-import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=130";
-import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=130";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=130";
-import { loadMyRewards } from "./rewards.js?v=130";
+import { app } from "./state.js?v=133";
+import { $, fitSingleLineText, msg, safeStorage } from "./helpers.js?v=133";
+import { humanError } from "./errors.js?v=133";
+import { switchView } from "./navigation.js?v=133";
+import { loadLobby } from "./lobby.js?v=133";
+import { clearPlacementDraft, loadPlacementDraft, lockPlacement, renderPlacement, unlockPlacement } from "./placement.js?v=133";
+import { refreshBattleData, refreshSpectatorData, renderBattle, renderSpectatorBattle } from "./battle.js?v=133";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=133";
+import { loadMyRewards } from "./rewards.js?v=133";
 
 export async function openGame(row) {
   app.spectatorMode = false;
