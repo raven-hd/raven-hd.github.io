@@ -5,7 +5,7 @@ begin;
 create table public.player_achievements (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(user_id) on delete cascade,
-  code text not null check (code in ('tournament_player','tournament_winner','games_50','rating_leader')),
+  code text not null check (code in ('tournament_player','tournament_winner','games_50')),
   context_key text not null,
   tournament_id uuid references public.tournaments(id) on delete cascade,
   evidence text not null,
@@ -90,80 +90,6 @@ create trigger propose_achievements_for_tournament_trigger
 after update of status on public.tournaments
 for each row execute function public.propose_achievements_for_tournament();
 
--- История рейтинга начинается с установки миграции. Прошлых лидеров по текущему рейтингу не восстанавливаем.
-create table public.achievement_rating_snapshots (
-  id bigint generated always as identity primary key,
-  user_id uuid not null references public.profiles(user_id) on delete cascade,
-  rating integer not null,
-  wins integer not null,
-  games integer not null,
-  recorded_at timestamptz not null default clock_timestamp()
-);
-create index achievement_rating_snapshots_lookup_idx
-on public.achievement_rating_snapshots(user_id,recorded_at desc,id desc);
-alter table public.achievement_rating_snapshots enable row level security;
-revoke all on public.achievement_rating_snapshots from public,anon,authenticated;
-
-insert into public.achievement_rating_snapshots(user_id,rating,wins,games)
-select user_id,rating,rated_wins,rated_games from public.profiles where account_type='registered';
-
-create or replace function public.capture_achievement_rating()
-returns trigger language plpgsql security definer set search_path=''
-as $$
-begin
-  if new.account_type='registered' then
-    insert into public.achievement_rating_snapshots(user_id,rating,wins,games)
-    values(new.user_id,new.rating,new.rated_wins,new.rated_games);
-  end if;
-  return new;
-end;
-$$;
-create trigger capture_achievement_rating_trigger
-after insert or update of rating,rated_wins,rated_games,account_type on public.profiles
-for each row execute function public.capture_achievement_rating();
-
-create table public.achievement_leader_check (
-  singleton boolean primary key default true check(singleton),
-  last_checked_day date not null
-);
-insert into public.achievement_leader_check(singleton,last_checked_day)
-values(true,(now() at time zone 'Europe/Moscow')::date);
-alter table public.achievement_leader_check enable row level security;
-revoke all on public.achievement_leader_check from public,anon,authenticated;
-
-create or replace function public.refresh_achievement_leaders()
-returns void language plpgsql security definer set search_path=''
-as $$
-declare
-  check_day date;
-  today_moscow date:=(now() at time zone 'Europe/Moscow')::date;
-  cutoff timestamptz;
-  leader_id uuid;
-begin
-  perform public.require_game_admin();
-  select last_checked_day into check_day from public.achievement_leader_check where singleton=true for update;
-  while check_day+1<today_moscow loop
-    check_day:=check_day+1;
-    cutoff:=(check_day+1)::timestamp at time zone 'Europe/Moscow';
-    select p.user_id into leader_id
-    from public.profiles p
-    join lateral (
-      select s.rating,s.wins,s.games from public.achievement_rating_snapshots s
-      where s.user_id=p.user_id and s.recorded_at<cutoff
-      order by s.recorded_at desc,s.id desc limit 1
-    ) snapshot on true
-    where p.account_type='registered' and snapshot.games>0
-    order by snapshot.rating desc,snapshot.wins desc,snapshot.games asc,lower(p.display_name),p.user_id
-    limit 1;
-    if leader_id is not null then
-      perform public.propose_player_achievement(leader_id,'rating_leader','overall',
-        'первое место в общем рейтинге по итогам '||to_char(check_day,'DD.MM.YYYY'));
-    end if;
-    update public.achievement_leader_check set last_checked_day=check_day where singleton=true;
-  end loop;
-end;
-$$;
-
 -- Старые завершенные матчи и завершенные турниры учитываем при установке.
 insert into public.player_achievements(user_id,code,context_key,evidence)
 select p.user_id,'games_50','games:50','50 завершенных матчей'
@@ -215,7 +141,6 @@ as $$
 declare result jsonb;
 begin
   perform public.require_game_admin();
-  perform public.refresh_achievement_leaders();
   select jsonb_build_object(
     'unread_count',(select count(*) from public.player_achievements where status='pending'),
     'items',coalesce((select jsonb_agg(jsonb_build_object(
@@ -224,7 +149,7 @@ begin
         when 'tournament_player' then 'участник турнира'
         when 'tournament_winner' then 'победитель турнира'
         when 'games_50' then '50 игр'
-        else 'лидер рейтинга' end,
+        else 'ачивка' end,
       'actor_id',a.user_id,'player_name',p.display_name,'code',a.code,
       'evidence',a.evidence,'tournament_name',t.name,
       'created_at',a.earned_at,'read_at',null
@@ -258,7 +183,7 @@ begin
       when 'tournament_player' then 'участник турнира'
       when 'tournament_winner' then 'победитель турнира'
       when 'games_50' then '50 игр'
-      else 'лидер рейтинга' end;
+      else 'ачивка' end;
     perform public.push_user_notification(row_to_decide.user_id,'reward','новая ачивка',
       'вам выдана ачивка «'||title||'».',null,row_to_decide.tournament_id,null,
       'achievement:'||row_to_decide.id::text);
@@ -270,8 +195,6 @@ $$;
 revoke execute on function public.propose_player_achievement(uuid,text,text,text,uuid) from public,anon,authenticated;
 revoke execute on function public.propose_achievements_for_game() from public,anon,authenticated;
 revoke execute on function public.propose_achievements_for_tournament() from public,anon,authenticated;
-revoke execute on function public.capture_achievement_rating() from public,anon,authenticated;
-revoke execute on function public.refresh_achievement_leaders() from public,anon,authenticated;
 revoke execute on function public.list_player_achievements(uuid) from public,anon;
 revoke execute on function public.admin_list_achievement_requests(integer) from public,anon;
 revoke execute on function public.admin_decide_achievement(uuid,boolean) from public,anon;

@@ -1,24 +1,24 @@
 // Точка входа: привязка кнопок и запуск приложения.
-import { createClient } from "../vendor/supabase.js?v=131";
-import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config.js?v=131";
-import { app } from "./state.js?v=131";
-import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=131";
-import { $, $$, bind, msg, safeStorage } from "./helpers.js?v=131";
-import { loadPublicGameSettings } from "./settings.js?v=131";
-import { restoreSavedView, switchView } from "./navigation.js?v=131";
-import { guestLogin, handleSession, login, logout, openAuth, register, renderAccount, retryInitialSession, retryProfileLoad, sendPasswordLink, setAuthTab, showPasswordDialog, updatePassword } from "./auth.js?v=131";
-import { createGame, loadLobby, renderActiveGames, resyncLobby } from "./lobby.js?v=131";
-import { exitPreGame, resyncGame, returnToLobby, surrenderGame } from "./room.js?v=131";
-import { buildBoard, syncVegetableMode } from "./board.js?v=131";
-import { cancelPlacementDrag, emptyPlacement, endPlacementDrag, movePlacementDrag, ready, renderPlacement, savePlacementDraft } from "./placement.js?v=131";
-import { activateTournamentSection, changeTournamentApplication, loadTournaments, resetTournamentDeadlineInput } from "./tournament.js?v=131";
-import { renderTournamentDemoState, updateTournamentDemoControls } from "./tournament-demo.js?v=131";
-import { loadRating, openPlayerProfile } from "./rating.js?v=131";
-import { closeAdminNotifications, loadAdminNotifications, markAdminNotificationsRead, toggleAdminNotifications } from "./admin-notifications.js?v=131";
-import { adminCancelGame, loadAdmin, loadMoreAdminGames, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=131";
-import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=131";
-import { openAvatarPicker, saveAvatarChoice } from "./avatars.js?v=131";
-import { decideAchievement } from "./achievements.js?v=131";
+import { createClient } from "../vendor/supabase.js?v=132";
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "../config.js?v=132";
+import { app } from "./state.js?v=132";
+import { TOURNAMENT_DEMO_ENABLED, configured } from "./constants.js?v=132";
+import { $, $$, bind, msg, safeStorage } from "./helpers.js?v=132";
+import { loadPublicGameSettings } from "./settings.js?v=132";
+import { restoreSavedView, switchView } from "./navigation.js?v=132";
+import { guestLogin, handleSession, login, logout, openAuth, register, renderAccount, retryInitialSession, retryProfileLoad, sendPasswordLink, setAuthTab, showPasswordDialog, updatePassword } from "./auth.js?v=132";
+import { createGame, loadLobby, renderActiveGames, resyncLobby } from "./lobby.js?v=132";
+import { exitPreGame, resyncGame, returnToLobby, surrenderGame } from "./room.js?v=132";
+import { buildBoard, syncVegetableMode } from "./board.js?v=132";
+import { cancelPlacementDrag, emptyPlacement, endPlacementDrag, movePlacementDrag, ready, renderPlacement, savePlacementDraft } from "./placement.js?v=132";
+import { activateTournamentSection, changeTournamentApplication, loadTournaments, resetTournamentDeadlineInput } from "./tournament.js?v=132";
+import { renderTournamentDemoState, updateTournamentDemoControls } from "./tournament-demo.js?v=132";
+import { loadRating, openPlayerProfile } from "./rating.js?v=132";
+import { closeAdminNotifications, loadAdminNotifications, markAdminNotificationsRead, toggleAdminNotifications } from "./admin-notifications.js?v=132";
+import { adminCancelGame, loadAdmin, loadMoreAdminGames, publishAdminAnnouncement, renderAdminPlayers, runSecurityAudit, setActiveAdminFilter } from "./admin.js?v=132";
+import { closeAdminTournament, configureTournamentQualifiers, createAdminTournament, deleteAdminTournament, generateTournament, saveTournamentFormat, saveTournamentRegistrationDeadline, setAdminTournamentArchived, startQualifierTiebreak, startTournamentPlayoff, startTournamentQualifiers } from "./admin-tournaments.js?v=132";
+import { openAvatarPicker, saveAvatarChoice } from "./avatars.js?v=132";
+import { decideAchievement } from "./achievements.js?v=132";
 
 function wire(){
   // Только кнопки меню. У <body> тоже есть data-view (там хранится текущий раздел), и раньше

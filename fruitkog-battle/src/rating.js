@@ -1,12 +1,12 @@
 // Рейтинг игроков и публичный профиль.
-import { app } from "./state.js?v=131";
-import { configured } from "./constants.js?v=131";
-import { $, formatAdminDate, msg } from "./helpers.js?v=131";
-import { humanError } from "./errors.js?v=131";
-import { openAuth } from "./auth.js?v=131";
-import { openCompletedMatch } from "./lobby.js?v=131";
-import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=131";
-import { renderPlayerAchievements } from "./achievements.js?v=131";
+import { app } from "./state.js?v=132";
+import { configured } from "./constants.js?v=132";
+import { $, formatAdminDate, msg } from "./helpers.js?v=132";
+import { humanError } from "./errors.js?v=132";
+import { openAuth } from "./auth.js?v=132";
+import { openCompletedMatch } from "./lobby.js?v=132";
+import { loadFruitkogAvatars, renderFruitkogAvatar } from "./avatars.js?v=132";
+import { renderPlayerAchievements } from "./achievements.js?v=132";
 
 export async function loadRating(){
   if(!configured)return;

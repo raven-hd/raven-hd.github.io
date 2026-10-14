@@ -7446,7 +7446,7 @@ body[data-view="tournament"] .page-shell{
 .profile-achievements{margin:1.2rem 0 1.7rem}
 .achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:.65rem}
 .achievement-card{display:flex;align-items:flex-start;gap:.7rem;padding:.85rem;border:1px solid #c9b691;border-radius:14px;background:#fff9eb;color:#39492a}
-.achievement-icon{font-size:1.75rem;line-height:1.2}
+.achievement-icon{width:56px;height:56px;object-fit:contain;flex:none}
 .achievement-card strong,.achievement-card small,.achievement-card time{display:block}
 .achievement-card small{margin:.25rem 0;color:#59634e}
 .achievement-card time{font-size:.72rem;color:#677060}

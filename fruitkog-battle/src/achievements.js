@@ -1,16 +1,17 @@
 // Публичные ачивки и подтверждение кандидатов администратором.
-import { app } from "./state.js?v=131";
-import { $, formatAdminDate, msg } from "./helpers.js?v=131";
-import { humanError } from "./errors.js?v=131";
+import { app } from "./state.js?v=132";
+import { $, formatAdminDate, msg } from "./helpers.js?v=132";
+import { humanError } from "./errors.js?v=132";
 
 export const ACHIEVEMENT_TITLES = Object.freeze({
   tournament_player:"участник турнира",
   tournament_winner:"победитель турнира",
   games_50:"50 игр",
-  rating_leader:"лидер рейтинга",
 });
 const ICONS=Object.freeze({
-  tournament_player:"🌱",tournament_winner:"🏆",games_50:"⚓",rating_leader:"⭐",
+  tournament_player:"./assets/achievements/tournament-player.webp",
+  tournament_winner:"./assets/achievements/tournament-winner.webp",
+  games_50:"./assets/achievements/games-50.webp",
 });
 
 export async function renderPlayerAchievements(playerId,generation){
@@ -28,9 +29,10 @@ export async function renderPlayerAchievements(playerId,generation){
   for(const item of data||[]){
     const card=document.createElement("div");
     card.className="achievement-card";
-    const symbol=document.createElement("span");
+    const symbol=document.createElement("img");
     symbol.className="achievement-icon";
-    symbol.textContent=ICONS[item.code]||"✦";
+    symbol.src=ICONS[item.code]||ICONS.tournament_player;
+    symbol.alt="";
     symbol.setAttribute("aria-hidden","true");
     const copy=document.createElement("div");
     const title=document.createElement("strong");

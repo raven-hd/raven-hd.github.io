@@ -1,7 +1,7 @@
 -- Очередь ачивок: решение админа отделено от проверки условий.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(12);
+select plan(14);
 
 insert into auth.users(id,email,raw_user_meta_data) values
   ('1a000000-0000-4000-8000-000000000001','ach-admin@test.local','{"school_nick":"Админ Ачивок"}'),
@@ -19,12 +19,15 @@ select ok(not has_function_privilege('anon','public.admin_decide_achievement(uui
 select ok(not has_function_privilege('authenticated','public.propose_player_achievement(uuid,text,text,text,uuid)','EXECUTE'),'игрок не может создавать себе кандидатуру');
 select ok(not exists(
   select 1 from pg_class c where c.oid in (
-    'public.player_achievements'::regclass,
-    'public.achievement_rating_snapshots'::regclass,
-    'public.achievement_leader_check'::regclass)
+    'public.player_achievements'::regclass)
   and (has_table_privilege('anon',c.oid,'SELECT,INSERT,UPDATE,DELETE')
     or has_table_privilege('authenticated',c.oid,'SELECT,INSERT,UPDATE,DELETE'))
 ),'служебные таблицы закрыты от браузера');
+select ok(to_regclass('public.achievement_rating_snapshots') is null
+  and to_regclass('public.achievement_leader_check') is null,
+  'история лидеров рейтинга не создается');
+select ok(to_regprocedure('public.refresh_achievement_leaders()') is null,
+  'проверка рейтинговой ачивки не создается');
 
 select pg_temp.as_user('1a000000-0000-4000-8000-000000000002');
 select is(jsonb_array_length(public.list_player_achievements('1a000000-0000-4000-8000-000000000002')),0,'ожидающая ачивка не видна в профиле');
