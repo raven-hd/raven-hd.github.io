@@ -822,6 +822,45 @@
             color:var(--gold);
         }
 
+
+        /* Shops belong to the shared project dashboard. */
+        .dashboard-shops {
+            max-width:690px;
+            margin:8px auto 0;
+            padding-top:20px;
+            border-top:1px solid var(--border);
+        }
+        .dashboard-shops h2 {
+            color:var(--gold2);
+            text-align:center;
+            font-family:'SpecialElite',serif;
+            font-size:12px;
+            font-weight:400;
+            letter-spacing:.7px;
+        }
+        .dashboard-shops .icons-grid {
+            grid-template-columns:repeat(3,minmax(0,1fr));
+            max-width:420px;
+            padding:18px 0 0;
+            gap:18px 14px;
+        }
+        .dashboard-shops .app-icon-box img {
+            width:64px;
+            height:64px;
+            mix-blend-mode:screen;
+            filter:none;
+        }
+        .app-icon-item:focus-visible {
+            outline:2px solid var(--gold2);
+            outline-offset:5px;
+            border-radius:4px;
+        }
+        @media(max-width:400px) {
+            .dashboard-shops .app-icon-box { width:62px;height:62px;border-radius:14px; }
+            .dashboard-shops .app-icon-box img { width:54px;height:54px; }
+            .dashboard-shops .icons-grid { gap:14px 8px; }
+            .dashboard-shops .app-icon-label { font-size:10px;max-width:86px; }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
@@ -980,6 +1019,30 @@
           <span class="app-icon-label">подарки</span>
         </span>
       </div>
+
+      <section class="dashboard-shops" aria-labelledby="dashboard-shops-title">
+        <h2 id="dashboard-shops-title">магазины</h2>
+        <div class="icons-grid">
+          <a href="https://raven-hd.github.io/hogsmeade/rich-peach/" class="app-icon-item">
+            <div class="app-icon-box">
+              <img src="https://raven-hd.github.io/hogsmeade/shared/assets/shop-peach.png" alt="" decoding="async">
+            </div>
+            <span class="app-icon-label">Rich Peach</span>
+          </a>
+          <a href="https://raven-hd.github.io/hogsmeade/under-the-raven-wing/" class="app-icon-item">
+            <div class="app-icon-box">
+              <img src="https://raven-hd.github.io/hogsmeade/shared/assets/shop-raven.png" alt="" decoding="async">
+            </div>
+            <span class="app-icon-label">под крылом Ворона</span>
+          </a>
+          <a href="https://raven-hd.github.io/hogsmeade/cafeteria/" class="app-icon-item">
+            <div class="app-icon-box">
+              <img src="https://raven-hd.github.io/hogsmeade/shared/assets/shop-cafeteria.png" alt="" decoding="async">
+            </div>
+            <span class="app-icon-label">кафетерий</span>
+          </a>
+        </div>
+      </section>
 
     </main>
 
