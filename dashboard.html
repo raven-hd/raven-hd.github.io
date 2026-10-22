@@ -839,8 +839,8 @@
             letter-spacing:.7px;
         }
         .dashboard-shops .icons-grid {
-            grid-template-columns:repeat(3,minmax(0,1fr));
-            max-width:420px;
+            grid-template-columns:repeat(4,minmax(0,1fr));
+            max-width:560px;
             padding:18px 0 0;
             gap:18px 14px;
         }
@@ -854,6 +854,9 @@
             outline:2px solid var(--gold2);
             outline-offset:5px;
             border-radius:4px;
+        }
+        @media(max-width:600px) {
+            .dashboard-shops .icons-grid { grid-template-columns:repeat(2,minmax(0,1fr));max-width:280px; }
         }
         @media(max-width:400px) {
             .dashboard-shops .app-icon-box { width:62px;height:62px;border-radius:14px; }
@@ -995,13 +998,7 @@
           <span class="app-icon-label">Редактор</span>
         </a>
 
-        <a href="https://raven-hd.github.io/richpeach/lp_decoder.html" class="app-icon-item">
-          <div class="app-icon-box">
-            <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/richpeach/img/goldenpeach.png"
-                 alt="Lucky Peach">
-          </div>
-          <span class="app-icon-label">Lucky Peach</span>
-        </a>
+
 
         <a href="https://raven-hd.github.io/tower/questionnaire/editor/editor.html"
            class="app-icon-item" aria-label="редактор анкет">
@@ -1029,11 +1026,18 @@
             </div>
             <span class="app-icon-label">Rich Peach</span>
           </a>
+          <a href="https://raven-hd.github.io/richpeach/lp_decoder.html" class="app-icon-item">
+            <div class="app-icon-box">
+              <img src="https://raw.githubusercontent.com/raven-hd/raven-hd.github.io/refs/heads/main/richpeach/img/goldenpeach.png"
+                   alt="Lucky Peach">
+            </div>
+            <span class="app-icon-label">Lucky Peach</span>
+          </a>
           <a href="https://raven-hd.github.io/hogsmeade/under-the-raven-wing/" class="app-icon-item">
             <div class="app-icon-box">
               <img src="https://raven-hd.github.io/hogsmeade/shared/assets/shop-raven.png" alt="" decoding="async">
             </div>
-            <span class="app-icon-label">под крылом Ворона</span>
+            <span class="app-icon-label">Под крылом Ворона</span>
           </a>
           <a href="https://raven-hd.github.io/hogsmeade/cafeteria/" class="app-icon-item">
             <div class="app-icon-box">
